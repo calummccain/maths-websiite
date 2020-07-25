@@ -1,5 +1,7 @@
 // Order n dodecahedral
 
+import { p } from "../constants.js";
+
 function typeOfHoneycomb(n) {
     var t = '';
     if (n < 6) {

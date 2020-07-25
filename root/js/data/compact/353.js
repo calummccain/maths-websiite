@@ -1,6 +1,6 @@
 // Order 5 icosahedral (compact)
 
-import { p } from "./constants.js";
+import { p } from "../constants.js";
 
 const faceType = "triangle";
 
@@ -94,6 +94,5 @@ const matrixDict = {
 };
 
 const l = Math.acosh((p ** 6 - (-1 + p ** 2) * (3 * p - 1)) / 4);
-
 
 export { faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l };
