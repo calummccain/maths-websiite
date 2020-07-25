@@ -79,9 +79,9 @@ const e = [
 
 const f = [
     [(p ** 3) / 2, 0, 0, 0],
-    [0, -Math.sqrt(3 * p - 1) / 2, 0, 0],
-    [0, 0, -Math.sqrt(3 * p - 1) / 2, 0],
-    [0, 0, 0, -Math.sqrt(3 * p - 1) / 2]
+    [0, Math.sqrt(3 * p - 1) / 2, 0, 0],
+    [0, 0, Math.sqrt(3 * p - 1) / 2, 0],
+    [0, 0, 0, Math.sqrt(3 * p - 1) / 2]
 ];
 
 const matrixDict = {
