@@ -25,6 +25,7 @@ const vertices = [
     [[1, -1 / p, 0, -p]]
 ];
 
+//ADD FACES!!!
 const faces = [[]];
 
 const a = [
@@ -64,9 +65,9 @@ const e = [
 
 const f = [
     [p ** 2 / Math.sqrt(2), 0, 0, 0],
-    [0, -Math.sqrt(p / 2), 0, 0],
-    [0, 0, -Math.sqrt(p / 2), 0],
-    [0, 0, 0, -Math.sqrt(p / 2)]
+    [0, Math.sqrt(p / 2), 0, 0],
+    [0, 0, Math.sqrt(p / 2), 0],
+    [0, 0, 0, Math.sqrt(p / 2)]
 ];
 
 const matrixDict = {
@@ -77,6 +78,5 @@ const matrixDict = {
     'e': e,
     'f': f
 };
-
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict };

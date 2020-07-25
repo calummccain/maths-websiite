@@ -59,9 +59,9 @@ const e = [
 
 const f = [
     [(p ** 2) / Math.sqrt(2), 0, 0, 0],
-    [0, -Math.sqrt(p / 2), 0, 0],
-    [0, 0, -Math.sqrt(p / 2), 0],
-    [0, 0, 0, -Math.sqrt(p / 2)]
+    [0, Math.sqrt(p / 2), 0, 0],
+    [0, 0, Math.sqrt(p / 2), 0],
+    [0, 0, 0, Math.sqrt(p / 2)]
 ];
 
 const matrixDict = {
