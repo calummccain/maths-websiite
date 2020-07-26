@@ -132,7 +132,7 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
             // add them to the geometry
 
             for (var j = 0; j < hyperboloidVertices.length; j++) {
-                var vertex = HF.hyperboloidToPoincare(hyperboloidVertices[j]);
+                var vertex = HF.hyperboloidToPoincareMod(hyperboloidVertices[j]);
                 //var vertex = HF.poincareToUpperHalfPlane(HF.hyperboloidToPoincare(hyperboloidVertices[j]));
 
                 var vertex2 = VF.vectorSum(VF.vectorScale([vertex], 1 - s), VF.vectorScale([poincareCenter], s));
