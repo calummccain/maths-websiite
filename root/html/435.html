@@ -24,9 +24,11 @@
 
 <body>
     <script type="module">
+        import * as FTF from "../js/data/compact/435.js";
+        alert("loaded data");
         import * as MAIN from "../js/main/solid-main.js";
-        alert("imported main")
-        MAIN.init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType);
+        alert("imported main");
+        MAIN.init(3, [''], 0.5, 1, FTF.matrixDict, FTF.vertices, FTF.center, FTF.f, FTF.faces, FTF.faceType);
         MAIN.render();
     </script>
 

@@ -85,4 +85,6 @@ const l = Math.acosh(p ** 2);
 
 const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
 
-export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };
+const center = [[Math.sqrt(2) / (p ** 2), 0, 0, 0]];
+
+export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };

@@ -1,11 +1,9 @@
 import * as THREE from "../three.module.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
-import * as TFF from "./344.js";
 import * as TRI from "../faces/triangle-faces.js";
 import * as QUAD from "../faces/square-faces.js";
 import * as PENT from "../faces/pentagon-faces.js";
-import * as LAYER from "../maths-functions/layers.js";
 
 var scene, camera, renderer;
 var objects = [];
