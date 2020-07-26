@@ -1,5 +1,7 @@
 // Order n octahedral
 
+const faceType = "triangle";
+
 function typeOfHoneycomb(n) {
     var t = '';
     if (n <= 3) {

@@ -2,6 +2,10 @@
 
 import { p } from "./constants.js";
 
+const faceType = "pentagon";
+
+const typeOfHoneycomb = "compact";
+
 const vertices = [
     [[1, 1, 1, 1]],
     [[1, 1, 1, -1]],
@@ -91,4 +95,4 @@ const matrixDict = {
     'f': f
 };
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict };
+export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict };

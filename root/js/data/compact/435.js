@@ -2,6 +2,10 @@
 
 import { p } from "./constants.js";
 
+const faceType = "square";
+
+const typeOfHoneycomb = "compact";
+
 const vertices = [
     [[1, 1, 1, 1]],
     [[1, 1, -1, 1]],
@@ -81,4 +85,4 @@ const l = Math.acosh(p ** 2);
 
 const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };
+export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };

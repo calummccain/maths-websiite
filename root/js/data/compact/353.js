@@ -4,6 +4,8 @@ import { p } from "../constants.js";
 
 const faceType = "triangle";
 
+const typeOfHoneycomb = "compact";
+
 const vertices = [
     [[1, 1, p, 0]],
     [[1, 1, -p, 0]],
@@ -111,4 +113,4 @@ const faceReflections = [
     'acbacabcbaca'
 ];
 
-export { faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };
+export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };
