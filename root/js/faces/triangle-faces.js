@@ -1,7 +1,7 @@
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js"
 
-function hyperboloidFaceBisection(a, b, c, n) {
+function hyperboloidFace(a, b, c, n) {
 
     var j = 0;
     var coords = [a, b, c];
@@ -42,4 +42,4 @@ function hyperboloidFaceBisection(a, b, c, n) {
     return [triangularFaces, coords];
 }
 
-export { hyperboloidFaceBisection };
+export { hyperboloidFace };

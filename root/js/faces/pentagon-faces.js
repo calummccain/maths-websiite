@@ -1,7 +1,7 @@
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js"
 
-function hyperboloidFaceBisection(a, b, c, d, e, n) {
+function hyperboloidFace(a, b, c, d, e, n) {
 
 
     //centre of face
@@ -19,7 +19,7 @@ function hyperboloidFaceBisection(a, b, c, d, e, n) {
         var newFaces = [];
 
         for (var i = 0; i < faces.length; i++) {
-            
+
             var u = VF.vectorSum(coords[faces[i][0]], coords[faces[i][1]]);
             var v = VF.vectorSum(coords[faces[i][1]], coords[faces[i][2]]);
             var w = VF.vectorSum(coords[faces[i][2]], coords[faces[i][0]]);
@@ -51,4 +51,4 @@ function hyperboloidFaceBisection(a, b, c, d, e, n) {
     return [triangularFaces, coords];
 }
 
-export { hyperboloidFaceBisection };
+export { hyperboloidFace };
