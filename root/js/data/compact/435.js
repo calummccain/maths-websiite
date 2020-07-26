@@ -79,4 +79,6 @@ const matrixDict = {
 
 const l = Math.acosh(p ** 2);
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, l };
+const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
+
+export { vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };

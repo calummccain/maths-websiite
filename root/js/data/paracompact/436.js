@@ -46,11 +46,11 @@ const c = [
 
 //fev
 const d = [
-        [2, -1, 0, 0],
-        [3, -2, 0, 0],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1]
-    ];
+    [2, -1, 0, 0],
+    [3, -2, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1]
+];
 
 const e = [
     [1, 0, 0, 0],
@@ -75,4 +75,6 @@ const matrixDict = {
     'f': f
 };
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict };
+const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
+
+export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };

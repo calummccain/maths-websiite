@@ -95,4 +95,20 @@ const matrixDict = {
 
 const l = Math.acosh((p ** 6 - (-1 + p ** 2) * (3 * p - 1)) / 4);
 
-export { faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l };
+const faceReflections = [
+    '',
+    'a',
+    'ca',
+    'aca', 'bca',
+    'baca', 'caca',
+    'cbaca', 'bcaca',
+    'bcbaca',
+    'abcbaca',
+    'babcbaca', 'cabcbaca',
+    'cbabcbaca', 'acabcbaca', 'bcabcbaca',
+    'bcbabcbaca', 'bacabcbaca',
+    'cbacabcbaca',
+    'acbacabcbaca'
+];
+
+export { faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };

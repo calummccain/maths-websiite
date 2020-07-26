@@ -105,4 +105,6 @@ function matrixDict(n) {
     return dict;
 }
 
-export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict };
+const faceReflections = ['', 'b', 'ab', 'cab'];
+
+export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };

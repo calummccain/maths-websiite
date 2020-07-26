@@ -75,4 +75,6 @@ const matrixDict = {
     'f': f
 };
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict };
+const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcab'];
+
+export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };

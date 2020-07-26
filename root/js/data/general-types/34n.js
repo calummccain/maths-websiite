@@ -110,4 +110,6 @@ function matrixDict(n) {
     return dict;
 }
 
-export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict };
+const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcab'];
+
+export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };
