@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <style>
+        body {
+            margin: 0;
+            background-color: olivedrab;
+        }
+
+        .view {
+            width: 5in;
+            height: 5in;
+            margin: auto;
+            background-color: powderblue;
+        }
+    </style>
+
+    <title>{4, 3, 5}</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as MAIN from "../js/main/solid-main.js";
+        alert("imported main")
+        MAIN.init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType);
+        MAIN.render();
+    </script>
+
+</body>
+
+</html>

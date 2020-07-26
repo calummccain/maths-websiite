@@ -15,7 +15,7 @@ var HEIGHT = window.innerHeight;
 
 var SPEED = 0.01;
 
-function init() {
+function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
@@ -27,11 +27,13 @@ function init() {
 
     //initObjects(5, ['', 'd', 'bd', 'bdbd', 'bdbdbd', 'bdbdbdbd']);
     //initObjects(5, ['']);
-    initObjects(4, LAYER.layer(3));
+    //initObjects(4, LAYER.layer(3));
     //alert(LAYER.layer(1));
     //initObjects(5, ['', 'd', 'cd', 'bcd', 'abcd', 'cbcd', 'cabcd', 'bcabcd', 'cbcabcd']);
     //initObjects(5, ['', 'd', 'ad']);
     //alert("objects loaded");
+
+    initObjects(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType);
     initCamera();
     initRenderer();
 
