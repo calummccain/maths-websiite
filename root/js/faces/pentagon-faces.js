@@ -28,9 +28,9 @@ function hyperboloidFace(a, b, c, d, e, n) {
                 coords[faces[i][0]],
                 coords[faces[i][1]],
                 coords[faces[i][2]],
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(u)),
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(v)),
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(w)),
+                VF.vectorScale(u, 1 / Math.sqrt(HF.hyperbolicNorm(u))),
+                VF.vectorScale(v, 1 / Math.sqrt(HF.hyperbolicNorm(v))),
+                VF.vectorScale(w, 1 / Math.sqrt(HF.hyperbolicNorm(w)))
             ]);
 
             newFaces = newFaces.concat([

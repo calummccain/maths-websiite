@@ -22,28 +22,27 @@ const vertices = [
 ];
 
 const faces = [
-    [0, 2, 8],
-    [0, 9, 2],
-    [0, 4, 6],
-    [0, 8, 4],
-    [0, 6, 9],
-    [1, 10, 3],
-    [1, 3, 11],
-    [1, 6, 4],
-    [1, 4, 10],
-    [1, 11, 6],
-    [2, 7, 5],
-    [2, 5, 8],
-    [2, 9, 7],
-    [3, 5, 7],
-    [3, 10, 5],
-    [3, 7, 11],
-    [4, 8, 10],
-    [5, 10, 8],
-    [6, 11, 9],
-    [7, 9, 11]
+    [0, 8, 2],
+    [0, 2, 9],
+    [0, 6, 4],
+    [0, 4, 8],
+    [0, 9, 6],
+    [1, 3, 10],
+    [1, 11, 3],
+    [1, 4, 6],
+    [1, 10, 4],
+    [1, 6, 11],
+    [2, 5, 7],
+    [2, 8, 5],
+    [2, 7, 9],
+    [3, 7, 5],
+    [3, 5, 10],
+    [3, 11, 7],
+    [4, 10, 8],
+    [5, 8, 10],
+    [6, 9, 11],
+    [7, 11, 9]
 ];
-
 const a = [
     [1, 0, 0, 0],
     [0, 1, 0, 0],
@@ -113,4 +112,6 @@ const faceReflections = [
     'acbacabcbaca'
 ];
 
-export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections };
+const center = [[2 / (p **3), 0, 0, 0]];
+
+export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };

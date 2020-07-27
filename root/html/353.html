@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(227, 236, 208);
+        }
+    </style>
+
+    <title>first page</title>
+</head>
+
+<body>
+
+    <script type="module">
+        import * as TFT from "../js/data/compact/353.js";
+        import * as MAIN from "../js/main/solid-main.js";
+        alert("imported main");
+        MAIN.init(5, ['', 'd'], 1, 0.2, TFT.matrixDict, TFT.vertices, TFT.center, TFT.f, TFT.faces, TFT.faceType);
+        alert('loaded all objects');
+        //alert(MAIN.objects.length);
+        MAIN.render();
+        //alert("yoo");
+    </script>
+
+</body>
+
+</html>
