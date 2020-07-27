@@ -1,5 +1,9 @@
 // Order 6 tetrahedral (paracompact)
 
+const faceType = "triangle";
+
+const typeOfHoneycomb = "paracompact";
+
 const vertices = [
     [[1, 1, 1, 1]],
     [[1, 1, -1, -1]],
@@ -8,10 +12,10 @@ const vertices = [
 ];
 
 const faces = [
-    [0, 1, 2],
-    [1, 3, 2],
-    [2, 3, 0],
-    [3, 1, 0]
+    [0, 2, 1],
+    [1, 2, 3],
+    [2, 0, 3],
+    [3, 0, 1]
 ];
 
 //cfv
@@ -71,4 +75,6 @@ const matrixDict = {
 
 const faceReflections = ['', 'b', 'ab', 'cab'];
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };
+const center = [[1 / Math.sqrt(3), 0, 0, 0]];
+
+export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };

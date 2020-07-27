@@ -2,6 +2,10 @@
 
 import { p } from "./constants.js";
 
+const faceType = "pentagon";
+
+const typeOfHoneycomb = "paracompact";
+
 const vertices = [
     [[1, 1, 1, 1]],
     [[1, 1, 1, -1]],
@@ -96,10 +100,8 @@ const matrixDict = {
     'f': f
 };
 
-const l = 0;
-
 const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
 
-const center = [[2 / (p ** 4), 0, 0, 0]];
+const center = [[1 / Math.sqrt(3), 0, 0, 0]];
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };
+export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };

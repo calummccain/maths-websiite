@@ -1,5 +1,9 @@
 // Order 6 cubic
 
+const faceType = "square";
+
+const typeOfHoneycomb = "paracompact";
+
 const vertices = [
     [[1, 1, 1, 1]],
     [[1, 1, -1, 1]],
@@ -77,4 +81,6 @@ const matrixDict = {
 
 const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };
+const center = [[1 / Math.sqrt(3), 0, 0, 0]];
+
+export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
