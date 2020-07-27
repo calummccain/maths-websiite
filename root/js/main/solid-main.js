@@ -34,7 +34,7 @@ function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, f
 
 function initCamera() {
     camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 10);
-    camera.position.set(0, -3, 1);
+    camera.position.set(0, -2, 1);
     camera.lookAt(scene.position);
 }
 
@@ -161,7 +161,7 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
 function rotateObjects() {
     for (var i = 0; i < objects.length; i++) {
         objects[i].rotation.x -= 0;
-        objects[i].rotation.y -= 0.02;
+        objects[i].rotation.y -= 0.005;
         objects[i].rotation.z -= 0.01;
     }
 }
