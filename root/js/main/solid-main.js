@@ -26,8 +26,6 @@ function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, f
 
     initObjects(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType);
 
-    alert("objects made");
-
     initCamera();
     initRenderer();
 
@@ -77,16 +75,12 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
 
         var newVertices = HF.transformVertices(vertices, transform);
 
-        //alert("verts done");
+
         // transform center of cell
-        //alert(center);
         var newCenter = HF.transformVertices([center], transform);
-        //alert(newCenter);
         var poincareCenter = HF.hyperboloidToPoincare(VF.transpose(VF.matrixMultiplication(f, VF.transpose(newCenter[0]))));
 
         // loop over the faces listed to generate mesh
-
-        //alert("center done")
 
         for (var i = 0; i < faces.length; i++) {
             var geometry = new THREE.Geometry();
