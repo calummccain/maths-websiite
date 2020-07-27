@@ -84,4 +84,12 @@ function hyperbolicNorm(x) {
     return norm;
 }
 
-export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm };
+function scaledHyperbolicNorm(x, f) {
+
+    var norm = (f[0][0] * x[0][0]) ** 2 - (f[1][1] * x[0][1]) ** 2 - (f[2][2] * x[0][2]) ** 2 - (f[3][3] * x[0][3]) ** 2;
+
+    return norm;
+}
+
+
+export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, scaledHyperbolicNorm };

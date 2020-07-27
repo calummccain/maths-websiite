@@ -14,6 +14,7 @@ var HEIGHT = window.innerHeight;
 var SPEED = 0.01;
 
 function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType) {
+
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
@@ -23,15 +24,10 @@ function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, f
     light.position.set(1, -1, 1);
     scene.add(light);
 
-    //initObjects(5, ['', 'd', 'bd', 'bdbd', 'bdbdbd', 'bdbdbdbd']);
-    //initObjects(5, ['']);
-    //initObjects(4, LAYER.layer(3));
-    //alert(LAYER.layer(1));
-    //initObjects(5, ['', 'd', 'cd', 'bcd', 'abcd', 'cbcd', 'cabcd', 'bcabcd', 'cbcabcd']);
-    //initObjects(5, ['', 'd', 'ad']);
-    //alert("objects loaded");
-
     initObjects(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType);
+
+    alert("objects made");
+
     initCamera();
     initRenderer();
 
@@ -65,7 +61,7 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
         // can change opacity too
 
         var material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color().setHSL(Math.random(), 0.7, 0.3 * Math.random() + 0.5),
+            color: new THREE.Color().setHSL(Math.random(), 0.7, 0.8),
             roughness: 0.5,
             metalness: 0,
             flatShading: true,
@@ -81,11 +77,16 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
 
         var newVertices = HF.transformVertices(vertices, transform);
 
+        //alert("verts done");
         // transform center of cell
+        //alert(center);
         var newCenter = HF.transformVertices([center], transform);
+        //alert(newCenter);
         var poincareCenter = HF.hyperboloidToPoincare(VF.transpose(VF.matrixMultiplication(f, VF.transpose(newCenter[0]))));
 
         // loop over the faces listed to generate mesh
+
+        //alert("center done")
 
         for (var i = 0; i < faces.length; i++) {
             var geometry = new THREE.Geometry();
@@ -109,7 +110,8 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][1]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][2]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][3]]))),
-                    n
+                    n,
+                    f
                 );
             } else if (faceType === "pentagon") {
                 faceData = PENT.hyperboloidFace(
@@ -144,7 +146,7 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
 
             for (var k = 0; k < facets.length; k++) {
                 var facetPiece = facets[k];
-                geometry.faces.push(new THREE.Face3(facetPiece[(transforms[m].length + 1) % 2], facetPiece[2], facetPiece[transforms[m].length % 2]));
+                geometry.faces.push(new THREE.Face3(facetPiece[(transforms[m].length) % 2], facetPiece[2], facetPiece[(transforms[m].length + 1)% 2]));
                 //geometry.faces.push(new THREE.Face3(facetPiece[1], facetPiece[2], facetPiece[0]));
             }
 

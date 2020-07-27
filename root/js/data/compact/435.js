@@ -1,6 +1,6 @@
 // Order 5 cubic (compact)
 
-import { p } from "./constants.js";
+import { p } from "../constants.js";
 
 const faceType = "square";
 

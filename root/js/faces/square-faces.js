@@ -1,7 +1,7 @@
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js"
 
-function hyperboloidFace(a, b, c, d, n) {
+function hyperboloidFace(a, b, c, d, n, f) {
 
     var j = 0;
     var coords = [a, b, c, d];
@@ -11,6 +11,7 @@ function hyperboloidFace(a, b, c, d, n) {
         var newCoords = [];
         var newFaces = [];
         for (var i = 0; i < faces.length; i++) {
+
             var u = VF.vectorSum(coords[faces[i][0]], coords[faces[i][1]]);
             var v = VF.vectorSum(coords[faces[i][1]], coords[faces[i][2]]);
             var w = VF.vectorSum(coords[faces[i][2]], coords[faces[i][3]]);
@@ -22,11 +23,12 @@ function hyperboloidFace(a, b, c, d, n) {
                 coords[faces[i][1]],
                 coords[faces[i][2]],
                 coords[faces[i][3]],
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(u)),
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(v)),
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(w)),
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(x)),
-                VF.vectorScale(u, 1 / HF.hyperbolicNorm(y))
+                VF.vectorScale(u, 1 / Math.sqrt(HF.scaledHyperbolicNorm(u, f))),
+                VF.vectorScale(u, 1 / Math.sqrt(HF.scaledHyperbolicNorm(v, f))),
+                VF.vectorScale(u, 1 / Math.sqrt(HF.scaledHyperbolicNorm(w, f))),
+                VF.vectorScale(u, 1 / Math.sqrt(HF.scaledHyperbolicNorm(x, f))),
+                VF.vectorScale(u, 1 / Math.sqrt(HF.scaledHyperbolicNorm(y, f)))
+                //u, v, w, x, y
             ]);
 
             newFaces = newFaces.concat([
