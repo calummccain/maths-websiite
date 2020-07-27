@@ -1,6 +1,6 @@
 // order 6 dodecahedral (paracompact)
 
-import { p } from "./constants.js";
+import { p } from "../constants.js";
 
 const faceType = "pentagon";
 
