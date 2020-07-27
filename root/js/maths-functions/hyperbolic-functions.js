@@ -91,5 +91,4 @@ function scaledHyperbolicNorm(x, f) {
     return norm;
 }
 
-
 export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, scaledHyperbolicNorm };
