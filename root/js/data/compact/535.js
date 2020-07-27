@@ -61,20 +61,12 @@ const b = [
     [0, 0, 0, 1]
 ];
 
-// //cfv
-// const c = [
-//     [1, 0, 0, 0],
-//     [0, 1 - 2 / (4 * p ** 2), 1 / 2, 1 / (2 * p)],
-//     [0, 1 / 2, 1 - 2 * p ** 4 / (4 * p ** 2), -p / 2],
-//     [0, 1 / (2 * p), -p / 2, 1 - 2 * p ** 2 / (4 * p ** 2)]
-// ];
-
 //cfv
 const c = [
     [1, 0, 0, 0],
     [0, p / 2, 1 / 2, 1 / (2 * p)],
     [0, 1 / 2, -1 / (2 * p), -p / 2],
-    [0, 1 / (2 * p), -p / 2, p / 2]
+    [0, 1 / (2 * p), -p / 2, 1 / 2]
 ];
 
 //fev
@@ -108,4 +100,10 @@ const matrixDict = {
     'f': f
 };
 
-export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict };
+const l = 0;
+
+const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
+
+const center = [[2 / (p ** 4), 0, 0, 0]];
+
+export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };

@@ -68,20 +68,12 @@ const b = [
     [0, 0, 0, 1]
 ];
 
-// //cfv
-// const c = [
-//     [1, 0, 0, 0],
-//     [0, 1 - 2 / (4 * p ** 2), 1 / 2, 1 / (2 * p)],
-//     [0, 1 / 2, 1 - 2 * p ** 4 / (4 * p ** 2), -p / 2],
-//     [0, 1 / (2 * p), -p / 2, 1 - 2 * p ** 2 / (4 * p ** 2)]
-// ];
-
 //cfv
 const c = [
     [1, 0, 0, 0],
     [0, p / 2, 1 / 2, 1 / (2 * p)],
     [0, 1 / 2, -1 / (2 * p), -p / 2],
-    [0, 1 / (2 * p), -p / 2, p / 2]
+    [0, 1 / (2 * p), -p / 2, p1 / 2]
 ];
 
 //fev
@@ -138,4 +130,13 @@ function matrixDict(n) {
     return dict;
 }
 
-export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict };
+const l = 0;
+
+const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
+
+function center(n) {
+    var cot = 1 / (Math.tan(Math.pi / n) ** 2);
+    return [[Math.sqrt((3 - cot) / cot) / (p ** 2), 0, 0, 0]];
+}
+
+export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };
