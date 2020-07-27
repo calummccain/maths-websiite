@@ -7,7 +7,7 @@ function hyperboloidFace(a, b, c, d, e, n) {
     //centre of face
     var fUnscaled = VF.vectorSum(a, VF.vectorSum(b, VF.vectorSum(c, VF.vectorSum(d, e))));
     var f = VF.vectorScale(fUnscaled, HF.hyperbolicNorm(fUnscaled));
-    
+
     var coords = [a, b, c, d, e, f];
     var faces = [[0, 1, 5], [1, 2, 5], [2, 3, 5], [3, 4, 5], [4, 0, 5]];
 
@@ -34,10 +34,10 @@ function hyperboloidFace(a, b, c, d, e, n) {
             ]);
 
             newFaces = newFaces.concat([
-                [6 * i, 6 * i + 3, 6 * i + 5],
-                [6 * i + 3, 6 * i + 1, 6 * i + 4],
-                [6 * i + 5, 6 * i + 4, 6 * i + 2],
-                [6 * i + 3, 6 * i + 4, 6 * i + 5]
+                [6 * i, 6 * i + 5, 6 * i + 3],
+                [6 * i + 3, 6 * i + 4, 6 * i + 1],
+                [6 * i + 5, 6 * i + 2, 6 * i + 4],
+                [6 * i + 3, 6 * i + 5, 6 * i + 4]
             ]);
         }
 
