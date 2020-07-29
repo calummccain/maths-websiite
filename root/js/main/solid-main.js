@@ -104,8 +104,7 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][1]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][2]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][3]]))),
-                    n,
-                    f
+                    n
                 );
             } else if (faceType === "pentagon") {
                 faceData = PENT.hyperboloidFace(
@@ -162,7 +161,7 @@ function rotateObjects() {
     for (var i = 0; i < objects.length; i++) {
         objects[i].rotation.x -= 0;
         objects[i].rotation.y -= 0.005;
-        objects[i].rotation.z -= 0.01;
+        objects[i].rotation.z -= 0.001;
     }
 }
 

@@ -1,7 +1,7 @@
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js"
 
-function hyperboloidFace(a, b, c, d, n, f) {
+function hyperboloidFace(a, b, c, d, n) {
 
     var j = 0;
     var coords = [a, b, c, d];
