@@ -163,7 +163,7 @@ function rotateObjects() {
     for (var i = 0; i < objects.length; i++) {
         objects[i].rotation.x -= 0;
         objects[i].rotation.y -= 0.005;
-        objects[i].rotation.z -= 0.001;
+        objects[i].rotation.z -= 0.01;
     }
 }
 

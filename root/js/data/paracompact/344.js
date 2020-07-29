@@ -79,7 +79,7 @@ const matrixDict = {
     'f': f
 };
 
-const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcab'];
+const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcabc'];
 
 const center = [[1, 0, 0, 0]];
 
