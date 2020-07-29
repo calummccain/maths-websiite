@@ -16,7 +16,7 @@ var SPEED = 0.01;
 function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType) {
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
+    scene.background = new THREE.Color(0x121212);
 
     scene.add(new THREE.HemisphereLight(0xaaaaaa, 0x444444));
 
@@ -92,11 +92,12 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
             // The coordinates are originally in the form of a row vector so transposes are required as well 
             // as multiplication by the f matrix to get them into the standard coordinates
             if (faceType === "triangle") {
-                faceData = TRI.hyperboloidFace(
+                faceData = TRI.hyperboloidFaceIdeal(
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][0]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][1]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][2]]))),
-                    n
+                    n,
+                    2
                 );
             } else if (faceType === "square") {
                 faceData = QUAD.hyperboloidFace(
@@ -107,18 +108,19 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
                     n
                 );
             } else if (faceType === "pentagon") {
-                faceData = PENT.hyperboloidFace(
+                faceData = PENT.hyperboloidFaceIdeal(
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][0]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][1]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][2]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][3]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][4]]))),
-                    n
+                    n,
+                    2
                 );
             }
 
             // facets is the list of small trianglular faces that make up the mesh and which vertices make them up 
-            
+
             var facets = faceData[0];
             var hyperboloidVertices = faceData[1];
 
@@ -139,7 +141,7 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
 
             for (var k = 0; k < facets.length; k++) {
                 var facetPiece = facets[k];
-                geometry.faces.push(new THREE.Face3(facetPiece[(transforms[m].length) % 2], facetPiece[2], facetPiece[(transforms[m].length + 1)% 2]));
+                geometry.faces.push(new THREE.Face3(facetPiece[(transforms[m].length) % 2], facetPiece[2], facetPiece[(transforms[m].length + 1) % 2]));
                 //geometry.faces.push(new THREE.Face3(facetPiece[1], facetPiece[2], facetPiece[0]));
             }
 
