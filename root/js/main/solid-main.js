@@ -100,12 +100,13 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
                     2
                 );
             } else if (faceType === "square") {
-                faceData = QUAD.hyperboloidFace(
+                faceData = QUAD.hyperboloidFaceIdeal(
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][0]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][1]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][2]]))),
                     VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][3]]))),
-                    n
+                    n,
+                    1.5
                 );
             } else if (faceType === "pentagon") {
                 faceData = PENT.hyperboloidFaceIdeal(
@@ -129,8 +130,8 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
             // add them to the geometry
 
             for (var j = 0; j < hyperboloidVertices.length; j++) {
-                var vertex = HF.hyperboloidToPoincareMod(hyperboloidVertices[j]);
-                //var vertex = HF.poincareToUpperHalfPlane(HF.hyperboloidToPoincare(hyperboloidVertices[j]));
+                //var vertex = HF.hyperboloidToPoincareMod(hyperboloidVertices[j]);
+                var vertex = HF.poincareToUpperHalfPlane(HF.hyperboloidToPoincare(hyperboloidVertices[j]));
 
                 var vertex2 = VF.vectorSum(VF.vectorScale([vertex], 1 - s), VF.vectorScale([poincareCenter], s));
 
