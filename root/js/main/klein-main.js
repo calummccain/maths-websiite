@@ -2,8 +2,8 @@ import * as THREE from "../three.module.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as TRI from "../faces/klein-triangle-faces.js";
-import * as QUAD from "../faces/square-faces.js";
-import * as PENT from "../faces/pentagon-faces.js";
+import * as QUAD from "../faces/klein-square-faces.js";
+import * as PENT from "../faces/klein-pentagon-faces.js";
 
 var scene, camera, renderer;
 var objects = [];
@@ -25,8 +25,6 @@ function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, f
     scene.add(light);
 
     initObjects(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType);
-
-    alert("objects init");
 
     initCamera();
     initRenderer();
@@ -115,25 +113,23 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
 
             } else if (faceType === "square") {
 
-                faceData = QUAD.hyperboloidFaceIdeal(
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][0]]))),
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][1]]))),
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][2]]))),
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][3]]))),
-                    n,
-                    1.5
+                faceData = QUAD.kleinFace(
+                    kleinVertices[faces[i][0]],
+                    kleinVertices[faces[i][1]],
+                    kleinVertices[faces[i][2]],
+                    kleinVertices[faces[i][3]],
+                    n
                 );
 
             } else if (faceType === "pentagon") {
 
-                faceData = PENT.hyperboloidFaceIdeal(
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][0]]))),
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][1]]))),
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][2]]))),
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][3]]))),
-                    VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[faces[i][4]]))),
-                    n,
-                    2
+                faceData = PENT.kleinFace(
+                    kleinVertices[faces[i][0]],
+                    kleinVertices[faces[i][1]],
+                    kleinVertices[faces[i][2]],
+                    kleinVertices[faces[i][3]],
+                    kleinVertices[faces[i][4]],
+                    n
                 );
 
             }
