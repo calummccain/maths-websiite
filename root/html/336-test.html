@@ -5,19 +5,28 @@
 
     <meta charset="utf-8">
 
-    <link rel="stylesheet" href="../css/test.css">
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(227, 236, 208);
+        }
+    </style>
 
     <title>first page</title>
 </head>
 
 <body>
-
+    
     <a href="/root/index.html">index</a>
 
     <script type="module">
         import * as TTS from "../js/data/paracompact/336.js";
-        import * as MAIN from "../js/main/solid-main.js";
+        alert("loaded");
+        import * as MAIN from "../js/main/klein-main.js";
+        alert("loaded");
         import * as LAYER from "../js/maths-functions/layers.js";
+
+        alert("loaded");
 
         MAIN.init(4, LAYER.layer(2, TTS.faceReflections), 1, 0, TTS.matrixDict, TTS.vertices, TTS.center, TTS.f, TTS.faces, TTS.faceType);
         MAIN.render();

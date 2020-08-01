@@ -69,6 +69,25 @@ function poincareToUpperHalfPlane(point) {
     return uhp;
 }
 
+function kleinToPoincare(point) {
+
+    var dist = Math.sqrt(point[0][0] ** 2 + point[0][1] ** 2 + point[0][2] ** 2);
+    var hyperbolicDist;
+
+    if (1 > dist **2) {
+
+        hyperbolicDist = 1 / (1 + Math.sqrt(1 - dist ** 2));
+
+    } else {
+
+        hyperbolicDist = 1 / dist;
+
+    }
+
+    return VF.vectorScale(point, hyperbolicDist);
+
+}
+
 // hyperboloid inner product
 function hyperboloidInnerProduct(x, y) {
 
@@ -91,4 +110,4 @@ function scaledHyperbolicNorm(x, f) {
     return norm;
 }
 
-export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, scaledHyperbolicNorm };
+export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, scaledHyperbolicNorm, kleinToPoincare };
