@@ -130,8 +130,8 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
             // add them to the geometry
 
             for (var j = 0; j < hyperboloidVertices.length; j++) {
-                //var vertex = HF.hyperboloidToPoincareMod(hyperboloidVertices[j]);
-                var vertex = HF.poincareToUpperHalfPlane(HF.hyperboloidToPoincare(hyperboloidVertices[j]));
+                var vertex = HF.hyperboloidToPoincareMod(hyperboloidVertices[j]);
+                //var vertex = HF.poincareToUpperHalfPlane(HF.hyperboloidToPoincare(hyperboloidVertices[j]));
 
                 var vertex2 = VF.vectorSum(VF.vectorScale([vertex], 1 - s), VF.vectorScale([poincareCenter], s));
 
@@ -151,7 +151,9 @@ function initObjects(n, transforms, opacityValue, s, matrixDict, vertices, cente
             //geometry.computeFaceNormals();
             //var material = new THREE.MeshNormalMaterial({ color: 0x999999 });
 
-            // make mesh and add it to the scene and list of objects
+            // make mesh and add it to the scene and list of objects and optimise geometry
+
+            geometry.mergeVertices();
 
             var curvedFace = new THREE.Mesh(geometry, material);
             scene.add(curvedFace);
