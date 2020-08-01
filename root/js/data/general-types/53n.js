@@ -2,6 +2,8 @@
 
 import { p } from "../constants.js";
 
+const faceType = 'pentagon';
+
 function typeOfHoneycomb(n) {
     var t = '';
     if (n < 6) {
@@ -36,7 +38,6 @@ const vertices = [
     [[1, -1 / p, 0, -p]]
 ];
 
-//ADD FACES!!!
 const faces = [
     [0, 16, 2, 13, 12],
     [1, 12, 13, 3, 18],
@@ -73,19 +74,23 @@ const c = [
     [1, 0, 0, 0],
     [0, p / 2, 1 / 2, 1 / (2 * p)],
     [0, 1 / 2, -1 / (2 * p), -p / 2],
-    [0, 1 / (2 * p), -p / 2, p1 / 2]
+    [0, 1 / (2 * p), -p / 2, 1 / 2]
 ];
 
 //fev
 function d(n) {
-    var cos = Math.cos(2 * Math.pi / n);
+
+    var cos = Math.cos(2 * Math.PI / n);
+
     var matrix = [
         [1 + 2 * cos, -2 * cos, 0, 0],
         [2 * cos + 2, -1 - 2 * cos, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1]
     ];
+
     return matrix;
+
 }
 
 const e = [
@@ -96,24 +101,33 @@ const e = [
 ];
 
 function f(n) {
+
     var matrix;
+
     if (n == 6) {
+
         matrix = [
             [Math.sqrt(3), 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ]
+
     } else {
-        var cot = 1 / (Math.tan(Math.pi / n) ** 2);
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
         matrix = [
-            [(p ** 2) * Math.sqrt(cot / (3 - cot)), 0, 0, 0],
-            [0, Math.sqrt(((p ** 2) * cot - 1) / (3 - cot)), 0, 0],
-            [0, 0, Math.sqrt(((p ** 2) * cot - 1) / (3 - cot)), 0],
-            [0, 0, 0, Math.sqrt(((p ** 2) * cot - 1) / (3 - cot))]
+            [(p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot))), 0, 0, 0],
+            [0, Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot))), 0, 0],
+            [0, 0, Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot))), 0],
+            [0, 0, 0, Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot)))]
         ];
+
     }
+
     return matrix;
+
 }
 
 function matrixDict(n) {
@@ -130,13 +144,13 @@ function matrixDict(n) {
     return dict;
 }
 
-const l = 0;
-
 const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
 
 function center(n) {
-    var cot = 1 / (Math.tan(Math.pi / n) ** 2);
-    return [[Math.sqrt((3 - cot) / cot) / (p ** 2), 0, 0, 0]];
+
+    var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+    return [[1 / ((p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot)))), 0, 0, 0]];
+
 }
 
-export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };
+export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };

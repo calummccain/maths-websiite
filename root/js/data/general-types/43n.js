@@ -1,5 +1,7 @@
 // Order n cubic
 
+const faceType = 'square';
+
 function typeOfHoneycomb(n) {
     var t = '';
     if (n < 6) {
@@ -58,14 +60,18 @@ const c = [
 
 //fev
 function d(n) {
-    var cos = Math.cos(2 * Math.pi / n);
+
+    var cos = Math.cos(2 * Math.PI / n);
+
     var matrix = [
         [1 + 2 * cos, -2 * cos, 0, 0],
         [2 * cos + 2, -1 - 2 * cos, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1]
     ];
+
     return matrix;
+
 }
 
 const e = [
@@ -76,24 +82,33 @@ const e = [
 ];
 
 function f(n) {
+
     var matrix;
+
     if (n == 6) {
+
         matrix = [
             [Math.sqrt(3), 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ]
+
     } else {
-        var cot = 1 / (Math.tan(Math.pi / n) ** 2);
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
         matrix = [
-            [Math.sqrt(2 * cot / (3 - cot)), 0, 0, 0],
-            [0, Math.sqrt((cot - 1) / (3 - cot)), 0, 0],
-            [0, 0, Math.sqrt((cot - 1) / (3 - cot)), 0],
-            [0, 0, 0, Math.sqrt((cot - 1) / (3 - cot))]
+            [Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0],
+            [0, Math.sqrt(Math.abs((cot - 1) / (3 - cot))), 0, 0],
+            [0, 0, Math.sqrt(Math.abs((cot - 1) / (3 - cot))), 0],
+            [0, 0, 0, Math.sqrt(Math.abs((cot - 1) / (3 - cot)))]
         ];
+
     }
+
     return matrix;
+    
 }
 
 function matrixDict(n) {
@@ -112,4 +127,11 @@ function matrixDict(n) {
 
 const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
 
-export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };
+function center(n) {
+
+    var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
+    return [[1 / Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0]]
+}
+
+export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };

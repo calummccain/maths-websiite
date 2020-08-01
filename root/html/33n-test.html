@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(227, 236, 208);
+        }
+    </style>
+
+    <title>first page</title>
+</head>
+
+<body>
+
+    <a href="/root/index.html">index</a>
+
+    <script type="module">
+        import * as TTN from "../js/data/general-types/33n.js";
+        import * as MAIN from "../js/main/klein-main.js";
+        import * as LAYER from "../js/maths-functions/layers.js";
+        var n = 7;
+        MAIN.init(5, LAYER.layer(0, TTN.faceReflections), 1, 0, TTN.matrixDict(n), TTN.vertices, TTN.center(n), TTN.f(n), TTN.faces, TTN.faceType);
+        MAIN.render();
+    </script>
+
+</body>
+
+</html>

@@ -24,14 +24,14 @@ const vertices = [
 ];
 
 const faces = [
-    [0, 2, 4],
-    [0, 5, 2],
-    [0, 4, 3],
-    [0, 3, 5],
-    [1, 4, 2],
-    [1, 2, 5],
-    [1, 3, 4],
-    [1, 5, 3]
+    [0, 4, 2],
+    [0, 2, 5],
+    [0, 3, 4],
+    [0, 5, 3],
+    [1, 2, 4],
+    [1, 5, 2],
+    [1, 4, 3],
+    [1, 3, 5]
 ];
 
 //cfe
@@ -60,14 +60,18 @@ const c = [
 
 //fev
 function d(n) {
-    var cos = Math.cos(Math.pi / n) ** 2;
+
+    var cos = Math.cos(Math.PI / n) ** 2;
+
     var matrix = [
         [6 * cos - 1, 2 - 6 * cos, 2 - 6 * cos, 2 - 6 * cos],
         [2 * cos, 1 - 2 * cos, -2 * cos, -2 * cos],
         [2 * cos, -2 * cos, 1 - 2 * cos, -2 * cos],
         [2 * cos, -2 * cos, -2 * cos, 1 - 2 * cos]
     ];
+
     return matrix;
+
 }
 
 const e = [
@@ -78,24 +82,32 @@ const e = [
 ];
 
 function f(n) {
+
     var matrix;
+
     if (n == 4) {
+
         matrix = [
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ]
+
     } else {
-        var cot = 1 / (Math.tan(Math.pi / n) ** 2);
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
         matrix = [
-            [Math.sqrt(cot / (1 - cot)), 0, 0, 0],
-            [0, Math.sqrt((2 * cot - 1) / (1 - cot)), 0, 0],
-            [0, 0, Math.sqrt((2 * cot - 1) / (1 - cot)), 0],
-            [0, 0, 0, Math.sqrt((2 * cot - 1) / (1 - cot))]
+            [Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0],
+            [0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0, 0],
+            [0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0],
+            [0, 0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot)))]
         ];
+
     }
+
     return matrix;
+
 }
 
 function matrixDict(n) {
@@ -114,4 +126,11 @@ function matrixDict(n) {
 
 const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcab'];
 
-export { typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };
+function center(n) {
+
+    var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
+    return [[1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]]
+}
+
+export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
