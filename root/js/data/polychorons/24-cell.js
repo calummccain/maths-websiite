@@ -191,9 +191,3 @@ function findCells(l) {
     }
     return cells;
 }
-
-//console.log(findLines(Math.sqrt(2)).length);
-
-//console.log(findFaces(Math.sqrt(12)).length);
-
-console.log(findCells(Math.sqrt(2 - Math.sqrt(2))));
