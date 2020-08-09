@@ -28,7 +28,7 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
         f = ORDER5.f;
         center = ORDER5.center;
 
-    } else if (order = 6) {
+    } else if (order == 6) {
 
         dict = ORDER6.matrixDict;
         f = ORDER6.f;

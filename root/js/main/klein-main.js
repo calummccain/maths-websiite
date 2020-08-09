@@ -11,8 +11,6 @@ var objects = [];
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
-var SPEED = 0.01;
-
 function init(n, transforms, opacityValue, s, matrixDict, vertices, center, f, faces, faceType) {
 
     scene = new THREE.Scene();
