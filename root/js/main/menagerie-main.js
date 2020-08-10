@@ -3,10 +3,11 @@ import * as GEOM53N from "../geometries/53n-geometry.js";
 import * as GEOM43N from "../geometries/43n-geometry.js";
 import * as GEOM33N from "../geometries/33n-geometry.js";
 import * as GEOM34N from "../geometries/34n-geometry.js";
+import * as GEOM35N from "../geometries/35n-geometry.js";
 
 var scene, camera, renderer;
 var objects = [];
-var shapes = ['534', '535', '536', '435', '436', '336', '344',];
+var shapes = ['534', '535', '536', '435', '436', '336', '344','353'];
 var locations = [[1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1], [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1]];
 
 var WIDTH = window.innerWidth;
@@ -37,7 +38,7 @@ function init(n, opacityValue, s) {
 
 function initCamera() {
     camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 10);
-    camera.position.set(3, 3, 3);
+    camera.position.set(5, 0, 0);
     camera.lookAt(scene.position);
 }
 
@@ -77,6 +78,10 @@ function initObjects(n, opacityValue, s) {
         } else if (type === '34') {
 
             geometry = GEOM34N.hyperbolicOctahedronGeometry(shapes[i][2], n, '', s);
+
+        } else if (type === '35'){
+
+            geometry = GEOM35N.hyperbolicIcosahedronGeometry(shapes[i][2], n, '', s);
 
         }
 
