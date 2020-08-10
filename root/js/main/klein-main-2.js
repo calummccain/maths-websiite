@@ -1,5 +1,6 @@
 import * as THREE from "../three.module.js";
-import * as GEOM from "../geometries/53n-geometry.js"
+import * as GEOM53N from "../geometries/53n-geometry.js"
+import * as GEOM43N from "../geometries/43n-geometry.js"
 
 var scene, camera, renderer;
 var objects = [];
@@ -7,7 +8,7 @@ var objects = [];
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
-function init(n, transforms, opacityValue, s, order) {
+function init(n, transforms, opacityValue, s, schlafli) {
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
@@ -18,7 +19,7 @@ function init(n, transforms, opacityValue, s, order) {
     light.position.set(1, -1, 1);
     scene.add(light);
 
-    initObjects(n, transforms, opacityValue, s, order);
+    initObjects(n, transforms, opacityValue, s, schlafli);
 
     initCamera();
     initRenderer();
@@ -37,7 +38,7 @@ function initRenderer() {
     renderer.setSize(WIDTH, HEIGHT);
 }
 
-function initObjects(n, transforms, opacityValue, s, order) {
+function initObjects(n, transforms, opacityValue, s, schlafli) {
 
     // loop over the each transformation in transformation array
 
@@ -57,7 +58,18 @@ function initObjects(n, transforms, opacityValue, s, order) {
             transparent: true
         });
 
-        var geometry = GEOM.hyperbolicDodecahedronGeometry(order, n, transforms[m], s);
+        var geometry;
+        var type = schlafli.slice(0, 2);
+
+        if (type === '53') {
+
+            geometry = GEOM53N.hyperbolicDodecahedronGeometry(schlafli[2], n, transforms[m], s);
+
+        } else if (type === '43') {
+
+            geometry = GEOM43N.hyperbolicCubeGeometry(schlafli[2], n, transforms[m], s);
+
+        }
 
         var cell = new THREE.Mesh(geometry, material);
 
@@ -76,6 +88,8 @@ function rotateObjects() {
         objects[i].rotation.x -= 0;
         objects[i].rotation.y -= 0.005;
         objects[i].rotation.z -= 0.01;
+
+        //objects[i].position.set(i, 0, 0);
 
     }
 }
