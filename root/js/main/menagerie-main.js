@@ -6,22 +6,28 @@ import * as GEOM34N from "../geometries/34n-geometry.js";
 
 var scene, camera, renderer;
 var objects = [];
+var shapes = ['534', '535', '536', '435', '436', '336', '344',];
+var locations = [[1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1], [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1]];
 
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
-function init(n, transforms, opacityValue, s, schlafli) {
+function init(n, opacityValue, s) {
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
 
     scene.add(new THREE.HemisphereLight(0xaaaaaa, 0x444444));
 
-    var light = new THREE.DirectionalLight(0xffffff, 0.5);
-    light.position.set(1, -1, 1);
-    scene.add(light);
+    //var light = new THREE.DirectionalLight(0xffffff, 0.5);
+    //light.position.set(1, -1, 1);
+    //scene.add(light);
 
-    initObjects(n, transforms, opacityValue, s, schlafli);
+    //var light = new THREE.PointLight(0xffffff, 2, 100);
+    //light.position.set(0, 0, 0);
+    //scene.add(light);
+
+    initObjects(n, opacityValue, s);
 
     initCamera();
     initRenderer();
@@ -31,7 +37,7 @@ function init(n, transforms, opacityValue, s, schlafli) {
 
 function initCamera() {
     camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 10);
-    camera.position.set(0, -2, 1);
+    camera.position.set(3, 3, 3);
     camera.lookAt(scene.position);
 }
 
@@ -40,19 +46,12 @@ function initRenderer() {
     renderer.setSize(WIDTH, HEIGHT);
 }
 
-function initObjects(n, transforms, opacityValue, s, schlafli) {
+function initObjects(n, opacityValue, s) {
 
-    // loop over the each transformation in transformation array
-
-    for (var m = 0; m < transforms.length; m++) {
-
-        // define a material for cell corresponding to transformation
-        // colour is defined through HSL
-        // transparency turn on/off - transparent
-        // can change opacity too
+    for (var i = 0; i < shapes.length; i++) {
 
         var material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color().setHSL(Math.random(), 0.7, 0.8),
+            color: new THREE.Color().setHSL(i / (shapes.length - 1), 0.7, 0.8),
             roughness: 0.5,
             metalness: 0,
             flatShading: true,
@@ -61,23 +60,23 @@ function initObjects(n, transforms, opacityValue, s, schlafli) {
         });
 
         var geometry;
-        var type = schlafli.slice(0, 2);
+        var type = shapes[i].slice(0, 2);
 
         if (type === '53') {
 
-            geometry = GEOM53N.hyperbolicDodecahedronGeometry(schlafli[2], n, transforms[m], s);
+            geometry = GEOM53N.hyperbolicDodecahedronGeometry(shapes[i][2], n, '', s);
 
         } else if (type === '43') {
 
-            geometry = GEOM43N.hyperbolicCubeGeometry(schlafli[2], n, transforms[m], s);
+            geometry = GEOM43N.hyperbolicCubeGeometry(shapes[i][2], n, '', s);
 
         } else if (type === '33') {
 
-            geometry = GEOM33N.hyperbolicTetrahedronGeometry(schlafli[2], n, transforms[m], s);
+            geometry = GEOM33N.hyperbolicTetrahedronGeometry(shapes[i][2], n, '', s);
 
         } else if (type === '34') {
 
-            geometry = GEOM34N.hyperbolicOctahedronGeometry(schlafli[2], n, transforms[m], s);
+            geometry = GEOM34N.hyperbolicOctahedronGeometry(shapes[i][2], n, '', s);
 
         }
 
@@ -99,15 +98,22 @@ function rotateObjects() {
         objects[i].rotation.y -= 0.005;
         objects[i].rotation.z -= 0.01;
 
-        //objects[i].position.set(i, 0, 0);
+        objects[i].position.set(locations[i][0], locations[i][1], locations[i][2]);
 
     }
+}
+
+function rotateScene() {
+    scene.rotation.x -= 0;
+    scene.rotation.y -= 0.005;
+    scene.rotation.z -= 0.001;
 }
 
 function render() {
 
     requestAnimationFrame(render);
     rotateObjects();
+    rotateScene();
     renderer.render(scene, camera);
 
 }
