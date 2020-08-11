@@ -7,7 +7,7 @@ import * as GEOM35N from "../geometries/35n-geometry.js";
 
 var scene, camera, renderer;
 var objects = [];
-var shapes = ['534', '535', '536', '435', '436', '336', '344','353'];
+var shapes = ['534', '535', '536', '435', '436', '336', '345','353'];
 var locations = [[1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1], [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1]];
 
 var WIDTH = window.innerWidth;
@@ -18,7 +18,7 @@ function init(n, opacityValue, s) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
 
-    scene.add(new THREE.HemisphereLight(0xaaaaaa, 0x444444));
+    scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
     //var light = new THREE.DirectionalLight(0xffffff, 0.5);
     //light.position.set(1, -1, 1);
@@ -109,9 +109,9 @@ function rotateObjects() {
 }
 
 function rotateScene() {
-    scene.rotation.x -= 0;
+    scene.rotation.x -= 0.001;
     scene.rotation.y -= 0.005;
-    scene.rotation.z -= 0.001;
+    scene.rotation.z -= 0;
 }
 
 function render() {

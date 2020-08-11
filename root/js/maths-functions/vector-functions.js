@@ -50,4 +50,10 @@ function midpoint(a, b) {
     return vectorScale(vectorSum(a, b), 0.5);
 }
 
-export { matrixMultiplication, transpose, vectorScale, vectorSum, midpoint }
+function norm(x) {
+
+    return Math.sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2);
+
+}
+
+export { matrixMultiplication, transpose, vectorScale, vectorSum, midpoint, norm }
