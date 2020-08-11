@@ -7,7 +7,7 @@ import * as GEOM35N from "../geometries/35n-geometry.js";
 
 var scene, camera, renderer;
 var objects = [];
-var shapes = ['534', '535', '536', '435', '436', '336', '345','353'];
+var shapes = ['534', '535', '536', '435', '436', '336', '349','353'];
 var locations = [[1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1], [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1]];
 
 var WIDTH = window.innerWidth;

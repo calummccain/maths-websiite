@@ -12,8 +12,8 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
 
     var vertices = ORDERN.vertices;
     var faces = ORDERN.faces;
-    var type = ORDERN.typeOfHoneycomb(order)
-
+    var type = ORDERN.typeOfHoneycomb(order);
+    alert(type);
     var dict, f, center;
 
     if (order == 4) {

@@ -36,20 +36,20 @@ function kleinFace(a, b, c, n, compactness) {
                 ]);
 
             } else {
- 
-                if (VF.norm(coords[faces[i][0]]) <= 1) {
+
+                if (VF.norm(coords[faces[i][0]]) <= 1 || (VF.norm(u) <= 1 || VF.norm(w) <= 1)) {
 
                     newFaces.push([6 * i, 6 * i + 3, 6 * i + 5]);
 
                 }
 
-                if (VF.norm(faces[i][1]) <= 1) {
+                if (VF.norm(coords[faces[i][1]]) <= 1 || (VF.norm(u) <= 1 || VF.norm(v) <= 1)) {
 
                     newFaces.push([6 * i + 3, 6 * i + 1, 6 * i + 4]);
 
                 }
 
-                if (VF.norm(faces[i][2]) <= 1) {
+                if (VF.norm(coords[faces[i][2]]) <= 1 || (VF.norm(v) <= 1 || VF.norm(w) <= 1)) {
 
                     newFaces.push([6 * i + 5, 6 * i + 4, 6 * i + 2]);
 

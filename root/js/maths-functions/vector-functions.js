@@ -52,7 +52,7 @@ function midpoint(a, b) {
 
 function norm(x) {
 
-    return Math.sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2);
+    return Math.sqrt(x[0][0] ** 2 + x[0][1] ** 2 + x[0][2] ** 2);
 
 }
 
