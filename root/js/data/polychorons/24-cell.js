@@ -132,62 +132,132 @@ const cells = [
 ];
 
 function distance(x, y) {
+
     var d = (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2 + (x[2] - y[2]) ** 2 + (x[3] - y[3]) ** 2;
+
     return Math.sqrt(d);
+
 }
 
 function scaleQuaternion(x, s) {
+
     return [x[0] * s, x[1] * s, x[2] * s, x[3] * s];
+
 }
 
 function sumQuaternions(m) {
+
     var v = [];
+
     for (var i = 0; i < m[0].length; i++) {
+
         v[i] = 0;
+
         for (var j = 0; j < m.length; j++) {
+
             v[i] += m[j][i];
+
         }
+
     }
+
     return v;
+
 }
 
 function findLines(l) {
+
     var lines = [];
+
     for (var i = 0; i < vertices.length; i++) {
+
         for (var j = i + 1; j < vertices.length; j++) {
+
             if (Math.abs(distance(vertices[i], vertices[j]) - l) < 0.001) {
+
                 lines.push([i, j]);
+
             }
+
         }
+
     }
+
     return lines;
+
 }
 
 function findFaces(l) {
+
     var faces = [];
+
     for (var i = 0; i < vertices.length; i++) {
+
         for (var j = i + 1; j < vertices.length; j++) {
+
             for (var k = j + 1; k < vertices.length; k++) {
+
                 var face = sumQuaternions([vertices[i], vertices[j], vertices[k]]);
+
                 if (Math.abs(distance(face, [0, 0, 0, 0]) - l) < 0.001) {
+
                     faces.push([i, j, k]);
+
                 }
+
             }
+
         }
+
     }
+
     return faces;
+
 }
 
 function findCells(l) {
+
     var cells = [];
+
     for (var i = 0; i < 24; i++) {
+
         cells[i] = [];
+
         for (var j = 0; j < 24; j++) {
+
             var d = distance(dualVertices[i], scaleQuaternion(vertices[j], 1 / Math.sqrt(2)));
+
             if (Math.abs(d - l) < 0.001) {
+
                 cells[i].push(j);
+
+            }
+
+        }
+
+    }
+
+    return cells;
+
+}
+
+function cellFacesFinder() {
+    cellFaces = [];
+    for (var m = 0; m < cells.length; m++) {
+        var individual = [];
+        for (var i = 0; i < 6; i++) {
+            for (var j = i + 1; j < 6; j++) {
+                for (var k = j + 1; k < 6; k++) {
+                    if (faces.includes([i, j, k])) {
+                        individual.push(0);
+                    }
+                }
             }
         }
+        cellFaces[m] = individual;
     }
-    return cells;
+    return cellFaces;
 }
+
+console.log(cellFacesFinder());
+console.log([[1, 2]].indexOf([1, 2]))
