@@ -5,9 +5,11 @@ import * as GEOM33N from "../geometries/33n-geometry.js";
 import * as GEOM34N from "../geometries/34n-geometry.js";
 import * as GEOM35N from "../geometries/35n-geometry.js";
 
-var scene, camera, renderer;
+var scene, camera, renderer, raycaster;
+var mouse = new THREE.Vector2(), INTERSECTED;
+
 var objects = [];
-var shapes = ['534', '535', '536', '435', '436', '336', '344','353'];
+var shapes = ['534', '535', '536', '435', '436', '336', '344', '353'];
 var locations = [[1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1], [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1]];
 
 var WIDTH = window.innerWidth;
@@ -27,6 +29,10 @@ function init(n, opacityValue, s) {
     //var light = new THREE.PointLight(0xffffff, 2, 100);
     //light.position.set(0, 0, 0);
     //scene.add(light);
+
+    raycaster = new THREE.Raycaster();
+
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     initObjects(n, opacityValue, s);
 
@@ -79,7 +85,7 @@ function initObjects(n, opacityValue, s) {
 
             geometry = GEOM34N.hyperbolicOctahedronGeometry(shapes[i][2], n, '', s);
 
-        } else if (type === '35'){
+        } else if (type === '35') {
 
             geometry = GEOM35N.hyperbolicIcosahedronGeometry(shapes[i][2], n, '', s);
 
@@ -119,7 +125,41 @@ function render() {
     requestAnimationFrame(render);
     rotateObjects();
     rotateScene();
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+
+        if (INTERSECTED != intersects[0].object) {
+
+            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            INTERSECTED.material.emissive.setHex(0xff0000);
+
+        }
+
+    } else {
+
+        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+        INTERSECTED = null;
+
+    }
+
     renderer.render(scene, camera);
+
+}
+
+function onDocumentMouseMove(event) {
+
+    event.preventDefault();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
 }
 
