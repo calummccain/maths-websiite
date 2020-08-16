@@ -1,4 +1,4 @@
-import * as VF from "../maths-functions/vector-functions.js";
+import * as VF from "../../maths-functions/vector-functions.js";
 
 function kleinFace(a, b, c, d, e, n) {
 
