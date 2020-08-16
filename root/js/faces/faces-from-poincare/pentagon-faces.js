@@ -1,5 +1,5 @@
-import * as VF from "../maths-functions/vector-functions.js";
-import * as HF from "../maths-functions/hyperbolic-functions.js"
+import * as VF from "../../maths-functions/vector-functions.js";
+import * as HF from "../../maths-functions/hyperbolic-functions.js"
 
 function hyperboloidFace(a, b, c, d, e, n) {
 

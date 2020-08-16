@@ -5,7 +5,7 @@ import * as ORDER5 from "../data/compact/535.js";
 import * as ORDER6 from "../data/paracompact/536.js";
 import * as ORDERN from "../data/general-types/53n.js";
 
-import * as FACE from "../faces/klein-pentagon-faces.js";
+import * as FACE from "../faces/faces-from-klein/klein-pentagon-faces.js";
 
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
