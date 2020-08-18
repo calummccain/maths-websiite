@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../../css/test.css">
+
+    <title>first page</title>
+</head>
+
+<body>
+
+    <a href="/root/index.html">index</a>
+
+    <script type="module">
+        import * as DATA from "../../js/data/polychorons/24-cell.js";
+        import * as SPH from "../../js/maths-functions/spherical-functions.js";
+        import * as THREE from "../../js/three.module.js"
+
+        var scene, camera, renderer;
+        var object;
+        var projectedVertices = [];
+
+        var WIDTH = window.innerWidth;
+        var HEIGHT = window.innerHeight;
+
+        function init(cells, opacityValue) {
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x121212);
+
+            scene.add(new THREE.HemisphereLight(0xaaaaaa, 0x444444));
+
+            var light = new THREE.DirectionalLight(0xffffff, 0.5);
+            light.position.set(1, -1, 1);
+            scene.add(light);
+
+            initObjects(cells, opacityValue);
+
+            initCamera();
+            initRenderer();
+
+            document.body.appendChild(renderer.domElement);
+        }
+
+        function initCamera() {
+            camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 10);
+            camera.position.set(0, -5, 1);
+            camera.lookAt(scene.position);
+        }
+
+        function initRenderer() {
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(WIDTH, HEIGHT);
+        }
+
+        function initObjects(cells, opacityValue) {
+
+            var geometry = new THREE.Geometry();
+            var material = new THREE.MeshStandardMaterial({
+                color: new THREE.Color().setHSL(Math.random(), 0.7, 0.8),
+                roughness: 0.5,
+                metalness: 0,
+                flatShading: true,
+                opacity: opacityValue,
+                transparent: true
+            });
+            material.side = THREE.DoubleSide;
+
+            for (var i = 0; i < 24; i++) {
+                projectedVertices[i] = SPH.sphereToPoincare(DATA.vertexDict[DATA.vertices[i]], 2);
+                geometry.vertices.push(
+                    new THREE.Vector3(
+                        projectedVertices[i][0],
+                        projectedVertices[i][1],
+                        projectedVertices[i][2]
+                    )
+                );
+            }
+
+            for (var i = 0; i < cells.length; i++) {
+                var facets = DATA.cellFaceDict[DATA.cells[cells[i]]];
+                for (var j = 0; j < 8; j++) {
+                    var facet = facets[j];
+                    geometry.faces.push(
+                        new THREE.Face3(
+                            DATA.vertices.indexOf(facet[0]),
+                            DATA.vertices.indexOf(facet[1]),
+                            DATA.vertices.indexOf(facet[2])
+                        )
+                    );
+                }
+            }
+
+            object = new THREE.Mesh(geometry, material);
+            scene.add(object);
+
+        }
+
+        function rotateObject() {
+
+                object.rotation.x -= 0;
+                object.rotation.y -= 0.005;
+                object.rotation.z -= 0.01;
+
+        }
+
+        function render() {
+
+            requestAnimationFrame(render);
+            rotateObject();
+            renderer.render(scene, camera);
+
+        }
+
+        init([7, 8, 14, 15, 22, 23], 1);
+        //init([1, 4, 6, 9, 13, 17], 1);
+        render();
+    </script>
+
+</body>
+
+</html>

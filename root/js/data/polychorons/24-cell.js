@@ -1,5 +1,10 @@
 //aka {3,4,3}
 
+//[0, 2, 10, 11, 12, 19]
+//[1, 4, 6, 9, 13, 17]
+//[3, 5, 16, 18, 20, 21]
+//[7, 8, 14, 15, 22, 23]
+
 const vertices = [
     'a', 'b', 'c', 'd',
     'e', 'f', 'g', 'h',
@@ -277,22 +282,27 @@ const cellDict = {
     'acmnqr': [0, 6, 0, 0],
     'aeimqu': [3, 3, 3, 3],
     'aejmrv': [3, 3, 3, -3],
+
     'afinqw': [3, 3, -3, 3],
     'afjnrx': [3, 3, -3, -3],
     'bdopst': [0, -6, 0, 0],
     'beiosu': [3, -3, 3, 3],
+
     'bejotv': [3, -3, 3, -3],
     'bfipsw': [3, -3, -3, 3],
     'bfjptx': [3, -3, -3, -3],
     'cdghkl': [-6, 0, 0, 0],
+
     'cgkmqu': [-3, 3, 3, 3],
     'cglmrv': [-3, 3, 3, -3],
     'chknqw': [-3, 3, -3, 3],
     'chlnrx': [-3, 3, -3, -3],
+
     'dgkosu': [-3, -3, 3, 3],
     'dglotv': [-3, -3, 3, -3],
     'dhkpsw': [-3, -3, -3, 3],
     'dhlptx': [-3, -3, -3, -3],
+
     'egmouv': [0, 0, 6, 0],
     'fhnpwx': [0, 0, -6, 0],
     'ikqsuw': [0, 0, 0, 6],
@@ -543,4 +553,6 @@ function cellFaces() {
 //console.log(findLines(2));
 //console.log(findFaces(12));
 //console.log(findCells(36));
-console.log(cellFaces());
+//console.log(cellFaces());
+
+export { vertices, vertexDict, lines, lineDict, faces, faceDict, cells, cellDict, cellFaceDict };
