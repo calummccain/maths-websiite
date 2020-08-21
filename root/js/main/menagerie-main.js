@@ -31,7 +31,6 @@ function init(n, opacityValue, s) {
     //scene.add(light);
 
     raycaster = new THREE.Raycaster();
-
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     initObjects(n, opacityValue, s);
