@@ -4,7 +4,7 @@ import * as ORDER5 from "../data/compact/435.js";
 import * as ORDER6 from "../data/paracompact/436.js";
 import * as ORDERN from "../data/general-types/43n.js";
 
-import * as FACE from "../faces/faces-from-klein/klein-square-faces.js";
+import * as FACE from "../faces/klein-square-faces.js";
 
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";

@@ -1,10 +1,15 @@
-import * as VF from "../../maths-functions/vector-functions.js";
+import * as VF from "../maths-functions/vector-functions.js";
 
-function kleinFace(a, b, c, n) {
+function kleinFace(a, b, c, d, n) {
+
+    //centre of face
+    var eUnscaled = VF.vectorSum(a, VF.vectorSum(b, VF.vectorSum(c, d)));
+    var e = VF.vectorScale(eUnscaled, 0.25);
+
+    var coords = [a, b, c, d, e];
+    var faces = [[0, 1, 4], [1, 2, 4], [2, 3, 4], [3, 0, 4]];
 
     var j = 0;
-    var coords = [a, b, c];
-    var faces = [[0, 1, 2]];
 
     while (j < n) {
 

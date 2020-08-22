@@ -2,7 +2,7 @@ import * as THREE from "../three.module.js";
 
 import * as ORDER3 from "../data/compact/353.js";
 
-import * as FACE from "../faces/faces-from-klein/klein-triangle-faces.js";
+import * as FACE from "../faces/klein-triangle-faces.js";
 
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
