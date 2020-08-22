@@ -7,12 +7,12 @@ const faceType = "pentagon";
 const typeOfHoneycomb = "paracompact";
 
 const vertices = [
-    [1, 1, 1,],
+    [1, 1, 1, 1],
     [1, 1, 1, -1],
     [1, 1, -1, 1],
     [1, 1, -1, -1],
     [1, -1, 1, 1],
-    [1, -1, 1, -1,]
+    [1, -1, 1, -1],
     [1, -1, -1, 1],
     [1, -1, -1, -1],
     [1, 0, p, 1 / p],

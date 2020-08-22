@@ -28,19 +28,18 @@ function hyperbolicTetrahedronGeometry(order, n, transform, s) {
 
     }
 
-    var transform = HF.wordToTransform(transform, dict);
-    var newVertices = HF.transformVertices(vertices, transform);
+    var newVertices = HF.transformVertices(vertices, transform, dict);
 
     var kleinVertices = [];
     for (var i = 0; i < newVertices.length; i++) {
 
-        kleinVertices[i] = [HF.hyperboloidToKlein(VF.transpose(VF.matrixMultiplication(f, VF.transpose(newVertices[i]))))];
+        kleinVertices[i] = HF.hyperboloidToKlein(f(newVertices[i]));
 
     }
 
     // transform center of cell
-    var newCenter = HF.transformVertices([center], transform);
-    var kleinCenter = [HF.hyperboloidToKlein(VF.transpose(VF.matrixMultiplication(f, VF.transpose(newCenter[0]))))];
+    var newCenter = HF.transformVertices([center], transform, dict);
+    var kleinCenter = f(newCenter[0]);
 
     // loop over the faces listed to generate mesh
     var cellGeometry = new THREE.Geometry();
@@ -74,7 +73,7 @@ function hyperbolicTetrahedronGeometry(order, n, transform, s) {
 
             var vertex = HF.kleinToPoincare(hyperboloidVertices[j]);
             var vertex2 = VF.vectorSum(VF.vectorScale(vertex, 1 - s), VF.vectorScale(kleinCenter, s));
-            geometry.vertices.push(new THREE.Vector3(vertex2[0][0], vertex2[0][1], vertex2[0][2]));
+            geometry.vertices.push(new THREE.Vector3(vertex2[0], vertex2[1], vertex2[2]));
 
         }
 

@@ -7,7 +7,7 @@ const faceType = "triangle";
 const typeOfHoneycomb = "compact";
 
 const vertices = [
-    [1, 1, p,],
+    [1, 1, p, 0],
     [1, 1, -p, 0],
     [1, -1, p, 0],
     [1, -1, -p, 0],

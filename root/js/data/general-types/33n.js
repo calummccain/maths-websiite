@@ -15,10 +15,10 @@ function typeOfHoneycomb(n) {
 const faceType = 'triangle';
 
 const vertices = [
-    [[1, 1, 1, 1]],
-    [[1, 1, -1, -1]],
-    [[1, -1, 1, -1]],
-    [[1, -1, -1, 1]]
+    [1, 1, 1, 1],
+    [1, 1, -1, -1],
+    [1, -1, 1, -1],
+    [1, -1, -1, 1]
 ];
 
 const faces = [

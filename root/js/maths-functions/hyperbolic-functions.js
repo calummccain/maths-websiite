@@ -7,15 +7,18 @@ function transformVertices(baseVertices, transformation, dictionary) {
     var newVertices = [];
     var e1 = [1, 0, 0, 0], e2 = [0, 1, 0, 0], e3 = [0, 0, 1, 0], e4 = [0, 0, 0, 1];
 
-    for (var i = transformation.length - 1; i > -1; i--) {
-        e1 = dictionary(transformation[i], e1);
-        e2 = dictionary(transformation[i], e2);
-        e3 = dictionary(transformation[i], e3);
-        e4 = dictionary(transformation[i], e4);
+    if (transformation !== '') {
+        for (var i = transformation.length - 1; i > -1; i--) {
+            e1 = dictionary(transformation[i], e1);
+            e2 = dictionary(transformation[i], e2);
+            e3 = dictionary(transformation[i], e3);
+            e4 = dictionary(transformation[i], e4);
+        }
     }
 
+
     for (var j = 0; j < baseVertices.length; j++) {
-        var oldVertex = baseVertices[i];
+        var oldVertex = baseVertices[j];
         var newVertex = VF.vectorSum(
             VF.vectorSum(
                 VF.vectorScale(e1, oldVertex[0]),
@@ -30,19 +33,6 @@ function transformVertices(baseVertices, transformation, dictionary) {
     }
 
     return newVertices;
-}
-
-// turns the word representation of the transformation into the actual matrix representation
-function wordToTransform(word, dictionary) {
-
-    var t_matrix = dictionary['e'];
-
-    for (var i = 0; i < word.length; i++) {
-        var n_matrix = VF.matrixMultiplication(t_matrix, dictionary[word.charAt(i)]);
-        t_matrix = n_matrix;
-    }
-
-    return t_matrix;
 }
 
 // stereographic projection from the hyperboloid model to the poincare model 
@@ -123,4 +113,4 @@ function hyperbolicNorm(x) {
 }
 
 
-export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, kleinToPoincare };
+export { transformVertices, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, kleinToPoincare };
