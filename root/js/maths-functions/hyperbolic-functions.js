@@ -29,8 +29,8 @@ function wordToTransform(word, dictionary) {
 // stereographic projection from the hyperboloid model to the poincare model 
 function hyperboloidToPoincare(point) {
 
-    var scale = 1 + point[0][0];
-    var newPoint = [point[0][1] / scale, point[0][2] / scale, point[0][3] / scale];
+    var scale = 1 + point[0];
+    var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
 
     return newPoint;
 }
@@ -38,12 +38,12 @@ function hyperboloidToPoincare(point) {
 // stereographic projection from the hyperboloid model to the poincare model 
 function hyperboloidToPoincareMod(point) {
 
-    if (Math.abs(point[0][0] ** 2 - point[0][1] ** 2 - point[0][2] ** 2 - point[0][3] ** 2) < 0.01) {
-        var scale = point[0][0];
-        var newPoint = [point[0][1] / scale, point[0][2] / scale, point[0][3] / scale];
+    if (Math.abs(point[0] ** 2 - point[1] ** 2 - point[2] ** 2 - point[3] ** 2) < 0.01) {
+        var scale = point[0];
+        var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
     } else {
-        var scale = 1 + point[0][0];
-        var newPoint = [point[0][1] / scale, point[0][2] / scale, point[0][3] / scale];
+        var scale = 1 + point[0];
+        var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
     }
     return newPoint;
 }
@@ -51,8 +51,8 @@ function hyperboloidToPoincareMod(point) {
 // stereographic projection from the hyperboloid model to the klein model (use for ideal points too)
 function hyperboloidToKlein(point) {
 
-    var scale = point[0][0];
-    var newPoint = [point[0][1] / scale, point[0][2] / scale, point[0][3] / scale];
+    var scale = point[0];
+    var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
 
     return newPoint;
 }
@@ -71,7 +71,7 @@ function poincareToUpperHalfPlane(point) {
 
 function kleinToPoincare(point) {
 
-    var dist = Math.sqrt(point[0][0] ** 2 + point[0][1] ** 2 + point[0][2] ** 2);
+    var dist = Math.sqrt(point[0] ** 2 + point[1] ** 2 + point[2] ** 2);
     var hyperbolicDist;
 
     if (1 > dist ** 2) {
@@ -91,23 +91,17 @@ function kleinToPoincare(point) {
 // hyperboloid inner product
 function hyperboloidInnerProduct(x, y) {
 
-    var innerProduct = x[0][0] * y[0][0] - x[0][1] * y[0][1] - x[0][2] * y[0][2] - x[0][3] * y[0][3];
+    var innerProduct = x[0] * y[0] - x[1] * y[1] - x[2] * y[2] - x[3] * y[3];
 
     return innerProduct;
 }
 
 function hyperbolicNorm(x) {
 
-    var norm = x[0][0] ** 2 - x[0][1] ** 2 - x[0][2] ** 2 - x[0][3] ** 2;
+    var norm = x[0] ** 2 - x[1] ** 2 - x[2] ** 2 - x[3] ** 2;
 
     return norm;
 }
 
-function scaledHyperbolicNorm(x, f) {
-
-    var norm = (f[0][0] * x[0][0]) ** 2 - (f[1][1] * x[0][1]) ** 2 - (f[2][2] * x[0][2]) ** 2 - (f[3][3] * x[0][3]) ** 2;
-
-    return norm;
-}
 
 export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, scaledHyperbolicNorm, kleinToPoincare };
