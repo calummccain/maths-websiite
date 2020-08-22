@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../css/test.css">
+
+    <title>first page</title>
+</head>
+
+<body>
+
+    <a href="/root/index.html">index</a>
+
+    <script type="module">
+        import * as FTF from "../js/data/compact/435.js";
+        import * as MAIN from "../js/main/line-klein.js";
+        import * as LAYER from "../js/maths-functions/layers.js";
+
+        MAIN.init(10, LAYER.layer(1, FTF.faceReflections), 0.2, FTF.matrixDict, FTF.vertices, FTF.center, FTF.f, FTF.lines);
+        MAIN.render();
+    </script>
+
+</body>
+
+</html>
