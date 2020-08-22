@@ -7,14 +7,14 @@ const faceType = "square";
 const typeOfHoneycomb = "compact";
 
 const vertices = [
-    [[1, 1, 1, 1]],
-    [[1, 1, -1, 1]],
-    [[1, -1, -1, 1]],
-    [[1, -1, 1, 1]],
-    [[1, 1, 1, -1]],
-    [[1, 1, -1, -1]],
-    [[1, -1, -1, -1]],
-    [[1, -1, 1, -1]]
+    [1, 1, 1, 1],
+    [1, 1, -1, 1],
+    [1, -1, -1, 1],
+    [1, -1, 1, 1],
+    [1, 1, 1, -1],
+    [1, 1, -1, -1],
+    [1, -1, -1, -1],
+    [1, -1, 1, -1]
 ];
 
 const lines = [
@@ -42,50 +42,74 @@ const faces = [
 ];
 
 //cfe
-const a = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, -1]
-];
+// const a = [
+//     [1, 0, 0, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 1, 0],
+//     [0, 0, 0, -1]
+// ];
+
+function a(v) {
+    return [v[0], v[1], v[2], -v[3]];
+}
 
 //cfv
-const b = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 0, 1],
-    [0, 0, 1, 0]
-];
+// const b = [
+//     [1, 0, 0, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 0, 1],
+//     [0, 0, 1, 0]
+// ];
+
+function b(v) {
+    return [v[0], v[1], v[3], v[2]];
+}
 
 //cev
-const c = [
-    [1, 0, 0, 0],
-    [0, 0, 1, 0],
-    [0, 1, 0, 0],
-    [0, 0, 0, 1]
-];
+// const c = [
+//     [1, 0, 0, 0],
+//     [0, 0, 1, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 0, 1]
+// ];
+
+function c(v) {
+    return [v[0], v[2], v[1], v[3]];
+}
 
 //fev
-const d = [
-    [p, 1 - p, 0, 0],
-    [1 + p, -p, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1]
-];
+// const d = [
+//     [p, 1 - p, 0, 0],
+//     [1 + p, -p, 0, 0],
+//     [0, 0, 1, 0],
+//     [0, 0, 0, 1]
+// ];
 
-const e = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1]
-];
+function d(v) {
+    return [p * v[0] - v[1] / p, p ** 2 * v[0] - p * v[1], v[2], v[3]];
+}
 
-const f = [
-    [(p ** 2) / Math.sqrt(2), 0, 0, 0],
-    [0, Math.sqrt(p / 2), 0, 0],
-    [0, 0, Math.sqrt(p / 2), 0],
-    [0, 0, 0, Math.sqrt(p / 2)]
-];
+// const e = [
+//     [1, 0, 0, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 1, 0],
+//     [0, 0, 0, 1]
+// ];
+
+function e(v) {
+    return [v[0], v[1], v[2], v[3]];
+}
+
+// const f = [
+//     [(p ** 2) / Math.sqrt(2), 0, 0, 0],
+//     [0, Math.sqrt(p / 2), 0, 0],
+//     [0, 0, Math.sqrt(p / 2), 0],
+//     [0, 0, 0, Math.sqrt(p / 2)]
+// ];
+
+function f(v) {
+    return [(p ** 2) / Math.sqrt(2) * v[0], Math.sqrt(p / 2) * v[1], Math.sqrt(p / 2) * v[2], Math.sqrt(p / 2) * v[3]];
+}
 
 const matrixDict = {
     'a': a,
@@ -100,6 +124,6 @@ const l = Math.acosh(p ** 2);
 
 const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
 
-const center = [[Math.sqrt(2) / (p ** 2), 0, 0, 0]];
+const center = [Math.sqrt(2) / (p ** 2), 0, 0, 0];
 
 export { typeOfHoneycomb, faceType, vertices, lines, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };
