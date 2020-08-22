@@ -121,13 +121,30 @@ function f(v) {
         Math.sqrt(3 * p - 1) / 2 * v[3]
     ];
 }
-const matrixDict = {
-    'a': a,
-    'b': b,
-    'c': c,
-    'd': d,
-    'e': e,
-    'f': f
+
+function matrixDict(letter, vector) {
+    var newVector;
+    switch (letter) {
+        case 'a':
+            newVector = a(vector);
+            break;
+        case 'b':
+            newVector = b(vector);
+            break;
+        case 'c':
+            newVector = c(vector);
+            break;
+        case 'd':
+            newVector = d(vector);
+            break;
+        case 'e':
+            newVector = e(vector);
+            break;
+        case 'f':
+            newVector = f(vector);
+            break;
+    }
+    return newVector;
 };
 
 const l = Math.acosh((p ** 6 - (-1 + p ** 2) * (3 * p - 1)) / 4);

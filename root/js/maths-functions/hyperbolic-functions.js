@@ -2,12 +2,31 @@ import * as VF from "./vector-functions.js";
 
 //transforms the original cell to the transformed one 
 // REMEMBER TO MULTIPLY THEM BY f !!!!!!!!!
-function transformVertices(baseVertices, transformation) {
+function transformVertices(baseVertices, transformation, dictionary) {
 
     var newVertices = [];
+    var e1 = [1, 0, 0, 0], e2 = [0, 1, 0, 0], e3 = [0, 0, 1, 0], e4 = [0, 0, 0, 1];
 
-    for (var i = 0; i < baseVertices.length; i++) {
-        newVertices[i] = VF.transpose(VF.matrixMultiplication(transformation, VF.transpose(baseVertices[i])));
+    for (var i = transformation.length - 1; i > -1; i--) {
+        e1 = dictionary(transformation[i], e1);
+        e2 = dictionary(transformation[i], e2);
+        e3 = dictionary(transformation[i], e3);
+        e4 = dictionary(transformation[i], e4);
+    }
+
+    for (var j = 0; j < baseVertices.length; j++) {
+        var oldVertex = baseVertices[i];
+        var newVertex = VF.vectorSum(
+            VF.vectorSum(
+                VF.vectorScale(e1, oldVertex[0]),
+                VF.vectorScale(e2, oldVertex[1])
+            ),
+            VF.vectorSum(
+                VF.vectorScale(e3, oldVertex[2]),
+                VF.vectorScale(e4, oldVertex[3])
+            )
+        );
+        newVertices.push(newVertex);
     }
 
     return newVertices;
@@ -104,4 +123,4 @@ function hyperbolicNorm(x) {
 }
 
 
-export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, scaledHyperbolicNorm, kleinToPoincare };
+export { transformVertices, wordToTransform, hyperboloidInnerProduct, hyperboloidToPoincare, poincareToUpperHalfPlane, hyperboloidToKlein, hyperboloidToPoincareMod, hyperbolicNorm, kleinToPoincare };

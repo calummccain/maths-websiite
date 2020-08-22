@@ -61,12 +61,12 @@ function c(v) {
 }
 
 //fev
-const d = [
-    [2, -1, -1, -1],
-    [1, 0, -1, -1],
-    [1, -1, 0, -1],
-    [1, -1, -1, 0]
-];
+// const d = [
+//     [2, -1, -1, -1],
+//     [1, 0, -1, -1],
+//     [1, -1, 0, -1],
+//     [1, -1, -1, 0]
+// ];
 
 function d(v) {
     return [
@@ -100,13 +100,29 @@ function f(v) {
     return [v[0], v[1], v[2], v[3]];
 }
 
-const matrixDict = {
-    'a': a,
-    'b': b,
-    'c': c,
-    'd': d,
-    'e': e,
-    'f': f
+function matrixDict(letter, vector) {
+    var newVector;
+    switch (letter) {
+        case 'a':
+            newVector = a(vector);
+            break;
+        case 'b':
+            newVector = b(vector);
+            break;
+        case 'c':
+            newVector = c(vector);
+            break;
+        case 'd':
+            newVector = d(vector);
+            break;
+        case 'e':
+            newVector = e(vector);
+            break;
+        case 'f':
+            newVector = f(vector);
+            break;
+    }
+    return newVector;
 };
 
 const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcabc'];
