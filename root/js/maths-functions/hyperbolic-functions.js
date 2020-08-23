@@ -1,7 +1,5 @@
 import * as VF from "./vector-functions.js";
 
-//transforms the original cell to the transformed one 
-// REMEMBER TO MULTIPLY THEM BY f !!!!!!!!!
 function transformVertices(baseVertices, transformation, dictionary) {
 
     var newVertices = [];
