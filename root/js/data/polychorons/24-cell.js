@@ -54,6 +54,7 @@ const lines = [
     'ot', 'ou', 'ov', 'ps', 'pt', 'pw', 'px', 'qu', 'qw',
     'rv', 'rx', 'su', 'sw', 'tv', 'tx'
 ]
+
 const lineDict = {
     'ae': [2, 1, 1, 0],
     'af': [2, 1, -1, 0],
@@ -277,6 +278,7 @@ const cells = [
     'dhkpsw', 'dhlptx', 'egmouv',
     'fhnpwx', 'ikqsuw', 'jlrtvx'
 ]
+
 const cellDict = {
     'abefij': [6, 0, 0, 0],
     'acmnqr': [0, 6, 0, 0],
