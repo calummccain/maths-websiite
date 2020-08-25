@@ -4,8 +4,9 @@ import * as GEOM43N from "../geometries/43n-geometry.js";
 import * as GEOM33N from "../geometries/33n-geometry.js";
 import * as GEOM34N from "../geometries/34n-geometry.js";
 import * as GEOM35N from "../geometries/35n-geometry.js";
+import {OrbitControls} from "../orbit-controls.js"
 
-var scene, camera, renderer, raycaster;
+var scene, camera, renderer, raycaster, controls;
 var mouse = new THREE.Vector2(), INTERSECTED;
 
 var objects = [];
@@ -37,6 +38,9 @@ function init(n, opacityValue, s) {
 
     initCamera();
     initRenderer();
+
+    controls = new OrbitControls( camera, renderer.domElement );
+    controls.update();
 
     document.body.appendChild(renderer.domElement);
 }
@@ -123,7 +127,7 @@ function render() {
 
     requestAnimationFrame(render);
     rotateObjects();
-    rotateScene();
+    //rotateScene();
 
     raycaster.setFromCamera(mouse, camera);
 
@@ -148,6 +152,8 @@ function render() {
         INTERSECTED = null;
 
     }
+
+    controls.update();
 
     renderer.render(scene, camera);
 
