@@ -4,10 +4,10 @@ import * as GEOM43N from "../geometries/43n-geometry.js";
 import * as GEOM33N from "../geometries/33n-geometry.js";
 import * as GEOM34N from "../geometries/34n-geometry.js";
 import * as GEOM35N from "../geometries/35n-geometry.js";
-import {OrbitControls} from "../orbit-controls.js"
+import { OrbitControls } from "../orbit-controls.js"
 
 var scene, camera, renderer, raycaster, controls;
-var mouse = new THREE.Vector2(), INTERSECTED;
+var mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
 
 var objects = [];
 var shapes = ['534', '535', '536', '435', '436', '336', '344', '353'];
@@ -33,13 +33,14 @@ function init(n, opacityValue, s) {
 
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);
+    document.addEventListener('click', onDocumentMouseClick, false);
 
     initObjects(n, opacityValue, s);
 
     initCamera();
     initRenderer();
 
-    controls = new OrbitControls( camera, renderer.domElement );
+    controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
 
     document.body.appendChild(renderer.domElement);
@@ -95,6 +96,7 @@ function initObjects(n, opacityValue, s) {
         }
 
         var cell = new THREE.Mesh(geometry, material);
+        cell.name = "/root/old/html/test/" + shapes[i] + ".html";
 
         objects.push(cell);
         scene.add(cell);
@@ -129,32 +131,7 @@ function render() {
     rotateObjects();
     //rotateScene();
 
-    raycaster.setFromCamera(mouse, camera);
-
-    var intersects = raycaster.intersectObjects(scene.children);
-
-    if (intersects.length > 0) {
-
-        if (INTERSECTED != intersects[0].object) {
-
-            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-
-            INTERSECTED = intersects[0].object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            INTERSECTED.material.emissive.setHex(0xff0000);
-
-        }
-
-    } else {
-
-        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-
-        INTERSECTED = null;
-
-    }
-
     controls.update();
-
     renderer.render(scene, camera);
 
 }
@@ -165,6 +142,57 @@ function onDocumentMouseMove(event) {
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+        if (INTERSECTED != intersects[0].object) {
+            if (INTERSECTED) {
+                INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+            }
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            INTERSECTED.material.emissive.setHex(0xff0000);
+        }
+    } else {
+        if (INTERSECTED) {
+            INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+        }
+        INTERSECTED = null;
+    }
+
+}
+
+function onDocumentMouseClick(event) {
+
+    event.preventDefault();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var clicked = raycaster.intersectObjects(scene.children);
+    //alert((clicked[0].object).name);
+    window.open((clicked[0].object).name)
+
+    if (clicked.length > 0) {
+        if (CLICKED != clicked[0].object) {
+            if (CLICKED) {
+                CLICKED.material.emissive.setHex(CLICKED.currentHex);
+            }
+            CLICKED = clicked[0].object;
+            CLICKED.currentHex = INTERSECTED.material.emissive.getHex();
+            CLICKED.material.emissive.setHex(0x0000ff);
+        }
+    } else {
+        if (CLICKED) {
+            CLICKED.material.emissive.setHex(CLICKED.currentHex);
+        }
+        CLICKED = null;
+    }
 
 }
 
