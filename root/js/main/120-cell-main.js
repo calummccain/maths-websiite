@@ -3,7 +3,8 @@ import * as GEOM from "../geometries/120-cell-geometry.js";
 import * as CXX from "../data/polychorons/120-cell.js";
 import { OrbitControls } from "../orbit-controls.js";
 
-var scene, camera, renderer, controls;
+var scene, camera, renderer, controls, raycaster;
+var mouse = new THREE.Vector2(), INTERSECTED;
 
 var objects = [];
 
@@ -24,7 +25,10 @@ function init(n, opacityValue, cells, d) {
     //var light = new THREE.PointLight(0xffffff, 2, 100);
     //light.position.set(0, 0, 0);
     //scene.add(light);
-
+    
+    raycaster = new THREE.Raycaster();
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
+    
     initObjects(n, opacityValue, cells, d);
 
     initCamera();
@@ -93,6 +97,35 @@ function render() {
 
     controls.update();
     renderer.render(scene, camera);
+
+}
+
+function onDocumentMouseMove(event) {
+
+    event.preventDefault();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+        if (INTERSECTED != intersects[0].object) {
+            if (INTERSECTED) {
+                INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+            }
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            INTERSECTED.material.emissive.setHex(0xff0000);
+        }
+    } else {
+        if (INTERSECTED) {
+            INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+        }
+        INTERSECTED = null;
+    }
 
 }
 

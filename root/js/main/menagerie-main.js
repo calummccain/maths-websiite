@@ -7,7 +7,7 @@ import * as GEOM35N from "../geometries/35n-geometry.js";
 import { OrbitControls } from "../orbit-controls.js";
 
 var scene, camera, renderer, raycaster, controls;
-var mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
+var mouse = new THREE.Vector2(), INTERSECTED;
 
 var objects = [];
 var shapes = ['534', '535', '536', '435', '436', '336', '344', '353'];
