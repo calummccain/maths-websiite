@@ -1,6 +1,6 @@
 import * as THREE from "../three.module.js";
-import * as GEOM from "../geometries/24-cell-geometry.js";
-import * as XXIV from "../data/polychorons/24-cell.js";
+import * as GEOM from "../geometries/8-cell-geometry.js";
+import * as VIII from "../data/polychorons/8-cell.js";
 import { OrbitControls } from "../orbit-controls.js";
 
 var scene, camera, renderer, controls, raycaster;
@@ -16,20 +16,18 @@ function init(n, opacityValue, cells, d) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
 
-    //scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
-
-    //var light = new THREE.DirectionalLight(0xffffff, 0.5);
+    //var light = new THREE.DirectionalLight(0xaaaaaa, 0.5);
     //light.position.set(2, 0, 0);
-    //scene.add(light);
+    //camera.add(light);
 
     //var light = new THREE.PointLight(0xffffff, 2, 100);
     //light.position.set(0, 0, 0);
-    //scene.add(light);
+
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     initObjects(n, opacityValue, cells, d);
-
+    
     initCamera();
     camera.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
     scene.add(camera);
@@ -67,7 +65,7 @@ function initObjects(n, opacityValue, cells, d) {
 
         material.side = THREE.DoubleSide;
 
-        var geometry = GEOM.xxivCellGeometry(n, XXIV.cells[cells[i]], d);
+        var geometry = GEOM.viiiCellGeometry(n, VIII.cells[cells[i]], d);
 
         var cell = new THREE.Mesh(geometry, material);
 
