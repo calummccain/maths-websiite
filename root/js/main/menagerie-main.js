@@ -175,24 +175,7 @@ function onDocumentMouseClick(event) {
     raycaster.setFromCamera(mouse, camera);
 
     var clicked = raycaster.intersectObjects(scene.children);
-    //alert((clicked[0].object).name);
-    window.open((clicked[0].object).name)
-
-    if (clicked.length > 0) {
-        if (CLICKED != clicked[0].object) {
-            if (CLICKED) {
-                CLICKED.material.emissive.setHex(CLICKED.currentHex);
-            }
-            CLICKED = clicked[0].object;
-            CLICKED.currentHex = INTERSECTED.material.emissive.getHex();
-            CLICKED.material.emissive.setHex(0x0000ff);
-        }
-    } else {
-        if (CLICKED) {
-            CLICKED.material.emissive.setHex(CLICKED.currentHex);
-        }
-        CLICKED = null;
-    }
+    window.open((clicked[0].object).name, "_top");
 
 }
 
