@@ -1,8 +1,9 @@
 import * as THREE from "../three.module.js";
 import * as GEOM from "../geometries/120-cell-geometry.js";
 import * as CXX from "../data/polychorons/120-cell.js";
+import { OrbitControls } from "../orbit-controls.js";
 
-var scene, camera, renderer;
+var scene, camera, renderer, controls;
 
 var objects = [];
 
@@ -28,6 +29,9 @@ function init(n, opacityValue, cells, d) {
 
     initCamera();
     initRenderer();
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
 
     document.body.appendChild(renderer.domElement);
 }
@@ -85,8 +89,9 @@ function rotateObjects() {
 function render() {
 
     requestAnimationFrame(render);
-    rotateObjects();
+    //rotateObjects();
 
+    controls.update();
     renderer.render(scene, camera);
 
 }
