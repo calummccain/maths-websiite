@@ -53,7 +53,7 @@ const lines = [
     'mq', 'mr', 'mu', 'mv', 'nq', 'nr', 'nw', 'nx', 'os',
     'ot', 'ou', 'ov', 'ps', 'pt', 'pw', 'px', 'qu', 'qw',
     'rv', 'rx', 'su', 'sw', 'tv', 'tx'
-]
+];
 
 const lineDict = {
     'ae': [2, 1, 1, 0],
@@ -167,7 +167,106 @@ const faces = [
     'iqu', 'iqw', 'isu', 'isw', 'jrv', 'jrx', 'jtv', 'jtx',
     'kqu', 'kqw', 'ksu', 'ksw', 'lrv', 'lrx', 'ltv', 'ltx',
     'mqu', 'mrv', 'nqw', 'nrx', 'osu', 'otv', 'psw', 'ptx'
-]
+];
+
+const faceCellDict = {
+    'aei': [ 'abefij', 'aeimqu' ],
+    'aej': [ 'abefij', 'aejmrv' ],
+    'aem': [ 'aeimqu', 'aejmrv' ],
+    'afi': [ 'abefij', 'afinqw' ],
+    'afj': [ 'abefij', 'afjnrx' ],
+    'afn': [ 'afinqw', 'afjnrx' ],
+    'aiq': [ 'aeimqu', 'afinqw' ],
+    'ajr': [ 'aejmrv', 'afjnrx' ],
+    'amq': [ 'acmnqr', 'aeimqu' ],
+    'amr': [ 'acmnqr', 'aejmrv' ],
+    'anq': [ 'acmnqr', 'afinqw' ],
+    'anr': [ 'acmnqr', 'afjnrx' ],
+    'bei': [ 'abefij', 'beiosu' ],
+    'bej': [ 'abefij', 'bejotv' ],
+    'beo': [ 'beiosu', 'bejotv' ],
+    'bfi': [ 'abefij', 'bfipsw' ],
+    'bfj': [ 'abefij', 'bfjptx' ],
+    'bfp': [ 'bfipsw', 'bfjptx' ],
+    'bis': [ 'beiosu', 'bfipsw' ],
+    'bjt': [ 'bejotv', 'bfjptx' ],
+    'bos': [ 'bdopst', 'beiosu' ],
+    'bot': [ 'bdopst', 'bejotv' ],
+    'bps': [ 'bdopst', 'bfipsw' ],
+    'bpt': [ 'bdopst', 'bfjptx' ],
+    'cgk': [ 'cdghkl', 'cgkmqu' ],
+    'cgl': [ 'cdghkl', 'cglmrv' ],
+    'cgm': [ 'cgkmqu', 'cglmrv' ],
+    'chk': [ 'cdghkl', 'chknqw' ],
+    'chl': [ 'cdghkl', 'chlnrx' ],
+    'chn': [ 'chknqw', 'chlnrx' ],
+    'ckq': [ 'cgkmqu', 'chknqw' ],
+    'clr': [ 'cglmrv', 'chlnrx' ],
+    'cmq': [ 'acmnqr', 'cgkmqu' ],
+    'cmr': [ 'acmnqr', 'cglmrv' ],
+    'cnq': [ 'acmnqr', 'chknqw' ],
+    'cnr': [ 'acmnqr', 'chlnrx' ],
+    'dgk': [ 'cdghkl', 'dgkosu' ],
+    'dgl': [ 'cdghkl', 'dglotv' ],
+    'dgo': [ 'dgkosu', 'dglotv' ],
+    'dhk': [ 'cdghkl', 'dhkpsw' ],
+    'dhl': [ 'cdghkl', 'dhlptx' ],
+    'dhp': [ 'dhkpsw', 'dhlptx' ],
+    'dks': [ 'dgkosu', 'dhkpsw' ],
+    'dlt': [ 'dglotv', 'dhlptx' ],
+    'dos': [ 'bdopst', 'dgkosu' ],
+    'dot': [ 'bdopst', 'dglotv' ],
+    'dps': [ 'bdopst', 'dhkpsw' ],
+    'dpt': [ 'bdopst', 'dhlptx' ],
+    'eiu': [ 'aeimqu', 'beiosu' ],
+    'ejv': [ 'aejmrv', 'bejotv' ],
+    'emu': [ 'aeimqu', 'egmouv' ],
+    'emv': [ 'aejmrv', 'egmouv' ],
+    'eou': [ 'beiosu', 'egmouv' ],
+    'eov': [ 'bejotv', 'egmouv' ],
+    'fiw': [ 'afinqw', 'bfipsw' ],
+    'fjx': [ 'afjnrx', 'bfjptx' ],
+    'fnw': [ 'afinqw', 'fhnpwx' ],
+    'fnx': [ 'afjnrx', 'fhnpwx' ],
+    'fpw': [ 'bfipsw', 'fhnpwx' ],
+    'fpx': [ 'bfjptx', 'fhnpwx' ],
+    'gku': [ 'cgkmqu', 'dgkosu' ],
+    'glv': [ 'cglmrv', 'dglotv' ],
+    'gmu': [ 'cgkmqu', 'egmouv' ],
+    'gmv': [ 'cglmrv', 'egmouv' ],
+    'gou': [ 'dgkosu', 'egmouv' ],
+    'gov': [ 'dglotv', 'egmouv' ],
+    'hkw': [ 'chknqw', 'dhkpsw' ],
+    'hlx': [ 'chlnrx', 'dhlptx' ],
+    'hnw': [ 'chknqw', 'fhnpwx' ],
+    'hnx': [ 'chlnrx', 'fhnpwx' ],
+    'hpw': [ 'dhkpsw', 'fhnpwx' ],
+    'hpx': [ 'dhlptx', 'fhnpwx' ],
+    'iqu': [ 'aeimqu', 'ikqsuw' ],
+    'iqw': [ 'afinqw', 'ikqsuw' ],
+    'isu': [ 'beiosu', 'ikqsuw' ],
+    'isw': [ 'bfipsw', 'ikqsuw' ],
+    'jrv': [ 'aejmrv', 'jlrtvx' ],
+    'jrx': [ 'afjnrx', 'jlrtvx' ],
+    'jtv': [ 'bejotv', 'jlrtvx' ],
+    'jtx': [ 'bfjptx', 'jlrtvx' ],
+    'kqu': [ 'cgkmqu', 'ikqsuw' ],
+    'kqw': [ 'chknqw', 'ikqsuw' ],
+    'ksu': [ 'dgkosu', 'ikqsuw' ],
+    'ksw': [ 'dhkpsw', 'ikqsuw' ],
+    'lrv': [ 'cglmrv', 'jlrtvx' ],
+    'lrx': [ 'chlnrx', 'jlrtvx' ],
+    'ltv': [ 'dglotv', 'jlrtvx' ],
+    'ltx': [ 'dhlptx', 'jlrtvx' ],
+    'mqu': [ 'aeimqu', 'cgkmqu' ],
+    'mrv': [ 'aejmrv', 'cglmrv' ],
+    'nqw': [ 'afinqw', 'chknqw' ],
+    'nrx': [ 'afjnrx', 'chlnrx' ],
+    'osu': [ 'beiosu', 'dgkosu' ],
+    'otv': [ 'bejotv', 'dglotv' ],
+    'psw': [ 'bfipsw', 'dhkpsw' ],
+    'ptx': [ 'bfjptx', 'dhlptx' ]
+  };
 
 const faceDict = {
     'aei': [3, 1, 1, 1],
@@ -266,7 +365,7 @@ const faceDict = {
     'otv': [0, -2, 2, -2],
     'psw': [0, -2, -2, 2],
     'ptx': [0, -2, -2, -2]
-}
+};
 
 const cells = [
     'abefij', 'acmnqr', 'aeimqu',
@@ -277,7 +376,7 @@ const cells = [
     'chlnrx', 'dgkosu', 'dglotv',
     'dhkpsw', 'dhlptx', 'egmouv',
     'fhnpwx', 'ikqsuw', 'jlrtvx'
-]
+];
 
 const cellDict = {
     'abefij': [6, 0, 0, 0],
@@ -309,7 +408,7 @@ const cellDict = {
     'fhnpwx': [0, 0, -6, 0],
     'ikqsuw': [0, 0, 0, 6],
     'jlrtvx': [0, 0, 0, -6]
-}
+};
 
 const cellFaceDict = {
     'abefij': [
@@ -456,7 +555,7 @@ const cellFaceDict = {
         'lrv', 'lrx',
         'ltv', 'ltx'
     ]
-}
+};
 
 function distance(x, y) {
     var d = (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2 + (x[2] - y[2]) ** 2 + (x[3] - y[3]) ** 2;
@@ -557,4 +656,19 @@ function cellFaces() {
 //console.log(findCells(36));
 //console.log(cellFaces());
 
-export { vertices, vertexDict, lines, lineDict, faces, faceDict, cells, cellDict, cellFaceDict };
+function findFaceCells() {
+    var faceCellDict = {};
+
+    for (var i = 0; i < 96; i++) {
+        var cell = [];
+        for (var j = 0; j < 24; j++) {
+            if (cellFaceDict[cells[j]].includes(faces[i])) {
+                cell.push(cells[j]);
+            }
+        }
+        faceCellDict[faces[i]] = cell;
+    }
+    return faceCellDict
+}
+
+export { vertices, vertexDict, lines, lineDict, faces, faceDict, faceCellDict, cells, cellDict, cellFaceDict };

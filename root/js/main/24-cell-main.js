@@ -5,6 +5,7 @@ import { OrbitControls } from "../orbit-controls.js";
 
 var scene, camera, renderer, controls, raycaster;
 var mouse = new THREE.Vector2(), INTERSECTED;
+var objects = [];
 
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
@@ -26,7 +27,7 @@ function init(n, opacityValue, cells, d) {
 
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);
-    document.addEventListener('click', onDocumentMouseClick, false);
+    document.addEventListener('click', function () { onDocumentMouseClick(n, opacityValue, d); }, false);
 
     initObjects(n, opacityValue, cells, d);
 
@@ -56,25 +57,32 @@ function initObjects(n, opacityValue, cells, d) {
 
     for (var i = 0; i < cells.length; i++) {
 
-        var col = Math.random();
-        var geometry = GEOM.xxivCellGeometry(n, XXIV.cells[cells[i]], d);
-
-        for (var j = 0; j < 8; j++) {
-            scene.add(new THREE.Mesh(
-                geometry[j],
-                new THREE.MeshStandardMaterial({
-                    color: new THREE.Color().setHSL(col, 0.6, 0.7),
-                    roughness: 0.5,
-                    metalness: 0,
-                    flatShading: true,
-                    opacity: opacityValue,
-                    transparent: true,
-                    side: THREE.DoubleSide
-                })));
-        }
+        addCellToScene(n, opacityValue, cells[i], d);
 
     }
 
+}
+
+function addCellToScene(n, opacityValue, name, d) {
+
+    var col = Math.random();
+    objects.push(XXIV.cells[name]);
+
+    var geometry = GEOM.xxivCellGeometry(n, XXIV.cells[name], d);
+
+    for (var j = 0; j < 8; j++) {
+        scene.add(new THREE.Mesh(
+            geometry[j],
+            new THREE.MeshStandardMaterial({
+                color: new THREE.Color().setHSL(col, 0.6, 0.7),
+                roughness: 0.5,
+                metalness: 0,
+                flatShading: true,
+                opacity: opacityValue,
+                transparent: true,
+                side: THREE.DoubleSide
+            })));
+    }
 }
 
 function render() {
@@ -115,9 +123,7 @@ function onDocumentMouseMove(event) {
 
 }
 
-function onDocumentMouseClick(event) {
-
-    event.preventDefault();
+function onDocumentMouseClick(n, opacityValue, d) {
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -127,7 +133,9 @@ function onDocumentMouseClick(event) {
     var intersects = raycaster.intersectObjects(scene.children);
 
     if (intersects.length > 0) {
-        console.log(intersects[0].object.geometry.name);
+
+        var [face, cell] = intersects[0].object.geometry.name;
+        XXIV.faceCellDict[face].forEach(cell => { if (!(objects.includes(cell))) { addCellToScene(n, opacityValue, XXIV.cells.indexOf(cell), d) } });
     }
 
 }
