@@ -6,8 +6,6 @@ import { OrbitControls } from "../orbit-controls.js";
 var scene, camera, renderer, controls, raycaster;
 var mouse = new THREE.Vector2(), INTERSECTED;
 
-var objects = [];
-
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
@@ -25,8 +23,10 @@ function init(n, opacityValue, cells, d) {
     //var light = new THREE.PointLight(0xffffff, 2, 100);
     //light.position.set(0, 0, 0);
     //scene.add(light);
+
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);
+    document.addEventListener('click', onDocumentMouseClick, false);
 
     initObjects(n, opacityValue, cells, d);
 
@@ -56,44 +56,30 @@ function initObjects(n, opacityValue, cells, d) {
 
     for (var i = 0; i < cells.length; i++) {
 
-        var material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color().setHSL(Math.random(), 0.6, 0.7),
-            roughness: 0.5,
-            metalness: 0,
-            flatShading: true,
-            opacity: opacityValue,
-            transparent: true
-        });
-
-        material.side = THREE.DoubleSide;
-
+        var col = Math.random();
         var geometry = GEOM.xxivCellGeometry(n, XXIV.cells[cells[i]], d);
 
-        var cell = new THREE.Mesh(geometry, material);
-
-        objects.push(cell);
-        scene.add(cell);
-
-    }
-
-    return objects;
-}
-
-function rotateObjects() {
-
-    for (var i = 0; i < objects.length; i++) {
-
-        objects[i].rotation.x -= 0;
-        objects[i].rotation.y -= 0.005;
-        objects[i].rotation.z -= 0.01;
+        for (var j = 0; j < 8; j++) {
+            scene.add(new THREE.Mesh(
+                geometry[j],
+                new THREE.MeshStandardMaterial({
+                    color: new THREE.Color().setHSL(col, 0.6, 0.7),
+                    roughness: 0.5,
+                    metalness: 0,
+                    flatShading: true,
+                    opacity: opacityValue,
+                    transparent: true,
+                    side: THREE.DoubleSide
+                })));
+        }
 
     }
+
 }
 
 function render() {
 
     requestAnimationFrame(render);
-    //rotateObjects();
 
     controls.update();
     renderer.render(scene, camera);
@@ -125,6 +111,23 @@ function onDocumentMouseMove(event) {
             INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
         }
         INTERSECTED = null;
+    }
+
+}
+
+function onDocumentMouseClick(event) {
+
+    event.preventDefault();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+        console.log(intersects[0].object.geometry.name);
     }
 
 }
