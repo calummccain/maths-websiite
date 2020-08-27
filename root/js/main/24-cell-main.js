@@ -5,6 +5,7 @@ import { OrbitControls } from "../orbit-controls.js";
 
 var scene, camera, renderer, controls, raycaster;
 var mouse = new THREE.Vector2(), INTERSECTED;
+
 var objects = [];
 
 var WIDTH = window.innerWidth;
@@ -14,16 +15,6 @@ function init(n, opacityValue, cells, d) {
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
-
-    //scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
-
-    //var light = new THREE.DirectionalLight(0xffffff, 0.5);
-    //light.position.set(2, 0, 0);
-    //scene.add(light);
-
-    //var light = new THREE.PointLight(0xffffff, 2, 100);
-    //light.position.set(0, 0, 0);
-    //scene.add(light);
 
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);

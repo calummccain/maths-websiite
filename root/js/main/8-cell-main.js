@@ -16,15 +16,9 @@ function init(n, opacityValue, cells, d) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
 
-    //var light = new THREE.DirectionalLight(0xaaaaaa, 0.5);
-    //light.position.set(2, 0, 0);
-    //camera.add(light);
-
-    //var light = new THREE.PointLight(0xffffff, 2, 100);
-    //light.position.set(0, 0, 0);
-
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);
+    document.addEventListener('click', function () { onDocumentMouseClick(n, opacityValue, d); }, false);
 
     initObjects(n, opacityValue, cells, d);
     
@@ -54,44 +48,37 @@ function initObjects(n, opacityValue, cells, d) {
 
     for (var i = 0; i < cells.length; i++) {
 
-        var material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color().setHSL(Math.random(), 0.6, 0.7),
-            roughness: 0.5,
-            metalness: 0,
-            flatShading: true,
-            opacity: opacityValue,
-            transparent: true
-        });
-
-        material.side = THREE.DoubleSide;
-
-        var geometry = GEOM.viiiCellGeometry(n, VIII.cells[cells[i]], d);
-
-        var cell = new THREE.Mesh(geometry, material);
-
-        objects.push(cell);
-        scene.add(cell);
+        addCellToScene(n, opacityValue, cells[i], d);
 
     }
 
-    return objects;
 }
 
-function rotateObjects() {
+function addCellToScene(n, opacityValue, name, d) {
 
-    for (var i = 0; i < objects.length; i++) {
+    var col = Math.random();
+    objects.push(VIII.cells[name]);
 
-        objects[i].rotation.x -= 0;
-        objects[i].rotation.y -= 0.005;
-        objects[i].rotation.z -= 0.01;
+    var geometry = GEOM.viiiCellGeometry(n, VIII.cells[name], d);
 
+    for (var j = 0; j < 6; j++) {
+        scene.add(new THREE.Mesh(
+            geometry[j],
+            new THREE.MeshStandardMaterial({
+                color: new THREE.Color().setHSL(col, 0.6, 0.7),
+                roughness: 0.5,
+                metalness: 0,
+                flatShading: true,
+                opacity: opacityValue,
+                transparent: true,
+                side: THREE.DoubleSide
+            })));
     }
 }
 
 function render() {
 
     requestAnimationFrame(render);
-    //rotateObjects();
 
     controls.update();
     renderer.render(scene, camera);
@@ -123,6 +110,23 @@ function onDocumentMouseMove(event) {
             INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
         }
         INTERSECTED = null;
+    }
+
+}
+
+function onDocumentMouseClick(n, opacityValue, d) {
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+
+        var [face, cell] = intersects[0].object.geometry.name;
+        VIII.faceCellDict[face].forEach(cell => { if (!(objects.includes(cell))) { addCellToScene(n, opacityValue, VIII.cells.indexOf(cell), d) } });
     }
 
 }

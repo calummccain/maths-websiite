@@ -32,7 +32,7 @@ const lines = [
     'ij', 'ik', 'im', 'jl', 'jn',
     'kl', 'ko', 'lp', 'mn', 'mo',
     'np', 'op'
-]
+];
 
 const lineDict = {
     'ab': [2, 2, 2, 0],
@@ -67,7 +67,7 @@ const lineDict = {
     'mo': [-2, -2, 0, 2],
     'np': [-2, -2, 0, -2],
     'op': [-2, -2, -2, 0]
-}
+};
 
 const faces = [
     'abcd', 'abef', 'abij',
@@ -78,7 +78,7 @@ const faces = [
     'egmo', 'fhnp', 'ghop',
     'ijkl', 'ijmn', 'ikmo',
     'jlnp', 'klop', 'mnop'
-]
+];
 
 const faceDict = {
     'abcd': [4, 4, 0, 0],
@@ -105,7 +105,34 @@ const faceDict = {
     'jlnp': [-4, 0, 0, -4],
     'klop': [-4, 0, -4, 0],
     'mnop': [-4, -4, 0, 0]
-}
+};
+
+const faceCellDict = {
+    'abcd': ['abcdefgh', 'abcdijkl'],
+    'abef': ['abcdefgh', 'abefijmn'],
+    'abij': ['abcdijkl', 'abefijmn'],
+    'aceg': ['abcdefgh', 'acegikmo'],
+    'acik': ['abcdijkl', 'acegikmo'],
+    'aeim': ['abefijmn', 'acegikmo'],
+    'bdfh': ['abcdefgh', 'bdfhjlnp'],
+    'bdjl': ['abcdijkl', 'bdfhjlnp'],
+    'bfjn': ['abefijmn', 'bdfhjlnp'],
+    'cdgh': ['abcdefgh', 'cdghklop'],
+    'cdkl': ['abcdijkl', 'cdghklop'],
+    'cgko': ['acegikmo', 'cdghklop'],
+    'dhlp': ['bdfhjlnp', 'cdghklop'],
+    'efgh': ['abcdefgh', 'efghmnop'],
+    'efmn': ['abefijmn', 'efghmnop'],
+    'egmo': ['acegikmo', 'efghmnop'],
+    'fhnp': ['bdfhjlnp', 'efghmnop'],
+    'ghop': ['cdghklop', 'efghmnop'],
+    'ijkl': ['abcdijkl', 'ijklmnop'],
+    'ijmn': ['abefijmn', 'ijklmnop'],
+    'ikmo': ['acegikmo', 'ijklmnop'],
+    'jlnp': ['bdfhjlnp', 'ijklmnop'],
+    'klop': ['cdghklop', 'ijklmnop'],
+    'mnop': ['efghmnop', 'ijklmnop']
+};
 
 const cells = [
     'abcdefgh',
@@ -116,7 +143,7 @@ const cells = [
     'cdghklop',
     'efghmnop',
     'ijklmnop'
-]
+];
 
 const cellDict = {
     'abcdefgh': [8, 0, 0, 0],
@@ -127,18 +154,18 @@ const cellDict = {
     'cdghklop': [0, 0, -8, 0],
     'efghmnop': [0, -8, 0, 0],
     'ijklmnop': [-8, 0, 0, 0]
-}
+};
 
 const cellFaceDict = {
-    'abcdefgh': [ 'abcd', 'abef', 'aceg', 'bdfh', 'cdgh', 'efgh' ],
-    'abcdijkl': [ 'abcd', 'abij', 'acik', 'bdjl', 'cdkl', 'ijkl' ],
-    'abefijmn': [ 'abef', 'abij', 'aeim', 'bfjn', 'efmn', 'ijmn' ],
-    'acegikmo': [ 'aceg', 'acik', 'aeim', 'cgko', 'egmo', 'ikmo' ],
-    'bdfhjlnp': [ 'bdfh', 'bdjl', 'bfjn', 'dhlp', 'fhnp', 'jlnp' ],
-    'cdghklop': [ 'cdgh', 'cdkl', 'cgko', 'dhlp', 'ghop', 'klop' ],
-    'efghmnop': [ 'efgh', 'efmn', 'egmo', 'fhnp', 'ghop', 'mnop' ],
-    'ijklmnop': [ 'ijkl', 'ijmn', 'ikmo', 'jlnp', 'klop', 'mnop' ]
-  }
+    'abcdefgh': ['abcd', 'abef', 'aceg', 'bdfh', 'cdgh', 'efgh'],
+    'abcdijkl': ['abcd', 'abij', 'acik', 'bdjl', 'cdkl', 'ijkl'],
+    'abefijmn': ['abef', 'abij', 'aeim', 'bfjn', 'efmn', 'ijmn'],
+    'acegikmo': ['aceg', 'acik', 'aeim', 'cgko', 'egmo', 'ikmo'],
+    'bdfhjlnp': ['bdfh', 'bdjl', 'bfjn', 'dhlp', 'fhnp', 'jlnp'],
+    'cdghklop': ['cdgh', 'cdkl', 'cgko', 'dhlp', 'ghop', 'klop'],
+    'efghmnop': ['efgh', 'efmn', 'egmo', 'fhnp', 'ghop', 'mnop'],
+    'ijklmnop': ['ijkl', 'ijmn', 'ikmo', 'jlnp', 'klop', 'mnop']
+};
 
 function distance(x, y) {
     var d = (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2 + (x[2] - y[2]) ** 2 + (x[3] - y[3]) ** 2;
@@ -232,8 +259,24 @@ function cellFaces() {
     return cellFaceDict;
 }
 
+function findFaceCells() {
+    var faceCellDict = {};
+
+    for (var i = 0; i < 24; i++) {
+        var cell = [];
+        for (var j = 0; j < 8; j++) {
+            if (cellFaceDict[cells[j]].includes(faces[i])) {
+                cell.push(cells[j]);
+            }
+        }
+        faceCellDict[faces[i]] = cell;
+    }
+    return faceCellDict
+}
+
+//console.log(findFaceCells());
 //console.log('abc'.includes('a'));
 //console.log(findFaces());
 //console.log(cellFaces());
 
-export { vertices, vertexDict, lines, lineDict, faces, faceDict, cells, cellDict, cellFaceDict };
+export { vertices, vertexDict, lines, lineDict, faces, faceDict, faceCellDict, cells, cellDict, cellFaceDict };

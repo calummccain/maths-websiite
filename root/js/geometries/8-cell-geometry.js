@@ -7,23 +7,17 @@ import * as FACE from "../faces/sphere-square-faces.js";
 import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function viiiCellGeometry(n, cell, d) {
+function viiiCellGeometry(n, cellName, d) {
 
-    var faces = VIII.cellFaceDict[cell];
+    var faces = VIII.cellFaceDict[cellName];
 
-    // loop over the faces listed to generate mesh
-    var cellGeometry = new THREE.Geometry();
+    var cell = [];
 
     for (var i = 0; i < faces.length; i++) {
 
         var geometry = new THREE.Geometry();
         var faceData;
 
-        // faceData consists of two arrays - coordinates of mesh vertices in hyperbolic space and which 
-        // vertices correspond to each face
-        //
-        // The coordinates are originally in the form of a row vector so transposes are required as well 
-        // as multiplication by the f matrix to get them into the standard coordinates
         var v1 = VIII.vertexDict[faces[i][0]];
         var v2 = VIII.vertexDict[faces[i][1]];
         var v3 = VIII.vertexDict[faces[i][2]];
@@ -31,13 +25,9 @@ function viiiCellGeometry(n, cell, d) {
 
         faceData = FACE.sphereFace(v1, v2, v3, v4, n);
 
-        // facets is the list of small trianglular faces that make up the mesh and which vertices make them up 
         var facets = faceData[0];
         var hypersphereVertices = faceData[1];
 
-        // transform the vertices to the appropriate model - poincare disk or hyperboloid model
-        // scale them to the center
-        // add them to the geometry
         for (var j = 0; j < hypersphereVertices.length; j++) {
 
             var vertex = VF.vectorScale(hypersphereVertices[j], 1 / Math.sqrt(SF.sphereNorm(hypersphereVertices[j])));
@@ -46,8 +36,6 @@ function viiiCellGeometry(n, cell, d) {
 
         }
 
-        // add the facets to the geometry
-
         for (var k = 0; k < facets.length; k++) {
 
             var facetPiece = facets[k];
@@ -55,12 +43,13 @@ function viiiCellGeometry(n, cell, d) {
 
         }
 
-        cellGeometry.merge(geometry);
-        cellGeometry.mergeVertices();
+        geometry.mergeVertices();
+        geometry.name = [faces[i], cellName];
+        cell.push(geometry);
 
     }
 
-    return cellGeometry;
+    return cell;
 }
 
 export { viiiCellGeometry };
