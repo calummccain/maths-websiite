@@ -2,7 +2,6 @@ import * as VF from "../maths-functions/vector-functions.js";
 
 function sphereFace(a, b, c, d, e, n) {
 
-    //centre of face
     var fUnscaled = VF.vectorSum(a, VF.vectorSum(b, VF.vectorSum(c, VF.vectorSum(d, e))));
     var f = VF.vectorScale(fUnscaled, 0.2);
 
