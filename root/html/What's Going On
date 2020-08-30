@@ -1,0 +1,68 @@
+What's Going On?
+
+Hopefully by now you'll have played around with a couple of the shapes and 
+you're probably wndering what they even are. Short answer is: 
+
+they're honeycombs.
+
+So why don't they look like the cute little houses that bees make?
+
+Let's start by seeing what makes a bee's honeycomb a honeycomb:
+
+[IMAGE]
+
+The honeycomb that bees make is the gold standard of symmetry. Made up of 
+repeating hexagonal chambers all of the same size and shape it's optimised for 
+the storing of honey and larvae. So how doe this fit in with the 3d shapes? 
+What we need do is to pick the key features of the bee's honeycomb,
+express them in a bit of maths and then see how they generalise. From the image
+above we can extract a couple of things:
+
+1) It's made up of lots of repeating hexagons
+2) The hexagons are all the same size and shape 
+3) The arrangement is neat - there's a lot of symmetry
+
+We can now decide on which of these ideas we want to take with us and 
+generalise!
+
+Idea 1: Using hexagons is completely fine but also quite restrictive - do other
+        shapes work?
+Idea 2: The fact that none of the hexagons is 'special' is quite nice 
+        (and fair!) - might be a good one to keep
+Idea 3: Symmetry is kinda cool
+
+So now we can build a question to investigate:
+
+'What regular polygons tesselate the plane'
+
+Breaking this down:
+
+regular   = the shapes we are using all have the same angles and side lengths
+polygons  = the shapes have straight sides and don't  intersect themselves [IMAGE]
+tesselate = this word will come up quite a lot and is interchangeable with 
+            honeycomb i.e. if the shape tesselates then it makes a honeycomb (aka a tesselation)
+plane     = we will focus our attention on the Euclidean plane first. 
+            This basically means we can draw the honeycombs on a flat piece of paper 
+            (if the paper was infinitely big...)
+
+This question is really  quite quick to answer and  it turns out that there are only three solutions.
+
+[IMAGE] [IMAGE] [IMAGE]
+
+All three of these are rather well known from any maths/science/design notebook. 
+Alternatively the triangular tesselation is how you stack toblerones, the square one
+is basically pixel-art, a chessboard, tetris etc... and the hexagon one is the bee's 
+honeycomb from earlier.
+
+So why are there only 3?
+
+When we make out tesselation we don't want there to be any spaces inbetween the polygons.
+This means that around every point the angles need to add up to 360 (I'll switch to radians later)
+So we  need the solutions to:
+
+360 = k * 180 * (1 - 1 / n)
+
+2 = k * (1 - 1 / n)
+
+2n = k (n - 1)
+
