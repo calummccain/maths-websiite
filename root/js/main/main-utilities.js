@@ -9,16 +9,16 @@ var objects = [];
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
-function init(n, opacityValue, order, cells, s, geometryFunction) {
+function init(n, opacityValue, order, cells, s, geometryFunction, numberofFaces) {
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
 
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);
-    document.addEventListener('click', function () { onDocumentMouseClick(n, opacityValue, order, s, geometryFunction); }, false);
+    document.addEventListener('click', function () { onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces); }, false);
 
-    initObjects(n, opacityValue, order, cells, s, geometryFunction);
+    initObjects(n, opacityValue, order, cells, s, geometryFunction, numberofFaces);
 
     initCamera();
     camera.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
@@ -43,20 +43,20 @@ function initRenderer() {
     renderer.setSize(WIDTH, HEIGHT);
 }
 
-function initObjects(n, opacityValue, order, cells, s, geometryFunction) {
+function initObjects(n, opacityValue, order, cells, s, geometryFunction, numberofFaces) {
     for (var i = 0; i < cells.length; i++) {
-        addCellToScene(n, opacityValue, order, cells[i], s, geometryFunction);
+        addCellToScene(n, opacityValue, order, cells[i], s, geometryFunction, numberofFaces);
     }
 }
 
-function addCellToScene(n, opacityValue, order, transform, s, geometryFunction) {
+function addCellToScene(n, opacityValue, order, transform, s, geometryFunction, numberofFaces) {
 
     var col = Math.random();
     objects.push([transform]);
 
     var shapeGeometry = geometryFunction(order, n, transform, s);
 
-    for (var j = 0; j < 6; j++) {
+    for (var j = 0; j < numberofFaces; j++) {
         scene.add(new THREE.Mesh(
             shapeGeometry[j],
             new THREE.MeshStandardMaterial({
@@ -109,7 +109,7 @@ function onDocumentMouseMove(event) {
 
 }
 
-function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction) {
+function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces) {
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -126,7 +126,7 @@ function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction) {
         console.log(cell);
         console.log(intersects[0].object.geometry.name);
 
-        addCellToScene(n, opacityValue, order, cell + face + 'd', s, geometryFunction);
+        addCellToScene(n, opacityValue, order, cell + face + 'd', s, geometryFunction, numberofFaces);
     }
 
 }

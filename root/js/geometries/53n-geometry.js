@@ -43,7 +43,6 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
     }
 
     var newVertices = HF.transformVertices(vertices, transform, dict);
-
     var kleinVertices = [];
     for (var i = 0; i < newVertices.length; i++) {
 
@@ -91,7 +90,6 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
         geometry.mergeVertices();
         geometry.name = [ORDERN.faceReflections[i], transform, faces[i]];
         cellGeometry.push(geometry);
-
 
     }
 

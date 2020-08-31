@@ -146,7 +146,7 @@ function matrixDict(letter, vector) {
 
 const l = 0;
 
-const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
+const faceReflections = ['', 'a', 'ca', 'babacbca', 'abacbca', 'acbca', 'cbacbca', 'acbcbacbca', 'cbcbacbca', 'bca', 'bacbca', 'bcbacbca'];
 
 const center = [Math.sqrt(2) / (p ** 2), 0, 0, 0];
 

@@ -145,7 +145,7 @@ function matrixDict(n) {
     return dict;
 }
 
-const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
+const faceReflections = ['', 'a', 'ca', 'babacbca', 'abacbca', 'acbca', 'cbacbca', 'acbcbacbca', 'cbcbacbca', 'bca', 'bacbca', 'bcbacbca'];
 
 function center(n) {
 

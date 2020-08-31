@@ -29,9 +29,9 @@ function hyperbolicCubeGeometry(order, n, transform, s) {
 
     } else {
 
-        dict = ORDERN.matrixDict(order);
-        f = ORDERN.f(order);
-        center = ORDERN.center(order);
+        dict = ORDERN.matrixDict;
+        f = ORDERN.f;
+        center = ORDERN.center;
 
     }
 

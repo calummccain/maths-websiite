@@ -90,8 +90,8 @@ function c(v) {
 
 function d(v) {
     return [
-        ((1 - p ** 4) * v[0] - p ** 3 * v[1] - p ** 2 * v[3]) / 2,
-        (3 * p ** 3 * v[0] + (1 - 3 * p ** 2) * v[1] - 3 * p * v[3]) / 2,
+        ((2 + p ** 4) * v[0] - p ** 3 * v[1] - p ** 2 * v[3]) / 2,
+        (3 * p ** 3 * v[0] + (2 - 3 * p ** 2) * v[1] - 3 * p * v[3]) / 2,
         v[2],
         (3 * p ** 2 * v[0] - 3 * p * v[1] - v[3]) / 2
     ];
@@ -145,7 +145,7 @@ function matrixDict(letter, vector) {
     return newVector;
 };
 
-const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
+const faceReflections = ['', 'a', 'ca', 'babacbca', 'abacbca', 'acbca', 'cbacbca', 'acbcbacbca', 'cbcbacbca', 'bca', 'bacbca', 'bcbacbca'];
 
 const center = [1 / Math.sqrt(3), 0, 0, 0];
 

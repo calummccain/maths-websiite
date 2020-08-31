@@ -90,8 +90,8 @@ function c(v) {
 
 function d(v) {
     return [
-        ((p ** 4 + 1) * v[0] - (p ** 4 - 1) / p * v[1] - (p ** 4 - 1) / p ** 2 * v[3]) / 2,
-        (p ** 5 * v[0] + (1 - (p ** 4) / 2) * v[1] - p ** 3 * v[3]) / 2,
+        ((4 * p + 1) * v[0] - (4 * p - 1) / p * v[1] - (4 * p - 1) / p ** 2 * v[3]) / 2,
+        (p ** 5 * v[0] + (2 - p ** 4) * v[1] - p ** 3 * v[3]) / 2,
         v[2],
         (p ** 4 * v[0] - p ** 3 * v[1] - v[3] / p) / 2
     ];
@@ -146,7 +146,7 @@ function matrixDict(letter, vector) {
 
 const l = 0;
 
-const faceReflections = ['', 'a', 'ca', 'bca', 'acbca', 'bacbca', 'cbacbca', 'abacbca', 'bcbacbca', 'babacbca', 'cbcbacbca', 'acbcbacbca'];
+const faceReflections = ['', 'a', 'ca', 'babacbca', 'abacbca', 'acbca', 'cbacbca', 'acbcbacbca', 'cbcbacbca', 'bca', 'bacbca', 'bcbacbca'];
 
 const center = [2 / (p ** 4), 0, 0, 0];
 
