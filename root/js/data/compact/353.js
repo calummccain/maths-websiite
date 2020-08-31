@@ -86,10 +86,10 @@ function c(v) {
 
 function d(v) {
     return [
-        ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / p ** 3 * v[3]) / 2,
+        ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
         v[1],
-        (p ** 5 * v[0] + (1 - (p ** 4) / 2) * v[2] - p ** 2 * v[3]) / 2,
-        (p ** 3 * v[0] - p ** 2 * v[2] + v[3]) / 2
+        ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
+        ((p ** 3) * v[0] - (p ** 2 )* v[2] + v[3]) / 2
     ];
 }
 
@@ -149,20 +149,43 @@ function matrixDict(letter, vector) {
 
 const l = Math.acosh((p ** 6 - (-1 + p ** 2) * (3 * p - 1)) / 4);
 
+// const faceReflections = [
+//     '',
+//     'a',
+//     'ca',
+//     'aca', 'bca',
+//     'baca', 'caca',
+//     'cbaca', 'bcaca',
+//     'bcbaca',
+//     'abcbaca',
+//     'babcbaca', 'cabcbaca',
+//     'cbabcbaca', 'acabcbaca', 'bcabcbaca',
+//     'bcbabcbaca', 'bacabcbaca',
+//     'cbacabcbaca',
+//     'acbacabcbaca'
+// ];
+
 const faceReflections = [
     '',
     'a',
+    'caca',
     'ca',
-    'aca', 'bca',
-    'baca', 'caca',
-    'cbaca', 'bcaca',
-    'bcbaca',
-    'abcbaca',
-    'babcbaca', 'cabcbaca',
-    'cbabcbaca', 'acabcbaca', 'bcabcbaca',
-    'bcbabcbaca', 'bacabcbaca',
+    'aca',
     'cbacabcbaca',
-    'acbacabcbaca'
+    'acbacabcbaca',
+    'cbabcbaca',
+    'cabcbaca',
+    'acabcbaca',
+    'bcaca',
+    'bca',
+    'baca',
+    'bcbabcbaca',
+    'bcabcbaca',
+    'bacabcbaca',
+    'cbaca',
+    'bcbaca',
+    'babcbaca',
+    'abcbaca'
 ];
 
 const center = [2 / (p ** 3), 0, 0, 0];

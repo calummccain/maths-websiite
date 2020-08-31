@@ -65,7 +65,7 @@ function hyperbolicIcosahedronGeometry(order, n, transform, s) {
         }
 
         geometry.mergeVertices();
-        geometry.name = [ORDERN.faceReflections[i], transform, faces[i]];
+        geometry.name = [ORDER3.faceReflections[i], transform, faces[i]];
         cellGeometry.push(geometry);
 
     }
