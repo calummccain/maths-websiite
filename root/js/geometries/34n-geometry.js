@@ -12,7 +12,6 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
 
     var vertices = ORDERN.vertices;
     var faces = ORDERN.faces;
-    var type = ORDERN.typeOfHoneycomb(order);
     var dict, f, center;
 
     if (order == 4) {
@@ -38,11 +37,10 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
 
     }
 
-    // transform center of cell
     var newCenter = HF.transformVertices([center], transform, dict);
     var kleinCenter = f(newCenter[0]);
 
-    var cellGeometry = new THREE.Geometry();
+    var cellGeometry = [];
 
     for (var i = 0; i < faces.length; i++) {
 
@@ -75,8 +73,9 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
 
         }
 
-        cellGeometry.merge(geometry);
-        cellGeometry.mergeVertices();
+        geometry.mergeVertices();
+        geometry.name = [ORDERN.faceReflections[i], transform, faces[i]];
+        cellGeometry.push(geometry);
 
     }
 

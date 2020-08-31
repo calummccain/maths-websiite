@@ -138,7 +138,7 @@ function matrixDict(letter, vector) {
 
 const l = Math.acosh(p ** 2);
 
-const faceReflections = ['', 'c', 'bc', 'abc', 'babc', 'cbabc'];
+const faceReflections = ['bc', 'c', 'cbabc', 'abc', '', 'babc'];
 
 const center = [Math.sqrt(2) / (p ** 2), 0, 0, 0];
 

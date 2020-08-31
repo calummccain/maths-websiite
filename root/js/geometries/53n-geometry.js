@@ -51,23 +51,15 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
 
     }
 
-    // transform center of cell
     var newCenter = HF.transformVertices([center], transform, dict);
     var kleinCenter = f(newCenter[0]);
 
-    // loop over the faces listed to generate mesh
-    var cellGeometry = new THREE.Geometry();
+    var cellGeometry = [];
 
     for (var i = 0; i < faces.length; i++) {
 
         var geometry = new THREE.Geometry();
         var faceData;
-
-        // faceData consists of two arrays - coordinates of mesh vertices in hyperbolic space and which 
-        // vertices correspond to each face
-        //
-        // The coordinates are originally in the form of a row vector so transposes are required as well 
-        // as multiplication by the f matrix to get them into the standard coordinates
 
         faceData = FACE.kleinFace(
             kleinVertices[faces[i][0]],
@@ -77,14 +69,10 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
             kleinVertices[faces[i][4]],
             n
         );
-
-        // facets is the list of small trianglular faces that make up the mesh and which vertices make them up 
+ 
         var facets = faceData[0];
         var hyperboloidVertices = faceData[1];
 
-        // transform the vertices to the appropriate model - poincare disk or hyperboloid model
-        // scale them to the center
-        // add them to the geometry
         for (var j = 0; j < hyperboloidVertices.length; j++) {
 
             var vertex = HF.kleinToPoincare(hyperboloidVertices[j]);
@@ -93,8 +81,6 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
 
         }
 
-        // add the facets to the geometry
-
         for (var k = 0; k < facets.length; k++) {
 
             var facetPiece = facets[k];
@@ -102,8 +88,10 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
 
         }
 
-        cellGeometry.merge(geometry);
-        cellGeometry.mergeVertices();
+        geometry.mergeVertices();
+        geometry.name = [ORDERN.faceReflections[i], transform, faces[i]];
+        cellGeometry.push(geometry);
+
 
     }
 
