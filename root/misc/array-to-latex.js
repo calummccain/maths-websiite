@@ -12,7 +12,7 @@ function arrayToLatex(str) {
     var str11 = str10.replace(/\)\/2/g, '\}\{2\}');
     var str12 = str11.replace(/\)/g, '}');
     var str13 = str12.replace(/\*/g, '');
-    var str14 = str13.replace(/Math\./g, '');
+    var str14 = str13.replace(/Math\./g, '\\');
 
     console.log('\\\[\n' + str14 + '\n\\\]');
 }
