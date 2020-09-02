@@ -119,7 +119,7 @@ function matrixDict(letter, vector) {
     return newVector;
 };
 
-const faceReflections = ['', 'b', 'ab', 'cab'];
+const faceReflections = ['', 'cab', 'ab', 'b'];
 
 const center = [1 / Math.sqrt(3), 0, 0, 0];
 

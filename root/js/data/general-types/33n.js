@@ -125,13 +125,13 @@ function matrixDict(n) {
     return dict;
 }
 
-const faceReflections = ['', 'b', 'ab', 'cab'];
+const faceReflections = ['', 'cab', 'ab', 'b'];
 
 function center(n) {
 
     var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-    return [[1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0]]
+    return [1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0]
 }
 
 export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
