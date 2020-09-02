@@ -124,8 +124,7 @@ function matrixDict(letter, vector) {
     }
     return newVector;
 };
-
-const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcabc'];
+const faceReflections = ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'];
 
 const center = [1, 0, 0, 0];
 

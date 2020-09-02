@@ -29,7 +29,6 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
     }
 
     var newVertices = HF.transformVertices(vertices, transform, dict);
-
     var kleinVertices = [];
     for (var i = 0; i < newVertices.length; i++) {
 
@@ -51,8 +50,7 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
             kleinVertices[faces[i][0]],
             kleinVertices[faces[i][1]],
             kleinVertices[faces[i][2]],
-            n,
-            type
+            n
         );
 
         var facets = faceData[0];

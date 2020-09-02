@@ -124,7 +124,7 @@ function matrixDict(n) {
     return dict;
 }
 
-const faceReflections = ['', 'c', 'bc', 'abc', 'cbc', 'cabc', 'bcabc', 'cbcab'];
+const faceReflections = ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'];
 
 function center(n) {
 
