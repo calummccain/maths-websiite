@@ -34,7 +34,7 @@ function init(n, opacityValue, order, cells, s, geometryFunction, numberofFaces)
 
 function initCamera() {
     camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 10);
-    camera.position.set(3, 0, 0);
+    camera.position.set(1, 1, 1);
     camera.lookAt(scene.position);
 }
 
@@ -126,7 +126,7 @@ function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numbe
         console.log(cell);
         console.log(intersects[0].object.geometry.name);
 
-        addCellToScene(n, opacityValue, order, cell + face + 'd', s, geometryFunction, numberofFaces);
+        addCellToScene(n, opacityValue, order, cell + face + 'c', s, geometryFunction, numberofFaces);
     }
 
 }
