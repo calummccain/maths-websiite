@@ -21,6 +21,7 @@ function hyperbolicHexagonGeometry(order, n, transform, s) {
     var kleinCenter = f(newCenter[0]);
 
     var cellGeometry = [];
+    alert(faces.length);
 
     for (var i = 0; i < faces.length; i++) {
 

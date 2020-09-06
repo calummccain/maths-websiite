@@ -151,7 +151,10 @@ const faceReflections = [
     'dbdb', 'adbdb', 'bdbdb', 'abdbdb', 'babdbdb', 'ababdbdb',
     'dbadbdb', 'adbadbdb', 'bdbadbdb', 'badbadbdb', 'abdbadbdb', 'babdbadbdb',
     'dbdbadbdb', 'adbdbadbdb', 'badbdbadbdb',
-    'dbadbadbdb','adbadbadbdb','bdbadbadbdb','abdbadbadbdb','badbadbadbdb','abadbadbadbdb'
+    'dbadbadbdb','adbadbadbdb','bdbadbadbdb','abdbadbadbdb','badbadbadbdb','abadbadbadbdb',
+    'dbadbadbadbdb', 'adbadbadbadbdb', 'bdbadbadbadbdb', 'abdbadbadbadbdb', 'badbadbadbadbdb', 'abadbadbadbadbdb',
+    'dbdbadbadbadbdb', 'adbdbadbadbadbdb', 'bdbdbadbadbadbdb', 'badbdbadbadbadbdb', 'abdbdbadbadbadbdb', 'abadbdbadbadbadbdb',
+    'dbadbadbadbadbdb', 'adbadbadbadbadbdb', 'bdbadbadbadbadbdb', 'abdbadbadbadbadbdb', 'badbadbadbadbadbdb', 'abadbadbadbadbadbdb'
 ];
 
 const center = [3, 1, 1, 1];
