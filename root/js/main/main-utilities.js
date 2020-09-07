@@ -131,4 +131,4 @@ function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numbe
 
 }
 
-export { init, render };
+export { init, render, addCellToScene };

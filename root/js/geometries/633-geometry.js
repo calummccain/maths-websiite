@@ -21,12 +21,14 @@ function hyperbolicHexagonGeometry(order, n, transform, s) {
     var kleinCenter = f(newCenter[0]);
 
     var cellGeometry = [];
-    alert(faces.length);
+    //alert(faces.length);
 
     for (var i = 0; i < faces.length; i++) {
 
         var geometry = new THREE.Geometry();
         var faceData;
+
+        console.log([faces[i], HF.transformVertices([[3, 0, 1, 0]], faces[i], dict)])
 
         //alert(transform + faces[i]);
 

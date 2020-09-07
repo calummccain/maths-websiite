@@ -115,47 +115,46 @@ function matrixDict(letter, vector) {
     return newVector;
 };
 
-// const faceReflections = [
-//     '',
-//     'a',
-//     'ab',
-//     'dab',
-//     'bdab',
-//     'abdab',
-//     'dabdab',
-//     'adabdab',
-//     'bdabdab',
-//     'badabdab',
-//     'abdabdab',
-//     'abadabdab',
-// ];
-
-// const faceReflections = [
-//     '',
-//     'b', 'a',
-//     'db',
-//     'bdb',
-//     'abdb',
-//     'dabdb',
-//     'adabdb', 'bdabdb',
-//     'badabdb', 'abdabdb',
-//     'abadabdb', 'dabdabdb',
-//     'adabdabdb', 'bdabdabdb',
-//     'badabdabdb', 'abdabdabdb',
-//     'abadabdabdb', 'dbadabdabdb', 'dabdabdabdb'
-// ];
-
 const faceReflections = [
     '', 'a', 'b',
+
     'db', 'bdb', 'abdb',
-    'dbdb', 'adbdb', 'bdbdb', 'abdbdb', 'babdbdb', 'ababdbdb',
-    'dbadbdb', 'adbadbdb', 'bdbadbdb', 'badbadbdb', 'abdbadbdb', 'babdbadbdb',
-    'dbdbadbdb', 'adbdbadbdb', 'badbdbadbdb',
-    'dbadbadbdb','adbadbadbdb','bdbadbadbdb','abdbadbadbdb','badbadbadbdb','abadbadbadbdb',
-    'dbadbadbadbdb', 'adbadbadbadbdb', 'bdbadbadbadbdb', 'abdbadbadbadbdb', 'badbadbadbadbdb', 'abadbadbadbadbdb',
-    'dbdbadbadbadbdb', 'adbdbadbadbadbdb', 'bdbdbadbadbadbdb', 'badbdbadbadbadbdb', 'abdbdbadbadbadbdb', 'abadbdbadbadbadbdb',
-    'dbadbadbadbadbdb', 'adbadbadbadbadbdb', 'bdbadbadbadbadbdb', 'abdbadbadbadbadbdb', 'badbadbadbadbadbdb', 'abadbadbadbadbadbdb'
+
+    'dbdb', 'dabdb', 'bdbdb', 'bdabdb', 'abdbdb', 'abdabdb',
+
+    'dbdabdb', 'dabdabdb', 'bdbdabdb', 'bdabdabdb', 'abdbdabdb', 'abdabdabdb',
+
+    'dbdbdabdb', 'adbdbdabdb', 'badbdbdabdb', 'dbdabdabdb', 'adbdabdabdb', 'bdbdabdabdb',
+    'abdbdabdabdb', 'badbdabdabdb', 'abadbdabdabdb',
+
+    'dbadbdbdabdb', 'bdbadbdbdabdb', 'abdbadbdbdabdb',
+    'dbadbdabdabdb', 'adbadbdabdabdb', 'bdbadbdabdabdb',
+    'abdbadbdabdabdb', 'badbadbdabdabdb', 'abadbadbdabdabdb',
+
+    'dbdbadbdbdabdb', 'adbdbadbdbdabdb', 'bdbdbadbdbdabdb',
+    'abdbdbadbdbdabdb', 'badbdbadbdbdabdb', 'abadbdbadbdbdabdb',
+    'dbadbadbdabdabdb', 'adbadbadbdabdabdb', 'bdbadbadbdabdabdb',
+    'abdbadbadbdabdabdb', 'badbadbadbdabdabdb', 'abadbadbadbdabdabdb',
+
+    'dbadbdbadbdbdabdb', 'adbadbdbadbdbdabdb', 'bdbadbdbadbdbdabdb',
+    'abdbadbdbadbdbdabdb', 'badbadbdbadbdbdabdb', 'abadbadbdbadbdbdabdb',
+    'dbadbadbadbdabdabdb', 'adbadbadbadbdabdabdb', 'bdbadbadbadbdabdabdb',
+    'abdbadbadbadbdabdabdb', 'badbadbadbadbdabdabdb', 'abadbadbadbadbdabdabdb',
+
+    'dbdbadbdbadbdbdabdb','adbdbadbdbadbdbdabdb','badbdbadbdbadbdbdabdb',
+    'dbadbadbdbadbdbdabdb', 'adbadbadbdbadbdbdabdb', 'bdbadbadbdbadbdbdabdb', 
+    'abdbadbadbdbadbdbdabdb', 'badbadbadbdbadbdbdabdb', 'abadbadbadbdbadbdbdabdb', 
+    'dbadbadbadbadbdabdabdb', 'adbadbadbadbadbdabdabdb', 'bdbadbadbadbadbdabdabdb', 
+    'abdbadbadbadbadbdabdabdb', 'badbadbadbadbadbdabdabdb', 'abadbadbadbadbadbdabdabdb',
+
+    'dbadbdbadbdbadbdbdabdb','bdbadbdbadbdbadbdbdabdb','abdbadbdbadbdbadbdbdabdb',
+    'dbadbadbadbdbadbdbdabdb', 'adbadbadbadbdbadbdbdabdb','bdbadbadbadbdbadbdbdabdb',
+    'abdbadbadbadbdbadbdbdabdb','badbadbadbadbdbadbdbdabdb','abadbadbadbadbdbadbdbdabdb',
+    'dbadbadbadbadbadbdabdabdb', 'adbadbadbadbadbadbdabdabdb', 'bdbadbadbadbadbadbdabdabdb', 
+    'abdbadbadbadbadbadbdabdabdb', 'badbadbadbadbadbadbdabdabdb', 'abadbadbadbadbadbadbdabdabdb'
+
 ];
+
 
 const center = [3, 1, 1, 1];
 
