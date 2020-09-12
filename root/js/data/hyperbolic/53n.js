@@ -1,8 +1,8 @@
 // Order n dodecahedral
 
-import * as ORDER4 from '../compact/534.js';
-import * as ORDER5 from '../compact/535.js';
-import * as ORDER6 from '../compact/536.js';
+import * as ORDER4 from '../hyperbolic/534.js';
+import * as ORDER5 from '../hyperbolic/535.js';
+import * as ORDER6 from '../hyperbolic/536.js.js';
 
 const vertices = [
     [1, 1, 1, 1],
