@@ -126,7 +126,7 @@ function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numbe
         console.log(cell);
         console.log(intersects[0].object.geometry.name);
 
-        addCellToScene(n, opacityValue, order, 'c' + cell + face, s, geometryFunction, numberofFaces);
+        addCellToScene(n, opacityValue, order,cell + face + 'c', s, geometryFunction, numberofFaces);
     }
 
 }

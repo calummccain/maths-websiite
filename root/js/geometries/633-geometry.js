@@ -28,7 +28,7 @@ function hyperbolicHexagonGeometry(order, n, transform, s) {
         var geometry = new THREE.Geometry();
         var faceData;
 
-        console.log([faces[i], HF.transformVertices([[3, 0, 1, 0]], faces[i], dict)])
+        //console.log([faces[i], HF.transformVertices([[3, 0, 1, 0]], faces[i], dict)])
 
         //alert(transform + faces[i]);
 
