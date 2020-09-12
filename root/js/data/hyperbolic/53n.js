@@ -1,8 +1,10 @@
 // Order n dodecahedral
 
+import { p } from "../constants.js";
+
 import * as ORDER4 from '../hyperbolic/534.js';
 import * as ORDER5 from '../hyperbolic/535.js';
-import * as ORDER6 from '../hyperbolic/536.js.js';
+import * as ORDER6 from '../hyperbolic/536.js';
 
 const vertices = [
     [1, 1, 1, 1],
@@ -210,4 +212,4 @@ function center(n) {
 
 }
 
-export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
+export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
