@@ -24,6 +24,7 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
 
     var newVertices = HF.transformVertices(vertices, transform, dict);
     var kleinVertices = [];
+    
     for (var i = 0; i < newVertices.length; i++) {
 
         kleinVertices[i] = HF.hyperboloidToKlein(f(newVertices[i]));

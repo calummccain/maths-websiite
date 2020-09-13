@@ -13,7 +13,7 @@ function hyperbolicCubeGeometry(order, n, transform, s) {
     var faces = ORDERN.faces;
 
     function dict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector)
+        return ORDERN.matrixDict(letter, vector,  order)
     }
 
     function f(vector) {
@@ -24,6 +24,7 @@ function hyperbolicCubeGeometry(order, n, transform, s) {
 
     var newVertices = HF.transformVertices(vertices, transform, dict);
     var kleinVertices = [];
+
     for (var i = 0; i < newVertices.length; i++) {
 
         kleinVertices[i] = HF.hyperboloidToKlein(f(newVertices[i]));
