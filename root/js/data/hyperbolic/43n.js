@@ -178,9 +178,28 @@ const faceReflections = ['bc', 'c', 'cbabc', 'abc', '', 'babc'];
 
 function center(n) {
 
-    var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+    var newCenter = [];
 
-    return [1 / Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0]
+    switch (n) {
+        case 5:
+
+            newCenter = ORDER5.center;
+            break;
+
+        case 6:
+
+            newCenter = ORDER6.center;
+            break;
+
+        default:
+
+            var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+            newCenter = [1 / Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0]
+
+    }
+
+    return newCenter;
+
 }
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
