@@ -9,7 +9,7 @@ function kleinFace(vertices, n) {
 
     if (sideNumber == 3) {
 
-        faces = [[0, 1, 3], [1, 2, 3], [2, 0, 3]];
+        faces = [[0, 1, 2]];
 
     } else {
 
@@ -20,9 +20,9 @@ function kleinFace(vertices, n) {
 
         }
 
-    }
+        coords.push(VF.vectorScale(center, 1 / sideNumber));
 
-    coords.push(VF.vectorScale(center, 1 / sideNumber));
+    }
 
     var j = 0;
 

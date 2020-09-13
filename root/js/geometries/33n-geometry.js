@@ -1,6 +1,6 @@
 import * as THREE from "../three.module.js";
 
-import * as ORDERN from "../data/general-types/33n.js";
+import * as ORDERN from "../data/hyperbolic/33n.js";
 
 import * as FACE from "../faces/klein-hyperbolic-faces.js";
 
