@@ -16,43 +16,18 @@ const faces = [
     [3, 0, 1]
 ];
 
-//cfv
-// const a = [
-//     [1, 0, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 0, 1]
-// ];
-
 function a(v) {
     return [v[0], v[2], v[1], v[3]];
 }
-
-//cev
-// const b = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 0, 1],
-//     [0, 0, 1, 0]
-// ];
 
 function b(v) {
     return [v[0], v[1], v[3], v[2]];
 }
 
-//cfe
-// const c = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 0, -1],
-//     [0, 0, -1, 0]
-// ];
-
 function c(v) {
     return [v[0], v[1], -v[3], -v[2]];
 }
 
-//fev
 function d(n, v) {
 
     var newVector = [];
@@ -89,12 +64,6 @@ function d(n, v) {
 //     ];
 //     return matrix;
 
-// const e = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 0, 0, 1]
-// ];
 
 function e(v) {
 
@@ -125,13 +94,6 @@ function f(n, v) {
 
     return newVector;
 }
-
-// matrix = [
-//     [Math.sqrt(3), 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 0, 0, 1]
-// ]
 
 // newVector = [
 //     [Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0],
