@@ -1,9 +1,8 @@
 import * as THREE from "../three.module.js";
 
-import * as ORDER4 from "../data/paracompact/344.js";
 import * as ORDERN from "../data/general-types/34n.js";
 
-import * as FACE from "../faces/klein-triangle-faces.js";
+import * as FACE from "../faces/klein-hyperbolic-faces.js";
 
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
@@ -12,21 +11,16 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
 
     var vertices = ORDERN.vertices;
     var faces = ORDERN.faces;
-    var dict, f, center;
 
-    if (order == 4) {
-
-        dict = ORDER4.matrixDict;
-        f = ORDER4.f;
-        center = ORDER4.center;
-
-    } else {
-
-        dict = ORDERN.matrixDict(order);
-        f = ORDERN.f(order);
-        center = ORDERN.center(order);
-
+    function dict(letter, vector) {
+        return ORDERN.matrixDict(order, letter, vector)
     }
+
+    function f(vector) {
+        return dict('f', vector)
+    }
+
+    var center = ORDERN.center(order);
 
     var newVertices = HF.transformVertices(vertices, transform, dict);
     var kleinVertices = [];
@@ -47,9 +41,9 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
         var faceData;
 
         faceData = FACE.kleinFace(
-            kleinVertices[faces[i][0]],
+            [kleinVertices[faces[i][0]],
             kleinVertices[faces[i][1]],
-            kleinVertices[faces[i][2]],
+            kleinVertices[faces[i][2]]],
             n
         );
 

@@ -22,7 +22,6 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
 
     var center = ORDERN.center(order);
 
-
     var newVertices = HF.transformVertices(vertices, transform, dict);
     var kleinVertices = [];
     for (var i = 0; i < newVertices.length; i++) {
