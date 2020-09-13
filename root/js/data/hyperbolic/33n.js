@@ -1,5 +1,7 @@
 // Order n tetrahedral
 
+import * as ORDER6 from "./336.js";
+
 const vertices = [
     [1, 1, 1, 1],
     [1, 1, -1, -1],
@@ -53,15 +55,25 @@ function c(v) {
 //fev
 function d(n, v) {
 
-    var cos = Math.cos(Math.PI / n) ** 2;
-    var sin = Math.sin(Math.PI / n) ** 2;
+    var newVector = [];
 
-    var newVector = [
-        (2 - 3 * sin) * v[0] + (3 * sin - 1) * v[1] + (3 * sin - 1) * v[2] + (1 - 3 * sin) * v[3],
-        cos * v[0] + sin * v[1] - cos * v[2] + cos * v[3],
-        cos * v[0] - cos * v[1] + sin * v[2] + cos * v[3],
-        -cos * v[0] + cos * v[1] + cos * v[2] + sin * v[3]
-    ];
+    if (n == 6) {
+
+        newVector = ORDER6.d(v);
+
+    } else {
+
+        var cos = Math.cos(Math.PI / n) ** 2;
+        var sin = Math.sin(Math.PI / n) ** 2;
+
+        newVector = [
+            (2 - 3 * sin) * v[0] + (3 * sin - 1) * v[1] + (3 * sin - 1) * v[2] + (1 - 3 * sin) * v[3],
+            cos * v[0] + sin * v[1] - cos * v[2] + cos * v[3],
+            cos * v[0] - cos * v[1] + sin * v[2] + cos * v[3],
+            -cos * v[0] + cos * v[1] + cos * v[2] + sin * v[3]
+        ];
+
+    }
     return newVector;
 
 }
@@ -85,7 +97,9 @@ function d(n, v) {
 // ];
 
 function e(v) {
+
     return [v[0], v[1], v[2], v[3]];
+
 }
 
 
@@ -156,8 +170,8 @@ const faceReflections = ['', 'cab', 'ab', 'b'];
 function center(n) {
 
     var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
     return [1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0]
+
 }
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };

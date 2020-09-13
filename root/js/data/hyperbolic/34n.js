@@ -1,18 +1,6 @@
 // Order n octahedral
 
-const faceType = "triangle";
-
-function typeOfHoneycomb(n) {
-    var t = '';
-    if (n <= 3) {
-        t = 'spherical';
-    } else if (n == 4) {
-        t = 'paracompact';
-    } else {
-        t = 'noncompact';
-    }
-    return t;
-}
+import * as ORDER4 from "./344.js";
 
 const vertices = [
     [1, 1, 0, 0],
@@ -35,94 +23,149 @@ const faces = [
 ];
 
 //cfe
-const a = [
-    [1, 0, 0, 0],
-    [0, 0, 1, 0],
-    [0, 1, 0, 0],
-    [0, 0, 0, 1]
-];
+// const a = [
+//     [1, 0, 0, 0],
+//     [0, 0, 1, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 0, 1]
+// ];
 
-//cfv
-const b = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 0, 1],
-    [0, 0, 1, 0]
-];
+function a(v) {
 
-//cev
-const c = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, -1]
-];
-
-//fev
-function d(n) {
-
-    var cos = Math.cos(Math.PI / n) ** 2;
-
-    var matrix = [
-        [6 * cos - 1, 2 - 6 * cos, 2 - 6 * cos, 2 - 6 * cos],
-        [2 * cos, 1 - 2 * cos, -2 * cos, -2 * cos],
-        [2 * cos, -2 * cos, 1 - 2 * cos, -2 * cos],
-        [2 * cos, -2 * cos, -2 * cos, 1 - 2 * cos]
-    ];
-
-    return matrix;
+    return [v[0], v[2], v[1], v[3]];
 
 }
 
-const e = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1]
-];
+//cfv
+// const b = [
+//     [1, 0, 0, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 0, 1],
+//     [0, 0, 1, 0]
+// ];
 
-function f(n) {
+function b(v) {
 
-    var matrix;
+    return [v[0], v[1], v[3], v[2]];
+
+}
+
+//cev
+// const c = [
+//     [1, 0, 0, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 1, 0],
+//     [0, 0, 0, -1]
+// ];
+
+function c(v) {
+
+    return [v[0], v[1], v[2], -v[3]];
+
+}
+
+//fev
+function d(n, v) {
+
+    var newVector = [];
 
     if (n == 4) {
 
-        matrix = [
-            [1, 0, 0, 0],
-            [0, 1, 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        ]
+        newVector = ORDER4.d(v);
 
     } else {
 
-        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-        matrix = [
-            [Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0],
-            [0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0, 0],
-            [0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0],
-            [0, 0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot)))]
+        var cos = Math.cos(Math.PI / n) ** 2;
+
+        newVector = [
+            (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
+            2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
+            2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
+            2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
         ];
 
     }
 
-    return matrix;
+    return newVector;
 
 }
 
-function matrixDict(n) {
+// var matrix = [
+//     [6 * cos - 1, 2 - 6 * cos, 2 - 6 * cos, 2 - 6 * cos],
+//     [2 * cos, 1 - 2 * cos, -2 * cos, -2 * cos],
+//     [2 * cos, -2 * cos, 1 - 2 * cos, -2 * cos],
+//     [2 * cos, -2 * cos, -2 * cos, 1 - 2 * cos]
+// ];
 
-    var dict = {
-        'a': a,
-        'b': b,
-        'c': c,
-        'd': d(n),
-        'e': e,
-        'f': f(n)
+// const e = [
+//     [1, 0, 0, 0],
+//     [0, 1, 0, 0],
+//     [0, 0, 1, 0],
+//     [0, 0, 0, 1]
+// ];
+
+function e(v) {
+
+    return [v[0], v[1], v[2], v[3]];
+
+}
+
+function f(n, v) {
+
+    var newVector = [];
+
+    if (n == 4) {
+
+        newVector = v;
+
+    } else {
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
+        newVector = [
+            Math.sqrt(Math.abs(cot / (1 - cot))) * v[0],
+            Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))) * v[1],
+            Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))) * v[2],
+            Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))) * v[3]
+        ];
+
     }
 
-    return dict;
+    return newVector;
+
 }
+
+// matrix = [
+//     [Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0],
+//     [0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0, 0],
+//     [0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0],
+//     [0, 0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot)))]
+// ];
+
+function matrixDict(n, letter, vector) {
+    var newVector;
+    switch (letter) {
+        case 'a':
+            newVector = a(vector);
+            break;
+        case 'b':
+            newVector = b(vector);
+            break;
+        case 'c':
+            newVector = c(vector);
+            break;
+        case 'd':
+            newVector = d(n, vector);
+            break;
+        case 'e':
+            newVector = e(vector);
+            break;
+        case 'f':
+            newVector = f(n, vector);
+            break;
+    }
+    return newVector;
+};
 
 const faceReflections = ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'];
 
@@ -130,7 +173,7 @@ function center(n) {
 
     var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-    return [[1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]]
+    return [1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]
 }
 
-export { faceType, typeOfHoneycomb, vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
+export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
