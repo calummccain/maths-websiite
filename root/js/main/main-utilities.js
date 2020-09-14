@@ -23,7 +23,7 @@ function init(n, opacityValue, order, cells, s, geometryFunction, numberofFaces,
     initCamera();
     camera.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
     scene.add(camera);
-    
+
     initRenderer();
 
     controls = new OrbitControls(camera, renderer.domElement);
@@ -126,7 +126,7 @@ function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numbe
         console.log(cell);
         console.log(intersects[0].object.geometry.name);
 
-        addCellToScene(n, opacityValue, order,cell + face + specialLetter, s, geometryFunction, numberofFaces);
+        addCellToScene(n, opacityValue, order, cell + face + specialLetter, s, geometryFunction, numberofFaces);
     }
 
 }

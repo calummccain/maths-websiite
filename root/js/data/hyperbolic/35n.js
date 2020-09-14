@@ -60,35 +60,23 @@ function c(v) {
 
 }
 
-// const d = [
-//     [((p ** 4) - 1) / 2, 0, -((p ** 4) - 3) / (2 * p), -((p ** 4) - 3) / (2 * (p ** 3))],
-//     [0, 1, 0, 0],
-//     [(p ** 5) / 2, 0, 1 - (p ** 4) / 2, -(p ** 2) / 2],
-//     [(p ** 3) / 2, 0, -(p ** 2) / 2, 1 / 2]
-// ];
-
 function d(n, v) {
 
     var newVector = [];
 
     if (n == 3) {
 
-        newVector = [
-            ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
-            v[1],
-            ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
-            ((p ** 3) * v[0] - (p ** 2) * v[2] + v[3]) / 2
-        ];
+        newVector = ORDER3.d(v);
 
     } else {
 
         var cos = Math.cos(Math.PI / n) ** 2;
 
         newVector = [
-            (6 * (p ** 4) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / (p ** 2)) * v[3],
+            (6 * (p ** 4) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / p) * v[3],
             v[1],
-            2 * (p ** 2) * cos * ((p ** 3) * v[0] - (p ** 2) * v[2] - v[3]),
-            2 * cos * ((p ** 3) * v[0] - (p ** 2) * v[2] - v[3])
+            2 * (p ** 5) * cos * v[0] + (1 - 2 * (p ** 4) * cos) * v[2] - 2 * (p ** 2) * cos * v[3],
+            2 * (p ** 3) * cos * v[0] - 2 * (p ** 2) * cos * v[2] + (1 - 2 * cos) * v[3]
         ];
 
     }
@@ -117,12 +105,7 @@ function f(n, v) {
 
     if (n == 3) {
 
-        newVector = [
-            (p ** 3) / 2 * v[0],
-            Math.sqrt(3 * p - 1) / 2 * v[1],
-            Math.sqrt(3 * p - 1) / 2 * v[2],
-            Math.sqrt(3 * p - 1) / 2 * v[3]
-        ];
+        newVector = ORDER3.f(v);
 
     } else {
 
@@ -200,7 +183,7 @@ function center(n) {
     } else {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-        newCenter = [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p**3), 0, 0, 0]
+        newCenter = [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p ** 3), 0, 0, 0]
 
     }
 
