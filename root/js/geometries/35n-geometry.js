@@ -22,6 +22,8 @@ function hyperbolicIcosahedronGeometry(order, n, transform, s) {
 
     var center = ORDERN.center(order);
 
+    console.log(center)
+
     var newVertices = HF.transformVertices(vertices, transform, dict);
     var kleinVertices = [];
 

@@ -73,7 +73,7 @@ function d(n, v) {
         var cos = Math.cos(Math.PI / n) ** 2;
 
         newVector = [
-            (6 * (p ** 4) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / p) * v[3],
+            (6 * (p ** 2) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / p) * v[3],
             v[1],
             2 * (p ** 5) * cos * v[0] + (1 - 2 * (p ** 4) * cos) * v[2] - 2 * (p ** 2) * cos * v[3],
             2 * (p ** 3) * cos * v[0] - 2 * (p ** 2) * cos * v[2] + (1 - 2 * cos) * v[3]
@@ -90,14 +90,6 @@ function e(v) {
     return [v[0], v[1], v[2], v[3]];
 
 }
-
-// const f = [
-//     [(p ** 3) / 2, 0, 0, 0],
-//     [0, Math.sqrt(3 * p - 1) / 2, 0, 0],
-//     [0, 0, Math.sqrt(3 * p - 1) / 2, 0],
-//     [0, 0, 0, Math.sqrt(3 * p - 1) / 2]
-// ];
-
 
 function f(n, v) {
 
