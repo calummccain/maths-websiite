@@ -9,21 +9,21 @@ var objects = [];
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
-function init(n, opacityValue, order, cells, s, geometryFunction, numberofFaces) {
+function init(n, opacityValue, order, cells, s, geometryFunction, numberofFaces, specialLetter) {
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf2f2f2);
 
     raycaster = new THREE.Raycaster();
     document.addEventListener('mousemove', onDocumentMouseMove, false);
-    document.addEventListener('click', function () { onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces); }, false);
+    document.addEventListener('click', function () { onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces, specialLetter); }, false);
 
     initObjects(n, opacityValue, order, cells, s, geometryFunction, numberofFaces);
 
     initCamera();
     camera.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
     scene.add(camera);
-    
+
     initRenderer();
 
     controls = new OrbitControls(camera, renderer.domElement);
@@ -109,7 +109,7 @@ function onDocumentMouseMove(event) {
 
 }
 
-function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces) {
+function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces, specialLetter) {
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -126,7 +126,7 @@ function onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numbe
         console.log(cell);
         console.log(intersects[0].object.geometry.name);
 
-        addCellToScene(n, opacityValue, order,cell + face + 'c', s, geometryFunction, numberofFaces);
+        addCellToScene(n, opacityValue, order, cell + face + specialLetter, s, geometryFunction, numberofFaces);
     }
 
 }

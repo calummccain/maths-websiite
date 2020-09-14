@@ -1,28 +1,32 @@
 import * as THREE from "../three.module.js";
 
-import * as ORDER3 from "../data/compact/353.js";
+import * as ORDERN from "../data/hyperbolic/35n.js";
 
-import * as FACE from "../faces/klein-triangle-faces.js";
+import * as FACE from "../faces/klein-hyperbolic-faces.js";
 
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 function hyperbolicIcosahedronGeometry(order, n, transform, s) {
 
-    var vertices = ORDER3.vertices;
-    var faces = ORDER3.faces;
-    var dict, f, center;
+    var vertices = ORDERN.vertices;
+    var faces = ORDERN.faces;
 
-    if (order == 3) {
-
-        dict = ORDER3.matrixDict;
-        f = ORDER3.f;
-        center = ORDER3.center;
-
+    function dict(letter, vector) {
+        return ORDERN.matrixDict(order, letter, vector)
     }
+
+    function f(vector) {
+        return dict('f', vector)
+    }
+
+    var center = ORDERN.center(order);
+
+    console.log(center)
 
     var newVertices = HF.transformVertices(vertices, transform, dict);
     var kleinVertices = [];
+
     for (var i = 0; i < newVertices.length; i++) {
 
         kleinVertices[i] = HF.hyperboloidToKlein(f(newVertices[i]));
@@ -40,9 +44,9 @@ function hyperbolicIcosahedronGeometry(order, n, transform, s) {
         var faceData;
 
         faceData = FACE.kleinFace(
-            kleinVertices[faces[i][0]],
+            [kleinVertices[faces[i][0]],
             kleinVertices[faces[i][1]],
-            kleinVertices[faces[i][2]],
+            kleinVertices[faces[i][2]]],
             n
         );
 
@@ -65,7 +69,7 @@ function hyperbolicIcosahedronGeometry(order, n, transform, s) {
         }
 
         geometry.mergeVertices();
-        geometry.name = [ORDER3.faceReflections[i], transform, faces[i]];
+        geometry.name = [ORDERN.faceReflections[i], transform, faces[i]];
         cellGeometry.push(geometry);
 
     }
