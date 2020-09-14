@@ -2,6 +2,8 @@
 
 import { p } from "../constants.js";
 
+import * as ORDER3 from "./353.js";
+
 const vertices = [
     [1, 1, p, 0],
     [1, 1, -p, 0],
@@ -40,37 +42,22 @@ const faces = [
     [7, 11, 9]
 ];
 
-// const a = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 0, 0, -1]
-// ];
-
 function a(v) {
-    return [v[0], v[1], v[2], -v[3]];
-}
 
-// const b = [
-//     [1, 0, 0, 0],
-//     [0, -1, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 0, 0, 1]
-// ];
+    return [v[0], v[1], v[2], -v[3]];
+
+}
 
 function b(v) {
+
     return [v[0], -v[1], v[2], v[3]];
+
 }
 
-// const c = [
-//     [1, 0, 0, 0],
-//     [0, 1 / 2, 1 / (2 * p), -p / 2],
-//     [0, 1 / (2 * p), p / 2, 1 / 2],
-//     [0, -p / 2, 1 / 2, -1 / (2 * p)]
-// ];
-
 function c(v) {
+
     return [v[0], (v[1] + v[2] / p - p * v[3]) / 2, (v[1] / p + p * v[2] + v[3]) / 2, (-p * v[1] + v[2] - v[3] / p) / 2];
+
 }
 
 // const d = [
@@ -81,24 +68,39 @@ function c(v) {
 // ];
 
 function d(n, v) {
-    return [
-        ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
-        v[1],
-        ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
-        ((p ** 3) * v[0] - (p ** 2 )* v[2] + v[3]) / 2
-    ];
+
+    var newVector = [];
+
+    if (n == 3) {
+
+        newVector = [
+            ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
+            v[1],
+            ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
+            ((p ** 3) * v[0] - (p ** 2) * v[2] + v[3]) / 2
+        ];
+
+    } else {
+
+        var cos = Math.cos(Math.PI / n) ** 2;
+
+        newVector = [
+            (6 * (p ** 4) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / (p ** 2)) * v[3],
+            v[1],
+            2 * (p ** 2) * cos * ((p ** 3) * v[0] - (p ** 2) * v[2] - v[3]),
+            2 * cos * ((p ** 3) * v[0] - (p ** 2) * v[2] - v[3])
+        ];
+
+    }
+
+    return newVector;
+
 }
 
-// const e = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 0, 0, 1]
-// ];
-
-
 function e(v) {
+
     return [v[0], v[1], v[2], v[3]];
+
 }
 
 // const f = [
@@ -109,16 +111,37 @@ function e(v) {
 // ];
 
 
-function f(v) {
-    return [
-        (p ** 3) / 2 * v[0],
-        Math.sqrt(3 * p - 1) / 2 * v[1],
-        Math.sqrt(3 * p - 1) / 2 * v[2],
-        Math.sqrt(3 * p - 1) / 2 * v[3]
-    ];
+function f(n, v) {
+
+    var newVector = [];
+
+    if (n == 3) {
+
+        newVector = [
+            (p ** 3) / 2 * v[0],
+            Math.sqrt(3 * p - 1) / 2 * v[1],
+            Math.sqrt(3 * p - 1) / 2 * v[2],
+            Math.sqrt(3 * p - 1) / 2 * v[3]
+        ];
+
+    } else {
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
+        newVector = [
+            (p ** 3) * Math.sqrt(cot / ((p ** 4) * cot - 1 - (p ** 2))) * v[0],
+            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[1],
+            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[2],
+            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[3]
+        ];
+
+    }
+
+    return newVector;
+
 }
 
-function matrixDict(letter, vector) {
+function matrixDict(n, letter, vector) {
     var newVector;
     switch (letter) {
         case 'a':
@@ -131,35 +154,17 @@ function matrixDict(letter, vector) {
             newVector = c(vector);
             break;
         case 'd':
-            newVector = d(vector);
+            newVector = d(n, vector);
             break;
         case 'e':
             newVector = e(vector);
             break;
         case 'f':
-            newVector = f(vector);
+            newVector = f(n, vector);
             break;
     }
     return newVector;
 };
-
-const l = Math.acosh((p ** 6 - (-1 + p ** 2) * (3 * p - 1)) / 4);
-
-// const faceReflections = [
-//     '',
-//     'a',
-//     'ca',
-//     'aca', 'bca',
-//     'baca', 'caca',
-//     'cbaca', 'bcaca',
-//     'bcbaca',
-//     'abcbaca',
-//     'babcbaca', 'cabcbaca',
-//     'cbabcbaca', 'acabcbaca', 'bcabcbaca',
-//     'bcbabcbaca', 'bacabcbaca',
-//     'cbacabcbaca',
-//     'acbacabcbaca'
-// ];
 
 const faceReflections = [
     '',
@@ -184,6 +189,23 @@ const faceReflections = [
     'abcbaca'
 ];
 
-const center = [2 / (p ** 3), 0, 0, 0];
+function center(n) {
 
-export { typeOfHoneycomb, faceType, vertices, faces, a, b, c, d, e, f, matrixDict, l, faceReflections, center };
+    var newCenter = [];
+
+    if (n == 3) {
+
+        newCenter = ORDER3.center;
+
+    } else {
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+        newCenter = [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p**3), 0, 0, 0]
+
+    }
+
+    return newCenter;
+
+}
+
+export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };

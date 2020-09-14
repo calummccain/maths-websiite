@@ -74,10 +74,10 @@ function d(n, v) {
             newVector = ORDER4.d(v);
             break;
 
-        case 5:
+        // case 5:
 
-            newVector = ORDER5.d(v);
-            break;
+        //     newVector = ORDER5.d(v);
+        //     break;
 
         case 6:
 
@@ -85,14 +85,15 @@ function d(n, v) {
             break;
 
         default:
-            //recalculate
-            var cos = Math.cos(2 * Math.PI / n);
+            //recalculating
+            var cos = Math.cos(Math.PI / n) ** 2;
+            var rt = Math.sqrt(5);
 
             var newVector = [
-                [1 + 2 * cos, -2 * cos, 0, 0],
-                [2 * cos + 2, -1 - 2 * cos, 0, 0],
-                [0, 0, 1, 0],
-                [0, 0, 0, 1]
+                (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 / p) * v[1] - (2 * rt * cos / p - 2 / (p ** 2)) * v[3],
+                2 * (p ** 3) * cos * v[0] + (1 - 2 * (p ** 2) * cos) * v[1] - 2 * p * cos * v[3],
+                v[2],
+                2 * (p ** 2) * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
             ];
 
     }
@@ -133,10 +134,10 @@ function f(n, v) {
             var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
             var newVector = [
-                (p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot))) * v[0],
-                Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot))) * v[1],
-                Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot))) * v[2],
-                Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot))) * v[3]
+                (p ** 2) * Math.sqrt(cot / (cot - 3)) * v[0],
+                Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[1],
+                Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[2],
+                Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[3]
             ];
 
     }

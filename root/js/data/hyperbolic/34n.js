@@ -147,9 +147,21 @@ const faceReflections = ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc']
 
 function center(n) {
 
-    var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+    var newCenter = [];
 
-    return [1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]
+    if (n == 4) {
+
+        newCenter = ORDER4.center;
+
+    } else {
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
+        newCenter = [1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]
+    }
+
+    return newCenter;
+
 }
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
