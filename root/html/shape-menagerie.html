@@ -15,9 +15,79 @@
     <a href="/root/index.html">index</a>
 
     <script type="module">
-        import * as MAIN from "../js/main/menagerie-main.js";
-        MAIN.init(4, 1, 0);
-        MAIN.render();
+
+        import * as MAIN from "../js/main/main-utilities.js";
+        import * as THREE from "../js/three.module.js";
+        import { hyperbolicTetrahedronGeometry } from "../js/geometries/33n-geometry.js";
+        import { hyperbolicOctahedronGeometry } from "../js/geometries/34n-geometry.js";
+        import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js";
+        import { hyperbolicCubeGeometry } from "../js/geometries/43n-geometry.js";
+        import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
+        import { OrbitControls } from "../js/orbit-controls.js";
+
+        var WIDTH = window.innerWidth;
+        var HEIGHT = window.innerHeight;
+
+        var scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xEEEEEE);
+
+        var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 10);
+        camera.position.set(4, 4, 4);
+        camera.lookAt(4, 4, 4);
+        scene.add(camera);
+
+        var mouse = new THREE.Vector2(), INTERSECTED;
+        var raycaster = new THREE.Raycaster();
+
+        camera.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
+
+        var def = 4;
+
+        MAIN.addCellToScene(def, 1, 6, '', 0, hyperbolicTetrahedronGeometry, 4, scene, -4, -4, 2);
+        MAIN.addCellToScene(def, 1, 7, '', 0, hyperbolicTetrahedronGeometry, 4, scene, -4, -4, 4);
+
+        MAIN.addCellToScene(def, 1, 4, '', 0, hyperbolicOctahedronGeometry, 8, scene, -4, -2, -2);
+        MAIN.addCellToScene(def, 1, 5, '', 0, hyperbolicOctahedronGeometry, 8, scene, -4, -2, 0);
+        MAIN.addCellToScene(def, 1, 6, '', 0, hyperbolicOctahedronGeometry, 8, scene, -4, -2, 2);
+        MAIN.addCellToScene(def, 1, 7, '', 0, hyperbolicOctahedronGeometry, 8, scene, -4, -2, 4);
+
+        MAIN.addCellToScene(def, 1, 3, '', 0, hyperbolicIcosahedronGeometry, 20, scene, -4, 0, -4);
+        MAIN.addCellToScene(def, 1, 4, '', 0, hyperbolicIcosahedronGeometry, 20, scene, -4, 0, -2);
+        MAIN.addCellToScene(def, 1, 5, '', 0, hyperbolicIcosahedronGeometry, 20, scene, -4, 0, 0);
+        MAIN.addCellToScene(def, 1, 6, '', 0, hyperbolicIcosahedronGeometry, 20, scene, -4, 0, 2);
+        MAIN.addCellToScene(def, 1, 7, '', 0, hyperbolicIcosahedronGeometry, 20, scene, -4, 0, 4);
+
+        MAIN.addCellToScene(def, 1, 5, '', 0, hyperbolicCubeGeometry, 6, scene, -2, -4, 0);
+        MAIN.addCellToScene(def, 1, 6, '', 0, hyperbolicCubeGeometry, 6, scene, -2, -4, 2);
+        MAIN.addCellToScene(def, 1, 7, '', 0, hyperbolicCubeGeometry, 6, scene, -2, -4, 4);
+
+        MAIN.addCellToScene(def, 1, 4, '', 0, hyperbolicDodecahedronGeometry, 12, scene, 0, -4, -2);
+        MAIN.addCellToScene(def, 1, 5, '', 0, hyperbolicDodecahedronGeometry, 12, scene, 0, -4, 0);
+        MAIN.addCellToScene(def, 1, 6, '', 0, hyperbolicDodecahedronGeometry, 12, scene, 0, -4, 2);
+        MAIN.addCellToScene(def, 1, 7, '', 0, hyperbolicDodecahedronGeometry, 12, scene, 0, -4, 4);
+
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(WIDTH, HEIGHT);
+
+        var controls = new OrbitControls(camera, renderer.domElement);
+        controls.update();
+
+        //document.addEventListener('mousemove', (event) => { MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
+        //document.addEventListener('click', function () { MAIN.onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces, specialLetter, mouse); }, false);
+
+        document.body.appendChild(renderer.domElement);
+
+        render();
+
+        function render() {
+
+            requestAnimationFrame(render);
+
+            controls.update();
+            renderer.render(scene, camera);
+
+        }
+
     </script>
 
 </body>
