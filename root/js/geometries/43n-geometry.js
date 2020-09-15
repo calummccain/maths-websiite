@@ -7,7 +7,7 @@ import * as FACE from "../faces/klein-hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function hyperbolicCubeGeometry(order, n, transform, s) {
+function hyperbolicCubeGeometry(order, n, transform, s, compact) {
 
     var vertices = ORDERN.vertices;
     var faces = ORDERN.faces;
@@ -46,7 +46,8 @@ function hyperbolicCubeGeometry(order, n, transform, s) {
             kleinVertices[faces[i][1]],
             kleinVertices[faces[i][2]],
             kleinVertices[faces[i][3]]],
-            n
+            n,
+            compact
         );
 
         var facets = faceData[0];

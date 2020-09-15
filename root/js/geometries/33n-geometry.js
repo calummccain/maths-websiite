@@ -7,7 +7,7 @@ import * as FACE from "../faces/klein-hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function hyperbolicTetrahedronGeometry(order, refinement, transform, scale) {
+function hyperbolicTetrahedronGeometry(order, refinement, transform, scale, compact) {
 
     var vertices = ORDERN.vertices;
     var faces = ORDERN.faces;
@@ -45,7 +45,8 @@ function hyperbolicTetrahedronGeometry(order, refinement, transform, scale) {
             [kleinVertices[faces[i][0]],
             kleinVertices[faces[i][1]],
             kleinVertices[faces[i][2]]],
-            refinement
+            refinement,
+            compact
         );
 
         var facets = faceData[0];

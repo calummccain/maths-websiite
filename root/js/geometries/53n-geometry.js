@@ -7,7 +7,7 @@ import * as FACE from "../faces/klein-hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function hyperbolicDodecahedronGeometry(order, n, transform, s) {
+function hyperbolicDodecahedronGeometry(order, n, transform, s, compact) {
 
     var vertices = ORDERN.vertices;
     var faces = ORDERN.faces;
@@ -47,7 +47,8 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
             kleinVertices[faces[i][2]],
             kleinVertices[faces[i][3]],
             kleinVertices[faces[i][4]]],
-            n
+            n,
+            compact
         );
 
         var facets = faceData[0];

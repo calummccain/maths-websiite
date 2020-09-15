@@ -1,26 +1,51 @@
 import * as VF from "../maths-functions/vector-functions.js";
 
-function kleinFace(vertices, n) {
+function kleinFace(vertices, n, compact) {
 
-    var coords = vertices;
     var sideNumber = vertices.length;
     var faces = [];
     var center = [0, 0, 0, 0];
 
-    if (sideNumber == 3) {
+    if (compact === "uncompact") {
 
-        faces = [[0, 1, 2]];
+        var coords = [];
 
-    } else {
+        for (var j = 0; j < sideNumber; j++) {
+
+            coords = coords.concat(VF.lineSphereIntersection(vertices[j], vertices[(j + 1) % sideNumber]));
+
+        }
 
         for (var i = 0; i < sideNumber; i++) {
 
-            faces.push([i, (i + 1) % sideNumber, sideNumber]);
+            faces.push([2 * i, (2 * i + 1) % (2 * sideNumber), 2 * sideNumber]);
+            faces.push([(2 * i + 1) % (2 * sideNumber), (2 * i + 2) % (2 * sideNumber), 2 * sideNumber]);
             center = VF.vectorSum(center, vertices[i]);
 
         }
 
         coords.push(VF.vectorScale(center, 1 / sideNumber));
+
+    } else {
+
+        var coords = vertices;
+
+        if (sideNumber == 3) {
+
+            faces = [[0, 1, 2]];
+
+        } else {
+
+            for (var i = 0; i < sideNumber; i++) {
+
+                faces.push([i, (i + 1) % sideNumber, sideNumber]);
+                center = VF.vectorSum(center, vertices[i]);
+
+            }
+
+            coords.push(VF.vectorScale(center, 1 / sideNumber));
+
+        }
 
     }
 

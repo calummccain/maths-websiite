@@ -7,7 +7,7 @@ import * as FACE from "../faces/klein-hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function hyperbolicIcosahedronGeometry(order, n, transform, s) {
+function hyperbolicIcosahedronGeometry(order, n, transform, s, compact) {
 
     var vertices = ORDERN.vertices;
     var faces = ORDERN.faces;
@@ -21,8 +21,6 @@ function hyperbolicIcosahedronGeometry(order, n, transform, s) {
     }
 
     var center = ORDERN.center(order);
-
-    console.log(center)
 
     var newVertices = HF.transformVertices(vertices, transform, dict);
     var kleinVertices = [];
@@ -47,7 +45,8 @@ function hyperbolicIcosahedronGeometry(order, n, transform, s) {
             [kleinVertices[faces[i][0]],
             kleinVertices[faces[i][1]],
             kleinVertices[faces[i][2]]],
-            n
+            n,
+            compact
         );
 
         var facets = faceData[0];
