@@ -85,7 +85,7 @@ function d(n, v) {
             break;
 
         default:
-            //recalculating
+
             var cos = Math.cos(Math.PI / n) ** 2;
             var rt = Math.sqrt(5);
 
@@ -185,8 +185,33 @@ const faceReflections = ['', 'a', 'ca', 'babacbca', 'abacbca', 'acbca', 'cbacbca
 
 function center(n) {
 
-    var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-    return [1 / ((p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot)))), 0, 0, 0];
+    var newCenter = [];
+
+    switch (n) {
+
+        case 4:
+
+            newCenter = ORDER4.center;
+            break;
+
+        case 5:
+
+            newCenter = ORDER5.center;
+            break;
+
+        case 6:
+
+            newCenter = ORDER6.center;
+            break;
+
+        default:
+
+            var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+            newCenter = [1 / ((p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot)))), 0, 0, 0];;
+
+    }
+
+    return newCenter;
 
 }
 

@@ -64,7 +64,7 @@ function hyperbolicDodecahedronGeometry(order, n, transform, s) {
         for (var k = 0; k < facets.length; k++) {
 
             var facetPiece = facets[k];
-            geometry.faces.push(new THREE.Face3(facetPiece[(transform.length + (n % 2) + 1) % 2], facetPiece[2], facetPiece[(transform.length + (n % 2)) % 2]));
+            geometry.faces.push(new THREE.Face3(facetPiece[0], facetPiece[1], facetPiece[2]));
 
         }
 

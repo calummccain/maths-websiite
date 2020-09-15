@@ -61,7 +61,7 @@ function hyperbolicOctahedronGeometry(order, n, transform, s) {
         for (var k = 0; k < facets.length; k++) {
 
             var facetPiece = facets[k];
-            geometry.faces.push(new THREE.Face3(facetPiece[(transform.length) % 2], facetPiece[2], facetPiece[(transform.length + 1) % 2]));
+            geometry.faces.push(new THREE.Face3(facetPiece[0], facetPiece[1], facetPiece[2]));
 
         }
 

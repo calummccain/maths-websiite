@@ -15,7 +15,7 @@ function d(v) {
 
 function f(v) {
 
-    return [p ** 4 / 2 * v[0], p * Math.sqrt(4 * p - 1) / 2 * v[1], p * Math.sqrt(4 * p - 1) / 2 * v[2], p * Math.sqrt(4 * p - 1) / 2 * v[3]];
+    return [(p ** 4) / 2 * v[0], p * Math.sqrt(4 * p - 1) / 2 * v[1], p * Math.sqrt(4 * p - 1) / 2 * v[2], p * Math.sqrt(4 * p - 1) / 2 * v[3]];
 
 }
 
