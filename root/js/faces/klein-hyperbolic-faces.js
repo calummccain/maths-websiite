@@ -58,9 +58,9 @@ function kleinFace(vertices, n, compact) {
 
         for (var i = 0; i < faces.length; i++) {
 
-            var u = VF.midpoint(coords[faces[i][0]], coords[faces[i][1]]);
-            var v = VF.midpoint(coords[faces[i][1]], coords[faces[i][2]]);
-            var w = VF.midpoint(coords[faces[i][2]], coords[faces[i][0]]);
+            var u = VF.midpoint(coords[faces[i][0]], coords[faces[i][1]], compact);
+            var v = VF.midpoint(coords[faces[i][1]], coords[faces[i][2]], compact);
+            var w = VF.midpoint(coords[faces[i][2]], coords[faces[i][0]], compact);
 
             newCoords = newCoords.concat([
                 coords[faces[i][0]],
