@@ -16,10 +16,29 @@ function kleinFace(vertices, n, compact) {
 
         }
 
+        for (var j = 0; j < sideNumber; j++) {
+
+            // console.log(coords[(2 * j + 1) % (2 * sideNumber)], coords[(2 * j + 2) % (2 * sideNumber)])
+            // console.log(VF.vectorSum(coords[(2 * j + 1) % (2 * sideNumber)], coords[(2 * j + 2) % (2 * sideNumber)]));
+            // console.log(VF.vectorScale(VF.vectorSum(coords[(2 * j + 1) % (2 * sideNumber)], coords[(2 * j + 2) % (2 * sideNumber)]), 0.5));
+
+            coords.push(VF.vectorScale(VF.vectorSum(coords[2 * j], coords[2 * j + 1]), 0.5));
+
+        }
+
+        //console.log('hi');
+
         for (var i = 0; i < sideNumber; i++) {
 
-            faces.push([2 * i, (2 * i + 1) % (2 * sideNumber), 2 * sideNumber]);
-            faces.push([(2 * i + 1) % (2 * sideNumber), (2 * i + 2) % (2 * sideNumber), 2 * sideNumber]);
+            faces.push([2 * i + 1, (2 * i + 2) % (2 * sideNumber), 3 * sideNumber]);
+            //faces.push([(2 * i + 1) % (2 * sideNumber), (2 * i + 2) % (2 * sideNumber), 2 * sideNumber]);
+
+            faces.push([2 * i, 2 * sideNumber + i, 3 * sideNumber]);
+            faces.push([(2 * i + 1) % (2 * sideNumber), 2 * sideNumber + i, 3 * sideNumber]);
+
+            // console.log([(2 * i + 1) % (2 * sideNumber), 2 * sideNumber + i + 1, 2 * sideNumber]);
+            // console.log([(2 * i + 2) % (2 * sideNumber), 2 * sideNumber + i + 1, 2 * sideNumber]);
+            // console.log([2 * i, (2 * i + 1) % (2 * sideNumber), 2 * sideNumber]);
             center = VF.vectorSum(center, vertices[i]);
 
         }

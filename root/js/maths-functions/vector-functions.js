@@ -61,19 +61,19 @@ function midpoint(a, b, compact) {
 
     var newvector;
 
-    // if ((norm(a) * norm(b) > 0.9999) && (compact === "uncompact")) {
+    if ((norm(a) > 0.9999) && (norm(b) > 0.9999) && (compact === "uncompact")) {
 
-    //     var halfDist = Math.sqrt((vectorDot(a, b) + 1) / 2);
+        var halfDist = Math.sqrt((vectorDot(a, b) + 1) / 2);
 
-    //     newvector = vectorScale(vectorSum(a, b), 1 / (2 * halfDist));
+        newvector = vectorScale(vectorSum(a, b), 1 / (2 * halfDist));
 
-    // } else {
+    } else {
 
-    //     newvector = vectorScale(vectorSum(a, b), 0.5);
+        newvector = vectorScale(vectorSum(a, b), 0.5);
 
-    // }
+    }
 
-    newvector = vectorScale(vectorSum(a, b), 0.5);
+    //newvector = vectorScale(vectorSum(a, b), 0.5);
 
     return newvector;
 
