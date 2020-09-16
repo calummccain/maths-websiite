@@ -131,8 +131,20 @@ const faceReflections = ['', 'cab', 'ab', 'b'];
 
 function center(n) {
 
-    var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-    return [1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0]
+    var newCenter = [];
+
+    if (n == 6) {
+
+        newCenter = ORDER6.center;
+
+    } else {
+
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
+        newCenter = [1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0]
+    }
+
+    return newCenter;
 
 }
 
