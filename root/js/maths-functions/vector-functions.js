@@ -57,25 +57,29 @@ function vectorDot(a, b) {
 }
 
 // midpoint of a line
-function midpoint(a, b, compact) {
+function midpoint(a, b, c, compact) {
 
-    var newvector;
+    var newVector;
 
-    if ((norm(a) > 0.9999) && (norm(b) > 0.9999) && (compact === "uncompact")) {
+    if ((norm(a) > 0.99999) && (norm(b) > 0.9999) && (compact === "uncompact")) {
 
-        var halfDist = Math.sqrt((vectorDot(a, b) + 1) / 2);
-
-        newvector = vectorScale(vectorSum(a, b), 1 / (2 * halfDist));
+        //var halfDist = Math.sqrt((vectorDot(a, b) + 1) / 2);
+        var shiftedA = vectorDiff(a, c);
+        var shiftedB = vectorDiff(b, c);
+        var rad = norm(shiftedA);
+        //console.log(c, norm(c), rad, norm(shiftedB));
+        var unnormalisedSum= vectorScale(vectorSum(shiftedA, shiftedB), 1 / 2);
+        newVector = vectorSum(c, vectorScale(unnormalisedSum, rad / norm(unnormalisedSum)));
 
     } else {
 
-        newvector = vectorScale(vectorSum(a, b), 0.5);
+        newVector = vectorScale(vectorSum(a, b), 1 / 2);
 
     }
 
-    //newvector = vectorScale(vectorSum(a, b), 0.5);
+    //newVector = vectorScale(vectorSum(a, b), 0.5);
 
-    return newvector;
+    return newVector;
 
 }
 

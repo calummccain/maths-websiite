@@ -55,6 +55,7 @@ function hyperbolicIcosahedronGeometry(order, n, transform, s, compact) {
         for (var j = 0; j < hyperboloidVertices.length; j++) {
 
             var vertex = HF.kleinToPoincare(hyperboloidVertices[j]);
+            //var vertex = hyperboloidVertices[j];
             var vertex2 = VF.vectorSum(VF.vectorScale(vertex, 1 - s), VF.vectorScale(kleinCenter, s));
             geometry.vertices.push(new THREE.Vector3(vertex2[0], vertex2[1], vertex2[2]));
 
