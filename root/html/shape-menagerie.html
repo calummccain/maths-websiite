@@ -29,7 +29,7 @@
         var HEIGHT = window.innerHeight;
 
         var scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xEEEEEE);
+        scene.background = new THREE.Color(0x405060);
 
         var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
         camera.position.set(4, 4, 4);
@@ -41,7 +41,7 @@
 
         scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
-        var def = 4;
+        var def = 2;
         var size = 0.7;
         var spacing = 1;
 

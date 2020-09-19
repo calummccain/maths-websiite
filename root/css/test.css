@@ -1,10 +1,19 @@
 body {
     margin: 0;
-    background-color: rgb(229, 236, 211);
+    background-color: rgb(32, 40, 48);
 }
 
 .view {
     width: 5in;
     height: 5in;
     margin: auto;
+}
+
+#c {
+    position: fixed;
+    left: 0px; top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(64, 80, 96);
+    z-index: -1;
 }

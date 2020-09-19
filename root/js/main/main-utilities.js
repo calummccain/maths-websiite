@@ -19,6 +19,7 @@ function addCellToScene(
 
     for (var j = 0; j < numberofFaces; j++) {
 
+        //shapeGeometry[j].computeVertexNormals();
         var faceMesh = new THREE.Mesh(
             shapeGeometry[j],
             new THREE.MeshStandardMaterial({
@@ -30,6 +31,28 @@ function addCellToScene(
                 transparent: true,
                 side: THREE.DoubleSide
             }));
+
+        // shapeGeometry[j].computeVertexNormals();
+        // var faceMesh = new THREE.Mesh(
+        //     shapeGeometry[j],
+        //     new THREE.MeshNormalMaterial({ 
+        //         color: 0x7777ff, 
+        //         side: THREE.DoubleSide
+        //         //wireframe: true,
+        //         //wireframeLineWidth: 2
+        //     }));
+
+        // var faceMesh = new THREE.Mesh(
+        //     shapeGeometry[j],
+        //     new THREE.MeshToonMaterial({
+        //         color: new THREE.Color().setHSL(col, 0.6, 0.7),
+        //         roughness: 0.5,
+        //         metalness: 0,
+        //         flatShading: true,
+        //         opacity: opacityValue,
+        //         transparent: true,
+        //         side: THREE.DoubleSide
+        //     }));
 
         faceMesh.position.set(x, y, z);
 
@@ -75,9 +98,11 @@ function onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED
         INTERSECTED = null;
     }
 
+    return INTERSECTED;
+
 }
 
-function onDocumentMouseClick(refinement, opacityValue, order, scale, geometryFunction, numberofFaces, specialLetter, mouse) {
+function onDocumentMouseClick(refinement, opacityValue, order, scale, geometryFunction, numberofFaces, specialLetter, mouse, raycaster, camera, scene, compact) {
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -101,8 +126,10 @@ function onDocumentMouseClick(refinement, opacityValue, order, scale, geometryFu
             cell + face + specialLetter,
             scale,
             geometryFunction,
-            numberofFaces
-        );
+            numberofFaces,
+            scene,
+            compact,
+            0, 0, 0)
     }
 
 }

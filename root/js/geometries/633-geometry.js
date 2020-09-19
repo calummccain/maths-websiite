@@ -1,6 +1,6 @@
 import * as THREE from "../three.module.js";
 
-import * as ORDER3 from "../data/paracompact/633.js";
+import * as ORDER3 from "../data/hyperbolic/633.js";
 
 import * as FACE from "../faces/klein-hexagon-faces.js";
 
