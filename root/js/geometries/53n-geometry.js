@@ -1,81 +1,20 @@
-import * as THREE from "../three.module.js";
-
 import * as ORDERN from "../data/hyperbolic/53n.js";
+import * as GEOM from "../geometries/hyperbolic-geometry.js";
 
-import * as FACE from "../faces/klein-hyperbolic-faces.js";
+function hyperbolicDodecahedronGeometry(transform, order, refinement, compact) {
 
-import * as HF from "../maths-functions/hyperbolic-functions.js";
-import * as VF from "../maths-functions/vector-functions.js";
+    const vertices = ORDERN.vertices;
+    const faces = ORDERN.faces;
+    const numberOfSides = 5;
 
-function hyperbolicDodecahedronGeometry(order, n, transform, s, compact) {
-
-    var vertices = ORDERN.vertices;
-    var faces = ORDERN.faces;
-
-    function dict(letter, vector) {
+    function matrixDict(letter, vector) {
         return ORDERN.matrixDict(order, letter, vector)
     }
 
-    function f(vector) {
-        return dict('f', vector)
-    }
+    var dodecahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact);
 
-    var center = ORDERN.center(order);
+    return dodecahedron;
 
-    var newVertices = HF.transformVertices(vertices, transform, dict);
-    var kleinVertices = [];
-    
-    for (var i = 0; i < newVertices.length; i++) {
-
-        kleinVertices[i] = HF.hyperboloidToKlein(f(newVertices[i]));
-
-    }
-
-    var newCenter = HF.transformVertices([center], transform, dict);
-    var kleinCenter = f(newCenter[0]);
-
-    var cellGeometry = [];
-
-    for (var i = 0; i < faces.length; i++) {
-
-        var geometry = new THREE.Geometry();
-        var faceData;
-
-        faceData = FACE.kleinFace(
-            [kleinVertices[faces[i][0]],
-            kleinVertices[faces[i][1]],
-            kleinVertices[faces[i][2]],
-            kleinVertices[faces[i][3]],
-            kleinVertices[faces[i][4]]],
-            n,
-            compact
-        );
-
-        var facets = faceData[0];
-        var hyperboloidVertices = faceData[1];
-
-        for (var j = 0; j < hyperboloidVertices.length; j++) {
-
-            var vertex = HF.kleinToPoincare(hyperboloidVertices[j]);
-            var vertex2 = VF.vectorSum(VF.vectorScale(vertex, 1 - s), VF.vectorScale(kleinCenter, s));
-            geometry.vertices.push(new THREE.Vector3(vertex2[0], vertex2[1], vertex2[2]));
-
-        }
-
-        for (var k = 0; k < facets.length; k++) {
-
-            var facetPiece = facets[k];
-            geometry.faces.push(new THREE.Face3(facetPiece[0], facetPiece[1], facetPiece[2]));
-
-        }
-
-        geometry.mergeVertices();
-        geometry.name = [ORDERN.faceReflections[i], transform, faces[i]];
-        cellGeometry.push(geometry);
-
-    }
-
-    return cellGeometry;
 }
 
 export { hyperbolicDodecahedronGeometry };

@@ -1,6 +1,6 @@
 import * as VF from "../maths-functions/vector-functions.js";
 
-function kleinFace(vertices, n, compact) {
+function kleinFace(vertices, refinement, compact) {
 
     var sideNumber = vertices.length;
     var faces = [];
@@ -68,7 +68,7 @@ function kleinFace(vertices, n, compact) {
 
     var j = 0;
 
-    while (j < n) {
+    while (j < refinement) {
 
         var newCoords = [];
         var newFaces = [];

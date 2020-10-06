@@ -126,7 +126,7 @@ function f(n, v) {
     return newVector;
 }
 
-function matrixDict(letter, vector, n) {
+function matrixDict(n, letter, vector) {
     var newVector;
     switch (letter) {
         case 'a':

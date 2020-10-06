@@ -5,7 +5,6 @@ function addCellToScene(
     opacityValue,
     order,
     transform,
-    scale,
     geometryFunction,
     numberofFaces,
     scene,
@@ -15,7 +14,7 @@ function addCellToScene(
 
     var col = Math.random();
 
-    var shapeGeometry = geometryFunction(order, refinement, transform, scale, compact);
+    var shapeGeometry = geometryFunction(transform, order, refinement, compact);
 
     for (var j = 0; j < numberofFaces; j++) {
 

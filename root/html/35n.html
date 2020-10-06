@@ -1,78 +1,73 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+    <head>
 
-    <meta charset="utf-8">
+        <meta charset="utf-8">
 
-    <link rel="stylesheet" href="../css/test.css">
+        <link rel="stylesheet" href="../css/test.css">
 
-    <title>first page</title>
-</head>
+        <title>first page</title>
+    </head>
 
-<body>
+    <body>
 
-    <a href="/root/index.html">index</a>
+        <a href="/root/index.html">index</a>
 
-    <!-- <script type="module">
+        <!-- <script type="module">
         import * as MAIN from "../js/main/main-utilities.js";
         import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js"
         MAIN.init(4, 1, 4, [''], 0, hyperbolicIcosahedronGeometry, 20, 'd');
         MAIN.render();
     </script> -->
 
-    <script type="module">
+        <script type="module">
 
-        import * as MAIN from "../js/main/main-utilities.js";
-        import * as THREE from "../js/three.module.js";
-        import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js";
-        import { OrbitControls } from "../js/orbit-controls.js";
+            import * as MAIN from "../js/main/main-utilities.js";
+            import * as THREE from "../js/three.module.js";
+            import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js";
+            import { OrbitControls } from "../js/orbit-controls.js";
 
-        var WIDTH = window.innerWidth;
-        var HEIGHT = window.innerHeight;
+            var WIDTH = window.innerWidth;
+            var HEIGHT = window.innerHeight;
 
-        var scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x405060);
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x405060);
 
-        var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
-        camera.position.set(4, 4, 4);
-        camera.lookAt(4, 4, 4);
-        scene.add(camera);
+            var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
+            camera.position.set(4, 4, 4); camera.lookAt(4, 4, 4);
 
-        var mouse = new THREE.Vector2(), INTERSECTED;
-        var raycaster = new THREE.Raycaster();
+            scene.add(camera); var mouse = new THREE.Vector2(), INTERSECTED;
 
-        scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
+            var raycaster = new THREE.Raycaster();
 
-        //var ambientLight = new THREE.AmbientLight(0x0c0c0c);
-        //scene.add(ambientLight);
+            scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
+            //var ambientLight = new THREE.AmbientLight(0x0c0c0c); 
+            //scene.add(ambientLight);
+            MAIN.addCellToScene(2, 1, 3, '', 0, hyperbolicIcosahedronGeometry, 20, scene, 'compact', 0, 0, 0);
 
-        MAIN.addCellToScene(2, 1, 3, '', 0, hyperbolicIcosahedronGeometry, 20, scene, 'compact', 0, 0, 0);
+            var renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(WIDTH, HEIGHT);
 
-        var renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(WIDTH, HEIGHT);
-
-        var controls = new OrbitControls(camera, renderer.domElement);
-        controls.update();
-
-        document.addEventListener('mousemove', (event) => { INTERSECTED = MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
-        document.addEventListener('click', function () { MAIN.onDocumentMouseClick(2, 1, 3, 0, hyperbolicIcosahedronGeometry, 20, 'd', mouse, raycaster, camera, scene, 'compact'); }, false);
-
-        document.body.appendChild(renderer.domElement);
-
-        render();
-
-        function render() {
-
-            requestAnimationFrame(render);
-
+            var controls = new OrbitControls(camera, renderer.domElement);
             controls.update();
-            renderer.render(scene, camera);
 
-        }
+            document.addEventListener('mousemove', (event) => { INTERSECTED = MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
+            document.addEventListener('click', function () {
+                MAIN.onDocumentMouseClick(2, 1, 3, 0, hyperbolicIcosahedronGeometry, 20, 'd', mouse, raycaster, camera, scene, 'compact');
+            }, false);
+            document.body.appendChild(renderer.domElement);
 
-    </script>
+            render();
 
-</body>
+            function render() {
+                requestAnimationFrame(render);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+        </script>
+
+    </body>
 
 </html>
