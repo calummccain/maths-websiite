@@ -15,31 +15,31 @@ function addCellToScene(
     var col = Math.random();
 
     var shapeGeometry = geometryFunction(transform, order, refinement, compact);
+    console.log(shapeGeometry);
 
     for (var j = 0; j < numberofFaces; j++) {
 
         //shapeGeometry[j].computeVertexNormals();
-        var faceMesh = new THREE.Mesh(
-            shapeGeometry[j],
-            new THREE.MeshStandardMaterial({
-                color: new THREE.Color().setHSL(col, 0.6, 0.7),
-                roughness: 0.5,
-                metalness: 0,
-                flatShading: true,
-                opacity: opacityValue,
-                transparent: true,
-                side: THREE.DoubleSide
-            }));
-
-        // shapeGeometry[j].computeVertexNormals();
         // var faceMesh = new THREE.Mesh(
         //     shapeGeometry[j],
-        //     new THREE.MeshNormalMaterial({ 
-        //         color: 0x7777ff, 
+        //     new THREE.MeshStandardMaterial({
+        //         color: new THREE.Color().setHSL(col, 0.6, 0.7),
+        //         roughness: 0.5,
+        //         metalness: 0,
+        //         flatShading: true,
+        //         opacity: opacityValue,
+        //         transparent: true,
         //         side: THREE.DoubleSide
-        //         //wireframe: true,
-        //         //wireframeLineWidth: 2
         //     }));
+
+        shapeGeometry[j].computeVertexNormals();
+        var faceMesh = new THREE.Mesh(
+            shapeGeometry[j],
+            new THREE.MeshNormalMaterial({
+                side: THREE.DoubleSide
+                //wireframe: true,
+                //wireframeLineWidth: 2
+            }));
 
         // var faceMesh = new THREE.Mesh(
         //     shapeGeometry[j],
