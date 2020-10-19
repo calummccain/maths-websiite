@@ -26,24 +26,26 @@
             import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
             import { MapControls } from "../js/orbit-controls.js";
+            import { lineBox } from "../js/main/box-utilities.js";
 
             var WIDTH = window.innerWidth;
             var HEIGHT = window.innerHeight;
 
             const def = 3;
-            const spacing = 3;
+            const s = 3;
+            const bs = s * 0.4;
 
             var scene = new THREE.Scene();
             scene.background = new THREE.Color(0xDDDDDD);
 
             // Orthographic
-            //var camera = new THREE.OrthographicCamera(WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, 100);
+            // var camera = new THREE.OrthographicCamera(WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 10, 100);
 
             // Perspective
             var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
-            camera.position.set(3 * spacing, 0, -4 * spacing);
+            camera.position.set(3 * s, 0, -4 * s);
             camera.up = new THREE.Vector3(0, -1, 0);
-            //camera.lookAt(3 * spacing, 0, 0);
+            //camera.lookAt(3 * s, 0, 0);
             camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
 
             scene.add(camera);
@@ -53,22 +55,29 @@
 
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
-            MAIN.addCellToScene(def, 1, "#C17A2A", 6, '', hyperbolicTetrahedronGeometry, 4, scene, '', 2 * spacing, 0, 0);
+            MAIN.addCellToScene(def, 1, "#F9A834", 5, '', hyperbolicCubeGeometry, 6, scene, '', 0, 0, 0);
+            MAIN.addCellToScene(def, 1, "#FFD083", 6, '', hyperbolicCubeGeometry, 6, scene, '', 0, s, 0);
 
-            MAIN.addCellToScene(def, 1, "#F9A834", 4, '', hyperbolicOctahedronGeometry, 8, scene, '', 3 * spacing, 0, 0);
+            MAIN.addCellToScene(def, 1, "#C86218", 3, '', hyperbolicIcosahedronGeometry, 20, scene, '', s, 0, 0);
 
-            MAIN.addCellToScene(def, 1, "#C86218", 3, '', hyperbolicIcosahedronGeometry, 20, scene, '', spacing, 0, 0);
+            MAIN.addCellToScene(def, 1, "#EC5064", 6, '', hyperbolicTetrahedronGeometry, 4, scene, '', 2 * s, 0, 0);
 
-            MAIN.addCellToScene(def, 1, "#EC5064", 5, '', hyperbolicCubeGeometry, 6, scene, '', 0, 0, 0);
-            MAIN.addCellToScene(def, 1, "#03919B", 6, '', hyperbolicCubeGeometry, 6, scene, '', 0, spacing, 0);
+            MAIN.addCellToScene(def, 1, "#03919B", 4, '', hyperbolicOctahedronGeometry, 8, scene, '', 3 * s, 0, 0);
 
-            MAIN.addCellToScene(def, 1, "#007043", 4, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * spacing, 0, 0);
-            MAIN.addCellToScene(def, 1, "#40BAA4", 5, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * spacing, spacing, 0);
-            MAIN.addCellToScene(def, 1, "#B4CF68", 6, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * spacing, 2 * spacing, 0);
+            MAIN.addCellToScene(def, 1, "#007043", 4, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * s, 0, 0);
+            MAIN.addCellToScene(def, 1, "#B4CF68", 5, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * s, s, 0);
+            MAIN.addCellToScene(def, 1, "#E6F4BE", 6, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * s, 2 * s, 0);
 
-            MAIN.addCellToScene(def, 1, "#FCCEB2", 3, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * spacing, 0, 0);
-            MAIN.addCellToScene(def, 1, "#E6F4BE", 4, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * spacing, spacing, 0);
-            MAIN.addCellToScene(def, 1, "#BCEAF6", 5, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * spacing, 2 * spacing, 0);
+            MAIN.addCellToScene(def, 1, "#1F8276", 3, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * s, 0, 0);
+            MAIN.addCellToScene(def, 1, "#40BAA4", 4, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * s, s, 0);
+            MAIN.addCellToScene(def, 1, "#9DDED6", 5, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * s, 2 * s, 0);
+
+            lineBox([[-bs, -bs, bs], [-bs, -bs, -bs], [bs, -bs, -bs], [bs, -bs, bs], [-bs, s + bs, bs], [-bs, s + bs, -bs], [bs, s + bs, -bs], [bs, s + bs, bs]], "#F9A834", scene);
+            lineBox([[s - bs, -bs, bs], [s - bs, -bs, -bs], [s + bs, -bs, -bs], [s + bs, -bs, bs], [s - bs, bs, bs], [s - bs, bs, -bs], [s + bs, bs, -bs], [s + bs, bs, bs]], "#C86218", scene);
+            lineBox([[2 * s - bs, -bs, bs], [2 * s - bs, -bs, -bs], [2 * s + bs, -bs, -bs], [2 * s + bs, -bs, bs], [2 * s - bs, bs, bs], [2 * s - bs, bs, -bs], [2 * s + bs, bs, -bs], [2 * s + bs, bs, bs]], "#EC5064", scene);
+            lineBox([[3 * s - bs, -bs, bs], [3 * s - bs, -bs, -bs], [3 * s + bs, -bs, -bs], [3 * s + bs, -bs, bs], [3 * s - bs, bs, bs], [3 * s - bs, bs, -bs], [3 * s + bs, bs, -bs], [3 * s + bs, bs, bs]], "#03919B", scene);
+            lineBox([[4 * s - bs, -bs, bs], [4 * s - bs, -bs, -bs], [4 * s + bs, -bs, -bs], [4 * s + bs, -bs, bs], [4 * s - bs, 2 * s + bs, bs], [4 * s - bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, bs]], "#007043", scene);
+            lineBox([[5 * s - bs, -bs, bs], [5 * s - bs, -bs, -bs], [5 * s + bs, -bs, -bs], [5 * s + bs, -bs, bs], [5 * s - bs, 2 * s + bs, bs], [5 * s - bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, bs]], "#1F8276", scene);
 
             var renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(WIDTH, HEIGHT);
@@ -77,7 +86,7 @@
             controls.enableZoom = false;
             controls.enableRotate = false;
             controls.screenSpacePanning = true;
-            controls.target = new THREE.Vector3(2.5 * spacing, spacing, 0);
+            controls.target = new THREE.Vector3(2.5 * s, s, 0);
             controls.update();
 
             //document.addEventListener('mousemove', (event) => { MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
@@ -85,13 +94,15 @@
 
             document.body.appendChild(renderer.domElement);
 
+            console.log(scene.children);
+
             render();
 
             function render() {
 
                 requestAnimationFrame(render);
 
-                scene.children.forEach(function (obj) { obj.rotation.y = -Date.now() * 0.001; obj.rotation.z = -Date.now() * 0.0003; });
+                scene.children.forEach(function (obj) { if (obj.type === "Mesh") { obj.rotation.y = -Date.now() * 0.001; obj.rotation.z = -Date.now() * 0.0003; } });
 
                 controls.update();
                 renderer.render(scene, camera);
