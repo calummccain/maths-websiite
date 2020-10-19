@@ -1,26 +1,77 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+    <head>
 
-    <meta charset="utf-8">
+        <meta charset="utf-8">
 
-    <link rel="stylesheet" href="../css/test.css">
+        <link rel="stylesheet" href="../css/test.css">
 
-    <title>first page</title>
-</head>
+        <title>first page</title>
+    </head>
 
-<body>
+    <body>
 
-    <a href="/root/index.html">index</a>
+        <a href="/root/index.html">index</a>
 
-    <script type="module">
-        import * as MAIN from "../js/main/main-utilities.js";
-        import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js"
-        MAIN.init(4, 1, 10, [''], 0, hyperbolicDodecahedronGeometry, 12, 'd');
-        MAIN.render();
-    </script>
+        <script type="module">
 
-</body>
+            import * as MAIN from "../js/main/main-utilities.js";
+            import * as THREE from "../js/three.module.js";
+            import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
+            import { OrbitControls } from "../js/orbit-controls.js";
+
+            var WIDTH = window.innerWidth;
+            var HEIGHT = window.innerHeight;
+
+            const def = 3;
+            const spacing = 1;
+
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x405060);
+
+            // Orthographic
+            //var camera = new THREE.OrthographicCamera(WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, 100);
+
+            // Perspective
+            var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
+            camera.position.set(3 * spacing, 5 * spacing, spacing);
+            camera.up = new THREE.Vector3(0, 0, -1);
+
+            scene.add(camera);
+
+            var mouse = new THREE.Vector2(), INTERSECTED;
+            var raycaster = new THREE.Raycaster();
+
+            scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
+
+            MAIN.addCellToScene(def, 1, 10, '', hyperbolicDodecahedronGeometry, 12, scene, 'uncompact', 0, 0, 0);
+
+            var renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(WIDTH, HEIGHT);
+
+            var controls = new OrbitControls(camera, renderer.domElement);
+            controls.target = new THREE.Vector3(0, 0, 0)
+            controls.update();
+
+            //document.addEventListener('mousemove', (event) => { MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
+            //document.addEventListener('click', function () { MAIN.onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces, specialLetter, mouse); }, false);
+
+            document.body.appendChild(renderer.domElement);
+
+            render();
+
+            function render() {
+
+                requestAnimationFrame(render);
+
+                controls.update();
+                renderer.render(scene, camera);
+
+            }
+
+        </script>
+
+    </body>
 
 </html>

@@ -3,6 +3,7 @@ import * as THREE from "../three.module.js";
 function addCellToScene(
     refinement,
     opacityValue,
+    colour,
     order,
     transform,
     geometryFunction,
@@ -15,49 +16,50 @@ function addCellToScene(
     var col = Math.random();
 
     var shapeGeometry = geometryFunction(transform, order, refinement, compact);
-    console.log(shapeGeometry);
 
     for (var j = 0; j < numberofFaces; j++) {
 
-        //shapeGeometry[j].computeVertexNormals();
-        // var faceMesh = new THREE.Mesh(
-        //     shapeGeometry[j],
-        //     new THREE.MeshStandardMaterial({
-        //         color: new THREE.Color().setHSL(col, 0.6, 0.7),
-        //         roughness: 0.5,
-        //         metalness: 0,
-        //         flatShading: true,
-        //         opacity: opacityValue,
-        //         transparent: true,
-        //         side: THREE.DoubleSide
-        //     }));
+        if (colour === "normal") {
 
-        shapeGeometry[j].computeVertexNormals();
-        var faceMesh = new THREE.Mesh(
-            shapeGeometry[j],
-            new THREE.MeshNormalMaterial({
-                side: THREE.DoubleSide
-                //wireframe: true,
-                //wireframeLineWidth: 2
-            }));
+            shapeGeometry[j].computeVertexNormals();
+            var faceMesh = new THREE.Mesh(
+                shapeGeometry[j],
+                new THREE.MeshNormalMaterial({
+                    side: THREE.DoubleSide
+                    //wireframe: true,
+                    //wireframeLineWidth: 2
+                }));
 
-        // var faceMesh = new THREE.Mesh(
-        //     shapeGeometry[j],
-        //     new THREE.MeshToonMaterial({
-        //         color: new THREE.Color().setHSL(col, 0.6, 0.7),
-        //         roughness: 0.5,
-        //         metalness: 0,
-        //         flatShading: true,
-        //         opacity: opacityValue,
-        //         transparent: true,
-        //         side: THREE.DoubleSide
-        //     }));
+        } else {
+
+            var faceMesh = new THREE.Mesh(
+                shapeGeometry[j],
+                new THREE.MeshStandardMaterial({
+                    color: new THREE.Color(colour),
+                    roughness: 0.5,
+                    metalness: 0,
+                    flatShading: true,
+                    opacity: opacityValue,
+                    transparent: true,
+                    side: THREE.DoubleSide
+                }));
+
+        }
 
         faceMesh.position.set(x, y, z);
 
         scene.add(faceMesh);
 
     }
+
+}
+
+function onWindowResize(camera, renderer) {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
 }
 
@@ -137,5 +139,6 @@ export {
     render,
     addCellToScene,
     onDocumentMouseClick,
-    onDocumentMouseMove
+    onDocumentMouseMove,
+    onWindowResize
 };

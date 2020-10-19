@@ -16,12 +16,10 @@ function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSide
     // Project the transformed cell's vertices to the Klein Model
     var kleinVertices = [];
     for (var i = 0; i < newVertices.length; i++) {
-        console.log(f([1, 0, 0, 0]));
+
         kleinVertices[i] = HF.hyperboloidToKlein(f(newVertices[i]));
 
     }
-
-    console.log(kleinVertices)
 
     // For each face make a geometry for it and add it to the cellGeometry array
     var cellGeometry = [];

@@ -7,63 +7,116 @@
 
         <link rel="stylesheet" href="../css/test.css">
 
-        <title>first page</title>
+        <title>sHapES | Navigation</title>
     </head>
 
     <body>
 
-        <a href="/root/index.html">index</a>
+        <div id="top">
+            <a href="/root/index.html">index</a>
+        </div>
 
-        <script type="module">
-            import * as MAIN from "../js/main/main-utilities.js"; 
-            import { hyperbolicHexagonGeometry } from "../js/geometries/633-geometry.js" ;
-            MAIN.init(4, 1, 4, [''], 0, hyperbolicHexagonGeometry, 100); 
-            MAIN.render();
-        </script>
+        <canvas id="c"></canvas>
+
+        <div id="content">
+
+
+
+        </div>
 
         <script type="module">
 
             import * as MAIN from "../js/main/main-utilities.js";
             import * as THREE from "../js/three.module.js";
-            import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js";
-            import { OrbitControls } from "../js/orbit-controls.js";
+            import { hyperbolicHexagonalGeometry } from "../js/geometries/633-geometry.js";
+            import { MapControls } from "../js/orbit-controls.js";
 
-            var WIDTH = window.innerWidth;
-            var HEIGHT = window.innerHeight;
+            var canvas, scene, renderer;
 
-            var scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x405060);
 
-            var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
-            camera.position.set(4, 4, 4); camera.lookAt(4, 4, 4);
+            init();
 
-            scene.add(camera); var mouse = new THREE.Vector2(), INTERSECTED;
 
-            var raycaster = new THREE.Raycaster();
 
-            scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
-            //var ambientLight = new THREE.AmbientLight(0x0c0c0c); 
-            //scene.add(ambientLight);
-            MAIN.addCellToScene(2, 1, 3, '', 0, hyperbolicIcosahedronGeometry, 20, scene, 'compact', 0, 0, 0);
+            function init() {
 
-            var renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(WIDTH, HEIGHT);
+                canvas = document.getElementById("c");
+                var content = document.getElementById("content");
 
-            var controls = new OrbitControls(camera, renderer.domElement);
-            controls.update();
+                var WIDTH = window.innerWidth;
+                var HEIGHT = window.innerHeight;
 
-            document.addEventListener('mousemove', (event) => { INTERSECTED = MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
-            document.addEventListener('click', function () {
-                MAIN.onDocumentMouseClick(2, 1, 3, 0, hyperbolicIcosahedronGeometry, 20, 'd', mouse, raycaster, camera, scene, 'compact');
-            }, false);
-            document.body.appendChild(renderer.domElement);
+                const def = 3;
+                const spacing = 1;
 
-            render();
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x405060);
 
-            function render() {
-                requestAnimationFrame(render);
+                // Orthographic
+                //var camera = new THREE.OrthographicCamera(WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, 100);
+
+                // Perspective
+                var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
+
+                camera.position.set(3 * spacing, 5 * spacing, spacing);
+                camera.up = new THREE.Vector3(0, 0, -1);
+
+                scene.add(camera);
+
+                var mouse = new THREE.Vector2(), INTERSECTED;
+                var raycaster = new THREE.Raycaster();
+
+                scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
+
+                MAIN.addCellToScene(def, 1, 4, '', hyperbolicHexagonalGeometry, 108, scene, '', 0, 0, 0);
+
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+                renderer.setClearColor(0xffffff, 1);
+                renderer.setPixelRatio(window.devicePixelRatio);
+
+                var controls = new MapControls(camera, renderer.domElement);
+                controls.target = new THREE.Vector3(0, 0, 0);
+                // console.log(controls.screenSpacePanning);
+                //controls.enablePan = true;
+                // console.log(controls.screenSpacePanning);
                 controls.update();
-                renderer.render(scene, camera);
+
+                //document.addEventListener('mousemove', (event) => { MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
+                //document.addEventListener('click', function () { MAIN.onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces, specialLetter, mouse); }, false);
+
+
+                render();
+
+                function render() {
+
+                    updateSize();
+
+                    requestAnimationFrame(render);
+
+                    controls.update();
+                    renderer.render(scene, camera);
+
+                }
+
+                function updateSize() {
+
+                    var width = canvas.clientWidth;
+                    var height = canvas.clientHeight;
+
+                    if (canvas.width !== width || canvas.height !== height) {
+
+                        renderer.setSize(width, height, false);
+                        camera.aspect = width / height;
+                        camera.updateProjectionMatrix();
+
+                    }
+
+                }
+
+                updateSize();
+
+                document.body.appendChild(renderer.domElement);
+
             }
 
         </script>

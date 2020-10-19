@@ -1,74 +1,35 @@
-// Order 34 hexagonal (paracompact)
+// Order 4 hexagonal (paracompact)
 
-const vertices = [
-    [1, 0, 0, 0],
-    [2, 1, 0, 0],
-    [2, 0, 1, 0],
-    [4, 2, 1, 0],
-    [4, 1, 2, 0],
-    [5, 2, 2, 0]
-];
-
-const faces = [[0, 1, 3, 5, 4, 2]];
-
-//cfv
-// const a = [
-//     [1, 0, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 0, 1]
-// ];
+import { p } from "../constants.js";
 
 function a(v) {
 
-    return [v[0], v[2], v[1], v[3]];
+    return [v[0], v[1], (v[2] + v[3]) / 2, (3 * v[2] - v[3]) / 2];
 
 }
-
-//cev
-// const b = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 0, 1],
-//     [0, 0, 1, 0]
-// ];
 
 function b(v) {
 
-    return [v[0], v[1], v[3], v[2]];
+    return [v[0], v[1], -v[2], v[3]];
 
 }
-
-//cfe
-// const c = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 0, -1],
-//     [0, 0, -1, 0]
-// ];
 
 function c(v) {
 
-    return [v[0], v[1], -v[3], -v[2]];
+    return [(5 * v[0] - v[1] - 4 * v[3]) / 4, (v[0] + 3 * v[1] - 4 * v[3]) / 4, v[2], (2 * v[0] - 2 * v[1] - 4 * v[3]) / 4];
 
 }
-
-//fev
-// const d = diag[1,1,1,-1];
 
 function d(v) {
 
-    return [v[0], v[1], v[2], -v[3]];
+    const i = v[0];
+    const j = v[1];
+    const k = v[2];
+    const l = v[3];
+
+    return [i, (-j + 6 * k + 2 * l) / 3, (2 * j + 3 * k - l) / 6, (2 * j - 3 * k + 5 * l) / 6];
 
 }
-
-// const e = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 0, 0, 1]
-// ];
-
 
 function e(v) {
 
@@ -76,20 +37,19 @@ function e(v) {
 
 }
 
-// const f = [
-//     [1, 0, 0, 0],
-//     [0, Math.sqrt(3), 0, 0],
-//     [0, 0, Math.sqrt(3), 0],
-//     [0, 0, 0, Math.sqrt(3)]
-// ];
+// function f(v) {
+
+//     return [v[0] - 3, v[1], Math.sqrt(3/2) * v[2], Math.sqrt(1/2) * v[3]];
+
+// }
 
 function f(v) {
 
-    return [v[0], Math.sqrt(3) * v[1], Math.sqrt(3) * v[2], Math.sqrt(3) * v[3]];
+    return [(p ** 4) * v[0] / 2 + 1 - 2 * (p ** 4), (p ** 4) * v[1] / 2, Math.sqrt(3) * (p ** 2) * v[2] / 2, (p ** 2) * v[3] / 2];
 
 }
 
-function matrixDict(letter, vector) {
+function matrixDict(order, letter, vector) {
     var newVector;
     switch (letter) {
         case 'a':
@@ -114,61 +74,73 @@ function matrixDict(letter, vector) {
     return newVector;
 };
 
-const faceReflections = [
-    '', 'a', 'ba', 'dba', 'bdba', 'abdba', 'dbdba', 'dabdba', 'bdbdba', 'abdbdba', 'badbdba', 'abadbdba', 'dbadbdba', 'dabadbdba',
-    'bdbadbdba', 'abdbadbdba', 'badbadbdba', 'abadbadbdba', 'dbdbadbdba', 'dabdbadbdba', 'dbadbadbdba', 'dabadbadbdba', 'badbdbadbdba',
-    'bdbadbadbdba', 'abdbadbadbdba', 'badbadbadbdba', 'abadbadbadbdba', 'dbadbdbadbdba', 'dbadbadbadbdba', 'dabadbadbadbdba', 'bdbadbdbadbdba',
-    'abdbadbdbadbdba', 'bdbadbadbadbdba', 'abdbadbadbadbdba', 'badbadbadbadbdba', 'abadbadbadbadbdba', 'dbdbadbdbadbdba', 'dabdbadbdbadbdba',
-    'dbdbadbadbadbdba', 'dabdbadbadbadbdba', 'dbadbadbadbadbdba', 'dabadbadbadbadbdba', 'badbdbadbdbadbdba', 'abadbdbadbdbadbdba', 'bdbadbadbadbadbdba',
-    'abdbadbadbadbadbdba', 'badbadbadbadbadbdba', 'abadbadbadbadbadbdba', 'dbadbdbadbdbadbdba', 'dabadbdbadbdbadbdba', 'dbadbadbadbadbadbdba',
-    'dabadbadbadbadbadbdba', 'bdbadbdbadbdbadbdba', 'abdbadbdbadbdbadbdba', 'badbadbdbadbdbadbdba', 'abadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbdba',
-    'abdbadbadbadbadbadbdba', 'badbadbadbadbadbadbdba', 'abadbadbadbadbadbadbdba', 'dbdbadbdbadbdbadbdba', 'dabdbadbdbadbdbadbdba', 'dbadbadbdbadbdbadbdba',
-    'dabadbadbdbadbdbadbdba', 'dbdbadbadbadbadbadbdba', 'dabdbadbadbadbadbadbdba', 'dbadbadbadbadbadbadbdba', 'dabadbadbadbadbadbadbdba', 'badbdbadbdbadbdbadbdba',
-    'badbadbadbdbadbdbadbdba', 'abadbadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbdba', 'badbadbadbadbadbadbadbdba',
-    'abadbadbadbadbadbadbadbdba', 'dbadbdbadbdbadbdbadbdba', 'dbadbadbadbdbadbdbadbdba', 'dabadbadbadbdbadbdbadbdba', 'dbadbadbadbadbadbadbadbdba',
-    'dabadbadbadbadbadbadbadbdba', 'bdbadbdbadbdbadbdbadbdba', 'abdbadbdbadbdbadbdbadbdba', 'bdbadbadbadbdbadbdbadbdba', 'abdbadbadbadbdbadbdbadbdba',
-    'badbadbadbadbdbadbdbadbdba', 'abadbadbadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbadbdba', 'badbadbadbadbadbadbadbadbdba',
-    'abadbadbadbadbadbadbadbadbdba', 'dbdbadbdbadbdbadbdbadbdba', 'dabdbadbdbadbdbadbdbadbdba', 'dbdbadbadbadbdbadbdbadbdba', 'dabdbadbadbadbdbadbdbadbdba',
-    'dbadbadbadbadbdbadbdbadbdba', 'dabadbadbadbadbdbadbdbadbdba', 'dbdbadbadbadbadbadbadbadbdba', 'dabdbadbadbadbadbadbadbadbdba',
-    'dbadbadbadbadbadbadbadbadbdba', 'dabadbadbadbadbadbadbadbadbdba', 'badbdbadbdbadbdbadbdbadbdba', 'abadbdbadbdbadbdbadbdbadbdba',
-    'badbadbadbadbadbdbadbdbadbdba', 'abadbadbadbadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbadbadbdba',
-    'badbadbadbadbadbadbadbadbadbdba', 'abadbadbadbadbadbadbadbadbadbdba', 'dbadbdbadbdbadbdbadbdbadbdba', 'dabadbdbadbdbadbdbadbdbadbdba',
-    'dbadbadbadbadbadbdbadbdbadbdba', 'dabadbadbadbadbadbdbadbdbadbdba', 'dbadbadbadbadbadbadbadbadbadbdba', 'dabadbadbadbadbadbadbadbadbadbdba',
-    'bdbadbdbadbdbadbdbadbdbadbdba', 'abdbadbdbadbdbadbdbadbdbadbdba', 'badbadbdbadbdbadbdbadbdbadbdba', 'abadbadbdbadbdbadbdbadbdbadbdba',
-    'bdbadbadbadbadbadbdbadbdbadbdba', 'abdbadbadbadbadbadbdbadbdbadbdba', 'badbadbadbadbadbadbdbadbdbadbdba', 'abadbadbadbadbadbadbdbadbdbadbdba',
-    'bdbadbadbadbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbadbadbadbdba', 'badbadbadbadbadbadbadbadbadbadbdba', 'abadbadbadbadbadbadbadbadbadbadbdba',
-    'dbdbadbdbadbdbadbdbadbdbadbdba', 'dabdbadbdbadbdbadbdbadbdbadbdba', 'dbadbadbdbadbdbadbdbadbdbadbdba', 'dabadbadbdbadbdbadbdbadbdbadbdba',
-    'dbdbadbadbadbadbadbdbadbdbadbdba', 'dabdbadbadbadbadbadbdbadbdbadbdba', 'dbadbadbadbadbadbadbdbadbdbadbdba', 'dabadbadbadbadbadbadbdbadbdbadbdba',
-    'dbdbadbadbadbadbadbadbadbadbadbdba', 'dabdbadbadbadbadbadbadbadbadbadbdba', 'dbadbadbadbadbadbadbadbadbadbadbdba', 'dabadbadbadbadbadbadbadbadbadbadbdba',
-    'badbdbadbdbadbdbadbdbadbdbadbdba', 'badbadbadbdbadbdbadbdbadbdbadbdba', 'abadbadbadbdbadbdbadbdbadbdbadbdba', 'badbadbadbadbadbadbadbdbadbdbadbdba',
-    'abadbadbadbadbadbadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbadbadbadbadbdba',
-    'badbadbadbadbadbadbadbadbadbadbadbdba', 'abadbadbadbadbadbadbadbadbadbadbadbdba', 'dbadbdbadbdbadbdbadbdbadbdbadbdba',
-    'dbadbadbadbdbadbdbadbdbadbdbadbdba', 'dabadbadbadbdbadbdbadbdbadbdbadbdba', 'dbadbadbadbadbadbadbadbdbadbdbadbdba',
-    'dabadbadbadbadbadbadbadbdbadbdbadbdba', 'dbadbadbadbadbadbadbadbadbadbadbadbdba', 'dabadbadbadbadbadbadbadbadbadbadbadbdba',
-    'bdbadbdbadbdbadbdbadbdbadbdbadbdba', 'abdbadbdbadbdbadbdbadbdbadbdbadbdba', 'bdbadbadbadbdbadbdbadbdbadbdbadbdba',
-    'abdbadbadbadbdbadbdbadbdbadbdbadbdba', 'badbadbadbadbdbadbdbadbdbadbdbadbdba', 'abadbadbadbadbdbadbdbadbdbadbdbadbdba',
-    'bdbadbadbadbadbadbadbadbdbadbdbadbdba', 'abdbadbadbadbadbadbadbadbdbadbdbadbdba', 'badbadbadbadbadbadbadbadbdbadbdbadbdba',
-    'abadbadbadbadbadbadbadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbadbadbadbadbadbdba',
-    'badbadbadbadbadbadbadbadbadbadbadbadbdba', 'abadbadbadbadbadbadbadbadbadbadbadbadbdba', 'dbdbadbdbadbdbadbdbadbdbadbdbadbdba',
-    'dabdbadbdbadbdbadbdbadbdbadbdbadbdba', 'dbdbadbadbadbdbadbdbadbdbadbdbadbdba', 'dabdbadbadbadbdbadbdbadbdbadbdbadbdba',
-    'dbadbadbadbadbdbadbdbadbdbadbdbadbdba', 'dabadbadbadbadbdbadbdbadbdbadbdbadbdba', 'dbdbadbadbadbadbadbadbadbdbadbdbadbdba',
-    'dabdbadbadbadbadbadbadbadbdbadbdbadbdba', 'dbadbadbadbadbadbadbadbadbdbadbdbadbdba', 'dabadbadbadbadbadbadbadbadbdbadbdbadbdba',
-    'dbdbadbadbadbadbadbadbadbadbadbadbadbdba', 'dabdbadbadbadbadbadbadbadbadbadbadbadbdba', 'dbadbadbadbadbadbadbadbadbadbadbadbadbdba',
-    'dabadbadbadbadbadbadbadbadbadbadbadbadbdba', 'badbdbadbdbadbdbadbdbadbdbadbdbadbdba', 'abadbdbadbdbadbdbadbdbadbdbadbdbadbdba',
-    'badbadbadbadbadbdbadbdbadbdbadbdbadbdba', 'abadbadbadbadbadbdbadbdbadbdbadbdbadbdba', 'badbadbadbadbadbadbadbadbadbdbadbdbadbdba',
-    'abadbadbadbadbadbadbadbadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbadbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbadbadbadbadbadbadbdba',
-    'badbadbadbadbadbadbadbadbadbadbadbadbadbdba', 'abadbadbadbadbadbadbadbadbadbadbadbadbadbdba', 'dbadbdbadbdbadbdbadbdbadbdbadbdbadbdba',
-    'dabadbdbadbdbadbdbadbdbadbdbadbdbadbdba', 'dbadbadbadbadbadbdbadbdbadbdbadbdbadbdba', 'dabadbadbadbadbadbdbadbdbadbdbadbdbadbdba',
-    'dbadbadbadbadbadbadbadbadbadbdbadbdbadbdba', 'dabadbadbadbadbadbadbadbadbadbdbadbdbadbdba', 'dbadbadbadbadbadbadbadbadbadbadbadbadbadbdba',
-    'dabadbadbadbadbadbadbadbadbadbadbadbadbadbdba', 'bdbadbdbadbdbadbdbadbdbadbdbadbdbadbdba', 'abdbadbdbadbdbadbdbadbdbadbdbadbdbadbdba',
-    'badbadbdbadbdbadbdbadbdbadbdbadbdbadbdba', 'abadbadbdbadbdbadbdbadbdbadbdbadbdbadbdba', 'bdbadbadbadbadbadbdbadbdbadbdbadbdbadbdba',
-    'abdbadbadbadbadbadbdbadbdbadbdbadbdbadbdba', 'badbadbadbadbadbadbdbadbdbadbdbadbdbadbdba', 'abadbadbadbadbadbadbdbadbdbadbdbadbdbadbdba',
-    'bdbadbadbadbadbadbadbadbadbadbdbadbdbadbdba', 'abdbadbadbadbadbadbadbadbadbadbdbadbdbadbdba', 'badbadbadbadbadbadbadbadbadbadbdbadbdbadbdba',
-    'abadbadbadbadbadbadbadbadbadbadbdbadbdbadbdba', 'bdbadbadbadbadbadbadbadbadbadbadbadbadbadbdba', 'abdbadbadbadbadbadbadbadbadbadbadbadbadbadbdba',
-    'badbadbadbadbadbadbadbadbadbadbadbadbadbadbdba', 'abadbadbadbadbadbadbadbadbadbadbadbadbadbadbdba'];
+const faceReflections = ['', 'b', 'ab', 'cab', 'acab', 'bacab', 'cacab', 'cbacab', 'acacab', 'abcacab', 'bacacab', 'abacacab', 'cabcacab', 'cabacacab', 'acabcacab', 'abcabcacab', 'bacabcacab', 'abacabcacab', 'cacabcacab', 'cabcabcacab', 'cbacabcacab', 'cabacabcacab', 'abcacabcacab', 'acabcabcacab', 'abcabcabcacab', 'bacabcabcacab', 'abacabcabcacab', 'cabcacabcacab', 'cabcabcabcacab', 'cabacabcabcacab', 'acabcacabcacab', 'bacabcacabcacab', 'acabcabcabcacab', 'abcabcabcabcacab', 'bacabcabcabcacab', 'abacabcabcabcacab', 'cacabcacabcacab', 'cbacabcacabcacab', 'cacabcabcabcacab', 'cabcabcabcabcacab', 'cbacabcabcabcacab', 'cabacabcabcabcacab', 'abcacabcacabcacab', 'abacacabcacabcacab', 'acabcabcabcabcacab', 'abcabcabcabcabcacab', 'bacabcabcabcabcacab', 'abacabcabcabcabcacab', 'cabcacabcacabcacab', 'cabacacabcacabcacab', 'cabcabcabcabcabcacab', 'cabacabcabcabcabcacab', 'acabcacabcacabcacab', 'abcabcacabcacabcacab', 'bacabcacabcacabcacab', 'abacabcacabcacabcacab', 'acabcabcabcabcabcacab', 'abcabcabcabcabcabcacab', 'bacabcabcabcabcabcacab', 'abacabcabcabcabcabcacab', 'cacabcacabcacabcacab', 'cabcabcacabcacabcacab', 'cbacabcacabcacabcacab', 'cabacabcacabcacabcacab', 'cacabcabcabcabcabcacab', 'cabcabcabcabcabcabcacab', 'cbacabcabcabcabcabcacab', 'cabacabcabcabcabcabcacab', 'abcacabcacabcacabcacab', 'abcabcabcacabcacabcacab', 'abacabcabcacabcacabcacab', 'acabcabcabcabcabcabcacab', 'abcabcabcabcabcabcabcacab', 'bacabcabcabcabcabcabcacab', 'abacabcabcabcabcabcabcacab', 'cabcacabcacabcacabcacab', 'cabcabcabcacabcacabcacab', 'cabacabcabcacabcacabcacab', 'cabcabcabcabcabcabcabcacab', 'cabacabcabcabcabcabcabcacab', 'acabcacabcacabcacabcacab', 'bacabcacabcacabcacabcacab', 'acabcabcabcacabcacabcacab', 'abcabcabcabcacabcacabcacab', 'bacabcabcabcacabcacabcacab', 'abacabcabcabcacabcacabcacab', 'acabcabcabcabcabcabcabcacab', 'abcabcabcabcabcabcabcabcacab', 'bacabcabcabcabcabcabcabcacab', 'abacabcabcabcabcabcabcabcacab', 'cacabcacabcacabcacabcacab', 'cbacabcacabcacabcacabcacab', 'cacabcabcabcacabcacabcacab', 'cabcabcabcabcacabcacabcacab', 'cbacabcabcabcacabcacabcacab', 'cabacabcabcabcacabcacabcacab', 'cacabcabcabcabcabcabcabcacab', 'cabcabcabcabcabcabcabcabcacab', 'cbacabcabcabcabcabcabcabcacab', 'cabacabcabcabcabcabcabcabcacab', 'abcacabcacabcacabcacabcacab', 'abacacabcacabcacabcacabcacab', 'abcabcabcabcabcacabcacabcacab', 'abacabcabcabcabcacabcacabcacab', 'acabcabcabcabcabcabcabcabcacab', 'abcabcabcabcabcabcabcabcabcacab', 'bacabcabcabcabcabcabcabcabcacab', 'abacabcabcabcabcabcabcabcabcacab'];
+
+function vectorSum(x, y) {
+
+    var vDiff = [];
+
+    for (var i = 0; i < x.length; i++) {
+
+        vDiff[i] = Math.round(x[i] + y[i]);
+
+    }
+
+    return vDiff;
+
+}
+
+// scales a vector by 's'
+function vectorScale(x, s) {
+
+    var vScale = [];
+
+    for (var i = 0; i < x.length; i++) {
+
+        vScale[i] = x[i] * s;
+
+    }
+
+    return vScale;
+
+}
+
+function transformVertices(baseVertices, transformation, dictionary) {
+
+    var newVertices = [];
+    var e1 = [1, 0, 0, 0], e2 = [0, 1, 0, 0], e3 = [0, 0, 1, 0], e4 = [0, 0, 0, 1];
+
+    if (transformation !== '') {
+        for (var i = transformation.length - 1; i > -1; i--) {
+            e1 = dictionary(transformation[i], e1);
+            e2 = dictionary(transformation[i], e2);
+            e3 = dictionary(transformation[i], e3);
+            e4 = dictionary(transformation[i], e4);
+        }
+    }
 
 
+    for (var j = 0; j < baseVertices.length; j++) {
+        var oldVertex = baseVertices[j];
+        var newVertex = vectorSum(
+            vectorSum(
+                vectorScale(e1, oldVertex[0]),
+                vectorScale(e2, oldVertex[1])
+            ),
+            vectorSum(
+                vectorScale(e3, oldVertex[2]),
+                vectorScale(e4, oldVertex[3])
+            )
+        );
+        newVertices.push(newVertex);
+    }
 
-const center = [3, 1, 1, 0];
+    return newVertices;
+}
 
-export {  vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
+// var v = [];
+// for (var i = 0; i < faceReflections.length; i++) {
+//     v = v.concat(transformVertices(vertices, faceReflections[i], matrixDict));
+// }
+// console.log(v.slice(600, 700));
+export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections };

@@ -81,16 +81,6 @@ function kleinToPoincare(point) {
     var dist = Math.sqrt(point[0] ** 2 + point[1] ** 2 + point[2] ** 2);
     var hyperbolicDist;
 
-    // if (1 > dist ** 2) {
-
-    //     hyperbolicDist = 1 / (1 + Math.sqrt(1 - dist ** 2));
-
-    // } else {
-
-    //     hyperbolicDist = 1 / dist;
-
-    // }
-
     hyperbolicDist = 1 / (1 + Math.sqrt(Math.abs(1 - dist ** 2)));
 
     return VF.vectorScale(point, hyperbolicDist);
