@@ -4,7 +4,6 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 
 function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact) {
 
-
     // It is useful to have the f matrix separately defined
     function f(vector) {
         return matrixDict('f', vector)
