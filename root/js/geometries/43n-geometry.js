@@ -8,7 +8,7 @@ function hyperbolicCubeGeometry(transform, order, refinement, compact) {
     const numberOfSides = 4;
 
     function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector)
+        return ORDERN.matrixDict(order, letter, vector);
     }
 
     var cube = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact);

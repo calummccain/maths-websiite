@@ -155,7 +155,8 @@ function onDocumentMouseClick(refinement, opacityValue, order, scale, geometryFu
             numberofFaces,
             scene,
             compact,
-            0, 0, 0)
+            0, 0, 0);
+            
     }
 
 }

@@ -8,7 +8,7 @@ function hyperbolicHexagonalGeometry(transform, order, refinement, compact) {
     const numberOfSides = 6;
 
     function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector)
+        return ORDERN.matrixDict(order, letter, vector);
     }
 
     var hexagonal = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact);
