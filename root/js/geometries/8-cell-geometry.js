@@ -6,7 +6,7 @@ function viiiCellGeometry(refinement, cellName, d) {
     var cellFaceDict = VIII.cellFaceDict;
     var vertexDict = VIII.vertexDict;
 
-    var cube = GEOM.sphericalGeometry(cellName, cellFaceDict, vertexDict, refinement, d);
+    var cube = GEOM.sphericalGeometry(cellName, cellFaceDict, vertexDict, refinement, d, 4);
 
     return cube;
 }

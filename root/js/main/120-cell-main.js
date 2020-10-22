@@ -74,6 +74,8 @@ function addCellToScene(n, opacityValue, name, d) {
                 side: THREE.DoubleSide
             })));
     }
+
+    //console.log(scene.children);
 }
 
 function render() {

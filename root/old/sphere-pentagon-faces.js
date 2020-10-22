@@ -1,4 +1,4 @@
-import * as VF from "../maths-functions/vector-functions.js";
+import * as VF from "../js/maths-functions/vector-functions.js";
 
 function sphereFace(a, b, c, d, e, n) {
 

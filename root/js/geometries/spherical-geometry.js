@@ -3,7 +3,7 @@ import * as FACE from "../faces/spherical-faces.js";
 import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function sphericalGeometry(cellName, cellFaceDict, vertexDict, refinement, d) {
+function sphericalGeometry(cellName, cellFaceDict, vertexDict, refinement, d, sideNumber, faceDict) {
 
     var faces = cellFaceDict[cellName];
 
@@ -14,9 +14,17 @@ function sphericalGeometry(cellName, cellFaceDict, vertexDict, refinement, d) {
         var geometry = new THREE.Geometry();
         var faceVertices = [];
 
-        for (var j = 0; j < faces[i].length; j++) {
+        for (var j = 0; j < sideNumber; j++) {
 
-            faceVertices.push(vertexDict[faces[i][j]]);
+            if (sideNumber == 5) {
+
+                faceVertices.push(vertexDict[faceDict[faces[i]][j]]);
+
+            } else {
+
+                faceVertices.push(vertexDict[faces[i][j]]);
+
+            }
 
         }
 

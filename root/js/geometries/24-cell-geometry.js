@@ -6,7 +6,7 @@ function xxivCellGeometry(refinement, cellName, d) {
     var cellFaceDict = XXIV.cellFaceDict;
     var vertexDict = XXIV.vertexDict;
 
-    var octahedron = GEOM.sphericalGeometry(cellName, cellFaceDict, vertexDict, refinement, d);
+    var octahedron = GEOM.sphericalGeometry(cellName, cellFaceDict, vertexDict, refinement, d, 3);
 
     return octahedron;
 }

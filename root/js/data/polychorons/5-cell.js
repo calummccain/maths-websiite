@@ -4,13 +4,22 @@ const vertices = [
     'a', 'b', 'c', 'd', 'e'
 ];
 
+// const vertexDict = {
+//     'a': [1 / Math.sqrt(10), 1 / Math.sqrt(6), 1 / Math.sqrt(3), 1],
+//     'b': [1 / Math.sqrt(10), 1 / Math.sqrt(6), 1 / Math.sqrt(3), -1],
+//     'c': [1 / Math.sqrt(10), 1 / Math.sqrt(6), -2 / Math.sqrt(3), 0],
+//     'd': [1 / Math.sqrt(10), -Math.sqrt(3 / 2), 0, 0],
+//     'e': [-2 * Math.sqrt(2 / 5), 0, 0, 0]
+// };
+
 const vertexDict = {
-    'a': [1 / Math.sqrt(10), 1 / Math.sqrt(6), 1 / Math.sqrt(3), 1],
-    'b': [1 / Math.sqrt(10), 1 / Math.sqrt(6), 1 / Math.sqrt(3), -1],
-    'c': [1 / Math.sqrt(10), 1 / Math.sqrt(6), -2 / Math.sqrt(3), 0],
-    'd': [1 / Math.sqrt(10), -Math.sqrt(3 / 2), 0, 0],
-    'e': [-2 * Math.sqrt(2 / 5), 0, 0, 0]
+    'a': [-1 / Math.sqrt(5), 1, 1, 1],
+    'b': [-1 / Math.sqrt(5), 1, -1, -1],
+    'c': [-1 / Math.sqrt(5), -1, 1, -1],
+    'd': [-1 / Math.sqrt(5), -1, -1, 1],
+    'e': [Math.sqrt(5) - 1 / Math.sqrt(5), 0, 0, 0]
 };
+
 
 const lines = [
     'ab', 'ac', 'ad', 'ae',
