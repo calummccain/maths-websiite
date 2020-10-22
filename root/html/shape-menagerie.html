@@ -19,12 +19,16 @@
 
             import * as MAIN from "../js/main/main-utilities.js";
             import * as THREE from "../js/three.module.js";
+
             import { hyperbolicTetrahedronGeometry } from "../js/geometries/33n-geometry.js";
             import { hyperbolicOctahedronGeometry } from "../js/geometries/34n-geometry.js";
             import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js";
             import { hyperbolicCubeGeometry } from "../js/geometries/43n-geometry.js";
             import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
+
+            import { cxxCellGeometry } from "../js/geometries/120-cell-geometry.js";
+
             import { MapControls } from "../js/orbit-controls.js";
             import { lineBox } from "../js/main/box-utilities.js";
 
@@ -55,22 +59,23 @@
 
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
-            MAIN.addCellToScene(def, 1, "#F9A834", 5, '', hyperbolicCubeGeometry, 6, scene, '', 0, 0, 0);
-            MAIN.addCellToScene(def, 1, "#FFD083", 6, '', hyperbolicCubeGeometry, 6, scene, '', 0, s, 0);
+            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: 0, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, x: 0, y: s, z: 0 });
 
-            MAIN.addCellToScene(def, 1, "#C86218", 3, '', hyperbolicIcosahedronGeometry, 20, scene, '', s, 0, 0);
+            MAIN.addCellToScene({ geometryFunction: hyperbolicIcosahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#C86218", numberOfFaces: 20, x: s, y: 0, z: 0 });
 
-            MAIN.addCellToScene(def, 1, "#EC5064", 6, '', hyperbolicTetrahedronGeometry, 4, scene, '', 2 * s, 0, 0);
+            MAIN.addCellToScene({ geometryFunction: hyperbolicTetrahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#EC5064", numberOfFaces: 20, x: 2 * s, y: 0, z: 0 });
 
-            MAIN.addCellToScene(def, 1, "#03919B", 4, '', hyperbolicOctahedronGeometry, 8, scene, '', 3 * s, 0, 0);
+            MAIN.addCellToScene({ geometryFunction: hyperbolicOctahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#03919B", numberOfFaces: 20, x: 3 * s, y: 0, z: 0 });
 
-            MAIN.addCellToScene(def, 1, "#007043", 4, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * s, 0, 0);
-            MAIN.addCellToScene(def, 1, "#B4CF68", 5, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * s, s, 0);
-            MAIN.addCellToScene(def, 1, "#E6F4BE", 6, '', hyperbolicDodecahedronGeometry, 12, scene, '', 4 * s, 2 * s, 0);
+            MAIN.addCellToScene({ geometryFunction: cxxCellGeometry, scene: scene, metric: "spherical", refinement: def, cell: "039055071087103119135151588589590591592593594595596597598599", colour: "#003d24", numberOfFaces: 20, x: 4 * s, y: -s, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#007043", numberOfFaces: 20, x: 4 * s, y: 0, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#B4CF68", numberOfFaces: 20, x: 4 * s, y: s, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#E6F4BE", numberOfFaces: 20, x: 4 * s, y: 2 * s, z: 0 });
 
-            MAIN.addCellToScene(def, 1, "#1F8276", 3, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * s, 0, 0);
-            MAIN.addCellToScene(def, 1, "#40BAA4", 4, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * s, s, 0);
-            MAIN.addCellToScene(def, 1, "#9DDED6", 5, '', hyperbolicHexagonalGeometry, 100, scene, '', 5 * s, 2 * s, 0);
+            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#1F8276", numberOfFaces: 20, x: 5 * s, y: 0, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#40BAA4", numberOfFaces: 20, x: 5 * s, y: s, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#9DDED6", numberOfFaces: 20, x: 5 * s, y: 2 * s, z: 0 });
 
             lineBox([[-bs, -bs, bs], [-bs, -bs, -bs], [bs, -bs, -bs], [bs, -bs, bs], [-bs, s + bs, bs], [-bs, s + bs, -bs], [bs, s + bs, -bs], [bs, s + bs, bs]], "#F9A834", scene);
             lineBox([[s - bs, -bs, bs], [s - bs, -bs, -bs], [s + bs, -bs, -bs], [s + bs, -bs, bs], [s - bs, bs, bs], [s - bs, bs, -bs], [s + bs, bs, -bs], [s + bs, bs, bs]], "#C86218", scene);

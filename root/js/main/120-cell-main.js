@@ -128,7 +128,7 @@ function onDocumentMouseClick(n, opacityValue, d) {
     if (intersects.length > 0) {
 
         var [face, cell] = intersects[0].object.geometry.name;
-        CXX.faceCellDict[face].forEach(cell => { if (!(objects.includes(cell))) { addCellToScene(n, opacityValue, CXX.cells.indexOf(cell), d) } });
+        CXX.faceCellDict[face].forEach(cell => { if (!(objects.includes(cell))) { addCellToScene(n, opacityValue, CXX.cells.indexOf(cell), d); console.log(cell); } });
     }
 
 }

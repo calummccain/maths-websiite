@@ -1,19 +1,46 @@
 import * as THREE from "../three.module.js";
 
-function addCellToScene(
-    refinement,
-    opacityValue,
-    colour,
-    order,
-    transform,
-    geometryFunction,
-    numberofFaces,
-    scene,
-    compact,
-    x, y, z
-) {
+function addCellToScene(params) {
 
-    var shapeGeometry = geometryFunction(transform, order, refinement, compact);
+    var geometryFunction = params.geometryFunction;
+    var scene = params.scene;
+    var metric = params.metric || "spherical";
+    var refinement = params.refinement || 3;
+    var cell = params.cell || 0;
+    var opacityValue = params.opacity || 1;
+    var d = params.d || 1;
+    var transform = params.transform || "";
+    var order = params.order || 0;
+    var compact = params.compact || "compact";
+    var colour = params.colour || "normal";
+    var numberofFaces = params.numberOfFaces || 0;
+    var x = params.x || 0;
+    var y = params.y || 0;
+    var z = params.z || 0;
+
+    var shapeGeometry;
+
+    if (metric === "spherical") {
+
+        var d = 1;
+
+        shapeGeometry = geometryFunction(refinement, cell, d);
+
+        console.log(shapeGeometry[0].faces);
+
+    } else if (metric === "euclidean") {
+
+        // TODO
+
+    } else if (metric === "hyperbolic") {
+
+        shapeGeometry = geometryFunction(transform, order, refinement, compact);
+
+    } else {
+
+        console.log("I don't know what you've done but this ain't it");
+
+    }
 
     for (var j = 0; j < numberofFaces; j++) {
 
