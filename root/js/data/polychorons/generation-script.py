@@ -79,40 +79,71 @@ def populate_cells(big_daddy):
     print("Cells Populated")
 
 
-def distance(p1, p2):
+def distance(p1, p2, d1, d2):
 
     d = np.linalg.norm(
-        np.asarray([
+        (np.asarray([
             constants.values[p1[0]],
             constants.values[p1[1]],
             constants.values[p1[2]],
-            constants.values[p1[3]]]) -
-        np.asarray([
+            constants.values[p1[3]]
+        ]) * d1) -
+        (np.asarray([
             constants.values[p2[0]],
             constants.values[p2[1]],
             constants.values[p2[2]],
-            constants.values[p2[3]]])
+            constants.values[p2[3]]
+        ]) * d2)
     )
 
     return d
 
 
-def generateLines(big_daddy):
+def generate_lines_vertices(big_daddy):
 
     for x in constants.polychorons:
 
         k = 0
 
-        for i in range(constants.quantities[x]['v']):
+        l = constants.scale[x] / constants.distances[x]["R0"]
 
-            for j in range(i, constants.quantities[x]['v']):
+        for i in range(constants.quantities[x]["v"]):
 
-                if abs(distance(big_daddy[x]['v'][str(i)], big_daddy[x]['v'][str(j)]) - 1111111) < 0.1:
+            for j in range(i, constants.quantities[x]["v"]):
 
-                    big_daddy[x]['ev'][str(k)] = [str(i), str(j)]
+                if abs(distance(big_daddy[x]["v"][str(i)], big_daddy[x]["v"][str(j)], 1.0, 1.0) - 2 * l) < 0.01:
+
+                    big_daddy[x]["ev"][str(k)] = [str(i), str(j)]
+
+                    k += 1
+
+        print(x, "lines", k)
 
     print("Lines made")
 
+
+def generate_cell_vertices(big_daddy):
+
+    for x in constants.polychorons:
+
+        l = constants.scale[x] / constants.distances[x]["R0"]
+        dual_scale = constants.distances[x]["R3"] * \
+            l / constants.scale[constants.duals[x]]
+        d = constants.distances[x]["CV"] * l
+
+        for i in range(constants.quantities[x]["c"]):
+
+            vertices = []
+
+            for j in range(constants.quantities[x]["v"]):
+
+                if abs(distance(big_daddy[x]["v"][str(j)], big_daddy[x]["c"][str(i)], 1.0, dual_scale) - d) < 0.01:
+
+                    vertices.append(str(j))
+
+            big_daddy[x]["cv"][str(i)] = vertices
+
+    print("Cell Vertices found!")
 
 
 def generateJSON():
@@ -123,7 +154,9 @@ def generateJSON():
 
     populate_cells(big_daddy)
 
-    generateLines(big_daddy)
+    # generate_lines_vertices(big_daddy)
+
+    generate_cell_vertices(big_daddy)
 
     # with open("/Users/calummccain/Documents/maths-website/root/js/data/polychorons/json-data/5-data.json", "w") as f:
     #     json.dump(big_daddy["5"], f)
@@ -163,7 +196,3 @@ def generateJSON():
 
 
 generateJSON()
-
-print(distance(["1 / 2", "1 / 2", "1 / 2", "1 / 2"], ["0", "0", "0", "1"]))
-
-# print(generateJSON()["120"]["v"])
