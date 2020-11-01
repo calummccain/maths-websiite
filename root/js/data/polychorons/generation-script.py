@@ -154,7 +154,7 @@ def generateJSON():
 
     populate_cells(big_daddy)
 
-    # generate_lines_vertices(big_daddy)
+    generate_lines_vertices(big_daddy)
 
     generate_cell_vertices(big_daddy)
 
