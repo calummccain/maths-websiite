@@ -79,12 +79,14 @@ function addCellToScene(params) {
 
 }
 
-function onWindowResize(camera, renderer) {
+function onWindowResize(camera, renderer, div) {
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+    console.log(div.clientHeight, div.clientWidth)
+
+    camera.aspect = div.clientWidth / div.clientHeight;
     camera.updateProjectionMatrix();
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(div.clientWidth, div.clientHeight);
 
 }
 

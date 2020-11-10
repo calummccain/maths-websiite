@@ -8,14 +8,15 @@
         <link rel="stylesheet" href="../css/test.css">
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-        <title>hi</title>
+        <title>sHapES</title>
     </head>
 
     <body>
 
-        <a href="/root/index.html">index</a>
-
         <script type="module">
+
+            var view = document.getElementById("view");
+            console.log(view);
 
             import * as MAIN from "../js/main/main-utilities.js";
             import * as THREE from "../js/three.module.js";
@@ -27,13 +28,13 @@
             import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
 
-            import { cxxCellGeometry } from "../js/geometries/120-cell-geometry.js";
+            //import { cxxCellGeometry } from "../js/geometries/120-cell-geometry.js";
 
             import { MapControls } from "../js/orbit-controls.js";
             import { lineBox } from "../js/main/box-utilities.js";
 
-            var WIDTH = window.innerWidth;
-            var HEIGHT = window.innerHeight;
+            var WIDTH = view.clientWidth;
+            var HEIGHT = view.clientHeight;
 
             const def = 3;
             const s = 3;
@@ -59,20 +60,25 @@
 
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
+            // cubes
             MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: 0, z: 0 });
             MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, x: 0, y: s, z: 0 });
 
+            // icosahedrons
             MAIN.addCellToScene({ geometryFunction: hyperbolicIcosahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#C86218", numberOfFaces: 20, x: s, y: 0, z: 0 });
 
+            // tetrahedron
             MAIN.addCellToScene({ geometryFunction: hyperbolicTetrahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#EC5064", numberOfFaces: 4, x: 2 * s, y: 0, z: 0 });
 
+            // octahedron
             MAIN.addCellToScene({ geometryFunction: hyperbolicOctahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#03919B", numberOfFaces: 8, x: 3 * s, y: 0, z: 0 });
 
-            MAIN.addCellToScene({ geometryFunction: cxxCellGeometry, scene: scene, metric: "spherical", refinement: def, cell: "039055071087103119135151588589590591592593594595596597598599", colour: "#003d24", numberOfFaces: 12, x: 4 * s, y: -s, z: 0 });
+            // dodecahedron
             MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#007043", numberOfFaces: 12, x: 4 * s, y: 0, z: 0 });
             MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#B4CF68", numberOfFaces: 12, x: 4 * s, y: s, z: 0 });
             MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#E6F4BE", numberOfFaces: 12, x: 4 * s, y: 2 * s, z: 0 });
 
+            // hexagonal
             MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#1F8276", numberOfFaces: 110, x: 5 * s, y: 0, z: 0 });
             MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#40BAA4", numberOfFaces: 110, x: 5 * s, y: s, z: 0 });
             MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#9DDED6", numberOfFaces: 110, x: 5 * s, y: 2 * s, z: 0 });
@@ -94,12 +100,7 @@
             controls.target = new THREE.Vector3(2.5 * s, s, 0);
             controls.update();
 
-            //document.addEventListener('mousemove', (event) => { MAIN.onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED); }, false);
-            //document.addEventListener('click', function () { MAIN.onDocumentMouseClick(n, opacityValue, order, s, geometryFunction, numberofFaces, specialLetter, mouse); }, false);
-
-            document.body.appendChild(renderer.domElement);
-
-            console.log(scene.children);
+            view.appendChild(renderer.domElement);
 
             render();
 
@@ -115,6 +116,50 @@
             }
 
         </script>
+
+        <div id="panel">
+            <div id="header">
+                <h1>
+                    <div> \(s\mathbb{H}ap\mathbb{E}\mathbb{S}\)</div>
+                </h1>
+            </div>
+            <div id="sections">
+                <h2>
+                    Tetrahedral
+                </h2>
+                <a>\[\{3, 3, 6\}\]</a>
+                <h2>
+                    Cubic
+                </h2>
+                    <a>\[\{4, 3, 5\}\]</a>
+                    <a>\[\{4, 3, 6\}\]</a>
+                <h2>
+                    Octahedral
+                </h2>
+                <a>\[\{3, 4, 4\}\]</a>
+                <h2>
+                    Dodecahedral
+                </h2>
+                <a>\[\{5, 3, 4\}\]</a>
+                <a>\[\{5, 3, 5\}\]</a>
+                <a>\[\{5, 3, 6\}\]</a>
+                <h2>
+                    Icosahedral
+                </h2>
+                <a>\[\{3, 5, 3\}\]</a>
+                <h2>
+                    Hexagonal
+                </h2>
+                <a>\[\{6, 3, 3\}\]</a>
+                <a>\[\{6, 3, 4\}\]</a>
+                <a>\[\{6, 3, 5\}\]</a>
+                <a href="/root/index.html">index</a>
+            </div>
+        </div>
+
+        <div id="view">
+
+        </div>
 
     </body>
 
