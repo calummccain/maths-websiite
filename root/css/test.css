@@ -1,15 +1,13 @@
 html, body {
     margin: 0;
-    background-color: rgb(32, 40, 48);
+    background-color: #F5F5F5;
     height: 100%;
     width: 100%;
-    min-height: 100px;
 }
 
 #view {
-    width: 80%;
-    height: 80%;
-    min-height: 80px;
+    width: 100%;
+    height: 100%;
     margin: auto;
 }
 
@@ -20,9 +18,74 @@ html, body {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: navy;
+    background-color: #F5F5F5;
     overflow-x: hidden;
-    padding-top: 20px;
-    color: oldlace;
-  }
+    color: #060606;
+    text-align: center;
+    font-family: 'Roboto Mono', monospace;
+    font-size: small;
+}
+
+.dropdown {
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+.dropdown:hover {
+    background-color: #D5D5D5;
+    height: 100%;
+}
+
+.active {
+    background-color: #D5D5D5;
+    height: 100%;
+}
+
+.opt {
+    display: none;
+    background-color: #F5F5F5;
+    height: 100%;
+}
+
+a:link {
+    color: rgb(154, 155, 103);
+}
+
+a:visited {
+    color: rgb(161, 117, 104);
+}
+
+.tetrahedral {
+    color: #EC5064;
+}
+
+.cubic {
+    color: #F9A834;
+}
+
+.octahedral {
+    color: #03919B;
+}
+
+.dodecahedral {
+    color: #007043;
+}
+
+.icosahedral {
+    color: #C86218;
+}
+
+.hexagonal {
+    color: #1F8276;
+}
+
 

@@ -28,8 +28,6 @@
             import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
 
-            //import { cxxCellGeometry } from "../js/geometries/120-cell-geometry.js";
-
             import { MapControls } from "../js/orbit-controls.js";
             import { lineBox } from "../js/main/box-utilities.js";
 
@@ -117,6 +115,23 @@
 
         </script>
 
+        <script type="module">
+            var dropdown = document.getElementsByClassName("dropdown");
+            var i;
+
+            for (i = 0; i < dropdown.length; i++) {
+                dropdown[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    var dropdownContent = this.nextElementSibling;
+                    if (dropdownContent.style.display === "block") {
+                        dropdownContent.style.display = "none";
+                    } else {
+                        dropdownContent.style.display = "block";
+                    }
+                });
+            }
+        </script>
+
         <div id="panel">
             <div id="header">
                 <h1>
@@ -124,35 +139,47 @@
                 </h1>
             </div>
             <div id="sections">
-                <h2>
+                <button class="dropdown tetrahedral">
                     Tetrahedral
-                </h2>
-                <a>\[\{3, 3, 6\}\]</a>
-                <h2>
+                </button>
+                <div class="tetrahedral opt">
+                    <a href="#">\[\{3, 3, 6\}\]</a>
+                </div>
+                <button class="dropdown cubic">
                     Cubic
-                </h2>
-                    <a>\[\{4, 3, 5\}\]</a>
-                    <a>\[\{4, 3, 6\}\]</a>
-                <h2>
+                </button>
+                <div class="cubic opt">
+                    <a href="#">\[\{4, 3, 5\}\]</a>
+                    <a href="#">\[\{4, 3, 6\}\]</a>
+                </div>
+                <button class="dropdown octahedral">
                     Octahedral
-                </h2>
-                <a>\[\{3, 4, 4\}\]</a>
-                <h2>
+                </button>
+                <div class="octahedral opt">
+                    <a href="#">\[\{3, 4, 4\}\]</a>
+                </div>
+                <button class="dropdown dodecahedral">
                     Dodecahedral
-                </h2>
-                <a>\[\{5, 3, 4\}\]</a>
-                <a>\[\{5, 3, 5\}\]</a>
-                <a>\[\{5, 3, 6\}\]</a>
-                <h2>
+                </button>
+                <div class="dodecahedral opt">
+                    <a href="#">\[\{5, 3, 4\}\]</a>
+                    <a href="#">\[\{5, 3, 5\}\]</a>
+                    <a href="#">\[\{5, 3, 6\}\]</a>
+                </div>
+                <button class="dropdown icosahedral">
                     Icosahedral
-                </h2>
-                <a>\[\{3, 5, 3\}\]</a>
-                <h2>
+                </button>
+                <div class="icosahedral opt">
+                    <a href="#">\[\{3, 5, 3\}\]</a>
+                </div>
+                <button class="dropdown hexagonal">
                     Hexagonal
-                </h2>
-                <a>\[\{6, 3, 3\}\]</a>
-                <a>\[\{6, 3, 4\}\]</a>
-                <a>\[\{6, 3, 5\}\]</a>
+                </button>
+                <div class="hexagonal opt">
+                    <a href="#">\[\{6, 3, 3\}\]</a>
+                    <a href="#">\[\{6, 3, 4\}\]</a>
+                    <a href="#">\[\{6, 3, 5\}\]</a>
+                </div>
                 <a href="/root/index.html">index</a>
             </div>
         </div>
