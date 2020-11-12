@@ -49,7 +49,7 @@
                 scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
                 // tetrahedron
-                MAIN.addCellToScene({ geometryFunction: hyperbolicTetrahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#EC5064", numberOfFaces: 4 });
+                MAIN.addCellToScene({ geometryFunction: hyperbolicTetrahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 7, colour: "#EC5064", numberOfFaces: 4, compact: "uncompact" });
 
                 var renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(WIDTH, HEIGHT);

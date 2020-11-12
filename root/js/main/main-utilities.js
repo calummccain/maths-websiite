@@ -26,11 +26,9 @@ function addCellToScene(params) {
 
         shapeGeometry = geometryFunction(refinement, cell, d);
 
-        console.log(shapeGeometry[0].faces);
-
     } else if (metric === "euclidean") {
 
-        // TODO
+        shapeGeometry = [new THREE.BoxGeometry(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3))];
 
     } else if (metric === "hyperbolic") {
 

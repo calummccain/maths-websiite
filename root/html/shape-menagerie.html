@@ -59,8 +59,9 @@
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
             // cubes
-            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: 0, z: 0 });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, x: 0, y: s, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "euclidean", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: 0, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: s, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, x: 0, y: 2 * s, z: 0 });
 
             // icosahedrons
             MAIN.addCellToScene({ geometryFunction: hyperbolicIcosahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#C86218", numberOfFaces: 20, x: s, y: 0, z: 0 });
@@ -81,12 +82,12 @@
             MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#40BAA4", numberOfFaces: 110, x: 5 * s, y: s, z: 0 });
             MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#9DDED6", numberOfFaces: 110, x: 5 * s, y: 2 * s, z: 0 });
 
-            lineBox([[-bs, -bs, bs], [-bs, -bs, -bs], [bs, -bs, -bs], [bs, -bs, bs], [-bs, s + bs, bs], [-bs, s + bs, -bs], [bs, s + bs, -bs], [bs, s + bs, bs]], "#F9A834", scene);
-            lineBox([[s - bs, -bs, bs], [s - bs, -bs, -bs], [s + bs, -bs, -bs], [s + bs, -bs, bs], [s - bs, bs, bs], [s - bs, bs, -bs], [s + bs, bs, -bs], [s + bs, bs, bs]], "#C86218", scene);
-            lineBox([[2 * s - bs, -bs, bs], [2 * s - bs, -bs, -bs], [2 * s + bs, -bs, -bs], [2 * s + bs, -bs, bs], [2 * s - bs, bs, bs], [2 * s - bs, bs, -bs], [2 * s + bs, bs, -bs], [2 * s + bs, bs, bs]], "#EC5064", scene);
-            lineBox([[3 * s - bs, -bs, bs], [3 * s - bs, -bs, -bs], [3 * s + bs, -bs, -bs], [3 * s + bs, -bs, bs], [3 * s - bs, bs, bs], [3 * s - bs, bs, -bs], [3 * s + bs, bs, -bs], [3 * s + bs, bs, bs]], "#03919B", scene);
-            lineBox([[4 * s - bs, -bs, bs], [4 * s - bs, -bs, -bs], [4 * s + bs, -bs, -bs], [4 * s + bs, -bs, bs], [4 * s - bs, 2 * s + bs, bs], [4 * s - bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, bs]], "#007043", scene);
-            lineBox([[5 * s - bs, -bs, bs], [5 * s - bs, -bs, -bs], [5 * s + bs, -bs, -bs], [5 * s + bs, -bs, bs], [5 * s - bs, 2 * s + bs, bs], [5 * s - bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, bs]], "#1F8276", scene);
+            // lineBox([[-bs, -bs, bs], [-bs, -bs, -bs], [bs, -bs, -bs], [bs, -bs, bs], [-bs, s + bs, bs], [-bs, s + bs, -bs], [bs, s + bs, -bs], [bs, s + bs, bs]], "#F9A834", scene);
+            // lineBox([[s - bs, -bs, bs], [s - bs, -bs, -bs], [s + bs, -bs, -bs], [s + bs, -bs, bs], [s - bs, bs, bs], [s - bs, bs, -bs], [s + bs, bs, -bs], [s + bs, bs, bs]], "#C86218", scene);
+            // lineBox([[2 * s - bs, -bs, bs], [2 * s - bs, -bs, -bs], [2 * s + bs, -bs, -bs], [2 * s + bs, -bs, bs], [2 * s - bs, bs, bs], [2 * s - bs, bs, -bs], [2 * s + bs, bs, -bs], [2 * s + bs, bs, bs]], "#EC5064", scene);
+            // lineBox([[3 * s - bs, -bs, bs], [3 * s - bs, -bs, -bs], [3 * s + bs, -bs, -bs], [3 * s + bs, -bs, bs], [3 * s - bs, bs, bs], [3 * s - bs, bs, -bs], [3 * s + bs, bs, -bs], [3 * s + bs, bs, bs]], "#03919B", scene);
+            // lineBox([[4 * s - bs, -bs, bs], [4 * s - bs, -bs, -bs], [4 * s + bs, -bs, -bs], [4 * s + bs, -bs, bs], [4 * s - bs, 2 * s + bs, bs], [4 * s - bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, bs]], "#007043", scene);
+            // lineBox([[5 * s - bs, -bs, bs], [5 * s - bs, -bs, -bs], [5 * s + bs, -bs, -bs], [5 * s + bs, -bs, bs], [5 * s - bs, 2 * s + bs, bs], [5 * s - bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, bs]], "#1F8276", scene);
 
             var renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(WIDTH, HEIGHT);
