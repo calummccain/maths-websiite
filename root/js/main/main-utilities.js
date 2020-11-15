@@ -17,6 +17,8 @@ function addCellToScene(params) {
     var x = params.x || 0;
     var y = params.y || 0;
     var z = params.z || 0;
+    var name = params.name || "";
+    var faceMode = params.faceMode || false;
 
     var shapeGeometry;
 
@@ -28,7 +30,7 @@ function addCellToScene(params) {
 
     } else if (metric === "euclidean") {
 
-        shapeGeometry = [new THREE.BoxGeometry(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3))];
+        shapeGeometry = new THREE.BoxGeometry(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3));
 
     } else if (metric === "hyperbolic") {
 
@@ -36,64 +38,131 @@ function addCellToScene(params) {
 
     } else {
 
-        console.log("I don't know what you've done but this ain't it");
+        console.log("I don't know what you've done but this ain't it - please enter \"spherical\" or \"euclidean\" or \"hyperbolic\"");
 
     }
 
-    for (var j = 0; j < numberofFaces; j++) {
+    // faceMode keeps the faces as seperate meshes (and hence seperate objects)
+    // without faceMode the polyhedron is made as one mesh/object and the individual faces cannot be selected by ray-casting
+    if (faceMode) {
 
-        if (colour === "normal") {
+        for (var j = 0; j < numberofFaces; j++) {
 
-            shapeGeometry[j].computeVertexNormals();
-            var faceMesh = new THREE.Mesh(
-                shapeGeometry[j],
-                new THREE.MeshNormalMaterial({
-                    side: THREE.DoubleSide
-                    //wireframe: true,
-                    //wireframeLineWidth: 2
-                }));
+            if (colour === "normal") {
 
-        } else {
+                shapeGeometry[j].computeVertexNormals();
+                var faceMesh = new THREE.Mesh(
+                    shapeGeometry[j],
+                    new THREE.MeshNormalMaterial({
+                        side: THREE.DoubleSide
+                        //wireframe: true,
+                        //wireframeLineWidth: 2
+                    }));
 
-            var faceMesh = new THREE.Mesh(
-                shapeGeometry[j],
-                new THREE.MeshStandardMaterial({
-                    color: new THREE.Color(colour),
-                    roughness: 0.5,
-                    metalness: 0,
-                    flatShading: true,
-                    opacity: opacityValue,
-                    transparent: true,
-                    side: THREE.DoubleSide
-                }));
+            } else {
+
+                var faceMesh = new THREE.Mesh(
+                    shapeGeometry[j],
+                    new THREE.MeshStandardMaterial({
+                        color: new THREE.Color(colour),
+                        roughness: 0.5,
+                        metalness: 0,
+                        flatShading: true,
+                        opacity: opacityValue,
+                        transparent: true,
+                        side: THREE.DoubleSide
+                    }));
+
+            }
+
+            faceMesh.position.set(x, y, z);
+            faceMesh.name = name;
+
+            scene.add(faceMesh);
 
         }
 
-        faceMesh.position.set(x, y, z);
+    } else {
 
-        scene.add(faceMesh);
+        if (metric === "euclidean") {
+
+            if (colour === "normal") {
+
+                shapeGeometry.computeVertexNormals();
+                var cellMesh = new THREE.Mesh(
+                    shapeGeometry,
+                    new THREE.MeshNormalMaterial({
+                        side: THREE.DoubleSide
+                        //wireframe: true,
+                        //wireframeLineWidth: 2
+                    }));
+
+            } else {
+
+                var cellMesh = new THREE.Mesh(
+                    shapeGeometry,
+                    new THREE.MeshStandardMaterial({
+                        color: new THREE.Color(colour),
+                        roughness: 0.5,
+                        metalness: 0,
+                        flatShading: true,
+                        opacity: opacityValue,
+                        transparent: true,
+                        side: THREE.DoubleSide
+                    }));
+
+            }
+
+            cellMesh.position.set(x, y, z);
+            cellMesh.name = name;
+
+            scene.add(cellMesh);
+
+        } else {
+
+            var cellGeometry = new THREE.Geometry();
+
+            for (var j = 0; j < numberofFaces; j++) {
+
+                cellGeometry.merge(shapeGeometry[j]);
+
+            }
+
+            if (colour === "normal") {
+
+                cellGeometry.computeVertexNormals();
+                var cellMesh = new THREE.Mesh(
+                    cellGeometry,
+                    new THREE.MeshNormalMaterial({
+                        side: THREE.DoubleSide
+                        //wireframe: true,
+                        //wireframeLineWidth: 2
+                    }));
+
+            } else {
+
+                var cellMesh = new THREE.Mesh(
+                    cellGeometry,
+                    new THREE.MeshStandardMaterial({
+                        color: new THREE.Color(colour),
+                        roughness: 0.5,
+                        metalness: 0,
+                        flatShading: true,
+                        opacity: opacityValue,
+                        transparent: true,
+                        side: THREE.DoubleSide
+                    }));
+
+            }
+
+            cellMesh.position.set(x, y, z);
+            cellMesh.name = name;
+
+            scene.add(cellMesh);
+
+        }
 
     }
-
-}
-
-function onWindowResize(camera, renderer, div) {
-
-    console.log(div.clientHeight, div.clientWidth)
-
-    camera.aspect = div.clientWidth / div.clientHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(div.clientWidth, div.clientHeight);
-
-}
-
-function render() {
-
-    requestAnimationFrame(render);
-
-    controls.update();
-    renderer.render(scene, camera);
 
 }
 
@@ -128,43 +197,7 @@ function onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED
 
 }
 
-function onDocumentMouseClick(refinement, opacityValue, order, scale, geometryFunction, numberofFaces, specialLetter, mouse, raycaster, camera, scene, compact) {
-
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-
-    var intersects = raycaster.intersectObjects(scene.children);
-
-    if (intersects.length > 0) {
-
-        var [face, cell] = intersects[0].object.geometry.name;
-
-        console.log(face);
-        console.log(cell);
-        console.log(intersects[0].object.geometry.name);
-
-        addCellToScene(
-            refinement,
-            opacityValue,
-            order,
-            cell + face + specialLetter,
-            scale,
-            geometryFunction,
-            numberofFaces,
-            scene,
-            compact,
-            0, 0, 0);
-            
-    }
-
-}
-
 export {
-    render,
     addCellToScene,
-    onDocumentMouseClick,
-    onDocumentMouseMove,
-    onWindowResize
+    onDocumentMouseMove
 };

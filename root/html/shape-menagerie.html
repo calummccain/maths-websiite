@@ -15,9 +15,6 @@
 
         <script type="module">
 
-            var view = document.getElementById("view");
-            console.log(view);
-
             import * as MAIN from "../js/main/main-utilities.js";
             import * as THREE from "../js/three.module.js";
 
@@ -29,59 +26,59 @@
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
 
             import { MapControls } from "../js/orbit-controls.js";
-            import { lineBox } from "../js/main/box-utilities.js";
+            // import { lineBox } from "../js/main/box-utilities.js";
 
+            var view = document.getElementById("view");
             var WIDTH = view.clientWidth;
             var HEIGHT = view.clientHeight;
 
+            // constants for canvas
+            // def = resolution of polyhedrons (how many triangles)
+            // s   = scale of arrangement
+            // bs  = scale of boxes
             const def = 3;
             const s = 3;
-            const bs = s * 0.4;
+            // const bs = s * 0.4;
 
+            // setup scene
             var scene = new THREE.Scene();
             scene.background = new THREE.Color(0xDDDDDD);
 
-            // Orthographic
-            // var camera = new THREE.OrthographicCamera(WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 10, 100);
-
-            // Perspective
+            // camera is best a perspective one
+            // add camera and light to scene
             var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
-            camera.position.set(3 * s, 0, -4 * s);
+            camera.position.set(3 * s, -s, -4 * s);
             camera.up = new THREE.Vector3(0, -1, 0);
-            //camera.lookAt(3 * s, 0, 0);
             camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
-
             scene.add(camera);
-
-            var mouse = new THREE.Vector2(), INTERSECTED;
-            var raycaster = new THREE.Raycaster();
-
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
+            // add the polyhedrons to the scene
             // cubes
-            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "euclidean", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: 0, z: 0 });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: s, z: 0 });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, x: 0, y: 2 * s, z: 0 });
+            MAIN.addCellToScene({ scene: scene, metric: "euclidean", colour: "#F48415", numberOfFaces: 6, x: 0, y: -s, z: 0, name: "{4,3,4}" });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, x: 0, y: 0, z: 0, name: "{4,3,5}" });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, x: 0, y: s, z: 0, name: "{4,3,6}" });
 
             // icosahedrons
-            MAIN.addCellToScene({ geometryFunction: hyperbolicIcosahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#C86218", numberOfFaces: 20, x: s, y: 0, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicIcosahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#C86218", numberOfFaces: 20, x: s, y: 0, z: 0, name: "{3,5,3}" });
 
             // tetrahedron
-            MAIN.addCellToScene({ geometryFunction: hyperbolicTetrahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#EC5064", numberOfFaces: 4, x: 2 * s, y: 0, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicTetrahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#EC5064", numberOfFaces: 4, x: 2 * s, y: 0, z: 0, name: "{3,3,6}" });
 
             // octahedron
-            MAIN.addCellToScene({ geometryFunction: hyperbolicOctahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#03919B", numberOfFaces: 8, x: 3 * s, y: 0, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicOctahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#03919B", numberOfFaces: 8, x: 3 * s, y: 0, z: 0, name: "{3,4,4}" });
 
             // dodecahedron
-            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#007043", numberOfFaces: 12, x: 4 * s, y: 0, z: 0 });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#B4CF68", numberOfFaces: 12, x: 4 * s, y: s, z: 0 });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#E6F4BE", numberOfFaces: 12, x: 4 * s, y: 2 * s, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#007043", numberOfFaces: 12, x: 4 * s, y: 0, z: 0, name: "{5,3,4}" });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#B4CF68", numberOfFaces: 12, x: 4 * s, y: s, z: 0, name: "{5,3,5}" });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#C0E490", numberOfFaces: 12, x: 4 * s, y: 2 * s, z: 0, name: "{5,3,6}" });
 
             // hexagonal
-            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#1F8276", numberOfFaces: 110, x: 5 * s, y: 0, z: 0 });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#40BAA4", numberOfFaces: 110, x: 5 * s, y: s, z: 0 });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#9DDED6", numberOfFaces: 110, x: 5 * s, y: 2 * s, z: 0 });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#1F8276", numberOfFaces: 108, x: 5 * s, y: 0, z: 0, name: "{6,3,3}" });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#40BAA4", numberOfFaces: 108, x: 5 * s, y: s, z: 0, name: "{6,3,4}" });
+            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#9DDED6", numberOfFaces: 108, x: 5 * s, y: 2 * s, z: 0, name: "{6,3,5}" });
 
+            // optional boxes
             // lineBox([[-bs, -bs, bs], [-bs, -bs, -bs], [bs, -bs, -bs], [bs, -bs, bs], [-bs, s + bs, bs], [-bs, s + bs, -bs], [bs, s + bs, -bs], [bs, s + bs, bs]], "#F9A834", scene);
             // lineBox([[s - bs, -bs, bs], [s - bs, -bs, -bs], [s + bs, -bs, -bs], [s + bs, -bs, bs], [s - bs, bs, bs], [s - bs, bs, -bs], [s + bs, bs, -bs], [s + bs, bs, bs]], "#C86218", scene);
             // lineBox([[2 * s - bs, -bs, bs], [2 * s - bs, -bs, -bs], [2 * s + bs, -bs, -bs], [2 * s + bs, -bs, bs], [2 * s - bs, bs, bs], [2 * s - bs, bs, -bs], [2 * s + bs, bs, -bs], [2 * s + bs, bs, bs]], "#EC5064", scene);
@@ -89,9 +86,11 @@
             // lineBox([[4 * s - bs, -bs, bs], [4 * s - bs, -bs, -bs], [4 * s + bs, -bs, -bs], [4 * s + bs, -bs, bs], [4 * s - bs, 2 * s + bs, bs], [4 * s - bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, -bs], [4 * s + bs, 2 * s + bs, bs]], "#007043", scene);
             // lineBox([[5 * s - bs, -bs, bs], [5 * s - bs, -bs, -bs], [5 * s + bs, -bs, -bs], [5 * s + bs, -bs, bs], [5 * s - bs, 2 * s + bs, bs], [5 * s - bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, -bs], [5 * s + bs, 2 * s + bs, bs]], "#1F8276", scene);
 
+            // setup the renderer
             var renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(WIDTH, HEIGHT);
 
+            // add controls to the camera
             var controls = new MapControls(camera, renderer.domElement);
             controls.enableZoom = false;
             controls.enableRotate = false;
@@ -99,6 +98,17 @@
             controls.target = new THREE.Vector3(2.5 * s, s, 0);
             controls.update();
 
+            // add a raycaster to the scene for object selection
+            var raycaster = new THREE.Raycaster();
+            var mouseVector = new THREE.Vector2();
+
+            console.log(scene.children);
+
+            // add some event listeners
+            window.addEventListener("click", onMouseClick, false);
+            window.addEventListener("resize", onWindowResize, false);
+
+            // add the renderer to the 'view' div
             view.appendChild(renderer.domElement);
 
             render();
@@ -106,17 +116,42 @@
             function render() {
 
                 requestAnimationFrame(render);
-
                 scene.children.forEach(function (obj) { if (obj.type === "Mesh") { obj.rotation.y = -Date.now() * 0.001; obj.rotation.z = -Date.now() * 0.0003; } });
-
                 controls.update();
                 renderer.render(scene, camera);
+
+            }
+
+            function onMouseClick(event) {
+
+                mouseVector.x = (event.clientX / WIDTH) * 2 - 1;
+                mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
+                raycaster.setFromCamera(mouseVector, camera);
+
+                var intersects = raycaster.intersectObjects(scene.children);
+                if (intersects.length != 0) {
+                    var obj = intersects[0].object;
+                    console.log(obj.name);
+                } else {
+                    console.log("empty space");
+                }
+
+            }
+
+            function onWindowResize(event) {
+
+                WIDTH = view.clientWidth;
+                HEIGHT = view.clientHeight;
+                renderer.setSize(WIDTH, HEIGHT);
+                camera.aspect = WIDTH / HEIGHT;
+                camera.updateProjectionMatrix();
 
             }
 
         </script>
 
         <script type="module">
+
             var dropdown = document.getElementsByClassName("dropdown");
             var i;
 
@@ -131,6 +166,7 @@
                     }
                 });
             }
+
         </script>
 
         <div id="panel">
