@@ -14,9 +14,7 @@ function addCellToScene(params) {
     var compact = params.compact || "compact";
     var colour = params.colour || "normal";
     var numberofFaces = params.numberOfFaces || 0;
-    var x = params.x || 0;
-    var y = params.y || 0;
-    var z = params.z || 0;
+    var position = params.position || [0, 0, 0];
     var name = params.name || "";
     var faceMode = params.faceMode || false;
 
@@ -75,7 +73,7 @@ function addCellToScene(params) {
 
             }
 
-            faceMesh.position.set(x, y, z);
+            faceMesh.position.set(position[0], position[1], position[2]);
             faceMesh.name = name;
 
             scene.add(faceMesh);
@@ -113,7 +111,7 @@ function addCellToScene(params) {
 
             }
 
-            cellMesh.position.set(x, y, z);
+            cellMesh.position.set(position[0], position[1], position[2]);
             cellMesh.name = name;
 
             scene.add(cellMesh);
@@ -155,7 +153,7 @@ function addCellToScene(params) {
 
             }
 
-            cellMesh.position.set(x, y, z);
+            cellMesh.position.set(position[0], position[1], position[2]);
             cellMesh.name = name;
 
             scene.add(cellMesh);
