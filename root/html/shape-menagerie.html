@@ -104,6 +104,7 @@
             // setup the renderer
             var renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(WIDTH, HEIGHT);
+            var INTERSECTED;
 
             // add controls to the camera
             var controlsMap = new MapControls(camera, renderer.domElement);
@@ -130,6 +131,7 @@
 
             // add some event listeners
             window.addEventListener("click", onMouseClick, false);
+            window.addEventListener("mousemove", onMouseMove, false);
             window.addEventListener("resize", onWindowResize, false);
 
             // add the renderer to the 'view' div
@@ -219,7 +221,7 @@
 
             }
 
-            function onDocumentMouseMove(event) {
+            function onMouseMove(event) {
 
                 event.preventDefault();
 
@@ -227,7 +229,7 @@
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
-                var intersects = raycaster.intersectObjects(scene.children);
+                var intersects = raycaster.intersectObjects(meshes.children);
 
                 if (intersects.length > 0) {
                     if (INTERSECTED != intersects[0].object) {
@@ -236,7 +238,13 @@
                         }
                         INTERSECTED = intersects[0].object;
                         INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-                        INTERSECTED.material.emissive.setHex(0xff0000);
+                        var col = {
+                            r: intersects[0].object.material.color.r,
+                            g: intersects[0].object.material.color.g,
+                            b: intersects[0].object.material.color.b
+                        };
+                        console.log(col);
+                        INTERSECTED.material.emissive.setRGB(col.r, col.g, col.b);
                     }
                 } else {
                     if (INTERSECTED) {
