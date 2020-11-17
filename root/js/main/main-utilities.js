@@ -1,9 +1,9 @@
 import * as THREE from "../three.module.js";
 
-function addCellToScene(params) {
+function addCellToGroup(params) {
 
     var geometryFunction = params.geometryFunction;
-    var scene = params.scene;
+    var group = params.group;
     var metric = params.metric || "spherical";
     var refinement = params.refinement || 3;
     var cell = params.cell || 0;
@@ -76,7 +76,7 @@ function addCellToScene(params) {
             faceMesh.position.set(position[0], position[1], position[2]);
             faceMesh.name = name;
 
-            scene.add(faceMesh);
+            group.add(faceMesh);
 
         }
 
@@ -114,7 +114,7 @@ function addCellToScene(params) {
             cellMesh.position.set(position[0], position[1], position[2]);
             cellMesh.name = name;
 
-            scene.add(cellMesh);
+            group.add(cellMesh);
 
         } else {
 
@@ -156,7 +156,7 @@ function addCellToScene(params) {
             cellMesh.position.set(position[0], position[1], position[2]);
             cellMesh.name = name;
 
-            scene.add(cellMesh);
+            group.add(cellMesh);
 
         }
 
@@ -196,6 +196,6 @@ function onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED
 }
 
 export {
-    addCellToScene,
+    addCellToGroup,
     onDocumentMouseMove
 };

@@ -25,9 +25,9 @@
             import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
 
-            import { MapControls } from "../js/orbit-controls.js";
+            import { MapControls, OrbitControls } from "../js/orbit-controls.js";
             import * as POSITIONS from "../js/main/main-constants.js";
-            // import { lineBox } from "../js/main/box-utilities.js";
+            import { lineBox } from "../js/main/box-utilities.js";
 
             var view = document.getElementById("view");
             var WIDTH = view.clientWidth;
@@ -40,49 +40,60 @@
             // def = resolution of polyhedrons (how many triangles)
             // s   = scale of arrangement
             // bs  = scale of boxes
+            // rotatePositions  = positions of polyhedrons rotating
+            // translatePositions = positions of polyhedrons after being translated
+            // speed corresponds to how fast the objects fly
             const def = 3;
             const s = 3;
-            // const bs = s * 0.4;
-            const rotationPositions = POSITIONS.translatePositions(s);
-            console.log(rotationPositions);
+            const bs = s * 0.4;
+            const rotatePositions = POSITIONS.rotatePositions(s);
+            const translatePositions = POSITIONS.translatePositions();
+            const speed = 0.02;
 
             // setup scene
             var scene = new THREE.Scene();
             scene.background = new THREE.Color(0xDDDDDD);
 
+            // group of meshes
+            var meshes = new THREE.Group();
+
             // camera is best a perspective one
             // add camera and light to scene
-            var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 1, 100);
-            camera.position.set(3 * s, -s, -4 * s);
+            var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
+            camera.position.set(2.5 * s, s, -4 * s);
             camera.up = new THREE.Vector3(0, -1, 0);
+            //camera.lookAt(2.5 * s, s, 0);
+            camera.updateProjectionMatrix();
             camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
             scene.add(camera);
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
+            console.log(camera);
+
             // add the polyhedrons to the scene
             // cubes
-            MAIN.addCellToScene({ scene: scene, metric: "euclidean", colour: "#F48415", numberOfFaces: 6, position: rotationPositions["{4,3,4}"], name: "{4,3,4}" });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, position: rotationPositions["{4,3,5}"], name: "{4,3,5}" });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicCubeGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, position: rotationPositions["{4,3,6}"], name: "{4,3,6}" });
+            MAIN.addCellToGroup({ group: meshes, metric: "euclidean", colour: "#F48415", numberOfFaces: 6, position: rotatePositions["{4,3,4}"], name: "{4,3,4}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 5, colour: "#F9A834", numberOfFaces: 6, position: rotatePositions["{4,3,5}"], name: "{4,3,5}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 6, colour: "#FFD083", numberOfFaces: 6, position: rotatePositions["{4,3,6}"], name: "{4,3,6}" });
 
             // icosahedrons
-            MAIN.addCellToScene({ geometryFunction: hyperbolicIcosahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#C86218", numberOfFaces: 20, position: rotationPositions["{3,5,3}"], name: "{3,5,3}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicIcosahedronGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 3, colour: "#C86218", numberOfFaces: 20, position: rotatePositions["{3,5,3}"], name: "{3,5,3}" });
 
             // tetrahedron
-            MAIN.addCellToScene({ geometryFunction: hyperbolicTetrahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#EC5064", numberOfFaces: 4, position: rotationPositions["{3,3,6}"], name: "{3,3,6}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicTetrahedronGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 6, colour: "#EC5064", numberOfFaces: 4, position: rotatePositions["{3,3,6}"], name: "{3,3,6}" });
 
             // octahedron
-            MAIN.addCellToScene({ geometryFunction: hyperbolicOctahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#03919B", numberOfFaces: 8, position: rotationPositions["{3,4,4}"], name: "{3,4,4}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicOctahedronGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 4, colour: "#03919B", numberOfFaces: 8, position: rotatePositions["{3,4,4}"], name: "{3,4,4}" });
 
             // dodecahedron
-            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#007043", numberOfFaces: 12, position: rotationPositions["{5,3,4}"], name: "{5,3,4}" });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#B4CF68", numberOfFaces: 12, position: rotationPositions["{5,3,5}"], name: "{5,3,5}" });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicDodecahedronGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 6, colour: "#C0E490", numberOfFaces: 12, position: rotationPositions["{5,3,6}"], name: "{5,3,6}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 4, colour: "#007043", numberOfFaces: 12, position: rotatePositions["{5,3,4}"], name: "{5,3,4}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 5, colour: "#B4CF68", numberOfFaces: 12, position: rotatePositions["{5,3,5}"], name: "{5,3,5}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 6, colour: "#C0E490", numberOfFaces: 12, position: rotatePositions["{5,3,6}"], name: "{5,3,6}" });
 
             // hexagonal
-            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 3, colour: "#1F8276", numberOfFaces: 108, position: rotationPositions["{6,3,3}"], name: "{6,3,3}" });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 4, colour: "#40BAA4", numberOfFaces: 108, position: rotationPositions["{6,3,4}"], name: "{6,3,4}" });
-            MAIN.addCellToScene({ geometryFunction: hyperbolicHexagonalGeometry, scene: scene, metric: "hyperbolic", refinement: def, order: 5, colour: "#9DDED6", numberOfFaces: 108, position: rotationPositions["{6,3,5}"], name: "{6,3,5}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 3, colour: "#1F8276", numberOfFaces: 108, position: rotatePositions["{6,3,3}"], name: "{6,3,3}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 4, colour: "#40BAA4", numberOfFaces: 108, position: rotatePositions["{6,3,4}"], name: "{6,3,4}" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: def, order: 5, colour: "#9DDED6", numberOfFaces: 108, position: rotatePositions["{6,3,5}"], name: "{6,3,5}" });
 
             // optional boxes
             // lineBox([[-bs, -bs, bs], [-bs, -bs, -bs], [bs, -bs, -bs], [bs, -bs, bs], [-bs, s + bs, bs], [-bs, s + bs, -bs], [bs, s + bs, -bs], [bs, s + bs, bs]], "#F9A834", scene);
@@ -97,18 +108,27 @@
             renderer.setSize(WIDTH, HEIGHT);
 
             // add controls to the camera
-            var controls = new MapControls(camera, renderer.domElement);
-            controls.enableZoom = false;
-            controls.enableRotate = false;
-            controls.screenSpacePanning = true;
-            controls.target = new THREE.Vector3(2.5 * s, s, 0);
-            controls.update();
+            var controlsMap = new MapControls(camera, renderer.domElement);
+            controlsMap.enableZoom = false;
+            controlsMap.enableRotate = false;
+            controlsMap.screenSpacePanning = true;
+            controlsMap.target = new THREE.Vector3(2.5 * s, s, 0);
+            controlsMap.enabled = true;
+            controlsMap.update();
+
+            var controlsOrbit = new OrbitControls(camera, renderer.domElement);
+            controlsOrbit.target = new THREE.Vector3(0, 0, 0);
+            controlsOrbit.enabled = false;
+            controlsOrbit.update();
+
+            redefineControls();
 
             // add a raycaster to the scene for object selection
             var raycaster = new THREE.Raycaster();
             var mouseVector = new THREE.Vector2();
 
-            console.log(scene.children);
+            // add the meshes to the scene
+            scene.add(meshes);
 
             // add some event listeners
             window.addEventListener("click", onMouseClick, false);
@@ -119,13 +139,48 @@
 
             render();
 
+            // t is time and is used in rotations
+            // u is translation time and increments by speed from 0 to 1
+            // click Object is the object clicked by the user
+            var t = 0;
+            var u = 0;
+            var clickObject = "";
+
             function render() {
 
                 requestAnimationFrame(render);
+
                 if (canvasMode === "rotate") {
-                    scene.children.forEach(function (obj) { if (obj.type === "Mesh") { obj.rotation.y = -Date.now() * 0.001; obj.rotation.z = -Date.now() * 0.0003; } });
+                    meshes.children.forEach(element => {
+                        element.rotation.y = -t * 0.001;
+                        element.rotation.z = -t * 0.0006;
+                        t++;
+                    });
+                } else if (canvasMode === "translate" && u <= 1) {
+                    meshes.children.forEach(element => {
+                        if (element.name != clickObject) {
+                            element.position.setComponent(0, rotatePositions[element.name][0] * (1 - u) + translatePositions[element.name][0] * u);
+                            element.position.setComponent(1, rotatePositions[element.name][1] * (1 - u) + translatePositions[element.name][1] * u);
+                            element.position.setComponent(2, rotatePositions[element.name][2] * (1 - u) + translatePositions[element.name][2] * u);
+                        } else {
+                            element.position.setComponent(0, rotatePositions[element.name][0] * (1 - u));
+                            element.position.setComponent(1, rotatePositions[element.name][1] * (1 - u));
+                            element.position.setComponent(2, rotatePositions[element.name][2] * (1 - u));
+                        }
+                    });
+                    camera.position.setComponent(0, camera.position.getComponent(0) * (1 - u) + 2 * u);
+                    camera.position.setComponent(1, camera.position.getComponent(1) * (1 - u) + 0 * u);
+                    camera.position.setComponent(2, camera.position.getComponent(2) * (1 - u) + 0 * u);
+                    camera.far = camera.far * (1 - u) + 3 * u;
+                    camera.lookAt(0, 0, 0);
+                    camera.updateProjectionMatrix();
+                    u += speed;
+                } else if (canvasMode === "translate" && u > 1) {
+                    canvasMode = "add";
+                } else if (canvasMode === "add" && u >= 0) {
+
                 }
-                controls.update();
+
                 renderer.render(scene, camera);
 
             }
@@ -136,13 +191,22 @@
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
-                var intersects = raycaster.intersectObjects(scene.children);
-                if (intersects.length != 0) {
-                    var obj = intersects[0].object;
-                    console.log(obj.name);
-                } else {
-                    console.log("empty space");
+                if (canvasMode === "rotate") {
+                    var intersects = raycaster.intersectObjects(meshes.children);
+                    if (intersects.length != 0) {
+                        var obj = intersects[0].object;
+                        canvasMode = "translate";
+                        u = 0;
+                        clickObject = obj.name;
+                        redefineControls();
+                    } else {
+                        console.log("empty space");
+                    }
+                } else if (canvasMode === "translate") {
+                    // Do nothing
                 }
+
+                console.log(canvasMode);
 
             }
 
@@ -153,6 +217,23 @@
                 renderer.setSize(WIDTH, HEIGHT);
                 camera.aspect = WIDTH / HEIGHT;
                 camera.updateProjectionMatrix();
+
+            }
+
+            function redefineControls() {
+
+                if (canvasMode === "rotate") {
+                    controlsMap.enabled = true;
+                    controlsOrbit.enabled = false;
+                } else {
+                    controlsMap.enabled = false;
+                    controlsOrbit.enabled = true;
+                }
+
+                controlsOrbit.update();
+                controlsMap.update();
+                console.log(controlsOrbit.enabled, controlsMap.enabled);
+                console.log(camera);
 
             }
 

@@ -17,7 +17,7 @@ function rotatePositions(s) {
 }
 
 function translatePositions() {
-    var k = 30;
+    var k = 40;
     var posDict = {
         "{4,3,4}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
         "{4,3,5}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
