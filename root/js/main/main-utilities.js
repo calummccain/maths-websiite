@@ -74,7 +74,9 @@ function addCellToGroup(params) {
             }
 
             faceMesh.position.set(position[0], position[1], position[2]);
+            faceMesh.cellName = "";
             faceMesh.name = name;
+            faceMesh.faceName = j;
 
             group.add(faceMesh);
 
@@ -164,38 +166,6 @@ function addCellToGroup(params) {
 
 }
 
-function onDocumentMouseMove(event, mouse, raycaster, camera, scene, INTERSECTED) {
-
-    event.preventDefault();
-
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-
-    var intersects = raycaster.intersectObjects(scene.children);
-
-    if (intersects.length > 0) {
-        if (INTERSECTED != intersects[0].object) {
-            if (INTERSECTED) {
-                INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-            }
-            INTERSECTED = intersects[0].object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            INTERSECTED.material.emissive.setHex(0xff0000);
-        }
-    } else {
-        if (INTERSECTED) {
-            INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-        }
-        INTERSECTED = null;
-    }
-
-    return INTERSECTED;
-
-}
-
 export {
-    addCellToGroup,
-    onDocumentMouseMove
+    addCellToGroup
 };

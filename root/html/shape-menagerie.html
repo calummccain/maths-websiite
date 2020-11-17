@@ -68,8 +68,6 @@
             scene.add(camera);
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
-            console.log(camera);
-
             // add the polyhedrons to the scene
             // cubes
             MAIN.addCellToGroup({ group: meshes, metric: "euclidean", colour: "#F48415", numberOfFaces: 6, position: rotatePositions["{4,3,4}"], name: "{4,3,4}" });
@@ -117,7 +115,7 @@
             controlsMap.update();
 
             var controlsOrbit = new OrbitControls(camera, renderer.domElement);
-            controlsOrbit.target = new THREE.Vector3(0, 0, 0);
+            //controlsOrbit.target = new THREE.Vector3(0, 0, 0);
             controlsOrbit.enabled = false;
             controlsOrbit.update();
 
@@ -152,11 +150,11 @@
 
                 if (canvasMode === "rotate") {
                     meshes.children.forEach(element => {
-                        element.rotation.y = -t * 0.001;
+                        element.rotation.y = -t * 0.0001;
                         element.rotation.z = -t * 0.0006;
                         t++;
                     });
-                } else if (canvasMode === "translate" && u <= 1) {
+                } else if (canvasMode === "translate" && u <= 1 + speed / 2) {
                     meshes.children.forEach(element => {
                         if (element.name != clickObject) {
                             element.position.setComponent(0, rotatePositions[element.name][0] * (1 - u) + translatePositions[element.name][0] * u);
@@ -175,7 +173,7 @@
                     camera.lookAt(0, 0, 0);
                     camera.updateProjectionMatrix();
                     u += speed;
-                } else if (canvasMode === "translate" && u > 1) {
+                } else if (canvasMode === "translate" && u > 1 + speed / 2) {
                     canvasMode = "add";
                 } else if (canvasMode === "add" && u >= 0) {
 
@@ -198,6 +196,7 @@
                         canvasMode = "translate";
                         u = 0;
                         clickObject = obj.name;
+                        console.log(obj);
                         redefineControls();
                     } else {
                         console.log("empty space");
@@ -220,6 +219,36 @@
 
             }
 
+            function onDocumentMouseMove(event) {
+
+                event.preventDefault();
+
+                mouseVector.x = (event.clientX / WIDTH) * 2 - 1;
+                mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
+                raycaster.setFromCamera(mouseVector, camera);
+
+                var intersects = raycaster.intersectObjects(scene.children);
+
+                if (intersects.length > 0) {
+                    if (INTERSECTED != intersects[0].object) {
+                        if (INTERSECTED) {
+                            INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+                        }
+                        INTERSECTED = intersects[0].object;
+                        INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                        INTERSECTED.material.emissive.setHex(0xff0000);
+                    }
+                } else {
+                    if (INTERSECTED) {
+                        INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+                    }
+                    INTERSECTED = null;
+                }
+
+                return INTERSECTED;
+
+            }
+
             function redefineControls() {
 
                 if (canvasMode === "rotate") {
@@ -232,8 +261,6 @@
 
                 controlsOrbit.update();
                 controlsMap.update();
-                console.log(controlsOrbit.enabled, controlsMap.enabled);
-                console.log(camera);
 
             }
 
