@@ -11,7 +11,7 @@ function hyperbolicTetrahedronGeometry(transform, order, refinement, compact) {
         return ORDERN.matrixDict(order, letter, vector);
     }
 
-    var tetrahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact);
+    var tetrahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
     return tetrahedron;
 

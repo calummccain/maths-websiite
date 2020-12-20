@@ -11,7 +11,7 @@ function hyperbolicIcosahedronGeometry(transform, order, refinement, compact) {
         return ORDERN.matrixDict(order, letter, vector);
     }
 
-    var icosahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact)
+    var icosahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections)
 
     return icosahedron;
 

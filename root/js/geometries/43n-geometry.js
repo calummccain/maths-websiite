@@ -11,7 +11,7 @@ function hyperbolicCubeGeometry(transform, order, refinement, compact) {
         return ORDERN.matrixDict(order, letter, vector);
     }
 
-    var cube = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact);
+    var cube = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
     return cube;
 

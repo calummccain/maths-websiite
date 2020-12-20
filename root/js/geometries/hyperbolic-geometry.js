@@ -2,7 +2,7 @@ import * as THREE from "../three.module.js";
 import * as FACE from "../faces/klein-hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 
-function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact) {
+function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, names) {
 
     // It is useful to have the f matrix separately defined
     function f(vector) {
@@ -59,7 +59,7 @@ function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSide
         faceGeometry.mergeVertices();
 
         //  Give the face a name (useful for raycasting)
-        //faceGeometry.name = [ORDERN.faceReflections[i], transform, faces[i]];
+        faceGeometry.name = names[i];
 
         // Add the face's geometry to the cellGeometry array
         cellGeometry.push(faceGeometry);

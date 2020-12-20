@@ -11,7 +11,7 @@ function hyperbolicOctahedronGeometry(transform, order, refinement, compact) {
         return ORDERN.matrixDict(order, letter, vector);
     }
 
-    var octahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact);
+    var octahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
     return octahedron;
 

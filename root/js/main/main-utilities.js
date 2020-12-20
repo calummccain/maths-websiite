@@ -77,6 +77,7 @@ function addCellToGroup(params) {
             faceMesh.cellName = "";
             faceMesh.name = name;
             faceMesh.faceName = j;
+            faceMesh.params = params;
 
             group.add(faceMesh);
 

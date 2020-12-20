@@ -8,7 +8,7 @@ html, body {
 #view {
     width: 100%;
     height: 100%;
-    margin: auto;
+    z-index: -100;
 }
 
 #panel {
@@ -38,23 +38,25 @@ html, body {
     text-align: left;
     cursor: pointer;
     outline: none;
+    font-weight: bold;
+    font-family: 'Roboto Mono', monospace;
 }
 
-.dropdown:hover {
+/* .dropdown:hover {
     background-color: #D5D5D5;
     height: 100%;
-}
+} */
 
 .active {
-    background-color: #D5D5D5;
+    /* background-color: #D5D5D5; */
     height: 100%;
 }
-
+/* 
 .opt {
     display: none;
     background-color: #F5F5F5;
     height: 100%;
-}
+} */
 
 a:link {
     color: rgb(154, 155, 103);
@@ -64,27 +66,27 @@ a:visited {
     color: rgb(161, 117, 104);
 }
 
-.tetrahedral {
+.tetrahedral:hover {
     color: #EC5064;
 }
 
-.cubic {
+.cubic:hover {
     color: #F9A834;
 }
 
-.octahedral {
+.octahedral:hover {
     color: #03919B;
 }
 
-.dodecahedral {
+.dodecahedral:hover {
     color: #007043;
 }
 
-.icosahedral {
+.icosahedral:hover {
     color: #C86218;
 }
 
-.hexagonal {
+.hexagonal:hover {
     color: #1F8276;
 }
 
