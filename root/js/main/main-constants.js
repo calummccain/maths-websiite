@@ -16,23 +16,20 @@ function rotatePositions(s) {
     return posDict;
 }
 
-function translatePositions() {
-    var k = 40;
-    var posDict = {
-        "{4,3,4}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{4,3,5}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{4,3,6}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{3,5,3}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{3,3,6}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{3,4,4}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{5,3,4}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{5,3,5}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{5,3,6}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{6,3,3}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{6,3,4}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)],
-        "{6,3,5}": [k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1), k * (Math.random() + 1) * (2 * Math.round(Math.random()) - 1)]
-    };
-    return posDict;
+const shapeLinks = {
+    "{4,3,4}": "./individual/434.html",
+    "{4,3,5}": "./individual/435.html",
+    "{4,3,6}": "./individual/436.html",
+    "{3,5,3}": "./individual/353.html",
+    "{3,3,6}": "./individual/336.html",
+    "{3,4,4}": "./individual/344.html",
+    "{5,3,4}": "./individual/534.html",
+    "{5,3,5}": "./individual/535.html",
+    "{5,3,6}": "./individual/536.html",
+    "{6,3,3}": "./individual/633.html",
+    "{6,3,4}": "./individual/634.html",
+    "{6,3,5}": "./individual/635.html"
 }
 
-export { rotatePositions, translatePositions };
+
+export { rotatePositions, shapeLinks };

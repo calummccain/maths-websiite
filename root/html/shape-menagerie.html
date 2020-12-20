@@ -26,7 +26,7 @@
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
 
             import { MapControls } from "../js/orbit-controls.js";
-            import * as POSITIONS from "../js/main/main-constants.js";
+            import * as CONSTANTS from "../js/main/main-constants.js";
 
             var view = document.getElementById("view");
             var WIDTH = view.clientWidth;
@@ -39,7 +39,7 @@
 
             const def = 3;
             const s = 3;
-            const rotatePositions = POSITIONS.rotatePositions(s);
+            const rotatePositions = CONSTANTS.rotatePositions(s);
 
             // setup scene
             var scene = new THREE.Scene();
@@ -144,6 +144,7 @@
                     var obj = intersects[0].object;
                     console.log(obj);
                     document.getElementById("content").innerHTML = obj.name;
+                    window.location = CONSTANTS.shapeLinks[obj.name];
                 } else {
                     console.log("empty space");
                     clickObject = null;
