@@ -5,42 +5,28 @@
 
         <meta charset="utf-8">
 
-        <link rel="stylesheet" href="../css/test.css">
+        <link rel="stylesheet" href="../../css/test.css">
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-        <title>sHapES</title>
+        <title>Icosahedron - {3, 5, 3}</title>
     </head>
 
     <body>
 
         <script type="module">
 
-            import * as MAIN from "../js/main/main-utilities.js";
-            import * as THREE from "../js/three.module.js";
+            import * as MAIN from "../../js/main/main-utilities.js";
+            import * as THREE from "../../js/three.module.js";
 
-            import { hyperbolicTetrahedronGeometry } from "../js/geometries/33n-geometry.js";
-            import { hyperbolicOctahedronGeometry } from "../js/geometries/34n-geometry.js";
-            import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js";
-            import { hyperbolicCubeGeometry } from "../js/geometries/43n-geometry.js";
-            import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
-            import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
+            import { hyperbolicIcosahedronGeometry } from "../../js/geometries/35n-geometry.js";
 
-            import { MapControls } from "../js/orbit-controls.js";
-            import * as CONSTANTS from "../js/main/main-constants.js";
+            import { OrbitControls } from "../../js/orbit-controls.js";
+            import * as CONSTANTS from "../../js/main/main-constants.js";
 
             var view = document.getElementById("view");
             var WIDTH = view.clientWidth;
             var HEIGHT = view.clientHeight;
             var rect = view.getBoundingClientRect();
-            console.log(rect)
-
-            // constants for canvas
-            // CONSTANTTS.mainDefinition = resolution of polyhedrons (how many triangles)
-            // s = scale of arrangement
-            // rotatePositions = where the shapes rotate
-
-            const s = 3;
-            const rotatePositions = CONSTANTS.rotatePositions(s);
 
             // setup scene
             var scene = new THREE.Scene();
@@ -51,38 +37,27 @@
 
             // add camera and light to scene
             var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
-            camera.position.set(2.5 * s, s, -4 * s);
-            camera.up = new THREE.Vector3(0, -1, 0);
+            camera.position.set(3, 0, 0);
             camera.updateProjectionMatrix();
             camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
 
             scene.add(camera);
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
-            // add the polyhedrons to the scene
-            // cubes
-            MAIN.addCellToGroup({ group: meshes, metric: "euclidean", colour: "#F48415", numberOfFaces: 6, position: rotatePositions["{4,3,4}"], name: "{4,3,4}" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 5, colour: "#F9A834", numberOfFaces: 6, position: rotatePositions["{4,3,5}"], name: "{4,3,5}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#FFD083", numberOfFaces: 6, position: rotatePositions["{4,3,6}"], name: "{4,3,6}", transform: "" });
-
-            // icosahedrons
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicIcosahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 3, colour: "#C86218", numberOfFaces: 20, position: rotatePositions["{3,5,3}"], name: "{3,5,3}", transform: "" });
-
-            // tetrahedron
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicTetrahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#EC5064", numberOfFaces: 4, position: rotatePositions["{3,3,6}"], name: "{3,3,6}", transform: "" });
-
-            // octahedron
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicOctahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 4, colour: "#03919B", numberOfFaces: 8, position: rotatePositions["{3,4,4}"], name: "{3,4,4}", transform: "" });
-
-            // dodecahedron
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 4, colour: "#007043", numberOfFaces: 12, position: rotatePositions["{5,3,4}"], name: "{5,3,4}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 5, colour: "#B4CF68", numberOfFaces: 12, position: rotatePositions["{5,3,5}"], name: "{5,3,5}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#C0E490", numberOfFaces: 12, position: rotatePositions["{5,3,6}"], name: "{5,3,6}", transform: "" });
-
-            // hexagonal
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 3, colour: "#1F8276", numberOfFaces: 108, position: rotatePositions["{6,3,3}"], name: "{6,3,3}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 4, colour: "#40BAA4", numberOfFaces: 108, position: rotatePositions["{6,3,4}"], name: "{6,3,4}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 5, colour: "#9DDED6", numberOfFaces: 108, position: rotatePositions["{6,3,5}"], name: "{6,3,5}", transform: "" });
+            // add the main polyhedron to the scene
+            // Icosahedron
+            MAIN.addCellToGroup({
+                geometryFunction: hyperbolicIcosahedronGeometry,
+                group: meshes,
+                metric: "hyperbolic",
+                refinement: CONSTANTS.individualDefinition,
+                order: 3,
+                colour: "#C86218",
+                numberOfFaces: 20,
+                name: "{3,5,3}",
+                faceMode: true,
+                transform: ""
+            });
 
             // setup the renderer
             var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -90,27 +65,13 @@
             var intersectionObjectName, intersectionObject, clickObjectParams;
 
             // add controls to the camera
-            var controls = new MapControls(camera, renderer.domElement);
+            var controls = new OrbitControls(camera, renderer.domElement);
             controls.enableZoom = true;
-            controls.enableRotate = false;
-            controls.screenSpacePanning = true;
-            controls.target = new THREE.Vector3(2.5 * s, s, 0);
             controls.enabled = true;
-            controls.minZoom = s;
-            controls.maxZoom = 5 * s;
-
-            var minPan = new THREE.Vector3(0, -s, 0);
-            var maxPan = new THREE.Vector3(5 * s, 2 * s, 0);
-            var _v = new THREE.Vector3();
-
-            controls.addEventListener("change", function () {
-                _v.copy(controls.target);
-                controls.target.clamp(minPan, maxPan);
-                _v.sub(controls.target);
-                camera.position.sub(_v);
-            });
-
+            controls.minZoom = 1;
+            controls.maxZoom = 5;
             controls.update();
+
 
             // add a raycaster to the scene for object selection
             var raycaster = new THREE.Raycaster(), mouseVector = new THREE.Vector2();
@@ -136,12 +97,12 @@
 
                 requestAnimationFrame(render);
 
-                meshes.children.forEach(element => {
-                    element.rotation.y = t * 0.003;
-                    element.rotation.y = -t * 0.005;
-                    element.rotation.z = -t * 0.007;
-                });
-                t++;
+                // meshes.children.forEach(element => {
+                //     element.rotation.y = t * 0.003;
+                //     element.rotation.y = -t * 0.005;
+                //     element.rotation.z = -t * 0.007;
+                // });
+                // t++;
 
                 renderer.render(scene, camera);
 
@@ -149,7 +110,7 @@
 
             function onMouseClick(event) {
 
-                mouseVector.x = ((event.clientX - rect.left)  / WIDTH) * 2 - 1;
+                mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
@@ -157,11 +118,30 @@
                 if (intersects.length != 0) {
                     var obj = intersects[0].object;
                     console.log(obj);
-                    window.location = CONSTANTS.shapeLinks[obj.name];
+                    document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + "d";
+                    var colour = new THREE.Color(
+                        Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1), 
+                        Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1), 
+                        Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
+                        );
+                    document.getElementById("content2").innerHTML = colour.r;
+                    MAIN.addCellToGroup({
+                        geometryFunction: hyperbolicIcosahedronGeometry,
+                        group: meshes,
+                        metric: "hyperbolic",
+                        refinement: CONSTANTS.individualDefinition,
+                        order: 3,
+                        colour: "#" + colour.getHexString(),
+                        numberOfFaces: 20,
+                        name: "{3,5,3}",
+                        faceMode: true,
+                        transform: obj.cellName + obj.faceName + "d"
+                    });
                 } else {
                     console.log("empty space");
                     clickObject = null;
-                    document.getElementById("content").innerHTML = "empty space";
+                    document.getElementById("content1").innerHTML = "empty space";
+                    document.getElementById("content2").innerHTML = "";
                     console.log(document.getElementById("content"));
                 }
 
@@ -181,18 +161,18 @@
 
                 event.preventDefault();
 
-                mouseVector.x = ((event.clientX  - rect.left)/ WIDTH) * 2 - 1;
+                mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
                 var intersects = raycaster.intersectObjects(meshes.children);
-                
+
                 if (intersects.length > 0) {
-                    document.getElementById("content").innerHTML = intersects[0].object.name;
-                    if (intersectionObjectName != intersects[0].object.name) {
-                        intersectionObjectName = intersects[0].object.name;
+                    var selectedObject = intersects[0].object;
+                    if (intersectionObject != selectedObject) {
+                        intersectionObject = selectedObject;
                         meshes.children.forEach(mesh => {
-                            if (mesh.name === intersectionObjectName) {
+                            if (mesh === intersectionObject) {
                                 var col = {
                                     r: mesh.material.color.r,
                                     g: mesh.material.color.g,
@@ -234,7 +214,7 @@
         <div id="panel">
             <div id="header">
                 <h1>
-                    <a href="./shape-menagerie.html"> \(s\mathbb{H}ap\mathbb{E}\mathbb{S}\)</a>
+                    <a href="../shape-menagerie.html"> \(s\mathbb{H}ap\mathbb{E}\mathbb{S}\)</a>
                 </h1>
             </div>
             <div id="sections">
@@ -281,14 +261,18 @@
                 </div>
                 <a href="/root/index.html">index</a>
 
-                <div id="content">
+                <div id="content1">
+                    Hi
+                </div>
+                <div id="content2">
                     Hi
                 </div>
             </div>
         </div>
 
-        <div id="view"></div>
-        
+        <div id="view">
+
+        </div>
 
     </body>
 
