@@ -118,14 +118,20 @@
                 if (intersects.length != 0) {
                     var obj = intersects[0].object;
                     console.log(obj);
-                    document.getElementById("content").innerHTML = obj.cellName + obj.faceName + "d";
+                    document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + "d";
+                    var colour = new THREE.Color(
+                        Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1), 
+                        Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1), 
+                        Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
+                        );
+                    document.getElementById("content2").innerHTML = colour.r;
                     MAIN.addCellToGroup({
                         geometryFunction: hyperbolicOctahedronGeometry,
                         group: meshes,
                         metric: "hyperbolic",
                         refinement: CONSTANTS.individualDefinition,
                         order: 4,
-                        colour: "#03919B",
+                        colour: "#" + colour.getHexString(),
                         numberOfFaces: 8,
                         name: "{3,4,4}",
                         faceMode: true,
@@ -134,7 +140,8 @@
                 } else {
                     console.log("empty space");
                     clickObject = null;
-                    document.getElementById("content").innerHTML = "empty space";
+                    document.getElementById("content1").innerHTML = "empty space";
+                    document.getElementById("content2").innerHTML = "";
                     console.log(document.getElementById("content"));
                 }
 
@@ -254,7 +261,10 @@
                 </div>
                 <a href="/root/index.html">index</a>
 
-                <div id="content">
+                <div id="content1">
+                    Hi
+                </div>
+                <div id="content2">
                     Hi
                 </div>
             </div>
