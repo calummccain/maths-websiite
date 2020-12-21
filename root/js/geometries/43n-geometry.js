@@ -13,7 +13,7 @@ function hyperbolicCubeGeometry(transform, order, refinement, compact) {
 
     var cube = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
-    return cube;
+    return [cube, ORDERN.faceReflections];
 
 }
 

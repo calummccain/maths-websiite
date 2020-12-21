@@ -13,7 +13,7 @@ function hyperbolicHexagonalGeometry(transform, order, refinement, compact) {
 
     var hexagonal = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
-    return hexagonal;
+    return [hexagonal, ORDERN.faceReflections];
 
 }
 

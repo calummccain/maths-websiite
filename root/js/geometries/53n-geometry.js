@@ -13,7 +13,7 @@ function hyperbolicDodecahedronGeometry(transform, order, refinement, compact) {
 
     var dodecahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
-    return dodecahedron;
+    return [dodecahedron, ORDERN.faceReflections];
 
 }
 

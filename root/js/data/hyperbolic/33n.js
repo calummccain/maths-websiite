@@ -141,7 +141,7 @@ function center(n) {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-        newCenter = [1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0]
+        newCenter = [1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0];
     }
 
     return newCenter;

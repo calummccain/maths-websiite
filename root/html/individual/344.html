@@ -28,11 +28,6 @@
             var HEIGHT = view.clientHeight;
             var rect = view.getBoundingClientRect();
 
-            // constants for canvas
-            // def = resolution of polyhedrons (how many triangles)
-            // s   = scale of arrangement
-            // rotatePositions = where the shapes rotate
-
             // setup scene
             var scene = new THREE.Scene();
             scene.background = new THREE.Color(0xDDDDDD);
@@ -51,7 +46,18 @@
 
             // add the main polyhedron to the scene
             // octahedron
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicOctahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.individualDefinition, order: 4, colour: "#03919B", numberOfFaces: 8, position: [0, 0, 0], name: "{3,4,4}", faceMode: true, transform: "" });
+            MAIN.addCellToGroup({
+                geometryFunction: hyperbolicOctahedronGeometry,
+                group: meshes,
+                metric: "hyperbolic",
+                refinement: CONSTANTS.individualDefinition,
+                order: 4,
+                colour: "#03919B",
+                numberOfFaces: 8,
+                name: "{3,4,4}",
+                faceMode: true,
+                transform: ""
+            });
 
             // setup the renderer
             var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -91,12 +97,12 @@
 
                 requestAnimationFrame(render);
 
-                meshes.children.forEach(element => {
-                    element.rotation.y = t * 0.003;
-                    element.rotation.y = -t * 0.005;
-                    element.rotation.z = -t * 0.007;
-                });
-                t++;
+                // meshes.children.forEach(element => {
+                //     element.rotation.y = t * 0.003;
+                //     element.rotation.y = -t * 0.005;
+                //     element.rotation.z = -t * 0.007;
+                // });
+                // t++;
 
                 renderer.render(scene, camera);
 
@@ -104,7 +110,7 @@
 
             function onMouseClick(event) {
 
-                mouseVector.x = ((event.clientX - rect.left)  / WIDTH) * 2 - 1;
+                mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
@@ -112,7 +118,19 @@
                 if (intersects.length != 0) {
                     var obj = intersects[0].object;
                     console.log(obj);
-                    document.getElementById("content").innerHTML = obj.name;
+                    document.getElementById("content").innerHTML = obj.cellName + obj.faceName + "d";
+                    MAIN.addCellToGroup({
+                        geometryFunction: hyperbolicOctahedronGeometry,
+                        group: meshes,
+                        metric: "hyperbolic",
+                        refinement: CONSTANTS.individualDefinition,
+                        order: 4,
+                        colour: "#03919B",
+                        numberOfFaces: 8,
+                        name: "{3,4,4}",
+                        faceMode: true,
+                        transform: obj.cellName + obj.faceName + "d"
+                    });
                 } else {
                     console.log("empty space");
                     clickObject = null;
@@ -136,17 +154,18 @@
 
                 event.preventDefault();
 
-                mouseVector.x = ((event.clientX  - rect.left)/ WIDTH) * 2 - 1;
+                mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
                 var intersects = raycaster.intersectObjects(meshes.children);
 
                 if (intersects.length > 0) {
-                    if (intersectionObjectName != intersects[0].object.name) {
-                        intersectionObjectName = intersects[0].object.name;
+                    var selectedObject = intersects[0].object;
+                    if (intersectionObject != selectedObject) {
+                        intersectionObject = selectedObject;
                         meshes.children.forEach(mesh => {
-                            if (mesh.name === intersectionObjectName) {
+                            if (mesh === intersectionObject) {
                                 var col = {
                                     r: mesh.material.color.r,
                                     g: mesh.material.color.g,

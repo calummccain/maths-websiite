@@ -1,3 +1,4 @@
+import { faceReflections } from "../data/hyperbolic/33n.js";
 import * as THREE from "../three.module.js";
 
 function addCellToGroup(params) {
@@ -18,7 +19,7 @@ function addCellToGroup(params) {
     var name = params.name || "";
     var faceMode = params.faceMode || false;
 
-    var shapeGeometry;
+    var shapeGeometry, faceReflections;
 
     if (metric === "spherical") {
 
@@ -32,11 +33,11 @@ function addCellToGroup(params) {
 
     } else if (metric === "hyperbolic") {
 
-        shapeGeometry = geometryFunction(transform, order, refinement, compact);
+        [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact);
 
     } else {
 
-        console.log("I don't know what you've done but this ain't it - please enter \"spherical\" or \"euclidean\" or \"hyperbolic\"");
+        console.log("Please enter \"spherical\" or \"euclidean\" or \"hyperbolic\"");
 
     }
 
@@ -74,9 +75,9 @@ function addCellToGroup(params) {
             }
 
             faceMesh.position.set(position[0], position[1], position[2]);
-            faceMesh.cellName = "";
+            faceMesh.cellName = transform;
             faceMesh.name = name;
-            faceMesh.faceName = j;
+            faceMesh.faceName = faceReflections[j];
             faceMesh.params = params;
 
             group.add(faceMesh);
