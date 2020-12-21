@@ -31,5 +31,8 @@ const shapeLinks = {
     "{6,3,5}": "./individual/635.html"
 }
 
+const individualDefinition = 4;
+const mainDefinition = 3;
 
-export { rotatePositions, shapeLinks };
+
+export { rotatePositions, shapeLinks, individualDefinition, mainDefinition };
