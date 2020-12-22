@@ -10,6 +10,16 @@ html, body {
     margin-left: 160px;
 }
 
+.text {
+    background-color:#E5E5E5;
+    color: darkslategray;
+    margin-left: 160px;
+    text-align: justify;
+    font-family: 'Roboto Mono', monospace;
+    position: relative;
+    padding: 100px;
+}
+
 #panel {
     height: 100%;
     width: 160px;
@@ -41,21 +51,10 @@ html, body {
     font-family: 'Roboto Mono', monospace;
 }
 
-/* .dropdown:hover {
-    background-color: #D5D5D5;
-    height: 100%;
-} */
-
 .active {
     /* background-color: #D5D5D5; */
     height: 100%;
 }
-/* 
-.opt {
-    display: none;
-    background-color: #F5F5F5;
-    height: 100%;
-} */
 
 a:link {
     color: rgb(154, 155, 103);
@@ -88,5 +87,3 @@ a:visited {
 .hexagonal:hover {
     color: #1F8276;
 }
-
-

@@ -35,7 +35,6 @@
             console.log(rect)
 
             // constants for canvas
-            // CONSTANTTS.mainDefinition = resolution of polyhedrons (how many triangles)
             // s = scale of arrangement
             // rotatePositions = where the shapes rotate
 
@@ -213,24 +212,7 @@
 
         </script>
 
-        <script type="module">
-
-            var dropdown = document.getElementsByClassName("dropdown");
-            var i;
-
-            for (i = 0; i < dropdown.length; i++) {
-                dropdown[i].addEventListener("mousedown", function () {
-                    this.classList.toggle("active");
-                    var dropdownContent = this.nextElementSibling;
-                    if (dropdownContent.style.display === "block") {
-                        dropdownContent.style.display = "none";
-                    } else {
-                        dropdownContent.style.display = "block";
-                    }
-                });
-            }
-
-        </script>
+        <script src="../js/dropdown.js"></script>
 
         <div id="panel">
             <div id="header">
