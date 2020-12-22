@@ -7,11 +7,22 @@
 
         <link rel="stylesheet" href="../../css/test.css">
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+            </script>
+        <script>
+            $(function () {
+                $("#side-menu").load("/root/html/menu-bars.html");
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            });
+        </script>
         <title>Hexagonal - {6, 3, 5}</title>
     </head>
 
     <body>
+
+        <div id="side-menu"></div>
 
         <script type="module">
 
@@ -210,65 +221,6 @@
             }
 
         </script>
-
-        <div id="panel">
-            <div id="header">
-                <h1>
-                    <a href="../shape-menagerie.html"> \(s\mathbb{H}ap\mathbb{E}\mathbb{S}\)</a>
-                </h1>
-            </div>
-            <div id="sections">
-                <button class="dropdown tetrahedral">
-                    Tetrahedral
-                </button>
-                <div class="tetrahedral opt">
-                    <a href="#">\[\{3, 3, 6\}\]</a>
-                </div>
-                <button class="dropdown cubic">
-                    Cubic
-                </button>
-                <div class="cubic opt">
-                    <a href="#">\[\{4, 3, 5\}\]</a>
-                    <a href="#">\[\{4, 3, 6\}\]</a>
-                </div>
-                <button class="dropdown octahedral">
-                    Octahedral
-                </button>
-                <div class="octahedral opt">
-                    <a href="#">\[\{3, 4, 4\}\]</a>
-                </div>
-                <button class="dropdown dodecahedral">
-                    Dodecahedral
-                </button>
-                <div class="dodecahedral opt">
-                    <a href="#">\[\{5, 3, 4\}\]</a>
-                    <a href="#">\[\{5, 3, 5\}\]</a>
-                    <a href="#">\[\{5, 3, 6\}\]</a>
-                </div>
-                <button class="dropdown icosahedral">
-                    Icosahedral
-                </button>
-                <div class="icosahedral opt">
-                    <a href="#">\[\{3, 5, 3\}\]</a>
-                </div>
-                <button class="dropdown hexagonal">
-                    Hexagonal
-                </button>
-                <div class="hexagonal opt">
-                    <a href="#">\[\{6, 3, 3\}\]</a>
-                    <a href="#">\[\{6, 3, 4\}\]</a>
-                    <a href="#">\[\{6, 3, 5\}\]</a>
-                </div>
-                <a href="/root/index.html">index</a>
-
-                <div id="content1">
-                    Hi
-                </div>
-                <div id="content2">
-                    Hi
-                </div>
-            </div>
-        </div>
 
         <div id="view">
 

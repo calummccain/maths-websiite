@@ -20,7 +20,15 @@ html, body {
     padding: 100px;
 }
 
-#panel {
+#top-menu {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    width: 8em;
+    margin-top: -2.5em;
+  }
+
+#side-menu {
     height: 100%;
     width: 160px;
     position: fixed;
