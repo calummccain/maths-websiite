@@ -68,7 +68,7 @@ function midpoint(a, b, c, compact) {
         var shiftedB = vectorDiff(b, c);
         var rad = norm(shiftedA);
         //console.log(c, norm(c), rad, norm(shiftedB));
-        var unnormalisedSum= vectorScale(vectorSum(shiftedA, shiftedB), 1 / 2);
+        var unnormalisedSum = vectorScale(vectorSum(shiftedA, shiftedB), 1 / 2);
         newVector = vectorSum(c, vectorScale(unnormalisedSum, rad / norm(unnormalisedSum)));
 
     } else {
@@ -105,4 +105,38 @@ function lineSphereIntersection(a, b) {
 
 }
 
-export { vectorScale, vectorSum, midpoint, norm, lineSphereIntersection }
+function circumradius(a, b, c) {
+
+    return (a * b * c) / Math.sqrt(Math.abs((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c)));
+
+}
+
+function determinant(m) {
+
+    return m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+
+}
+
+function circumcenter(u, v, w) {
+
+    const a = determinant([[u[0], u[1], 1], [v[0], v[1], 1], [w[0], w[1], 1]]);
+    const ru = u[0] ** 2 + u[1] ** 2;
+    const rv = v[0] ** 2 + v[1] ** 2;
+    const rw = w[0] ** 2 + w[1] ** 2;
+    const bx = -determinant([[ru, u[1], 1], [rv, v[1], 1], [rw, w[1], 1]]);
+    const by = determinant([[ru, u[0], 1], [rv, v[0], 1], [rw, w[0], 1]]);
+
+    return [-bx / (2 * a), -by / (2 * a)]
+
+}
+
+export {
+    vectorScale,
+    vectorSum,
+    vectorDiff,
+    midpoint,
+    norm,
+    lineSphereIntersection,
+    circumradius,
+    circumcenter
+}

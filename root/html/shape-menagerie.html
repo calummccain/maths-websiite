@@ -63,7 +63,8 @@
             // cubes
             MAIN.addCellToGroup({ group: meshes, metric: "euclidean", colour: "#F48415", numberOfFaces: 6, position: rotatePositions["{4,3,4}"], name: "{4,3,4}" });
             MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 5, colour: "#F9A834", numberOfFaces: 6, position: rotatePositions["{4,3,5}"], name: "{4,3,5}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#FFD083", numberOfFaces: 6, position: rotatePositions["{4,3,6}"], name: "{4,3,6}", transform: "" });
+            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#FFD083", numberOfFaces: 6, position: rotatePositions["{4,3,6}"], name: "{4,3,6}", transform: "", compact: "paracompact" });
+            // MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#FFD083", numberOfFaces: 6, position: [0, 2 * s, 0], name: "{4,3,6}", transform: "" });
 
             // icosahedrons
             MAIN.addCellToGroup({ geometryFunction: hyperbolicIcosahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 3, colour: "#C86218", numberOfFaces: 20, position: rotatePositions["{3,5,3}"], name: "{3,5,3}", transform: "" });

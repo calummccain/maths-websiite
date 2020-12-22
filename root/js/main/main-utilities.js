@@ -1,4 +1,3 @@
-import { faceReflections } from "../data/hyperbolic/33n.js";
 import * as THREE from "../three.module.js";
 
 function addCellToGroup(params) {

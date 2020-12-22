@@ -52,11 +52,12 @@
                 metric: "hyperbolic",
                 refinement: CONSTANTS.individualDefinition,
                 order: 6,
-                colour: "#FFD083",
+                colour: "#AAD083",
                 numberOfFaces: 6,
                 name: "{4,3,6}",
                 faceMode: true,
-                transform: ""
+                transform: "",
+                compact: "paracompact"
             });
 
             // setup the renderer
@@ -120,10 +121,10 @@
                     console.log(obj);
                     document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + "d";
                     var colour = new THREE.Color(
-                        Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1), 
-                        Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1), 
+                        Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1),
+                        Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1),
                         Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
-                        );
+                    );
                     document.getElementById("content2").innerHTML = colour.r;
                     MAIN.addCellToGroup({
                         geometryFunction: hyperbolicCubeGeometry,
@@ -135,7 +136,8 @@
                         numberOfFaces: 6,
                         name: "{4,3,6}",
                         faceMode: true,
-                        transform: obj.cellName + obj.faceName + "d"
+                        transform: obj.cellName + obj.faceName + "d",
+                        compact: "paracompact"
                     });
                 } else {
                     console.log("empty space");
