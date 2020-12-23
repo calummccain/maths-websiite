@@ -74,15 +74,11 @@ function kleinFace(vertices, refinement, compact) {
             uhpVertices.push(HF.kleinToUpperHalfPlane(element))
         });
 
-        console.log(uhpVertices)
-
         const a = VF.norm(VF.vectorDiff(uhpVertices[0], uhpVertices[1]));
         const b = VF.norm(VF.vectorDiff(uhpVertices[1], uhpVertices[2]));
         const c = VF.norm(VF.vectorDiff(uhpVertices[2], uhpVertices[0]));
         const circumradius = VF.circumradius(a, b, c);
         const circumcenter = VF.circumcenter(uhpVertices[0], uhpVertices[1], uhpVertices[2]);
-        
-        console.log(circumcenter, circumradius)
 
         for (var i = 0; i < sideNumber; i++) {
 
@@ -115,11 +111,11 @@ function kleinFace(vertices, refinement, compact) {
                 var u = VF.vectorScale(VF.vectorSum(uhpVertices[faces[i][0]], uhpVertices[faces[i][1]]), 0.5);
                 var v = VF.vectorScale(VF.vectorSum(uhpVertices[faces[i][1]], uhpVertices[faces[i][2]]), 0.5);
                 var w = VF.vectorScale(VF.vectorSum(uhpVertices[faces[i][2]], uhpVertices[faces[i][0]]), 0.5);
-                console.log(uhpVertices[faces[i][0]], uhpVertices[faces[i][1]], u)
+
                 u = [u[0], u[1], Math.sqrt(Math.abs(circumradius ** 2 - (circumcenter[0] - u[0]) ** 2 - (circumcenter[1] - u[1]) ** 2))];
                 v = [v[0], v[1], Math.sqrt(Math.abs(circumradius ** 2 - (circumcenter[0] - v[0]) ** 2 - (circumcenter[1] - v[1]) ** 2))];
                 w = [w[0], w[1], Math.sqrt(Math.abs(circumradius ** 2 - (circumcenter[0] - w[0]) ** 2 - (circumcenter[1] - w[1]) ** 2))];
-                console.log(u)
+
                 newUhpVertices = newUhpVertices.concat([
                     uhpVertices[faces[i][0]],
                     uhpVertices[faces[i][1]],
@@ -147,9 +143,6 @@ function kleinFace(vertices, refinement, compact) {
         uhpVertices.forEach(element => {
             coords.push(HF.upperHalfPlaneToKlein(element))
         })
-
-        console.log(uhpVertices);
-        console.log(coords);
 
         return [faces, coords];
     }
