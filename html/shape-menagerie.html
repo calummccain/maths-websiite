@@ -44,7 +44,6 @@
             var WIDTH = view.clientWidth;
             var HEIGHT = view.clientHeight;
             var rect = view.getBoundingClientRect();
-            console.log(rect)
 
             // constants for canvas
             // s = scale of arrangement
@@ -137,6 +136,9 @@
             window.addEventListener("mousemove", onMouseMove, false);
             window.addEventListener("resize", onWindowResize, false);
 
+            view.addEventListener('touchstart', touchStart, { passive: false });
+            view.addEventListener('touchend', touchEnd);
+
             // add the renderer to the 'view' div
             view.appendChild(renderer.domElement);
 
@@ -164,7 +166,7 @@
             function onMouseClick(event) {
 
                 mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-                mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
+                mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
                 var intersects = raycaster.intersectObjects(meshes.children);
@@ -188,6 +190,28 @@
                 camera.aspect = WIDTH / HEIGHT;
                 camera.updateProjectionMatrix();
 
+            }
+
+            function touchStart(e) {
+                e.preventDefault();
+            }
+
+            function touchEnd(e) {
+            
+                mouseVector.x = ((event.touches[0].clientX - rect.left) / WIDTH) * 2 - 1;
+                mouseVector.y = - ((event.touches[0].clientY - rect.top) / HEIGHT) * 2 + 1;
+                raycaster.setFromCamera(mouseVector, camera);
+
+                var intersects = raycaster.intersectObjects(meshes.children);
+                if (intersects.length != 0) {
+                    var obj = intersects[0].object;
+                    console.log(obj);
+                    window.location = CONSTANTS.shapeLinks[obj.name];
+                } else {
+                    console.log("empty space");
+                    clickObject = null;
+                    document.getElementById("content1").innerHTML = "empty space";
+                }
             }
 
             function onMouseMove(event) {
