@@ -56,6 +56,24 @@ function vectorDot(a, b) {
 
 }
 
+function lineSphereIntersection(a, b) {
+
+    var ab = vectorDiff(a, b);
+
+    var A = vectorDot(ab, ab);
+    var B = 2 * vectorDot(b, ab);
+    var C = vectorDot(b, b) - 1;
+
+    var l1 = (-B + Math.sqrt(B ** 2 - 4 * A * C)) / (2 * A);
+    var l2 = (-B - Math.sqrt(B ** 2 - 4 * A * C)) / (2 * A);
+
+    var l = Math.min(l1, l2);
+    var intersection = vectorSum(vectorScale(a, l), vectorScale(b, 1 - l));
+
+    return intersection;
+
+}
+
 // midpoint of a line
 function midpoint(a, b, c, compact) {
 
@@ -77,7 +95,7 @@ function midpoint(a, b, c, compact) {
 
     }
 
-    //newVector = vectorScale(vectorSum(a, b), 0.5);
+    newVector = vectorScale(vectorSum(a, b), 0.5);
 
     return newVector;
 
@@ -89,21 +107,21 @@ function norm(x) {
 
 }
 
-function lineSphereIntersection(a, b) {
+// function lineSphereIntersection(a, b) {
 
-    var a_b = vectorDiff(a, b);
+//     var a_b = vectorDiff(a, b);
 
-    var delta = Math.sqrt(vectorDot(b, a_b) ** 2 - (norm(a_b) ** 2) * (norm(b) ** 2 - 1));
+//     var delta = Math.sqrt(vectorDot(b, a_b) ** 2 - (norm(a_b) ** 2) * (norm(b) ** 2 - 1));
 
-    var t1 = (-vectorDot(b, a_b) + delta) / norm(a_b) ** 2;
-    var t2 = (-vectorDot(b, a_b) - delta) / norm(a_b) ** 2;
+//     var t1 = (-vectorDot(b, a_b) + delta) / norm(a_b) ** 2;
+//     var t2 = (-vectorDot(b, a_b) - delta) / norm(a_b) ** 2;
 
-    var x1 = vectorSum(vectorScale(a, t1), vectorScale(b, 1 - t1));
-    var x2 = vectorSum(vectorScale(a, t2), vectorScale(b, 1 - t2));
+//     var x1 = vectorSum(vectorScale(a, t1), vectorScale(b, 1 - t1));
+//     var x2 = vectorSum(vectorScale(a, t2), vectorScale(b, 1 - t2));
 
-    return [x1, x2];
+//     return [x1, x2];
 
-}
+// }
 
 function circumradius(a, b, c) {
 

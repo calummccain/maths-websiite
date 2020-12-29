@@ -18,7 +18,6 @@ function transformVertices(baseVertices, transformation, dictionary) {
 
     }
 
-
     for (var j = 0; j < baseVertices.length; j++) {
 
         var oldVertex = baseVertices[j];

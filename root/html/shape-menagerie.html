@@ -70,31 +70,33 @@
             scene.add(camera);
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
+            const geom = {
+                "{3,5}": hyperbolicIcosahedronGeometry,
+                "{5,3}": hyperbolicDodecahedronGeometry,
+                "{4,3}": hyperbolicCubeGeometry,
+                "{3,3}": hyperbolicTetrahedronGeometry,
+                "{3,4}": hyperbolicOctahedronGeometry,
+                "{6,3}": hyperbolicHexagonalGeometry
+            };
+
             // add the polyhedrons to the scene
-            // cubes
-            MAIN.addCellToGroup({ group: meshes, metric: "euclidean", colour: "#F48415", numberOfFaces: 6, position: rotatePositions["{4,3,4}"], name: "{4,3,4}" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 5, colour: "#F9A834", numberOfFaces: 6, position: rotatePositions["{4,3,5}"], name: "{4,3,5}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#FFD083", numberOfFaces: 6, position: rotatePositions["{4,3,6}"], name: "{4,3,6}", transform: "", compact: "paracompact" });
-            // MAIN.addCellToGroup({ geometryFunction: hyperbolicCubeGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#FFD083", numberOfFaces: 6, position: [0, 2 * s, 0], name: "{4,3,6}", transform: "" });
 
-            // icosahedrons
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicIcosahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 3, colour: "#C86218", numberOfFaces: 20, position: rotatePositions["{3,5,3}"], name: "{3,5,3}", transform: "" });
+            CONSTANTS.names.forEach((name) => {
 
-            // tetrahedron
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicTetrahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#EC5064", numberOfFaces: 4, position: rotatePositions["{3,3,6}"], name: "{3,3,6}", transform: "" });
+                MAIN.addCellToGroup({
+                    geometryFunction: geom[CONSTANTS.geometry[name]],
+                    group: meshes, metric: CONSTANTS.metric[name],
+                    refinement: CONSTANTS.mainDefinition,
+                    order: CONSTANTS.order[name],
+                    colour: CONSTANTS.colour[name],
+                    numberOfFaces: CONSTANTS.numberOfFaces[name],
+                    position: rotatePositions[name],
+                    name: name,
+                    transform: "",
+                    compact: CONSTANTS.compact[name]
+                });
 
-            // octahedron
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicOctahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 4, colour: "#03919B", numberOfFaces: 8, position: rotatePositions["{3,4,4}"], name: "{3,4,4}", transform: "" });
-
-            // dodecahedron
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 4, colour: "#007043", numberOfFaces: 12, position: rotatePositions["{5,3,4}"], name: "{5,3,4}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 5, colour: "#B4CF68", numberOfFaces: 12, position: rotatePositions["{5,3,5}"], name: "{5,3,5}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicDodecahedronGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 6, colour: "#C0E490", numberOfFaces: 12, position: rotatePositions["{5,3,6}"], name: "{5,3,6}", transform: "" });
-
-            // hexagonal
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 3, colour: "#1F8276", numberOfFaces: 108, position: rotatePositions["{6,3,3}"], name: "{6,3,3}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 4, colour: "#40BAA4", numberOfFaces: 108, position: rotatePositions["{6,3,4}"], name: "{6,3,4}", transform: "" });
-            MAIN.addCellToGroup({ geometryFunction: hyperbolicHexagonalGeometry, group: meshes, metric: "hyperbolic", refinement: CONSTANTS.mainDefinition, order: 5, colour: "#9DDED6", numberOfFaces: 108, position: rotatePositions["{6,3,5}"], name: "{6,3,5}", transform: "" });
+            })
 
             // setup the renderer
             var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -161,7 +163,7 @@
 
             function onMouseClick(event) {
 
-                mouseVector.x = ((event.clientX - rect.left)  / WIDTH) * 2 - 1;
+                mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
@@ -192,12 +194,12 @@
 
                 event.preventDefault();
 
-                mouseVector.x = ((event.clientX  - rect.left)/ WIDTH) * 2 - 1;
+                mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
                 var intersects = raycaster.intersectObjects(meshes.children);
-                
+
                 if (intersects.length > 0) {
                     document.getElementById("content1").innerHTML = intersects[0].object.name;
                     if (intersectionObjectName != intersects[0].object.name) {
@@ -222,8 +224,6 @@
             }
 
         </script>
-
-        <script src="../js/dropdown.js"></script>
 
         <div id="view"></div>
 

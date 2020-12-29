@@ -167,6 +167,19 @@ function addCellToGroup(params) {
 
 }
 
+function removeCellFromGroup(cellName, group) {
+
+    var newChilren = [];
+    group.children.forEach(element => {
+        if (element.cellName !== cellName) {
+            newChilren.push(element);
+        }
+    });
+    group.children = newChilren;
+
+}
+
 export {
-    addCellToGroup
+    addCellToGroup,
+    removeCellFromGroup
 };

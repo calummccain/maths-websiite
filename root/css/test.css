@@ -59,8 +59,89 @@ html, body {
     font-family: 'Roboto Mono', monospace;
 }
 
+/* Slideshow container */
+.slideshow-container {
+    position: relative;
+    margin: auto;
+}
+
+.mySlides {
+    display: inline;
+    background-color: #a5a5a5;
+}
+
+/* Next & previous buttons */
+.prev {
+    left: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    right: 0;
+  }
+
+.prev:hover, .next:hover {
+    color: #060606;
+}
+
+.selectorLabel {
+    color: #818181;
+    font-size: 20px;
+    padding: 8px 12px;
+    position: relative;
+    font-weight: bold;
+    top: 0;
+    width: 50%;
+    text-align: center;
+    background-color: #a5a5a5;
+}
+
 .active {
-    /* background-color: #D5D5D5; */
+    background-color: #060606;
+}
+
+/* Fading animation */
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+.active {
     height: 100%;
 }
 

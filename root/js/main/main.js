@@ -17,6 +17,7 @@ function main(name, geometry) {
 
     // group of meshes
     var meshes = new THREE.Group();
+    var ghosts = new THREE.Group();
 
     // add camera and light to scene
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
@@ -31,14 +32,15 @@ function main(name, geometry) {
     MAIN.addCellToGroup({
         geometryFunction: geometry,
         group: meshes,
-        metric: "hyperbolic",
+        metric: CONSTANTS.metric[name],
         refinement: CONSTANTS.individualDefinition,
         order: CONSTANTS.order[name],
         colour: CONSTANTS.colour[name],
         numberOfFaces: CONSTANTS.numberOfFaces[name],
         name: name,
         faceMode: true,
-        transform: ""
+        transform: "",
+        compact: CONSTANTS.compact[name]
     });
 
     // setup the renderer
@@ -60,6 +62,7 @@ function main(name, geometry) {
 
     // add the meshes to the scene
     scene.add(meshes);
+    scene.add(ghosts);
 
     // add some event listeners
     window.addEventListener("click", onMouseClick, false);
@@ -101,14 +104,15 @@ function main(name, geometry) {
             MAIN.addCellToGroup({
                 geometryFunction: geometry,
                 group: meshes,
-                metric: "hyperbolic",
+                metric: CONSTANTS.metric[name],
                 refinement: CONSTANTS.individualDefinition,
                 order: CONSTANTS.order[name],
                 colour: "#" + colour.getHexString(),
                 numberOfFaces: CONSTANTS.numberOfFaces[name],
                 name: name,
                 faceMode: true,
-                transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name]
+                transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
+                compact: CONSTANTS.compact[name]
             });
         } else {
             clickObject = null;
@@ -141,15 +145,31 @@ function main(name, geometry) {
         if (intersects.length > 0) {
             var selectedObject = intersects[0].object;
             if (intersectionObject != selectedObject) {
+                ghosts.children = [];
                 intersectionObject = selectedObject;
                 meshes.children.forEach(mesh => {
                     if (mesh === intersectionObject) {
-                        var col = {
-                            r: mesh.material.color.r,
-                            g: mesh.material.color.g,
-                            b: mesh.material.color.b
-                        };
-                        mesh.material.emissive.setRGB(col.r, col.g, col.b);
+                        document.getElementById("content2").innerHTML = mesh.cellName;
+                        var colour = new THREE.Color(
+                            selectedObject.material.color.r,
+                            selectedObject.material.color.g,
+                            selectedObject.material.color.b
+                        );
+                        mesh.material.emissive.setRGB(colour.r, colour.g, colour.b);
+                        MAIN.addCellToGroup({
+                            geometryFunction: geometry,
+                            group: ghosts,
+                            metric: CONSTANTS.metric[name],
+                            refinement: CONSTANTS.individualDefinition,
+                            order: CONSTANTS.order[name],
+                            colour: "#" + colour.getHexString(),
+                            numberOfFaces: CONSTANTS.numberOfFaces[name],
+                            name: name,
+                            faceMode: true,
+                            transform: selectedObject.cellName + selectedObject.faceName + CONSTANTS.specialLetter[name],
+                            opacity: 0.5,
+                            compact: CONSTANTS.compact[name]
+                        });
                     } else {
                         mesh.material.emissive.setRGB(0, 0, 0);
                     }
@@ -158,6 +178,7 @@ function main(name, geometry) {
         } else {
             meshes.children.forEach(mesh => { mesh.material.emissive.setRGB(0, 0, 0); });
             intersectionObjectName = null;
+            ghosts.children = [];
         }
     }
 
