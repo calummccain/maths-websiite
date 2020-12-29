@@ -1,5 +1,4 @@
 import * as VF from "../maths-functions/vector-functions.js";
-import * as HF from "../maths-functions/hyperbolic-functions.js";
 
 function kleinFace(vertices, refinement, compact) {
 
@@ -8,6 +7,12 @@ function kleinFace(vertices, refinement, compact) {
     var center = [0, 0, 0];
 
     var coords = vertices;
+
+    if (compact === "uncompact") {
+
+        refinement += 1;
+
+    }
 
     if (sideNumber == 3) {
 
@@ -211,7 +216,7 @@ function kleinFace(vertices, refinement, compact) {
     //     })
 
     // }
-    
+
     return [faces, coords];
 
 }

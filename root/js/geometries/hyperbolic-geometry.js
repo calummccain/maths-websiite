@@ -42,8 +42,8 @@ function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSide
         // Then add these to the faceGeometry (as THREE.Vector3)
         for (var j = 0; j < subdividedVertices.length; j++) {
 
-            var vertex = subdividedVertices[j];
-            // var vertex = HF.kleinToPoincare(subdividedVertices[j]);
+            // var vertex = subdividedVertices[j];
+            var vertex = HF.kleinToPoincare(subdividedVertices[j]);
             // var vertex = HF.poincareToUpperHalfPlane(vertex2);
             // var vertex = subdividedVertices[j];
             faceGeometry.vertices.push(new THREE.Vector3(vertex[0], vertex[1], vertex[2]));
