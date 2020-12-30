@@ -136,7 +136,9 @@ function main(name, geometry) {
         raycaster.setFromCamera(mouseVector, camera);
 
         var intersects = raycaster.intersectObjects(meshes.children);
+        
         if (intersects.length != 0) {
+        
             var obj = intersects[0].object;
             document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
             var colour = new THREE.Color(
@@ -158,10 +160,13 @@ function main(name, geometry) {
                 transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
                 compact: CONSTANTS.compact[name]
             });
+
         } else {
+            
             clickObject = null;
             document.getElementById("content1").innerHTML = "empty space";
             document.getElementById("content2").innerHTML = "";
+        
         }
 
     }
