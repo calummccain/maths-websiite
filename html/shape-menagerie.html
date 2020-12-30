@@ -136,8 +136,8 @@
             window.addEventListener("mousemove", onMouseMove, false);
             window.addEventListener("resize", onWindowResize, false);
 
-            view.addEventListener('touchstart', touchStart, { passive: false });
-            view.addEventListener('touchend', touchEnd);
+            view.addEventListener('touchstart', touchStart, false);
+            view.addEventListener('touchend', touchEnd, false);
 
             // add the renderer to the 'view' div
             view.appendChild(renderer.domElement);
@@ -164,6 +164,8 @@
             }
 
             function onMouseClick(event) {
+
+                var rect = view.getBoundingClientRect();
 
                 mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
@@ -193,11 +195,15 @@
             }
 
             function touchStart(e) {
+
                 e.preventDefault();
+
             }
 
             function touchEnd(e) {
-            
+
+                var rect = view.getBoundingClientRect();
+
                 mouseVector.x = ((event.touches[0].clientX - rect.left) / WIDTH) * 2 - 1;
                 mouseVector.y = - ((event.touches[0].clientY - rect.top) / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
@@ -218,8 +224,10 @@
 
                 event.preventDefault();
 
+                var rect = view.getBoundingClientRect();
+
                 mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-                mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
+                mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
                 var intersects = raycaster.intersectObjects(meshes.children);
