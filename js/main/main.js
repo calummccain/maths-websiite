@@ -123,7 +123,7 @@ function main(name, geometry) {
 
     }
 
-    function touchEnd(event) {
+    function touchEnd(e) {
 
         var rect = view.getBoundingClientRect();
 
