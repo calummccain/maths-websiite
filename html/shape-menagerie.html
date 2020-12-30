@@ -204,8 +204,12 @@
 
                 var rect = view.getBoundingClientRect();
 
-                mouseVector.x = ((event.touches[0].clientX - rect.left) / WIDTH) * 2 - 1;
-                mouseVector.y = - ((event.touches[0].clientY - rect.top) / HEIGHT) * 2 + 1;
+                e.preventDefault();
+
+                var touches = e.changedTouches;
+
+                mouseVector.x = ((touches[0].clientX - rect.left) / WIDTH) * 2 - 1;
+                mouseVector.y = - ((touches[0].clientY - rect.top) / HEIGHT) * 2 + 1;
                 raycaster.setFromCamera(mouseVector, camera);
 
                 var intersects = raycaster.intersectObjects(meshes.children);
