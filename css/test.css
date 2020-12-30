@@ -158,19 +158,19 @@ a:visited {
 }
 
 .cubic:hover {
-    color: #F9A834;
+    color: #27686A;
 }
 
 .octahedral:hover {
-    color: #03919B;
+    color: #4949FF;
 }
 
 .dodecahedral:hover {
-    color: #007043;
+    color: #6A359C;
 }
 
 .icosahedral:hover {
-    color: #C86218;
+    color: #FA8607;
 }
 
 .hexagonal:hover {
