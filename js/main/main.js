@@ -1,7 +1,7 @@
-import * as MAIN from "/root/js/main/main-utilities.js";
-import * as THREE from "/root/js/three.module.js";
-import { OrbitControls } from "/root/js/orbit-controls.js";
-import * as CONSTANTS from "/root/js/main/main-constants.js";
+import * as MAIN from "./main-utilities.js";
+import * as THREE from "../three.module.js";
+import { OrbitControls } from "../orbit-controls.js";
+import * as CONSTANTS from "./main-constants.js";
 
 function main(name, geometry) {
 
