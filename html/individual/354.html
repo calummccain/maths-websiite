@@ -12,10 +12,11 @@
             </script>
         <script>
             $(function () {
-                $("#side-menu").load("./html/menu-bars.html");
+                $("#side-menu").load("../menu-bars.html");
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             });
         </script>
+
         <title>Icosahedron - {3, 5, 4}</title>
     </head>
 
@@ -26,8 +27,8 @@
         <div id="view"></div>
 
         <script type="module">
-            import { main } from "./js/main/main.js";
-            import { hyperbolicIcosahedronGeometry } from "./js/geometries/35n-geometry.js";
+            import { main } from "../../js/main/main.js";
+            import { hyperbolicIcosahedronGeometry } from "../../js/geometries/35n-geometry.js";
             main("{3,5,4}", hyperbolicIcosahedronGeometry);
         </script>
 
