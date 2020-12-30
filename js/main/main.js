@@ -68,6 +68,7 @@ function main(name, geometry) {
     window.addEventListener("click", onMouseClick, false);
     window.addEventListener("mousemove", onMouseMove, false);
     window.addEventListener("resize", onWindowResize, false);
+    window.addEventListener("touchend", touchEnd, false);
 
     // add the renderer to the 'view' div
     view.appendChild(renderer.domElement);
@@ -88,7 +89,50 @@ function main(name, geometry) {
     function onMouseClick(event) {
 
         mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-        mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
+        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
+        raycaster.setFromCamera(mouseVector, camera);
+
+        var intersects = raycaster.intersectObjects(meshes.children);
+        if (intersects.length != 0) {
+            var obj = intersects[0].object;
+            document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
+            var colour = new THREE.Color(
+                Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1),
+                Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1),
+                Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
+            );
+            document.getElementById("content2").innerHTML = colour.r;
+            MAIN.addCellToGroup({
+                geometryFunction: geometry,
+                group: meshes,
+                metric: CONSTANTS.metric[name],
+                refinement: CONSTANTS.individualDefinition,
+                order: CONSTANTS.order[name],
+                colour: "#" + colour.getHexString(),
+                numberOfFaces: CONSTANTS.numberOfFaces[name],
+                name: name,
+                faceMode: true,
+                transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
+                compact: CONSTANTS.compact[name]
+            });
+        } else {
+            clickObject = null;
+            document.getElementById("content1").innerHTML = "empty space";
+            document.getElementById("content2").innerHTML = "";
+        }
+
+    }
+
+    function touchEnd(event) {
+
+        var rect = view.getBoundingClientRect();
+
+        e.preventDefault();
+
+        var touches = e.changedTouches;
+
+        mouseVector.x = ((touches[0].clientX - rect.left) / WIDTH) * 2 - 1;
+        mouseVector.y = - ((touches[0].clientY - rect.top) / HEIGHT) * 2 + 1;
         raycaster.setFromCamera(mouseVector, camera);
 
         var intersects = raycaster.intersectObjects(meshes.children);
@@ -137,7 +181,7 @@ function main(name, geometry) {
         event.preventDefault();
 
         mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-        mouseVector.y = - (event.clientY / HEIGHT) * 2 + 1;
+        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
         raycaster.setFromCamera(mouseVector, camera);
 
         var intersects = raycaster.intersectObjects(meshes.children);
