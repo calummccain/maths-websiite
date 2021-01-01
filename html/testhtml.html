@@ -76,7 +76,7 @@
                 var xr = vert[0];
                 var yr = vert[1] * cos - vert[2] * sin;
                 var zr = vert[1] * sin + vert[2] * cos;
-                if (zr >= 0) {
+                if (zr >= -1) {
                     var xScale = xr * (camera - plane) / (camera - zr);
                     var yScale = yr * (camera - plane) / (camera - zr);
                     var x = scale * xScale + (canvas.width / 2);
