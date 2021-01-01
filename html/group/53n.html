@@ -17,7 +17,7 @@
             });
         </script>
 
-        <title>Icosahedron - {3, 5, 5}</title>
+        <title>Dodecahedron - {5, 3, n}</title>
     </head>
 
     <body>
@@ -27,9 +27,9 @@
         <div id="view"></div>
 
         <script type="module">
-            import { main } from "../../js/main/main-individual.js";
-            import { hyperbolicIcosahedronGeometry } from "../../js/geometries/35n-geometry.js";
-            main("{3,5,5}", hyperbolicIcosahedronGeometry);
+            import { main } from "../../js/main/main.js";
+            import { hyperbolicDodecahedronGeometry } from "../../js/geometries/53n-geometry.js";
+            main("{5,3,4}", hyperbolicDodecahedronGeometry);
         </script>
 
     </body>
