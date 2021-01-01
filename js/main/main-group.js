@@ -3,7 +3,7 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as CONSTANTS from "./main-constants.js";
 
-function main(name, geometry) {
+function main(cellName, geometry, range) {
 
     var view = document.getElementById("view");
 
@@ -28,20 +28,27 @@ function main(name, geometry) {
     scene.add(camera);
     scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
-    // add the main polyhedron to the scene
-    MAIN.addCellToGroup({
-        geometryFunction: geometry,
-        group: meshes,
-        metric: CONSTANTS.metric[name],
-        refinement: CONSTANTS.individualDefinition,
-        order: CONSTANTS.order[name],
-        colour: CONSTANTS.colour[name],
-        numberOfFaces: CONSTANTS.numberOfFaces[name],
-        name: name,
-        faceMode: true,
-        transform: "",
-        compact: CONSTANTS.compact[name]
-    });
+    // add the polyhedrons to the scene
+    range.forEach((polyhedron) => {
+        const name = cellName.subString(0, cellName.length - 2) + polyhedron.toString() + "}"
+        const angle = 2 * Math.PI * range.indexOf(polyhedron) / range.length;
+        const position = [CONSTANTS.groupRadius * Math.cos(angle), 0, CONSTANTS.groupRadius * Math.sin(angle)];
+        
+        MAIN.addCellToGroup({
+            geometryFunction: geometry,
+            group: meshes,
+            metric: CONSTANTS.metric[name],
+            refinement: CONSTANTS.individualDefinition,
+            order: CONSTANTS.order[name],
+            colour: CONSTANTS.colour[name],
+            numberOfFaces: CONSTANTS.numberOfFaces[name],
+            name: name,
+            faceMode: true,
+            transform: "",
+            compact: CONSTANTS.compact[name],
+            position: position
+        });
+    })
 
     // setup the renderer
     var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -136,9 +143,9 @@ function main(name, geometry) {
         raycaster.setFromCamera(mouseVector, camera);
 
         var intersects = raycaster.intersectObjects(meshes.children);
-        
+
         if (intersects.length != 0) {
-        
+
             var obj = intersects[0].object;
             document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
             var colour = new THREE.Color(
@@ -162,11 +169,11 @@ function main(name, geometry) {
             });
 
         } else {
-            
+
             clickObject = null;
             document.getElementById("content1").innerHTML = "empty space";
             document.getElementById("content2").innerHTML = "";
-        
+
         }
 
     }

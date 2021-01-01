@@ -184,6 +184,7 @@ const geometry = {
 
 const individualDefinition = 4;
 const mainDefinition = 3;
+const groupRadius = 7;
 
 const names = [
     "{4,3,4}",
@@ -218,5 +219,6 @@ export {
     names,
     metric,
     compact,
-    geometry
+    geometry,
+    groupRadius
 };
