@@ -30,7 +30,7 @@ function main(cellName, geometry, range) {
 
     // add the polyhedrons to the scene
     range.forEach((polyhedron) => {
-        const name = cellName.subString(0, cellName.length - 2) + polyhedron.toString() + "}"
+        const name = cellName.substring(0, cellName.length - 2) + polyhedron.toString() + "}"
         const angle = 2 * Math.PI * range.indexOf(polyhedron) / range.length;
         const position = [CONSTANTS.groupRadius * Math.cos(angle), 0, CONSTANTS.groupRadius * Math.sin(angle)];
         
@@ -43,7 +43,7 @@ function main(cellName, geometry, range) {
             colour: CONSTANTS.colour[name],
             numberOfFaces: CONSTANTS.numberOfFaces[name],
             name: name,
-            faceMode: true,
+            faceMode: false,
             transform: "",
             compact: CONSTANTS.compact[name],
             position: position
@@ -72,10 +72,7 @@ function main(cellName, geometry, range) {
     scene.add(ghosts);
 
     // add some event listeners
-    window.addEventListener("click", onMouseClick, false);
-    window.addEventListener("mousemove", onMouseMove, false);
     window.addEventListener("resize", onWindowResize, false);
-    window.addEventListener("touchend", touchEnd, false);
 
     // add the renderer to the 'view' div
     view.appendChild(renderer.domElement);
@@ -93,91 +90,6 @@ function main(cellName, geometry, range) {
 
     }
 
-    function onMouseClick(event) {
-
-        mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
-        raycaster.setFromCamera(mouseVector, camera);
-
-        var intersects = raycaster.intersectObjects(meshes.children);
-        if (intersects.length != 0) {
-            var obj = intersects[0].object;
-            document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
-            var colour = new THREE.Color(
-                Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1),
-                Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1),
-                Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
-            );
-            document.getElementById("content2").innerHTML = colour.r;
-            MAIN.addCellToGroup({
-                geometryFunction: geometry,
-                group: meshes,
-                metric: CONSTANTS.metric[name],
-                refinement: CONSTANTS.individualDefinition,
-                order: CONSTANTS.order[name],
-                colour: "#" + colour.getHexString(),
-                numberOfFaces: CONSTANTS.numberOfFaces[name],
-                name: name,
-                faceMode: true,
-                transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
-                compact: CONSTANTS.compact[name]
-            });
-        } else {
-            clickObject = null;
-            document.getElementById("content1").innerHTML = "empty space";
-            document.getElementById("content2").innerHTML = "";
-        }
-
-    }
-
-    function touchEnd(e) {
-
-        var rect = view.getBoundingClientRect();
-
-        e.preventDefault();
-
-        var touches = e.changedTouches;
-
-        mouseVector.x = ((touches[0].clientX - rect.left) / WIDTH) * 2 - 1;
-        mouseVector.y = - ((touches[0].clientY - rect.top) / HEIGHT) * 2 + 1;
-        raycaster.setFromCamera(mouseVector, camera);
-
-        var intersects = raycaster.intersectObjects(meshes.children);
-
-        if (intersects.length != 0) {
-
-            var obj = intersects[0].object;
-            document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
-            var colour = new THREE.Color(
-                Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1),
-                Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1),
-                Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
-            );
-            document.getElementById("content2").innerHTML = colour.r;
-            MAIN.addCellToGroup({
-                geometryFunction: geometry,
-                group: meshes,
-                metric: CONSTANTS.metric[name],
-                refinement: CONSTANTS.individualDefinition,
-                order: CONSTANTS.order[name],
-                colour: "#" + colour.getHexString(),
-                numberOfFaces: CONSTANTS.numberOfFaces[name],
-                name: name,
-                faceMode: true,
-                transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
-                compact: CONSTANTS.compact[name]
-            });
-
-        } else {
-
-            clickObject = null;
-            document.getElementById("content1").innerHTML = "empty space";
-            document.getElementById("content2").innerHTML = "";
-
-        }
-
-    }
-
     function onWindowResize(event) {
 
         WIDTH = view.clientWidth;
@@ -186,56 +98,6 @@ function main(cellName, geometry, range) {
         camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
 
-    }
-
-    function onMouseMove(event) {
-
-        event.preventDefault();
-
-        mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
-        raycaster.setFromCamera(mouseVector, camera);
-
-        var intersects = raycaster.intersectObjects(meshes.children);
-
-        if (intersects.length > 0) {
-            var selectedObject = intersects[0].object;
-            if (intersectionObject != selectedObject) {
-                ghosts.children = [];
-                intersectionObject = selectedObject;
-                meshes.children.forEach(mesh => {
-                    if (mesh === intersectionObject) {
-                        document.getElementById("content2").innerHTML = mesh.cellName;
-                        var colour = new THREE.Color(
-                            selectedObject.material.color.r,
-                            selectedObject.material.color.g,
-                            selectedObject.material.color.b
-                        );
-                        mesh.material.emissive.setRGB(colour.r, colour.g, colour.b);
-                        MAIN.addCellToGroup({
-                            geometryFunction: geometry,
-                            group: ghosts,
-                            metric: CONSTANTS.metric[name],
-                            refinement: CONSTANTS.individualDefinition,
-                            order: CONSTANTS.order[name],
-                            colour: "#" + colour.getHexString(),
-                            numberOfFaces: CONSTANTS.numberOfFaces[name],
-                            name: name,
-                            faceMode: true,
-                            transform: selectedObject.cellName + selectedObject.faceName + CONSTANTS.specialLetter[name],
-                            opacity: 0.5,
-                            compact: CONSTANTS.compact[name]
-                        });
-                    } else {
-                        mesh.material.emissive.setRGB(0, 0, 0);
-                    }
-                });
-            }
-        } else {
-            meshes.children.forEach(mesh => { mesh.material.emissive.setRGB(0, 0, 0); });
-            intersectionObjectName = null;
-            ghosts.children = [];
-        }
     }
 
 }

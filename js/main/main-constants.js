@@ -184,7 +184,7 @@ const geometry = {
 
 const individualDefinition = 4;
 const mainDefinition = 3;
-const groupRadius = 7;
+const groupRadius = 3;
 
 const names = [
     "{4,3,4}",
