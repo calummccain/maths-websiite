@@ -29,7 +29,7 @@ function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSide
         var initial = 0;
         var faceGeometry = new THREE.Geometry();
         var faceVertices = Array(numberOfSides).fill().map(() => initial++);
-        faceVertices = faceVertices.map(x => kleinVertices[faces[i][x]]);
+        faceVertices = faceVertices.map((x) => kleinVertices[faces[i][x]]);
 
         // kleinFace subdivides the face automatically and returns the vertices and the face indices
         [subdividedFaces, subdividedVertices] = FACE.kleinFace(

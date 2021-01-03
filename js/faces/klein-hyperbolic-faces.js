@@ -116,7 +116,7 @@ function kleinFace(vertices, refinement, compact) {
                 coords.push(p1);
                 coords.push(p2);
                 newFaces.push([faceGoodVertices[0], faceGoodVertices[1], numberOfCoords]);
-                newFaces.push([faceGoodVertices[1], numberOfCoords, numberOfCoords + 1]);
+                newFaces.push([faceGoodVertices[1], numberOfCoords + 1, numberOfCoords]);
                 numberOfCoords += 2;
 
             } else if (faceBadNumber == 2) {

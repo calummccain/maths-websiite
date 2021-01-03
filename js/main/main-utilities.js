@@ -141,13 +141,14 @@ function addCellToGroup(params) {
                     }));
 
             } else {
-
+                cellGeometry.computeFaceNormals();
                 var cellMesh = new THREE.Mesh(
                     cellGeometry,
-                    new THREE.MeshStandardMaterial({
+                    new THREE.MeshLambertMaterial({
                         color: new THREE.Color(colour),
-                        roughness: 0.5,
-                        metalness: 0,
+                        //roughness: 0,
+                        //metalness: 0,
+                        // wireframe: true,
                         flatShading: true,
                         opacity: opacityValue,
                         transparent: true,
