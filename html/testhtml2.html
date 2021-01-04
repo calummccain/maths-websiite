@@ -13,23 +13,65 @@
     const plane = 2;
     const scale = 700;
     var poinVert = [];
-    var dataPoints = [];
+    var hypPoints = [];
     var lines = [];
     var t = 0;
+    var norms = [];
+    var lines = {};
 
-    DATA.vertices.forEach((vert) => {
-        const poin = DATA.f(3, vert);
-        dataPoints.push(poin);
-    })
+    getHypPoints();
+    makeLineDict();
+    startAndEnd();
+    findPerp();
+    makeEdges(3);
 
-    window.requestAnimationFrame(draw);
+    console.log(lines);
+
+    function getHypPoints() {
+        DATA.vertices.forEach((vert) => {
+            const poin = DATA.f(3, vert);
+            hypPoints.push(poin);
+        })
+    }
+
+    function makeLineDict() {
+        for (var i = 0; i < DATA.lines.length; i++) {
+            lines[i.toString()] = { "vertices": DATA.lines[i] }
+        }
+    }
+
+    function startAndEnd() {
+        for (var line in lines) {
+            lines[line]["poinEndPoints"] = [
+                HF.hyperboloidToPoincare(hypPoints[lines[line]["vertices"][0]]),
+                HF.hyperboloidToPoincare(hypPoints[lines[line]["vertices"][1]])
+            ];
+            lines[line]["hypEndPoints"] = [
+                hypPoints[lines[line]["vertices"][0]],
+                hypPoints[lines[line]["vertices"][1]]
+            ]
+        }
+    }
+
+    function findPerp() {
+
+        for (var line in lines) {
+            var [a, b] = lines[line]["poinEndPoints"];
+            var norm = [
+                a[1] * b[2] - a[2] * b[1],
+                a[2] * b[0] - a[0] * b[2],
+                a[0] * b[1] - a[1] * b[0]
+            ];
+            lines[line]["normal"] = norm;
+        }
+
+    }
 
     function makeEdges(iMax) {
 
-        DATA.lines.forEach((edge) => {
-
+        for (var line in lines) {
             var i = 0;
-            var hypVerts = [dataPoints[edge[0]], dataPoints[edge[1]]];
+            var hypVerts = [lines[line]["hypEndPoints"][0], lines[line]["hypEndPoints"][1]];
 
             while (i < iMax) {
                 var newHypVerts = [];
@@ -37,21 +79,20 @@
                     newHypVerts.push(hypVerts[j]);
                     var sum = VF.vectorSum(hypVerts[j], hypVerts[j + 1]);
                     newHypVerts.push(VF.vectorScale(sum, 1 / Math.sqrt(HF.hyperbolicNorm(sum))));
-                    newHypVerts.push(hypVerts[j + 1]);
                 }
+                newHypVerts.push(hypVerts[hypVerts.length - 1]);
                 hypVerts = newHypVerts;
-                i++
+                i++;
             }
             var poinVerts = [];
             hypVerts.forEach((vert) => { poinVerts.push(HF.hyperboloidToPoincare(vert)) })
-            lines.push(poinVerts);
-        })
+            lines[line]["poinGeodesic"] = poinVerts;
+        }
     }
 
-    makeEdges(6);
-    console.log(lines)
+    window.requestAnimationFrame(draw);
 
-    function line(edge, can) {
+    function drawLine(edge, can) {
         if (edge.length > 0) {
             can.beginPath();
             can.moveTo(edge[0][0], edge[0][1]);
@@ -70,13 +111,14 @@
         var sin = Math.sin(2 * Math.PI * t / 800);
         var cos = Math.cos(2 * Math.PI * t / 800);
 
-        lines.forEach((edge) => {
+        for (var line in lines) {
+            var edge = lines[line]["poinGeodesic"];
             var rotateAndProject = [];
             edge.forEach((vert) => {
                 var xr = vert[0];
                 var yr = vert[1] * cos - vert[2] * sin;
                 var zr = vert[1] * sin + vert[2] * cos;
-                if (zr >= 0) {
+                if (zr >= -1) {
                     var xScale = xr * (camera - plane) / (camera - zr);
                     var yScale = yr * (camera - plane) / (camera - zr);
                     var x = scale * xScale + (canvas.width / 2);
@@ -84,8 +126,8 @@
                     rotateAndProject.push([x, y]);
                 }
             })
-            line(rotateAndProject, context);
-        })
+            drawLine(rotateAndProject, context);
+        }
         t += 1
         poinVert = [];
         window.requestAnimationFrame(draw);

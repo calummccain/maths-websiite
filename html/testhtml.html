@@ -16,11 +16,34 @@
     var dataPoints = [];
     var lines = [];
     var t = 0;
+    var norms = [];
+
 
     DATA.vertices.forEach((vert) => {
         const poin = DATA.f(3, vert);
         dataPoints.push(poin);
     })
+
+    console.log("dataPoints", dataPoints)
+
+    function findPerp() {
+
+        DATA.lines.forEach((edge) => {
+            var a = HF.hyperboloidToPoincare(dataPoints[edge[0]]);
+            var b = HF.hyperboloidToPoincare(dataPoints[edge[1]]);
+            var norm = [
+                a[1] * b[2] - a[2] * b[1], 
+                a[2] * b[0] - a[0] * b[2], 
+                a[0] * b[1] - a[1] * b[0]
+            ];
+            norms.push(norm);
+
+        })
+
+    }
+
+    findPerp();
+    console.log("norms", norms);
 
     window.requestAnimationFrame(draw);
 
@@ -48,7 +71,7 @@
         })
     }
 
-    makeEdges(6);
+    makeEdges(3);
     console.log(lines)
 
     function line(edge, can) {
@@ -88,7 +111,7 @@
         })
         t += 1
         poinVert = [];
-        window.requestAnimationFrame(draw);
+        //window.requestAnimationFrame(draw);
     }
 
 </script>
