@@ -1,4 +1,4 @@
-<canvas width="800" height="400"></canvas>
+<canvas width="1440" height="720"></canvas>
 
 <script type="module">
 
@@ -11,7 +11,7 @@
 
     const camera = 2500;
     const plane = 600;
-    const scale = 500;
+    const scale = 200;
     var vertices = [];
     var hypPoints = [];
     var visible = [];
@@ -19,17 +19,31 @@
     var rotateAndProject = [];
     var center = [];
 
-    getHypPoints();
-    getCenter();
-    console.log(center)
-    makeEdges(4);
-    visibility();
+    // getHypPoints("dcad");
+    // getCenter();
+    // console.log(center)
+    // makeEdges(4);
+    // visibility();
 
+    for (var word in DATA.faceReflections) {
 
-    function getHypPoints() {
+        console.log(DATA.faceReflections[word] + "d")
 
-        DATA.vertices.forEach((vert) => {
-            const poin = DATA.f(3, DATA.d(3, vert));
+        draw(DATA.faceReflections[word] + "d", [135 * (word % 6) + 90, 135 * (word - word % 6) / 6 + 90]);
+
+    }
+
+    function getHypPoints(transform) {
+
+        function matrixDict(letter, vector) {
+            return DATA.matrixDict(3, letter, vector);
+        }
+
+        const data = HF.transformVertices(DATA.vertices, transform, matrixDict);
+
+        data.forEach((vert) => {
+
+            const poin = DATA.f(3, vert);
             hypPoints.push(poin);
         })
 
@@ -75,7 +89,7 @@
             }
 
             var poinVerts = [];
-            hypVerts.forEach((vert) => { poinVerts.push(VF.vectorScale(HF.hyperboloidToPoincare(vert), scale)) });
+            hypVerts.forEach((vert) => { poinVerts.push(VF.vectorScale(VF.vectorDiff(HF.hyperboloidToPoincare(vert), center), scale)) });
             vertices = vertices.concat(poinVerts);
 
         }
@@ -157,38 +171,40 @@
 
     }
 
-
-    window.requestAnimationFrame(draw);
-
-
-    function drawLine() {
+    function drawLine(hidden) {
 
         const numero = vertices.length / 30;
+
+        if (hidden) {
+
+            for (var i = 0; i < 30; i++) {
+
+                for (var j = 0; j < numero - 1; j++) {
+
+                    if (!(visible[i * numero + j] && visible[i * numero + j + 1])) {
+                        context.strokeStyle = '#AAAAAA';
+                        context.beginPath();
+                        context.moveTo(rotateAndProject[i * numero + j][0], rotateAndProject[i * numero + j][1]);
+                        context.lineWidth = 1;
+                        context.lineTo(rotateAndProject[i * numero + j + 1][0], rotateAndProject[i * numero + j + 1][1]);
+                        context.stroke();
+                    }
+
+                }
+
+            }
+
+        }
 
         for (var i = 0; i < 30; i++) {
 
             for (var j = 0; j < numero - 1; j++) {
 
-                if (!(visible[i * numero + j] && visible[i * numero + j + 1])) {
-                    context.setLineDash([5, 15]);
-                    context.strokeStyle = '#00000000';
-                    context.beginPath();
-                    context.moveTo(rotateAndProject[i * numero + j][0], rotateAndProject[i * numero + j][1]);
-                    context.lineWidth = 2;
-                    context.lineTo(rotateAndProject[i * numero + j + 1][0], rotateAndProject[i * numero + j + 1][1]);
-                    context.stroke();
-                }
-
-            }
-
-            for (var j = 0; j < numero - 1; j++) {
-
                 if (visible[i * numero + j] && visible[i * numero + j + 1]) {
-                    context.setLineDash([]);
                     context.strokeStyle = '#000000';
                     context.beginPath();
                     context.moveTo(rotateAndProject[i * numero + j][0], rotateAndProject[i * numero + j][1]);
-                    context.lineWidth = 2;
+                    context.lineWidth = 1;
                     context.lineTo(rotateAndProject[i * numero + j + 1][0], rotateAndProject[i * numero + j + 1][1]);
                     context.stroke();
                 }
@@ -200,10 +216,22 @@
     }
 
 
-    function draw() {
+    function draw(transform, translate) {
+
+        vertices = [];
+        hypPoints = [];
+        visible = [];
+        t = 0;
+        rotateAndProject = [];
+        center = [];
+
+        getHypPoints(transform);
+        getCenter();
+        makeEdges(4);
+        visibility();
 
         rotateAndProject = [];
-        context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
+        //context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
 
         var sin = Math.sin(2 * Math.PI * t / 800);
         var cos = Math.cos(2 * Math.PI * t / 800);
@@ -221,18 +249,16 @@
                 var zr = vert[1] * sin + vert[2] * cos;
                 var xScale = xr * (camera - plane) / (camera - zr);
                 var yScale = yr * (camera - plane) / (camera - zr);
-                var x = xScale + (canvas.width / 2);
-                var y = yScale + (canvas.height / 2);
+                var x = xScale + translate[0];
+                var y = yScale + translate[1];
                 rotateAndProject.push([x, y]);
 
             }
 
         }
 
-        drawLine();
+        drawLine(false);
 
-        //t += 1
-        window.requestAnimationFrame(draw);
     }
 
 </script>
