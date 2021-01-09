@@ -22,8 +22,7 @@
     getHypPoints();
     makeLineDict();
     startAndEnd();
-    findPerp();
-    makeEdges(3);
+    makeEdges(1);
 
     console.log(lines);
 
@@ -53,20 +52,6 @@
         }
     }
 
-    function findPerp() {
-
-        for (var line in lines) {
-            var [a, b] = lines[line]["poinEndPoints"];
-            var norm = [
-                a[1] * b[2] - a[2] * b[1],
-                a[2] * b[0] - a[0] * b[2],
-                a[0] * b[1] - a[1] * b[0]
-            ];
-            lines[line]["normal"] = norm;
-        }
-
-    }
-
     function makeEdges(iMax) {
 
         for (var line in lines) {
@@ -90,19 +75,106 @@
         }
     }
 
+    function rayTriangleIntersect(origin, direction, v1, v2) {
+
+        const dir = VF.vectorScale(direction, 1 / VF.norm(direction));
+        const eps = 1e-2;
+        const h = VF.vectorCross(dir, v2);
+        const a = VF.vectorDot(v1, h);
+
+        if (Math.abs(a) < eps) {
+
+            return false;
+        
+        }
+
+        const f = 1 / a;
+        const u = f * VF.vectorDot(origin, h);
+        
+        if (u < eps || u > 1 - eps) {
+            
+            return false;
+        
+        }
+
+        const q = VF.vectorCross(origin, v1);
+        const v = f * VF.vectorDot(dir, q);
+
+        if ((v < eps) || (u + v > 1 - eps)) {
+
+            return false;
+
+        }
+
+        const t = f * VF.vectorDot(v2, q);
+
+        if (t > eps) {
+
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+
+    function isPointVisible(cameraPos, targetPos, face) {
+
+        const dir = VF.vectorDiff(targetPos, cameraPos);
+        var vis = true;
+
+        for (var line in lines) {
+
+                var geodesic = lines[line]["poinGeodesic"];
+
+                for (var i = 0; i < geodesic.length - 1; i++) {
+            
+                    vis *= !(rayTriangleIntersect(cameraPos, dir, geodesic[i], geodesic[i + 1]));
+            
+                }
+        
+        }
+        
+        return vis;
+    
+    }
+
+
+    for (var line in lines) {
+        var visibleVector = [];
+        for (var i = 0; i < lines[line]["poinGeodesic"].length; i++) {
+            visibleVector.push(isPointVisible([0, 0, camera], lines[line]["poinGeodesic"][i], line));
+        }
+        lines[line]["visible"] = visibleVector;
+    }
+
+
     window.requestAnimationFrame(draw);
 
-    function drawLine(edge, can) {
+    
+    function drawLine(edge, can, visible) {
         if (edge.length > 0) {
-            can.beginPath();
-            can.moveTo(edge[0][0], edge[0][1]);
-            can.lineWidth = 3;
-            for (var i = 1; i < edge.length; i++) {
-                can.lineTo(edge[i][0], edge[i][1]);
+            for (var i = 0; i < edge.length - 1; i++) {
+                if (visible[i] && visible[i + 1]) {
+                    can.strokeStyle = '#000000';
+                    can.beginPath();
+                    can.moveTo(edge[i][0], edge[i][1]);
+                    can.lineWidth = 3;
+                    can.lineTo(edge[i + 1][0], edge[i + 1][1]);
+                    can.stroke();
+                } else {
+                    // can.strokeStyle = '#ff0000';
+                    // can.beginPath();
+                    // can.moveTo(edge[i][0], edge[i][1]);
+                    // can.lineWidth = 3;
+                    // can.lineTo(edge[i + 1][0], edge[i + 1][1]);
+                    // can.stroke();
+                }
             }
-            can.stroke();
         }
     }
+
 
     function draw() {
 
@@ -126,7 +198,7 @@
                     rotateAndProject.push([x, y]);
                 }
             })
-            drawLine(rotateAndProject, context);
+            drawLine(rotateAndProject, context, lines[line]["visible"]);
         }
         t += 1
         poinVert = [];

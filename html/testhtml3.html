@@ -1,0 +1,238 @@
+<canvas width="800" height="400"></canvas>
+
+<script type="module">
+
+    import * as DATA from "../js/data/hyperbolic/35n.js";
+    import * as HF from "../js/maths-functions/hyperbolic-functions.js";
+    import * as VF from "../js/maths-functions/vector-functions.js";
+
+    let canvas = document.querySelector("canvas");
+    let context = canvas.getContext("2d");
+
+    const camera = 2500;
+    const plane = 600;
+    const scale = 500;
+    var vertices = [];
+    var hypPoints = [];
+    var visible = [];
+    var t = 0;
+    var rotateAndProject = [];
+    var center = [];
+
+    getHypPoints();
+    getCenter();
+    console.log(center)
+    makeEdges(4);
+    visibility();
+
+
+    function getHypPoints() {
+
+        DATA.vertices.forEach((vert) => {
+            const poin = DATA.f(3, DATA.d(3, vert));
+            hypPoints.push(poin);
+        })
+
+    }
+
+    function getCenter() {
+
+        var hypCenter = [0, 0, 0, 0]
+
+        hypPoints.forEach((vert) => {
+            hypCenter = VF.vectorSum(hypCenter, vert);
+        })
+
+        hypCenter = VF.vectorScale(hypCenter, 1 / Math.sqrt(HF.hyperbolicNorm(hypCenter)));
+        center = HF.hyperboloidToPoincare(hypCenter);
+
+    }
+
+
+    function makeEdges(iMax) {
+
+        for (var line in DATA.lines) {
+
+            var i = 0;
+            var hypVerts = [hypPoints[DATA.lines[line][0]], hypPoints[DATA.lines[line][1]]];
+
+            while (i < iMax) {
+
+                var newHypVerts = [];
+
+                for (var j = 0; j < hypVerts.length - 1; j++) {
+
+                    newHypVerts.push(hypVerts[j]);
+                    var sum = VF.vectorSum(hypVerts[j], hypVerts[j + 1]);
+                    newHypVerts.push(VF.vectorScale(sum, 1 / Math.sqrt(HF.hyperbolicNorm(sum))));
+
+                }
+
+                newHypVerts.push(hypVerts[hypVerts.length - 1]);
+                hypVerts = newHypVerts;
+                i++;
+
+            }
+
+            var poinVerts = [];
+            hypVerts.forEach((vert) => { poinVerts.push(VF.vectorScale(HF.hyperboloidToPoincare(vert), scale)) });
+            vertices = vertices.concat(poinVerts);
+
+        }
+
+    }
+
+    function rayTriangleIntersect(origin, direction, v1, v2) {
+
+        var dir = VF.vectorScale(direction, 1 / VF.norm(direction));
+        var eps = 1e-2;
+        var h = VF.vectorCross(dir, v2);
+        var a = VF.vectorDot(v1, h);
+
+        if (Math.abs(a) < eps) {
+
+            return false;
+
+        }
+
+        var f = 1 / a;
+        var u = f * VF.vectorDot(origin, h);
+
+        if (u < 0 || u > 1) {
+
+            return false;
+
+        }
+
+        var q = VF.vectorCross(origin, v1);
+        var v = f * VF.vectorDot(dir, q);
+
+        if (v < 0 || u + v > 1) {
+
+            return false;
+
+        }
+
+        var t = f * VF.vectorDot(v2, q) / VF.norm(direction);
+
+        if (t < 1) {
+
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+
+    function isPointVisible(cameraPos, targetPos) {
+
+        const factor = 1.01;
+        const aim = VF.vectorScale(targetPos, factor);
+        const dir = VF.vectorDiff(aim, cameraPos);
+        var vis = true;
+
+        const numero = vertices.length / 30;
+
+        for (var i = 0; i < 30; i++) {
+
+            for (var j = 0; j < numero - 1; j++) {
+
+                vis *= !(rayTriangleIntersect(cameraPos, dir, vertices[i * numero + j], vertices[i * numero + j + 1]));
+
+            }
+
+        }
+
+        return vis;
+
+    }
+
+    function visibility() {
+
+        for (var i = 0; i < vertices.length; i++) {
+            visible.push(isPointVisible([0, 0, camera], vertices[i]));
+        }
+
+    }
+
+
+    window.requestAnimationFrame(draw);
+
+
+    function drawLine() {
+
+        const numero = vertices.length / 30;
+
+        for (var i = 0; i < 30; i++) {
+
+            for (var j = 0; j < numero - 1; j++) {
+
+                if (!(visible[i * numero + j] && visible[i * numero + j + 1])) {
+                    context.setLineDash([5, 15]);
+                    context.strokeStyle = '#00000000';
+                    context.beginPath();
+                    context.moveTo(rotateAndProject[i * numero + j][0], rotateAndProject[i * numero + j][1]);
+                    context.lineWidth = 2;
+                    context.lineTo(rotateAndProject[i * numero + j + 1][0], rotateAndProject[i * numero + j + 1][1]);
+                    context.stroke();
+                }
+
+            }
+
+            for (var j = 0; j < numero - 1; j++) {
+
+                if (visible[i * numero + j] && visible[i * numero + j + 1]) {
+                    context.setLineDash([]);
+                    context.strokeStyle = '#000000';
+                    context.beginPath();
+                    context.moveTo(rotateAndProject[i * numero + j][0], rotateAndProject[i * numero + j][1]);
+                    context.lineWidth = 2;
+                    context.lineTo(rotateAndProject[i * numero + j + 1][0], rotateAndProject[i * numero + j + 1][1]);
+                    context.stroke();
+                }
+
+            }
+
+        }
+
+    }
+
+
+    function draw() {
+
+        rotateAndProject = [];
+        context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
+
+        var sin = Math.sin(2 * Math.PI * t / 800);
+        var cos = Math.cos(2 * Math.PI * t / 800);
+
+        const numero = vertices.length / 30;
+
+        for (var i = 0; i < 30; i++) {
+
+            for (var j = 0; j < numero; j++) {
+
+                var vert = vertices[i * numero + j]
+
+                var xr = vert[0];
+                var yr = vert[1] * cos - vert[2] * sin;
+                var zr = vert[1] * sin + vert[2] * cos;
+                var xScale = xr * (camera - plane) / (camera - zr);
+                var yScale = yr * (camera - plane) / (camera - zr);
+                var x = xScale + (canvas.width / 2);
+                var y = yScale + (canvas.height / 2);
+                rotateAndProject.push([x, y]);
+
+            }
+
+        }
+
+        drawLine();
+
+        //t += 1
+        window.requestAnimationFrame(draw);
+    }
+
+</script>

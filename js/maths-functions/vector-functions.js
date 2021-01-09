@@ -42,6 +42,18 @@ function vectorScale(x, s) {
 
 }
 
+function vectorCross(a, b) {
+
+    var norm = [
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0]
+    ];
+
+    return norm;
+
+}
+
 function vectorDot(a, b) {
 
     var dot = 0;
@@ -152,9 +164,12 @@ export {
     vectorScale,
     vectorSum,
     vectorDiff,
+    vectorCross,
+    vectorDot,
     midpoint,
     norm,
     lineSphereIntersection,
     circumradius,
-    circumcenter
+    circumcenter,
+    determinant
 }
