@@ -11,13 +11,15 @@
 
     const camera = 2500;
     const plane = 600;
-    const scale = 200;
+    const scale = 30;
     var vertices = [];
     var hypPoints = [];
     var visible = [];
     var t = 0;
+    var radius = 0;
     var rotateAndProject = [];
     var center = [];
+    var centers = [[1, 0, 0, 0]];
 
     // getHypPoints("dcad");
     // getCenter();
@@ -25,19 +27,80 @@
     // makeEdges(4);
     // visibility();
 
-    for (var word in DATA.faceReflections) {
+    const t1 = firstLayer();
+    const t2 = secondLayer();
 
-        console.log(DATA.faceReflections[word] + "d")
+    draw("", [20, 20]);
 
-        draw(DATA.faceReflections[word] + "d", [135 * (word % 6) + 90, 135 * (word - word % 6) / 6 + 90]);
+    function matrixDict(letter, vector) {
+        return DATA.matrixDict(3, letter, vector);
+    }
+
+    function secondLayer() {
+        var trans = [];
+        const eps = 1e-3;
+
+        for (var i = 0; i < 20; i++) {
+            for (var j = 0; j < 20; j++) {
+                var testCenter = HF.transformVertices([[1, 0, 0, 0]], DATA.faceReflections[i] + "d" + DATA.faceReflections[j] + "d", matrixDict)[0];
+                var good = true;
+                for (var k = 0; k < centers.length; k++) {
+                    good = good && (!(
+                        (Math.abs(centers[k][0] - testCenter[0]) < eps) &&
+                        (Math.abs(centers[k][1] - testCenter[1]) < eps) &&
+                        (Math.abs(centers[k][2] - testCenter[2]) < eps) &&
+                        (Math.abs(centers[k][3] - testCenter[3]) < eps)
+                    ))
+                }
+                if (good) {
+                    trans.push(DATA.faceReflections[i] + "d" + DATA.faceReflections[j] + "d");
+                    centers.push(testCenter);
+                }
+            }
+        }
+        return trans;
+    }
+
+    function firstLayer() {
+        var trans = [];
+        const eps = 1e-3;
+
+        for (var i = 0; i < 20; i++) {
+            var testCenter = HF.transformVertices([[1, 0, 0, 0]], DATA.faceReflections[i] + "d", matrixDict)[0];
+            var done = false;
+            while (!done) {
+                for (var k = 0; k < centers.length; k++) {
+                    if (
+                        (Math.abs(centers[k][0] - testCenter[0]) < eps) &&
+                        (Math.abs(centers[k][1] - testCenter[1]) < eps) &&
+                        (Math.abs(centers[k][2] - testCenter[2]) < eps) &&
+                        (Math.abs(centers[k][3] - testCenter[3]) < eps)
+                    ) {
+                        done = true;
+                    }
+                }
+                trans.push(DATA.faceReflections[i] + "d");
+                centers.push(testCenter);
+                done = true;
+            }
+        }
+        return trans;
+    }
+
+    // console.log(firstLayer());
+    // console.log(centers);
+    // console.log(secondLayer());
+    console.log(t2)
+
+    for (var word = 1; word <= t2.length; word++) {
+
+        console.log(word, t2[word - 1])
+
+        draw(t2[word - 1], [60 * (word % 20) + 20, 60 * (word - word % 20) / 20 + 20]);
 
     }
 
     function getHypPoints(transform) {
-
-        function matrixDict(letter, vector) {
-            return DATA.matrixDict(3, letter, vector);
-        }
 
         const data = HF.transformVertices(DATA.vertices, transform, matrixDict);
 
@@ -51,7 +114,7 @@
 
     function getCenter() {
 
-        var hypCenter = [0, 0, 0, 0]
+        var hypCenter = [0, 0, 0, 0];
 
         hypPoints.forEach((vert) => {
             hypCenter = VF.vectorSum(hypCenter, vert);
@@ -59,6 +122,12 @@
 
         hypCenter = VF.vectorScale(hypCenter, 1 / Math.sqrt(HF.hyperbolicNorm(hypCenter)));
         center = HF.hyperboloidToPoincare(hypCenter);
+
+        for (var j = 0; j < hypPoints.length - 1; j++) {
+
+            radius = Math.max(radius, VF.norm(VF.vectorDiff(HF.hyperboloidToPoincare(hypPoints[j]), center)));
+
+        }
 
     }
 
@@ -89,7 +158,7 @@
             }
 
             var poinVerts = [];
-            hypVerts.forEach((vert) => { poinVerts.push(VF.vectorScale(VF.vectorDiff(HF.hyperboloidToPoincare(vert), center), scale)) });
+            hypVerts.forEach((vert) => { poinVerts.push(VF.vectorScale(VF.vectorDiff(HF.hyperboloidToPoincare(vert), center), scale / radius)) });
             vertices = vertices.concat(poinVerts);
 
         }
@@ -224,6 +293,7 @@
         t = 0;
         rotateAndProject = [];
         center = [];
+        radius = 0;
 
         getHypPoints(transform);
         getCenter();
