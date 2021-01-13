@@ -1,4 +1,4 @@
-// Order n hexagonal
+// Order n square
 
 const vertices = [];
 
@@ -6,7 +6,7 @@ const faces = [];
 
 // cfe
 function a(v) {
-    return [v[0], v[1], (v[2] + 3 * v[3]) / 2, (v[2] - v[3]) / 2];
+    return [v[0], v[1], v[3], v[2]];
 }
 
 //cfv
@@ -24,10 +24,10 @@ function d(n, v) {
 
     const c = Math.cos(Math.PI / n) ** 2;
     return [
-        (1 + 2 * c) * v[0] - 2 * c * v[1] - c * v[2] - c * v[3],
-        2 * c * v[0] + (1 - 2 * c) * v[1] - c * v[2] - c * v[3],
-        3 * v[0] - 3 * v[1] - v[2] / 2 - 3 * v[3] / 2,
-        v[0] - v[1] - v[2] / 2 + v[3] / 2
+        (1 + 2 * c) * v[0] - 2 * (c ** 4) * v[1] - 2 * c * v[2] - 2 * c * v[3],
+        2 * v[0] + (1 - 2 * c) * v[1] - 2 * v[2] - 2 * v[3],
+        v[0] - c * v[1] - v[3],
+        v[0] - c * v[1] - v[2]
     ];
 }
 
@@ -38,13 +38,13 @@ function e(v) {
 function f(n, v) {
 
     const c = Math.cos(Math.PI / n) ** 2;
-    const den = Math.sqrt(3 - 4 * c);
+    const den = Math.sqrt(1 - 2 * c);
 
     return [
-        Math.sqrt(3) * v[0] / den,
-        Math.sqrt(3) * v[1] / den,
-        Math.sqrt(c) * v[2] / den,
-        Math.sqrt(3 * c) * v[3] / den
+        v[0] / den,
+        c * v[1] / den,
+        Math.sqrt(2 * c) * v[2] / den,
+        Math.sqrt(2 * c) * v[3] / den
     ];
 
 }
@@ -79,4 +79,19 @@ const faceReflections = [];
 
 const center = [1, 1, 0, 0];
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
+//export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
+
+const numOfPoints = 15;
+for (var i = -numOfPoints; i <= numOfPoints; i++) {
+
+    for (var j = -numOfPoints; j <= numOfPoints; j++) {
+
+        if (i % 2 != j % 2) {
+
+            console.log([i ** 2 + j ** 2 - 1, i, j])
+
+        }
+
+    }
+
+}
