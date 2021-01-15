@@ -11,7 +11,10 @@ function hyperbolicHexagonalGeometry(transform, order, refinement, compact) {
         return ORDERN.matrixDict(order, letter, vector);
     }
 
-    var hexagonal = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
+    const newVertices = [];
+    vertices.forEach((v) => { newVertices.push(ORDERN.conversion(order, v)) });
+
+    var hexagonal = GEOM.hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
     return [hexagonal, ORDERN.faceReflections];
 

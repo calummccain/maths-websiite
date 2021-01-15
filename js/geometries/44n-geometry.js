@@ -12,7 +12,7 @@ function hyperbolicSquareGeometry(transform, order, refinement, compact) {
     }
 
     const newVertices = [];
-    vertices.forEach((v) => {newVertices.push(ORDERN.conversion(order, v))});
+    vertices.forEach((v) => { newVertices.push(ORDERN.conversion(order, v)) });
 
     var square = GEOM.hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
