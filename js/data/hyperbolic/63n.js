@@ -318,7 +318,7 @@ const faceReflections = [
 
 function conversion(n, v) {
     var c = Math.cos(Math.PI / n) ** 2;
-    return [1 + c * v[1] / 6, v[1] / 6, v[2], v[3]];
+    return [1 + c * (v[1] - 8) / 6, (v[1] - 8) / 6, v[2], v[3]];
 }
 
 const center = [1, 1, 0, 0];
