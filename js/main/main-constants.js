@@ -227,7 +227,7 @@ const geometry = {
 };
 
 
-const individualDefinition = 4;
+const individualDefinition = 3;
 const mainDefinition = 3;
 const groupRadius = 3;
 
