@@ -62,7 +62,7 @@
 
             // add camera and light to scene
             var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
-            camera.position.set(2.5 * s, s, -4 * s);
+            camera.position.set(3 * s, s, -4 * s);
             camera.up = new THREE.Vector3(0, -1, 0);
             camera.updateProjectionMatrix();
             camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
@@ -111,7 +111,7 @@
             controls.enableZoom = true;
             controls.enableRotate = false;
             controls.screenSpacePanning = true;
-            controls.target = new THREE.Vector3(2.5 * s, s, 0);
+            controls.target = new THREE.Vector3(3 * s, s, 0);
             controls.enabled = true;
             controls.minZoom = s;
             controls.maxZoom = 5 * s;
