@@ -146,7 +146,7 @@ function f(n, v) {
             Math.sqrt(2 * c) * v[3]
         ];
     } else {
-        const den = Math.sqrt(1 - 2 * c);
+        const den = Math.sqrt(Math.abs(1 - 2 * c));
         return [
             v[0] / den,
             c * v[1] / den,
@@ -155,6 +155,11 @@ function f(n, v) {
         ];
     }
 
+}
+
+function conversion(n, v) {
+    var c = Math.cos(Math.PI / n) ** 2;
+    return [1 + c * v[1], v[1], v[2], v[3]];
 }
 
 function matrixDict(order, letter, vector) {
@@ -195,8 +200,7 @@ function face(n) {
     } else {
 
         var c = Math.cos(Math.PI / n) ** 2;
-        return [Math.sqrt(1 - 2 * c), 0, 0, 0];
-
+        return [Math.sqrt(Math.abs(1 - 2 * c)), 0, 0, 0];
 
     }
 
@@ -292,7 +296,7 @@ const faceReflections = [
 
 const center = [1, 1, 0, 0];
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center, face };
+export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center, face, conversion };
 
 // const numOfPoints = 7;
 
