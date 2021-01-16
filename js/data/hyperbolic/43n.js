@@ -63,47 +63,36 @@ function d(n, v) {
 
 }
 
+
 function e(v) {
 
     return [v[0], v[1], v[2], v[3]];
 
 }
 
+
 function f(n, v) {
 
-    var newVector = [];
+    if (n == 5) {
 
-    switch (n) {
+        return [(p ** 2) / Math.sqrt(2) * v[0], Math.sqrt(p / 2) * v[1], Math.sqrt(p / 2) * v[2], Math.sqrt(p / 2) * v[3]];
 
-        case 5:
+    } else if (n == 6) {
 
-            newVector = ORDER5.f(v);
-            break;
+        return [Math.sqrt(3) * v[0], v[1], v[2], v[3]];
 
-        case 6:
+    } else {
 
-            newVector = ORDER6.f(v);
-            break;
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-        default:
+        var a = Math.sqrt(Math.abs(2 * cot / (3 - cot)));
+        var b = Math.sqrt(Math.abs((cot - 1) / (3 - cot)));
 
-            var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
-            var a = Math.sqrt(Math.abs(2 * cot / (3 - cot)));
-            var b = Math.sqrt(Math.abs((cot - 1) / (3 - cot)));
-
-            // matrix = [
-            //     [Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0],
-            //     [0, Math.sqrt(Math.abs((cot - 1) / (3 - cot))), 0, 0],
-            //     [0, 0, Math.sqrt(Math.abs((cot - 1) / (3 - cot))), 0],
-            //     [0, 0, 0, Math.sqrt(Math.abs((cot - 1) / (3 - cot)))]
-            // ];
-
-            newVector = [a * v[0], b * v[1], b * v[2], b * v[3]];
+        return [a * v[0], b * v[1], b * v[2], b * v[3]];
     }
 
-    return newVector;
 }
+
 
 function matrixDict(n, letter, vector) {
     var newVector;
@@ -130,31 +119,26 @@ function matrixDict(n, letter, vector) {
     return newVector;
 };
 
+
 const faceReflections = ['bc', 'c', 'cbabc', 'abc', '', 'babc'];
+
 
 function center(n) {
 
-    var newCenter = [];
+    if (n == 5) {
 
-    switch (n) {
-        case 5:
+        return [Math.sqrt(2) / (p ** 2), 0, 0, 0];
 
-            newCenter = ORDER5.center;
-            break;
+    } else if (n == 6) {
 
-        case 6:
+        return [1 / Math.sqrt(3), 0, 0, 0];
 
-            newCenter = ORDER6.center;
-            break;
+    } else {
 
-        default:
-
-            var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-            newCenter = [1 / Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0]
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+        return [1 / Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0];
 
     }
-
-    return newCenter;
 
 }
 
