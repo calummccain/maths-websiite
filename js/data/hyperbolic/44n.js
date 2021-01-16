@@ -51,6 +51,7 @@ const vertices = [
     [27, 52, 7, 2], [33, 64, 7, 4], [43, 84, 7, 6]
 ];
 
+
 const faces = [
     [83, 72, 60, 71], [91, 84, 72, 83], [90, 83, 71, 81],
     [72, 62, 53, 60], [102, 91, 83, 90], [71, 60, 52, 59],
@@ -83,12 +84,14 @@ const faces = [
     [19, 12, 0, 11]
 ];
 
+
 // cfe
 function a(v) {
 
     return [v[0], v[1], v[3], v[2]];
 
 }
+
 
 //cfv
 function b(v) {
@@ -97,12 +100,14 @@ function b(v) {
 
 }
 
+
 //fev
 function c(v) {
 
     return [v[0], -v[1], v[2], v[3]];
 
 }
+
 
 //cev
 function d(n, v) {
@@ -116,17 +121,20 @@ function d(n, v) {
             v[0] - v[1] / 2 - v[2]
         ];
 
+    } else {
+
+        const c = Math.cos(Math.PI / n) ** 2;
+        return [
+            (1 + 2 * c) * v[0] - 2 * (c ** 2) * v[1] - 2 * c * v[2] - 2 * c * v[3],
+            2 * v[0] + (1 - 2 * c) * v[1] - 2 * v[2] - 2 * v[3],
+            v[0] - c * v[1] - v[3],
+            v[0] - c * v[1] - v[2]
+        ];
+
     }
 
-    const c = Math.cos(Math.PI / n) ** 2;
-    return [
-        (1 + 2 * c) * v[0] - 2 * (c ** 2) * v[1] - 2 * c * v[2] - 2 * c * v[3],
-        2 * v[0] + (1 - 2 * c) * v[1] - 2 * v[2] - 2 * v[3],
-        v[0] - c * v[1] - v[3],
-        v[0] - c * v[1] - v[2]
-    ];
-
 }
+
 
 function e(v) {
 
@@ -134,18 +142,21 @@ function e(v) {
 
 }
 
+
 function f(n, v) {
 
-    const c = Math.cos(Math.PI / n) ** 2;
-
     if (n == 4) {
+
         return [
             v[0],
-            c * v[1],
-            Math.sqrt(2 * c) * v[2],
-            Math.sqrt(2 * c) * v[3]
+            v[1] / 2,
+            v[2],
+            v[3]
         ];
+
     } else {
+
+        const c = Math.cos(Math.PI / n) ** 2;
         const den = Math.sqrt(Math.abs(1 - 2 * c));
         return [
             v[0] / den,
@@ -153,14 +164,19 @@ function f(n, v) {
             Math.sqrt(2 * c) * v[2] / den,
             Math.sqrt(2 * c) * v[3] / den
         ];
+
     }
 
 }
 
+
 function conversion(n, v) {
+
     var c = Math.cos(Math.PI / n) ** 2;
     return [1 + c * v[1], v[1], v[2], v[3]];
+
 }
+
 
 function matrixDict(order, letter, vector) {
 
@@ -189,7 +205,8 @@ function matrixDict(order, letter, vector) {
 
     return newVector;
 
-};
+}
+
 
 function face(n) {
 
@@ -204,7 +221,8 @@ function face(n) {
 
     }
 
-};
+}
+
 
 const faceReflections = [
     '',
@@ -294,7 +312,9 @@ const faceReflections = [
     'babdbabdbabdbabdbabdbabd'
 ];
 
+
 const center = [1, 1, 0, 0];
+
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center, face, conversion };
 

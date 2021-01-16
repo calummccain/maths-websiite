@@ -53,7 +53,7 @@ function d(n, v) {
             v[0] - v[2] - v[3],
             v[0] - v[1] - v[3],
             v[0] - v[1] - v[2]
-        ]
+        ];
 
     } else {
 
@@ -101,7 +101,9 @@ function f(n, v) {
 
 
 function matrixDict(n, letter, vector) {
+
     var newVector;
+
     switch (letter) {
         case 'a':
             newVector = a(vector);
@@ -122,8 +124,10 @@ function matrixDict(n, letter, vector) {
             newVector = f(n, vector);
             break;
     }
+
     return newVector;
-};
+
+}
 
 
 const faceReflections = ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'];
@@ -139,7 +143,7 @@ function center(n) {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-        return [1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]
+        return [1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0];
     }
 
 }

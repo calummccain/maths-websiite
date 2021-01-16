@@ -1,5 +1,6 @@
 // Order n hexagonal
 
+
 const vertices = [
     [238.75, 317, -11, -8], [205, 272, -11, -7], [175.75, 233, -11, -6],
     [151, 200, -11, -5], [130.75, 173, -11, -4], [115, 152, -11, -3],
@@ -105,6 +106,7 @@ const vertices = [
     [295, 392, 14, 8]
 ];
 
+
 const faces = [
     [161, 145, 128, 110, 126, 143],
     [196, 180, 163, 145, 161, 178],
@@ -168,50 +170,72 @@ const faces = [
     [52, 36, 19, 1, 17, 34]
 ];
 
+
 // cfe
 function a(v) {
+
     return [v[0], v[1], (v[2] + 3 * v[3]) / 2, (v[2] - v[3]) / 2];
+
 }
+
 
 //cfv
 function b(v) {
+
     return [v[0], v[1], v[2], -v[3]];
+
 }
+
 
 //fev
 function c(v) {
+
     return [v[0], -v[1], v[2], v[3]];
+
 }
+
 
 //cev
 function d(n, v) {
 
     if (n == 6) {
+
         var c = 3 / 4;
+
     } else {
+
         var c = Math.cos(Math.PI / n) ** 2;
+
     }
+
     return [
         (1 + 2 * c) * v[0] - 2 * (c ** 2) * v[1] - c * v[2] - c * v[3],
         2 * v[0] + (1 - 2 * c) * v[1] - v[2] - v[3],
         3 * v[0] - 3 * c * v[1] - v[2] / 2 - 3 * v[3] / 2,
         v[0] - c * v[1] - v[2] / 2 + v[3] / 2
     ];
+
 }
 
+
 function e(v) {
+
     return [v[0], v[1], v[2], v[3]];
+
 }
+
 
 function f(n, v) {
 
     if (n == 6) {
+
         return [
             Math.sqrt(3) * v[0],
             Math.sqrt(27 / 16) * v[1],
             Math.sqrt(3 / 4) * v[2],
             Math.sqrt(9 / 4) * v[3]
         ];
+
     } else {
 
         const c = Math.cos(Math.PI / n) ** 2;
@@ -223,12 +247,15 @@ function f(n, v) {
             Math.sqrt(c) * v[2] / den,
             Math.sqrt(3 * c) * v[3] / den
         ];
+
     }
 
 }
 
 function matrixDict(order, letter, vector) {
+
     var newVector;
+
     switch (letter) {
         case 'a':
             newVector = a(vector);
@@ -249,8 +276,10 @@ function matrixDict(order, letter, vector) {
             newVector = f(order, vector);
             break;
     }
+
     return newVector;
-};
+
+}
 
 
 const faceReflections = [
@@ -316,12 +345,17 @@ const faceReflections = [
     'babdababdababdababdbababd'
 ];
 
+
 function conversion(n, v) {
+
     var c = Math.cos(Math.PI / n) ** 2;
     return [1 + c * (v[1] - 8) / 6, (v[1] - 8) / 6, v[2], v[3]];
+
 }
 
+
 const center = [1, 1, 0, 0];
+
 
 function face(n) {
 

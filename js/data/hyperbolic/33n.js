@@ -96,7 +96,9 @@ function f(n, v) {
 
 
 function matrixDict(n, letter, vector) {
+
     var newVector;
+
     switch (letter) {
         case 'a':
             newVector = a(vector);
@@ -117,8 +119,10 @@ function matrixDict(n, letter, vector) {
             newVector = f(n, vector);
             break;
     }
+
     return newVector;
-};
+
+}
 
 
 const faceReflections = ['', 'cab', 'ab', 'b'];

@@ -1,5 +1,7 @@
 // Order n cubic
 
+import {p} from "../constants.js";
+
 
 const vertices = [
     [1, 1, 1, 1],
@@ -95,7 +97,9 @@ function f(n, v) {
 
 
 function matrixDict(n, letter, vector) {
+
     var newVector;
+
     switch (letter) {
         case 'a':
             newVector = a(vector);
@@ -116,8 +120,10 @@ function matrixDict(n, letter, vector) {
             newVector = f(n, vector);
             break;
     }
+
     return newVector;
-};
+
+}
 
 
 const faceReflections = ['bc', 'c', 'cbabc', 'abc', '', 'babc'];

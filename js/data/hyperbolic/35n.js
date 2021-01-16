@@ -16,7 +16,7 @@ const vertices = [
     [1, 0, 1, -p],
     [1, 0, -1, p],
     [1, 0, -1, -p]
-]
+];
 
 
 const faces = [
@@ -74,7 +74,7 @@ const lines = [
     [7, 11],
     [8, 10],
     [9, 11]
-]
+];
 
 
 function a(v) {
@@ -160,7 +160,9 @@ function f(n, v) {
 
 
 function matrixDict(n, letter, vector) {
+
     var newVector;
+
     switch (letter) {
         case 'a':
             newVector = a(vector);
@@ -181,8 +183,10 @@ function matrixDict(n, letter, vector) {
             newVector = f(n, vector);
             break;
     }
+
     return newVector;
-};
+
+}
 
 
 const faceReflections = [
@@ -218,7 +222,7 @@ function center(n) {
     } else {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-        return [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p ** 3), 0, 0, 0]
+        return [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p ** 3), 0, 0, 0];
 
     }
 

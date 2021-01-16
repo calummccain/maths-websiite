@@ -2,9 +2,6 @@
 
 import { p } from "../constants.js";
 
-import * as ORDER4 from '../hyperbolic/534.js';
-import * as ORDER5 from '../hyperbolic/535.js';
-import * as ORDER6 from '../hyperbolic/536.js';
 
 const vertices = [
     [1, 1, 1, 1],
@@ -29,6 +26,7 @@ const vertices = [
     [1, -1 / p, 0, -p]
 ];
 
+
 const faces = [
     [0, 16, 2, 13, 12],
     [1, 12, 13, 3, 18],
@@ -44,11 +42,13 @@ const faces = [
     [11, 10, 6, 15, 7]
 ];
 
+
 function a(v) {
 
     return [v[0], v[1], v[2], -v[3]];
 
 }
+
 
 function b(v) {
 
@@ -56,51 +56,60 @@ function b(v) {
 
 }
 
+
 function c(v) {
 
     return [v[0], (p * v[1] + v[2] + v[3] / p) / 2, (v[1] - v[2] / p - p * v[3]) / 2, (v[1] / p - p * v[2] + v[3]) / 2];
 
 }
 
+
 //fev
 function d(n, v) {
 
-    var newVector = [];
+    if (n == 4) {
 
-    switch (n) {
+        return [
+            p ** 2 * v[0] - v[1] - v[3] / p,
+            p ** 3 * v[0] - p * v[1] - p * v[3],
+            v[2],
+            p ** 2 * v[0] - p * v[1]
+        ];
 
-        case 4:
+    } else if (n == 5) {
 
-            newVector = ORDER4.d(v);
-            break;
+        return [
+            ((4 * p + 1) * v[0] - (4 * p - 1) / p * v[1] - (4 * p - 1) / (p ** 2) * v[3]) / 2,
+            (p ** 5 * v[0] + (2 - p ** 4) * v[1] - p ** 3 * v[3]) / 2,
+            v[2],
+            (p ** 4 * v[0] - p ** 3 * v[1] - v[3] / p) / 2
+        ];
 
-        // case 5:
+    } else if (n == 6) {
 
-        //     newVector = ORDER5.d(v);
-        //     break;
+        return [
+            ((2 + p ** 4) * v[0] - p ** 3 * v[1] - p ** 2 * v[3]) / 2,
+            (3 * p ** 3 * v[0] + (2 - 3 * p ** 2) * v[1] - 3 * p * v[3]) / 2,
+            v[2],
+            (3 * p ** 2 * v[0] - 3 * p * v[1] - v[3]) / 2
+        ];
 
-        case 6:
+    } else {
 
-            newVector = ORDER6.d(v);
-            break;
+        var cos = Math.cos(Math.PI / n) ** 2;
+        var rt = Math.sqrt(5);
 
-        default:
-
-            var cos = Math.cos(Math.PI / n) ** 2;
-            var rt = Math.sqrt(5);
-
-            var newVector = [
-                (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 / p) * v[1] - (2 * rt * cos / p - 2 / (p ** 2)) * v[3],
-                2 * (p ** 3) * cos * v[0] + (1 - 2 * (p ** 2) * cos) * v[1] - 2 * p * cos * v[3],
-                v[2],
-                2 * (p ** 2) * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
-            ];
+        return [
+            (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 / p) * v[1] - (2 * rt * cos / p - 2 / (p ** 2)) * v[3],
+            2 * (p ** 3) * cos * v[0] + (1 - 2 * (p ** 2) * cos) * v[1] - 2 * p * cos * v[3],
+            v[2],
+            2 * (p ** 2) * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
+        ];
 
     }
 
-    return newVector;
-
 }
+
 
 function e(v) {
 
@@ -108,56 +117,52 @@ function e(v) {
 
 }
 
+
 function f(n, v) {
 
-    var newVector = [];
+    if (n == 4) {
 
-    switch (n) {
+        return [
+            p ** 2 / Math.sqrt(2) * v[0],
+            Math.sqrt(p / 2) * v[1],
+            Math.sqrt(p / 2) * v[2],
+            Math.sqrt(p / 2) * v[3]
+        ];
 
-        case 4:
+    } else if (n == 5) {
 
-            newVector = ORDER4.f(v);
-            break;
+        return [
+            (p ** 4) / 2 * v[0],
+            p * Math.sqrt(4 * p - 1) / 2 * v[1],
+            p * Math.sqrt(4 * p - 1) / 2 * v[2],
+            p * Math.sqrt(4 * p - 1) / 2 * v[3]
+        ];
 
-        case 5:
 
-            newVector = ORDER5.f(v);
-            break;
+    } else if (n == 6) {
 
-        case 6:
+        return [Math.sqrt(3) * v[0], v[1], v[2], v[3]];
 
-            newVector = ORDER6.f(v);
-            break;
+    } else {
 
-        default:
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-            var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
-            var newVector = [
-                (p ** 2) * Math.sqrt(cot / (cot - 3)) * v[0],
-                Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[1],
-                Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[2],
-                Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[3]
-            ];
+        return [
+            (p ** 2) * Math.sqrt(cot / (cot - 3)) * v[0],
+            Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[1],
+            Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[2],
+            Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[3]
+        ];
 
     }
-
-    return newVector;
 
 }
 
 
-// var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
-// matrix = [
-//     [(p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot))), 0, 0, 0],
-//     [0, Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot))), 0, 0],
-//     [0, 0, Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot))), 0],
-//     [0, 0, 0, Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (3 - cot)))]
-// ];
-
 function matrixDict(n, letter, vector) {
+
     var newVector;
+
     switch (letter) {
         case 'a':
             newVector = a(vector);
@@ -178,41 +183,38 @@ function matrixDict(n, letter, vector) {
             newVector = f(n, vector);
             break;
     }
+ 
     return newVector;
-};
+
+}
+
 
 const faceReflections = ['', 'a', 'ca', 'babacbca', 'abacbca', 'acbca', 'cbacbca', 'acbcbacbca', 'cbcbacbca', 'bca', 'bacbca', 'bcbacbca'];
 
+
 function center(n) {
 
-    var newCenter = [];
+    if (n == 4) {
 
-    switch (n) {
+        return [Math.sqrt(2) / (p ** 2), 0, 0, 0];
 
-        case 4:
+    } else if (n == 5) {
 
-            newCenter = ORDER4.center;
-            break;
+        return [2 / (p ** 4), 0, 0, 0];
 
-        case 5:
 
-            newCenter = ORDER5.center;
-            break;
+    } else if (n == 6) {
 
-        case 6:
+        return [1 / Math.sqrt(3), 0, 0, 0];
 
-            newCenter = ORDER6.center;
-            break;
+    } else {
 
-        default:
-
-            var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-            newCenter = [1 / ((p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot)))), 0, 0, 0];;
+        var cot = 1 / (Math.tan(Math.PI / n) ** 2);
+        return [1 / ((p ** 2) * Math.sqrt(Math.abs(cot / (3 - cot)))), 0, 0, 0];
 
     }
 
-    return newCenter;
-
 }
+
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
