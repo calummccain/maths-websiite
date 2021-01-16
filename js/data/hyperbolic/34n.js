@@ -1,7 +1,5 @@
 // Order n octahedral
 
-import * as ORDER4 from "./344.js";
-
 const vertices = [
     [1, 1, 0, 0],
     [1, -1, 0, 0],
@@ -10,6 +8,7 @@ const vertices = [
     [1, 0, 0, 1],
     [1, 0, 0, -1]
 ];
+
 
 const faces = [
     [0, 2, 4],
@@ -22,11 +21,13 @@ const faces = [
     [1, 5, 3]
 ];
 
+
 function a(v) {
 
     return [v[0], v[2], v[1], v[3]];
 
 }
+
 
 function b(v) {
 
@@ -34,26 +35,31 @@ function b(v) {
 
 }
 
+
 function c(v) {
 
     return [v[0], v[1], v[2], -v[3]];
 
 }
 
+
 //fev
 function d(n, v) {
 
-    var newVector = [];
-
     if (n == 4) {
 
-        newVector = ORDER4.d(v);
+        return [
+            2 * v[0] - v[1] - v[2] - v[3],
+            v[0] - v[2] - v[3],
+            v[0] - v[1] - v[3],
+            v[0] - v[1] - v[2]
+        ]
 
     } else {
 
         var cos = Math.cos(Math.PI / n) ** 2;
 
-        newVector = [
+        return [
             (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
             2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
             2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
@@ -62,23 +68,8 @@ function d(n, v) {
 
     }
 
-    return newVector;
-
 }
 
-// var matrix = [
-//     [6 * cos - 1, 2 - 6 * cos, 2 - 6 * cos, 2 - 6 * cos],
-//     [2 * cos, 1 - 2 * cos, -2 * cos, -2 * cos],
-//     [2 * cos, -2 * cos, 1 - 2 * cos, -2 * cos],
-//     [2 * cos, -2 * cos, -2 * cos, 1 - 2 * cos]
-// ];
-
-// const e = [
-//     [1, 0, 0, 0],
-//     [0, 1, 0, 0],
-//     [0, 0, 1, 0],
-//     [0, 0, 0, 1]
-// ];
 
 function e(v) {
 
@@ -86,19 +77,18 @@ function e(v) {
 
 }
 
-function f(n, v) {
 
-    var newVector = [];
+function f(n, v) {
 
     if (n == 4) {
 
-        newVector = v;
+        return v;
 
     } else {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-        newVector = [
+        return [
             Math.sqrt(Math.abs(cot / (1 - cot))) * v[0],
             Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))) * v[1],
             Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))) * v[2],
@@ -107,16 +97,8 @@ function f(n, v) {
 
     }
 
-    return newVector;
-
 }
 
-// matrix = [
-//     [Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0],
-//     [0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0, 0],
-//     [0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot))), 0],
-//     [0, 0, 0, Math.sqrt(Math.abs((2 * cot - 1) / (1 - cot)))]
-// ];
 
 function matrixDict(n, letter, vector) {
     var newVector;
@@ -143,25 +125,24 @@ function matrixDict(n, letter, vector) {
     return newVector;
 };
 
+
 const faceReflections = ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'];
+
 
 function center(n) {
 
-    var newCenter = [];
-
     if (n == 4) {
 
-        newCenter = ORDER4.center;
+        return [1, 0, 0, 0];
 
     } else {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-        newCenter = [1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]
+        return [1 / Math.sqrt(Math.abs(cot / (1 - cot))), 0, 0, 0]
     }
 
-    return newCenter;
-
 }
+
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };

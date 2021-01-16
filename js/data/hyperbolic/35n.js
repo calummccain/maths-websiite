@@ -2,7 +2,6 @@
 
 import { p } from "../constants.js";
 
-import * as ORDER3 from "./353.js";
 
 const vertices = [
     [1, 1, p, 0],
@@ -18,6 +17,7 @@ const vertices = [
     [1, 0, -1, p],
     [1, 0, -1, -p]
 ]
+
 
 const faces = [
     [0, 8, 2],
@@ -42,6 +42,7 @@ const faces = [
     [7, 11, 9]
 ];
 
+
 const lines = [
     [0, 2],
     [0, 4],
@@ -51,7 +52,7 @@ const lines = [
     [1, 3],
     [1, 4],
     [1, 6],
-    [1, 10], 
+    [1, 10],
     [1, 11],
     [2, 5],
     [2, 7],
@@ -75,11 +76,13 @@ const lines = [
     [9, 11]
 ]
 
+
 function a(v) {
 
     return [v[0], v[1], v[2], -v[3]];
 
 }
+
 
 function b(v) {
 
@@ -87,25 +90,30 @@ function b(v) {
 
 }
 
+
 function c(v) {
 
     return [v[0], (v[1] + v[2] / p - p * v[3]) / 2, (v[1] / p + p * v[2] + v[3]) / 2, (-p * v[1] + v[2] - v[3] / p) / 2];
 
 }
 
-function d(n, v) {
 
-    var newVector = [];
+function d(n, v) {
 
     if (n == 3) {
 
-        newVector = ORDER3.d(v);
+        return [
+            ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
+            v[1],
+            ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
+            ((p ** 3) * v[0] - (p ** 2) * v[2] + v[3]) / 2
+        ];
 
     } else {
 
         var cos = Math.cos(Math.PI / n) ** 2;
 
-        newVector = [
+        return [
             (6 * (p ** 2) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / p) * v[3],
             v[1],
             2 * (p ** 5) * cos * v[0] + (1 - 2 * (p ** 4) * cos) * v[2] - 2 * (p ** 2) * cos * v[3],
@@ -114,9 +122,8 @@ function d(n, v) {
 
     }
 
-    return newVector;
-
 }
+
 
 function e(v) {
 
@@ -124,19 +131,23 @@ function e(v) {
 
 }
 
-function f(n, v) {
 
-    var newVector = [];
+function f(n, v) {
 
     if (n == 3) {
 
-        newVector = ORDER3.f(v);
+        return [
+            ((p ** 3) / 2) * v[0],
+            (Math.sqrt(3 * p - 1) / 2) * v[1],
+            (Math.sqrt(3 * p - 1) / 2) * v[2],
+            (Math.sqrt(3 * p - 1) / 2) * v[3]
+        ];
 
     } else {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
-        newVector = [
+        return [
             (p ** 3) * Math.sqrt(cot / ((p ** 4) * cot - 1 - (p ** 2))) * v[0],
             Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[1],
             Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[2],
@@ -145,9 +156,8 @@ function f(n, v) {
 
     }
 
-    return newVector;
-
 }
+
 
 function matrixDict(n, letter, vector) {
     var newVector;
@@ -174,6 +184,7 @@ function matrixDict(n, letter, vector) {
     return newVector;
 };
 
+
 const faceReflections = [
     '',
     'a',
@@ -197,23 +208,21 @@ const faceReflections = [
     'abcbaca'
 ];
 
-function center(n) {
 
-    var newCenter = [];
+function center(n) {
 
     if (n == 3) {
 
-        newCenter = ORDER3.center;
+        return [2 / (p ** 3), 0, 0, 0];
 
     } else {
 
         var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-        newCenter = [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p ** 3), 0, 0, 0]
+        return [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p ** 3), 0, 0, 0]
 
     }
 
-    return newCenter;
-
 }
+
 
 export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center, lines };

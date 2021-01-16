@@ -1,7 +1,5 @@
 // Order n cubic
 
-import * as ORDER5 from "./435.js";
-import * as ORDER6 from "./436.js";
 
 const vertices = [
     [1, 1, 1, 1],
@@ -14,6 +12,7 @@ const vertices = [
     [1, -1, 1, -1]
 ];
 
+
 const faces = [
     [0, 3, 2, 1],
     [4, 7, 3, 0],
@@ -23,11 +22,13 @@ const faces = [
     [1, 2, 6, 5]
 ];
 
+
 function a(v) {
 
     return [v[0], v[1], v[2], -v[3]];
 
 }
+
 
 function b(v) {
 
@@ -35,52 +36,30 @@ function b(v) {
 
 }
 
+
 function c(v) {
 
     return [v[0], v[2], v[1], v[3]];
 
 }
 
-//fev
-// function d(n) {
-
-//     var cos = Math.cos(2 * Math.PI / n);
-
-//     var matrix = [
-//         [1 + 2 * cos, -2 * cos, 0, 0],
-//         [2 * cos + 2, -1 - 2 * cos, 0, 0],
-//         [0, 0, 1, 0],
-//         [0, 0, 0, 1]
-//     ];
-
-//     return matrix;
-
-// }
 
 function d(n, v) {
 
-    var newVector = [];
+    if (n == 5) {
 
-    switch (n) {
+        return [p * v[0] - v[1] / p, p ** 2 * v[0] - p * v[1], v[2], v[3]];
 
-        case 5:
+    } else if (n == 6) {
 
-            newVector = ORDER5.d(v);
-            break;
+        return [2 * v[0] - v[1], 3 * v[0] - 2 * v[1], v[2], v[3]];
 
-        case 6:
+    } else {
 
-            newVector = ORDER6.d(v);
-            break;
-
-        default:
-
-            var cos = Math.cos(2 * Math.PI / n);
-            newVector = [(1 + 2 * cos) * v[0] - 2 * cos * v[1], 2 * (1 + cos) * v[0] - (1 + 2 * cos) * v[1], v[2], v[3]];
+        var cos = Math.cos(2 * Math.PI / n);
+        return [(1 + 2 * cos) * v[0] - 2 * cos * v[1], 2 * (1 + cos) * v[0] - (1 + 2 * cos) * v[1], v[2], v[3]];
 
     }
-
-    return newVector;
 
 }
 
