@@ -26,6 +26,7 @@ function rotatePositions(s) {
     return posDict;
 }
 
+
 const shapeLinks = {
     "{4,3,4}": "./individual/434.html",
     "{4,3,5}": "./individual/435.html",
@@ -50,6 +51,7 @@ const shapeLinks = {
     "{4,4,5}": "./individual/445.html",
     "{4,4,6}": "./individual/446.html"
 };
+
 
 const specialLetter = {
     "{4,3,4}": "d",
@@ -76,6 +78,7 @@ const specialLetter = {
     "{4,4,6}": "c"
 };
 
+
 const colour = {
     "{4,3,4}": "#27686A",
     "{4,3,5}": "#2D9A4D",
@@ -100,6 +103,7 @@ const colour = {
     "{4,4,5}": "#CD8C32",
     "{4,4,6}": "#CDA632"
 };
+
 
 const order = {
     "{4,3,4}": 4,
@@ -126,6 +130,7 @@ const order = {
     "{4,4,6}": 6
 };
 
+
 const numberOfFaces = {
     "{4,3,4}": 6,
     "{4,3,5}": 6,
@@ -150,6 +155,7 @@ const numberOfFaces = {
     "{4,4,5}": 85,
     "{4,4,6}": 85
 };
+
 
 const metric = {
     "{4,3,4}": "euclidean",
@@ -176,6 +182,7 @@ const metric = {
     "{4,4,6}": "hyperbolic"
 };
 
+
 const compact = {
     "{4,3,4}": "",
     "{4,3,5}": "compact",
@@ -200,6 +207,7 @@ const compact = {
     "{4,4,5}": "uncompact",
     "{4,4,6}": "uncompact"
 };
+
 
 const geometry = {
     "{4,3,4}": "{4,3}",
@@ -231,6 +239,7 @@ const individualDefinition = 3;
 const mainDefinition = 3;
 const groupRadius = 3;
 
+
 const names = [
     "{4,3,4}",
     "{4,3,5}",
@@ -254,7 +263,7 @@ const names = [
     "{4,4,4}",
     "{4,4,5}",
     "{4,4,6}"
-]
+];
 
 
 export {

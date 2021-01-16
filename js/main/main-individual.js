@@ -209,7 +209,7 @@ function main(name, geometry) {
                             geometryFunction: geometry,
                             group: ghosts,
                             metric: CONSTANTS.metric[name],
-                            refinement: CONSTANTS.individualDefinition,
+                            refinement: Math.max(CONSTANTS.individualDefinition - 1, 1),
                             order: CONSTANTS.order[name],
                             colour: "#" + colour.getHexString(),
                             numberOfFaces: CONSTANTS.numberOfFaces[name],
