@@ -37,6 +37,7 @@
             import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
             import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
             import { hyperbolicSquareGeometry } from "../js/geometries/44n-geometry.js";
+            import { hyperbolicTriangularGeometry } from "../js/geometries/36n-geometry.js";
 
             import { MapControls } from "../js/orbit-controls.js";
             import * as CONSTANTS from "../js/main/main-constants.js";
@@ -62,7 +63,7 @@
 
             // add camera and light to scene
             var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
-            camera.position.set(3 * s, s, -4 * s);
+            camera.position.set(3.5 * s, s, -4 * s);
             camera.up = new THREE.Vector3(0, -1, 0);
             camera.updateProjectionMatrix();
             camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
@@ -79,7 +80,8 @@
                 "{3,3}": hyperbolicTetrahedronGeometry,
                 "{3,4}": hyperbolicOctahedronGeometry,
                 "{6,3}": hyperbolicHexagonalGeometry,
-                "{4,4}": hyperbolicSquareGeometry
+                "{4,4}": hyperbolicSquareGeometry,
+                "{3,6}": hyperbolicTriangularGeometry
             };
 
             // add the polyhedrons to the scene
@@ -111,13 +113,13 @@
             controls.enableZoom = true;
             controls.enableRotate = false;
             controls.screenSpacePanning = true;
-            controls.target = new THREE.Vector3(3 * s, s, 0);
+            controls.target = new THREE.Vector3(3.5 * s, s, 0);
             controls.enabled = true;
             controls.minZoom = s;
-            controls.maxZoom = 5 * s;
+            controls.maxZoom = 3 * s;
 
             var minPan = new THREE.Vector3(0, -s, 0);
-            var maxPan = new THREE.Vector3(6 * s, 2 * s, 0);
+            var maxPan = new THREE.Vector3(7 * s, 2 * s, 0);
             var _v = new THREE.Vector3();
 
             controls.addEventListener("change", function () {
