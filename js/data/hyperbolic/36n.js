@@ -143,8 +143,6 @@ function c(v) {
 
 
 //cev
-
-// CHANGE
 function d(n, v) {
 
     if (n == 3) {
