@@ -39,7 +39,20 @@ function c(v) {
 
 function d(n, v) {
 
-    if (n == 6) {
+    if (n == 3) {
+
+        return [
+            (2 - 3 * sin) * v[0] + (3 * sin - 1) * v[1] + (3 * sin - 1) * v[2] + (1 - 3 * sin) * v[3],
+            cos * v[0] + sin * v[1] - cos * v[2] + cos * v[3],
+            cos * v[0] - cos * v[1] + sin * v[2] + cos * v[3],
+            -cos * v[0] + cos * v[1] + cos * v[2] + sin * v[3]
+        ];
+
+    } else if (n == 4) {
+
+    } else if (n == 5) {
+
+    } else if (n == 6) {
 
         return [
             (5 * v[0] - v[1] - v[2] + v[3]) / 4,

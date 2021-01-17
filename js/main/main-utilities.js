@@ -4,7 +4,7 @@ function addCellToGroup(params) {
 
     var geometryFunction = params.geometryFunction;
     var group = params.group;
-    var metric = params.metric || "spherical";
+    var metric = params.metric || "";
     var refinement = params.refinement || 3;
     var cell = params.cell || 0;
     var opacityValue = params.opacity || 1;
@@ -20,25 +20,27 @@ function addCellToGroup(params) {
 
     var shapeGeometry, faceReflections;
 
-    if (metric === "spherical") {
+    // if (metric === "spherical") {
 
-        var d = 1;
+    //     var d = 1;
 
-        shapeGeometry = geometryFunction(refinement, cell, d);
+    //     shapeGeometry = geometryFunction(refinement, cell, d);
 
-    } else if (metric === "euclidean") {
+    // } else if (metric === "euclidean") {
 
-        shapeGeometry = new THREE.BoxGeometry(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3));
+    //     shapeGeometry = new THREE.BoxGeometry(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3));
 
-    } else if (metric === "hyperbolic") {
+    // } else if (metric === "hyperbolic") {
 
-        [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact);
+    //     [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact);
 
-    } else {
+    // } else {
 
-        console.log("Please enter \"spherical\" or \"euclidean\" or \"hyperbolic\"");
+    //     console.log("Please enter \"spherical\" or \"euclidean\" or \"hyperbolic\"");
 
-    }
+    // }
+
+    [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact, metric);
 
     // faceMode keeps the faces as seperate meshes (and hence seperate objects)
     // without faceMode the polyhedron is made as one mesh/object and the individual faces cannot be selected by ray-casting

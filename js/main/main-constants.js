@@ -1,5 +1,6 @@
 function rotatePositions(s) {
     var posDict = {
+        "{4,3,3}": [0, -s, 0],
         "{4,3,4}": [0, 0, 0],
         "{4,3,5}": [0, s, 0],
         "{4,3,6}": [0, 2 * s, 0],
@@ -32,6 +33,7 @@ function rotatePositions(s) {
 
 
 const shapeLinks = {
+    "{4,3,3}": "./individual/433.html",
     "{4,3,4}": "./individual/434.html",
     "{4,3,5}": "./individual/435.html",
     "{4,3,6}": "./individual/436.html",
@@ -62,6 +64,7 @@ const shapeLinks = {
 
 
 const specialLetter = {
+    "{4,3,3}": "d",
     "{4,3,4}": "d",
     "{4,3,5}": "d",
     "{4,3,6}": "d",
@@ -92,6 +95,7 @@ const specialLetter = {
 
 
 const colour = {
+    "{4,3,3}": "#27686A",
     "{4,3,4}": "#27686A",
     "{4,3,5}": "#2D9A4D",
     "{4,3,6}": "#33CD31",
@@ -122,6 +126,7 @@ const colour = {
 
 
 const order = {
+    "{4,3,3}": 3,
     "{4,3,4}": 4,
     "{4,3,5}": 5,
     "{4,3,6}": 6,
@@ -152,6 +157,7 @@ const order = {
 
 
 const numberOfFaces = {
+    "{4,3,3}": 6,
     "{4,3,4}": 6,
     "{4,3,5}": 6,
     "{4,3,6}": 6,
@@ -182,6 +188,7 @@ const numberOfFaces = {
 
 
 const metric = {
+    "{4,3,3}": "spherical",
     "{4,3,4}": "euclidean",
     "{4,3,5}": "hyperbolic",
     "{4,3,6}": "hyperbolic",
@@ -212,6 +219,7 @@ const metric = {
 
 
 const compact = {
+    "{4,3,3}": "",
     "{4,3,4}": "",
     "{4,3,5}": "compact",
     "{4,3,6}": "paracompact",
@@ -242,6 +250,7 @@ const compact = {
 
 
 const geometry = {
+    "{4,3,3}": "{4,3}",
     "{4,3,4}": "{4,3}",
     "{4,3,5}": "{4,3}",
     "{4,3,6}": "{4,3}",
@@ -271,12 +280,8 @@ const geometry = {
 };
 
 
-const individualDefinition = 3;
-const mainDefinition = 3;
-const groupRadius = 3;
-
-
 const names = [
+    "{4,3,3}",
     "{4,3,4}",
     "{4,3,5}",
     "{4,3,6}",
@@ -304,6 +309,11 @@ const names = [
     "{3,6,5}",
     "{3,6,6}"
 ];
+
+
+const individualDefinition = 3;
+const mainDefinition = 3;
+const groupRadius = 3;
 
 
 export {

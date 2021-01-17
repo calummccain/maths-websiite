@@ -7,13 +7,15 @@ function sphereFace(vertices, refinement) {
     var coords = vertices;
     var faces = [];
 
+    console.log(vertices)
+
     if (sideNumber == 3) {
 
         faces = [[0, 1, 2]];
 
     } else if (sideNumber == 4) {
 
-        faces = faces.concat([[0, 2, 4], [2, 3, 4], [3, 1, 4], [1, 0, 4]]);
+        faces = faces.concat([[0, 1, 4], [1, 2, 4], [2, 3, 4], [3, 0, 4]]);
         var center = VF.vectorScale(VF.vectorSum(coords[0], VF.vectorSum(coords[1], VF.vectorSum(coords[2], coords[3]))), 0.25);
         coords.push(center);
 
@@ -24,6 +26,8 @@ function sphereFace(vertices, refinement) {
         coords.push(center);
 
     }
+
+    console.log([coords, faces])
 
     var j = 0;
 

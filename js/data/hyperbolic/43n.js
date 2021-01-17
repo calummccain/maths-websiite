@@ -1,6 +1,6 @@
 // Order n cubic
 
-import {p} from "../constants.js";
+import { p } from "../constants.js";
 
 
 const vertices = [
@@ -48,7 +48,16 @@ function c(v) {
 
 function d(n, v) {
 
-    if (n == 5) {
+    if (n == 3) {
+
+        return [v[1], v[0], v[2], v[3]];
+
+    } else if (n == 4) {
+
+        // CHECK
+        return [v[0], 2 * v[0] - 1 * v[1], v[2], v[3]];
+
+    } else if (n == 5) {
 
         return [p * v[0] - v[1] / p, p ** 2 * v[0] - p * v[1], v[2], v[3]];
 
@@ -75,7 +84,17 @@ function e(v) {
 
 function f(n, v) {
 
-    if (n == 5) {
+    if (n == 3) {
+
+        return [v[0] / 2, v[1] / 2, v[2] / 2, v[3] / 2];
+
+    } else if (n == 4) {
+
+        // CHANGE!
+
+        return [v[0], v[1], v[2], v[3]];
+
+    } else if (n == 5) {
 
         return [(p ** 2) / Math.sqrt(2) * v[0], Math.sqrt(p / 2) * v[1], Math.sqrt(p / 2) * v[2], Math.sqrt(p / 2) * v[3]];
 
