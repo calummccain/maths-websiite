@@ -46,7 +46,16 @@ function c(v) {
 //fev
 function d(n, v) {
 
-    if (n == 4) {
+    if (n == 3) {
+
+        return [
+            (v[0] + v[1] + v[2] + v[3]) / 2,
+            v[0] - v[2] - v[3],
+            v[0] - v[1] - v[3],
+            v[0] - v[1] - v[2]
+        ];
+
+    } else if (n == 4) {
 
         return [
             2 * v[0] - v[1] - v[2] - v[3],
@@ -80,7 +89,11 @@ function e(v) {
 
 function f(n, v) {
 
-    if (n == 4) {
+    if (n == 3) {
+
+        return [v[0] / Math.sqrt(2), v[1] / Math.sqrt(2), v[2] / Math.sqrt(2), v[3] / Math.sqrt(2)]
+
+    } else if (n == 4) {
 
         return v;
 
@@ -135,7 +148,11 @@ const faceReflections = ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc']
 
 function center(n) {
 
-    if (n == 4) {
+    if (n == 3) {
+
+        return [Math.sqrt(2), 0, 0, 0];
+
+    } else if (n == 4) {
 
         return [1, 0, 0, 0];
 

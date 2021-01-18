@@ -67,7 +67,16 @@ function c(v) {
 //fev
 function d(n, v) {
 
-    if (n == 4) {
+    if (n == 3) {
+
+        return [
+            (p * v[0] - v[1] - v[3] / p) / 2,
+            ((p ** 3) * v[0] - v[1] / 2 - p * v[3]) / 2,
+            v[2],
+            ((p ** 2) * v[0] - p * v[1] + v[3]) / 2
+        ];
+
+    } else if (n == 4) {
 
         return [
             p ** 2 * v[0] - v[1] - v[3] / p,
@@ -120,7 +129,16 @@ function e(v) {
 
 function f(n, v) {
 
-    if (n == 4) {
+    if (n == 3) {
+
+        return [
+            (p ** 2) * v[0] / Math.sqrt(8),
+            v[1] / (p * Math.sqrt(8)),
+            v[2] / (p * Math.sqrt(8)),
+            v[3] / (p * Math.sqrt(8))
+        ];
+
+    } else if (n == 4) {
 
         return [
             p ** 2 / Math.sqrt(2) * v[0],
@@ -183,7 +201,7 @@ function matrixDict(n, letter, vector) {
             newVector = f(n, vector);
             break;
     }
- 
+
     return newVector;
 
 }
@@ -194,7 +212,11 @@ const faceReflections = ['', 'a', 'ca', 'babacbca', 'abacbca', 'acbca', 'cbacbca
 
 function center(n) {
 
-    if (n == 4) {
+    if (n == 3) {
+
+        return [Math.sqrt(8) / (p ** 2), 0, 0, 0];
+
+    } else if (n == 4) {
 
         return [Math.sqrt(2) / (p ** 2), 0, 0, 0];
 

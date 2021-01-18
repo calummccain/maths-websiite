@@ -150,7 +150,17 @@ const faceReflections = ['bc', 'c', 'cbabc', 'abc', '', 'babc'];
 
 function center(n) {
 
-    if (n == 5) {
+    if (n == 3) {
+
+        return [2, 0, 0, 0];
+
+    } else if (n == 4) {
+
+        // CHECK!
+
+        return [1, 0, 0, 0];
+
+    } else if (n == 5) {
 
         return [Math.sqrt(2) / (p ** 2), 0, 0, 0];
 
