@@ -1,4 +1,4 @@
-import * as ORDERN from "../data/hyperbolic/43n.js";
+import * as ORDERN from "../data/43n.js";
 import { hyperbolicGeometry } from "../geometries/hyperbolic-geometry.js";
 import { sphericalGeometry } from "../geometries/spherical-geometry.js";
 

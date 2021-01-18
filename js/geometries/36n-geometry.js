@@ -1,7 +1,7 @@
-import * as ORDERN from "../data/hyperbolic/36n.js";
+import * as ORDERN from "../data/36n.js";
 import * as GEOM from "./hyperbolic-geometry.js";
 
-function hyperbolicTriangularGeometry(transform, order, refinement, compact) {
+function triangularGeometry(transform, order, refinement, compact) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -20,4 +20,4 @@ function hyperbolicTriangularGeometry(transform, order, refinement, compact) {
 
 }
 
-export { hyperbolicTriangularGeometry };
+export { triangularGeometry };

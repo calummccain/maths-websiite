@@ -1,8 +1,8 @@
-import * as ORDERN from "../data/hyperbolic/53n.js";
+import * as ORDERN from "../data/53n.js";
 import { hyperbolicGeometry } from "../geometries/hyperbolic-geometry.js";
 import { sphericalGeometry } from "../geometries/spherical-geometry.js";
 
-function hyperbolicDodecahedronGeometry(transform, order, refinement, compact, metric) {
+function hdodecahedronGeometry(transform, order, refinement, compact, metric) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -29,4 +29,4 @@ function hyperbolicDodecahedronGeometry(transform, order, refinement, compact, m
 
 }
 
-export { hyperbolicDodecahedronGeometry };
+export { dodecahedronGeometry };

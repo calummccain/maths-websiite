@@ -1,8 +1,8 @@
-import * as ORDERN from "../data/hyperbolic/33n.js";
+import * as ORDERN from "../data/33n.js";
 import { hyperbolicGeometry } from "../geometries/hyperbolic-geometry.js";
 import { sphericalGeometry } from "../geometries/spherical-geometry.js";
 
-function hyperbolicTetrahedronGeometry(transform, order, refinement, compact, metric) {
+function tetrahedronGeometry(transform, order, refinement, compact, metric) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -30,4 +30,4 @@ function hyperbolicTetrahedronGeometry(transform, order, refinement, compact, me
 
 }
 
-export { hyperbolicTetrahedronGeometry };
+export { tetrahedronGeometry };

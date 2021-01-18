@@ -1,6 +1,6 @@
 // Order n dodecahedral
 
-import { p } from "../constants.js";
+import { p } from "./constants.js";
 
 
 const vertices = [

@@ -1,7 +1,7 @@
-import * as ORDERN from "../data/hyperbolic/63n.js";
+import * as ORDERN from "../data/63n.js";
 import * as GEOM from "./hyperbolic-geometry.js";
 
-function hyperbolicHexagonalGeometry(transform, order, refinement, compact) {
+function hexagonalGeometry(transform, order, refinement, compact) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -20,4 +20,4 @@ function hyperbolicHexagonalGeometry(transform, order, refinement, compact) {
 
 }
 
-export { hyperbolicHexagonalGeometry };
+export { hexagonalGeometry };

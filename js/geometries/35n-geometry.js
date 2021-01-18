@@ -1,7 +1,7 @@
-import * as ORDERN from "../data/hyperbolic/35n.js";
+import * as ORDERN from "../data/35n.js";
 import * as GEOM from "../geometries/hyperbolic-geometry.js";
 
-function hyperbolicIcosahedronGeometry(transform, order, refinement, compact) {
+function icosahedronGeometry(transform, order, refinement, compact) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -17,4 +17,4 @@ function hyperbolicIcosahedronGeometry(transform, order, refinement, compact) {
 
 }
 
-export { hyperbolicIcosahedronGeometry };
+export { icosahedronGeometry };

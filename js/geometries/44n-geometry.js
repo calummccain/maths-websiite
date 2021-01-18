@@ -1,7 +1,7 @@
-import * as ORDERN from "../data/hyperbolic/44n.js";
+import * as ORDERN from "../data/44n.js";
 import * as GEOM from "./hyperbolic-geometry.js";
 
-function hyperbolicSquareGeometry(transform, order, refinement, compact) {
+function squareGeometry(transform, order, refinement, compact) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -20,4 +20,4 @@ function hyperbolicSquareGeometry(transform, order, refinement, compact) {
 
 }
 
-export { hyperbolicSquareGeometry };
+export { squareGeometry };

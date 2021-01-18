@@ -1,6 +1,6 @@
 // order n icosahedral
 
-import { p } from "../constants.js";
+import { p } from "./constants.js";
 
 
 const vertices = [
