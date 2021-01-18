@@ -17,6 +17,7 @@ function hyperbolicTetrahedronGeometry(transform, order, refinement, compact, me
 
     if (metric == "spherical") {
 
+        refinement += 1;
         tetrahedron = sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, ORDERN.faceReflections, d);
 
     } else if (metric == "hyperbolic") {

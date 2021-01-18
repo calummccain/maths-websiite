@@ -17,6 +17,7 @@ function cubeGeometry(transform, order, refinement, compact, metric) {
 
     if (metric == "spherical") {
 
+        refinement += 1;
         cube = sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, ORDERN.faceReflections, d);
 
     } else if (metric == "euclidean") {

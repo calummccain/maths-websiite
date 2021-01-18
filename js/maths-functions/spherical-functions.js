@@ -43,27 +43,32 @@ function transformVertices(baseVertices, transformation, dictionary) {
 
 function sphereToPoincare(point, d) {
 
-    var scale = d / (d - point[0]);
-    var newPoint = [point[1] * scale, point[2] * scale, point[3] * scale];
+    if (Math.abs(point[0] - d) < 1e-4) {
 
-    return newPoint;
+        return [point[1], point[2], point[3]];
+
+    } else {
+
+        var scale = d / (d + point[0]);
+        return [point[1] * scale, point[2] * scale, point[3] * scale];
+
+    }
 
 }
+
 
 function sphericalInnerProduct(x, y) {
 
-    var innerProduct = x[0] * y[0] + x[1] * y[1] + x[2] * y[2] + x[3] * y[3];
-
-    return innerProduct;
+    return x[0] * y[0] + x[1] * y[1] + x[2] * y[2] + x[3] * y[3];
 
 }
+
 
 function sphereNorm(x) {
 
-    var norm = x[0] ** 2 + x[1] ** 2 + x[2] ** 2 + x[3] ** 2;
-
-    return norm;
+    return x[0] ** 2 + x[1] ** 2 + x[2] ** 2 + x[3] ** 2;
 
 }
+
 
 export { transformVertices, sphereNorm, sphereToPoincare, sphericalInnerProduct };
