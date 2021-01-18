@@ -89,7 +89,9 @@ function f(n, v) {
 
     } else if (n == 4) {
 
-        return [v[0], v[1], v[2], v[3]];
+        // factor of 1/2 is arbitrary but scales shapes nicely
+
+        return [v[0], v[1] / 2, v[2] / 2, v[3] / 2];
 
     } else if (n == 5) {
 
