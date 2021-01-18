@@ -1,6 +1,6 @@
 import * as ORDERN from "../data/33n.js";
-import { hyperbolicGeometry } from "../geometries/hyperbolic-geometry.js";
-import { sphericalGeometry } from "../geometries/spherical-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
+import { sphericalGeometry } from "./spherical-geometry.js";
 
 function tetrahedronGeometry(transform, order, refinement, compact, metric) {
 

@@ -1,5 +1,5 @@
 import * as THREE from "../three.module.js";
-import * as FACE from "../faces/klein-hyperbolic-faces.js";
+import { hyperbolicFace } from "../faces/hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 
 function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, names) {
@@ -32,7 +32,7 @@ function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSide
         faceVertices = faceVertices.map((x) => kleinVertices[faces[i][x]]);
 
         // kleinFace subdivides the face automatically and returns the vertices and the face indices
-        [subdividedFaces, subdividedVertices] = FACE.kleinFace(
+        [subdividedFaces, subdividedVertices] = hyperbolicFace(
             faceVertices,
             refinement,
             compact

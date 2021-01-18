@@ -1,10 +1,9 @@
 import * as THREE from "../three.module.js";
-import { sphericalFace } from "../faces/spherical-faces.js";
+import { euclideanFace } from "../faces/euclidean-faces.js";
 import * as SF from "../maths-functions/spherical-functions.js";
-import * as VF from "../maths-functions/vector-functions.js";
 
 
-function sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, names, d) {
+function euclideanGeometry(vertices, faces, matrixDict, transform, numberOfSides, names) {
 
     // It is useful to have the f matrix separately defined
     function f(vector) {
@@ -31,16 +30,14 @@ function sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides
         var initial = 0;
         var faceVertices = Array(numberOfSides).fill().map(() => initial++);
         faceVertices = faceVertices.map((x) => properVertices[faces[i][x]]);
-        var faceData = sphericalFace(faceVertices, refinement);
+        var faceData = euclideanFace(faceVertices);
 
         var facets = faceData[0];
-        var hypersphereVertices = faceData[1];
+        var euclideanVertices = faceData[1];
 
-        for (var j = 0; j < hypersphereVertices.length; j++) {
+        for (var j = 0; j < euclideanVertices.length; j++) {
 
-            var vertex = VF.vectorScale(hypersphereVertices[j], 1 / Math.sqrt(SF.sphereNorm(hypersphereVertices[j])));
-            var vertex2 = SF.sphereToPoincare(vertex, d);
-            faceGeometry.vertices.push(new THREE.Vector3(vertex2[0], vertex2[1], vertex2[2]));
+            faceGeometry.vertices.push(new THREE.Vector3(euclideanVertices[j][1], euclideanVertices[j][2], euclideanVertices[j][3]));
 
         }
 
@@ -62,9 +59,11 @@ function sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides
 
     }
 
+    console.log(cellGeometry)
+
     return cellGeometry;
 
 }
 
 
-export { sphericalGeometry };
+export { euclideanGeometry };

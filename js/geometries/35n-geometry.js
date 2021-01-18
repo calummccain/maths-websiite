@@ -1,5 +1,5 @@
 import * as ORDERN from "../data/35n.js";
-import * as GEOM from "../geometries/hyperbolic-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function icosahedronGeometry(transform, order, refinement, compact) {
 
@@ -11,7 +11,7 @@ function icosahedronGeometry(transform, order, refinement, compact) {
         return ORDERN.matrixDict(order, letter, vector);
     }
 
-    var icosahedron = GEOM.hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections)
+    var icosahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections)
 
     return [icosahedron, ORDERN.faceReflections];
 

@@ -1,5 +1,5 @@
 import * as ORDERN from "../data/44n.js";
-import * as GEOM from "./hyperbolic-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function squareGeometry(transform, order, refinement, compact) {
 
@@ -14,7 +14,7 @@ function squareGeometry(transform, order, refinement, compact) {
     const newVertices = [];
     vertices.forEach((v) => { newVertices.push(ORDERN.conversion(order, v)) });
 
-    var square = GEOM.hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
+    var square = hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
     return [square, ORDERN.faceReflections];
 

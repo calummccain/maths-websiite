@@ -54,7 +54,6 @@ function d(n, v) {
 
     } else if (n == 4) {
 
-        // CHECK
         return [v[0], 2 * v[0] - 1 * v[1], v[2], v[3]];
 
     } else if (n == 5) {
@@ -89,8 +88,6 @@ function f(n, v) {
         return [v[0] / 2, v[1] / 2, v[2] / 2, v[3] / 2];
 
     } else if (n == 4) {
-
-        // CHANGE!
 
         return [v[0], v[1], v[2], v[3]];
 
@@ -155,8 +152,6 @@ function center(n) {
         return [2, 0, 0, 0];
 
     } else if (n == 4) {
-
-        // CHECK!
 
         return [1, 0, 0, 0];
 

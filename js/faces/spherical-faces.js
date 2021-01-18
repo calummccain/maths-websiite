@@ -1,6 +1,6 @@
 import * as VF from "../maths-functions/vector-functions.js";
 
-function sphereFace(vertices, refinement) {
+function sphericalFace(vertices, refinement) {
 
     var sideNumber = vertices.length;
 
@@ -65,4 +65,4 @@ function sphereFace(vertices, refinement) {
 
 }
 
-export { sphereFace };
+export { sphericalFace };

@@ -6,9 +6,7 @@ function addCellToGroup(params) {
     var group = params.group;
     var metric = params.metric || "";
     var refinement = params.refinement || 3;
-    var cell = params.cell || 0;
     var opacityValue = params.opacity || 1;
-    var d = params.d || 1;
     var transform = params.transform || "";
     var order = params.order || 0;
     var compact = params.compact || "compact";
@@ -19,26 +17,6 @@ function addCellToGroup(params) {
     var faceMode = params.faceMode || false;
 
     var shapeGeometry, faceReflections;
-
-    // if (metric === "spherical") {
-
-    //     var d = 1;
-
-    //     shapeGeometry = geometryFunction(refinement, cell, d);
-
-    // } else if (metric === "euclidean") {
-
-    //     shapeGeometry = new THREE.BoxGeometry(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3));
-
-    // } else if (metric === "hyperbolic") {
-
-    //     [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact);
-
-    // } else {
-
-    //     console.log("Please enter \"spherical\" or \"euclidean\" or \"hyperbolic\"");
-
-    // }
 
     [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact, metric);
 
@@ -87,84 +65,46 @@ function addCellToGroup(params) {
 
     } else {
 
-        if (metric === "euclidean") {
+        var cellGeometry = new THREE.Geometry();
 
-            if (colour === "normal") {
+        for (var j = 0; j < numberofFaces; j++) {
 
-                shapeGeometry.computeVertexNormals();
-                var cellMesh = new THREE.Mesh(
-                    shapeGeometry,
-                    new THREE.MeshNormalMaterial({
-                        side: THREE.DoubleSide
-                        //wireframe: true,
-                        //wireframeLineWidth: 2
-                    }));
-
-            } else {
-
-                var cellMesh = new THREE.Mesh(
-                    shapeGeometry,
-                    new THREE.MeshStandardMaterial({
-                        color: new THREE.Color(colour),
-                        roughness: 0.5,
-                        metalness: 0,
-                        flatShading: true,
-                        opacity: opacityValue,
-                        transparent: true,
-                        side: THREE.DoubleSide
-                    }));
-
-            }
-
-            cellMesh.position.set(position[0], position[1], position[2]);
-            cellMesh.name = name;
-
-            group.add(cellMesh);
-
-        } else {
-
-            var cellGeometry = new THREE.Geometry();
-
-            for (var j = 0; j < numberofFaces; j++) {
-
-                cellGeometry.merge(shapeGeometry[j]);
-
-            }
-
-            if (colour === "normal") {
-
-                cellGeometry.computeVertexNormals();
-                var cellMesh = new THREE.Mesh(
-                    cellGeometry,
-                    new THREE.MeshNormalMaterial({
-                        side: THREE.DoubleSide
-                        //wireframe: true,
-                        //wireframeLineWidth: 2
-                    }));
-
-            } else {
-                cellGeometry.computeFaceNormals();
-                var cellMesh = new THREE.Mesh(
-                    cellGeometry,
-                    new THREE.MeshLambertMaterial({
-                        color: new THREE.Color(colour),
-                        //roughness: 0,
-                        //metalness: 0,
-                        // wireframe: true,
-                        flatShading: true,
-                        opacity: opacityValue,
-                        transparent: true,
-                        side: THREE.DoubleSide
-                    }));
-
-            }
-
-            cellMesh.position.set(position[0], position[1], position[2]);
-            cellMesh.name = name;
-
-            group.add(cellMesh);
+            cellGeometry.merge(shapeGeometry[j]);
 
         }
+
+        if (colour === "normal") {
+
+            cellGeometry.computeVertexNormals();
+            var cellMesh = new THREE.Mesh(
+                cellGeometry,
+                new THREE.MeshNormalMaterial({
+                    side: THREE.DoubleSide
+                    //wireframe: true,
+                    //wireframeLineWidth: 2
+                }));
+
+        } else {
+            cellGeometry.computeFaceNormals();
+            var cellMesh = new THREE.Mesh(
+                cellGeometry,
+                new THREE.MeshLambertMaterial({
+                    color: new THREE.Color(colour),
+                    //roughness: 0,
+                    //metalness: 0,
+                    // wireframe: true,
+                    flatShading: true,
+                    opacity: opacityValue,
+                    transparent: true,
+                    side: THREE.DoubleSide
+                }));
+
+        }
+
+        cellMesh.position.set(position[0], position[1], position[2]);
+        cellMesh.name = name;
+
+        group.add(cellMesh);
 
     }
 

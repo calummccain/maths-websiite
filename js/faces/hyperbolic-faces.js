@@ -1,6 +1,6 @@
 import * as VF from "../maths-functions/vector-functions.js";
 
-function kleinFace(vertices, refinement, compact) {
+function hyperbolicFace(vertices, refinement, compact) {
 
     var sideNumber = vertices.length;
     var faces = [];
@@ -142,4 +142,4 @@ function kleinFace(vertices, refinement, compact) {
 
 }
 
-export { kleinFace };
+export { hyperbolicFace };

@@ -1,6 +1,7 @@
 import * as ORDERN from "../data/43n.js";
-import { hyperbolicGeometry } from "../geometries/hyperbolic-geometry.js";
-import { sphericalGeometry } from "../geometries/spherical-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
+import { sphericalGeometry } from "./spherical-geometry.js";
+import { euclideanGeometry } from "./euclidean-geometry.js";
 
 function cubeGeometry(transform, order, refinement, compact, metric) {
 
@@ -22,7 +23,7 @@ function cubeGeometry(transform, order, refinement, compact, metric) {
 
     } else if (metric == "euclidean") {
 
-        //cube = euclideanGeometry();
+        cube = euclideanGeometry(vertices, faces, matrixDict, transform, numberOfSides, ORDERN.faceReflections);
 
     } else if (metric == "hyperbolic") {
 

@@ -1,5 +1,5 @@
 import * as ORDERN from "../data/36n.js";
-import * as GEOM from "./hyperbolic-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function triangularGeometry(transform, order, refinement, compact) {
 
@@ -14,7 +14,7 @@ function triangularGeometry(transform, order, refinement, compact) {
     const newVertices = [];
     vertices.forEach((v) => { newVertices.push(ORDERN.conversion(order, v)) });
 
-    var triangular = GEOM.hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
+    var triangular = hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
 
     return [triangular, ORDERN.faceReflections];
 
