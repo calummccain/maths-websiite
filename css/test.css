@@ -146,33 +146,19 @@ html, body {
 }
 
 a:link {
-    color: rgb(154, 155, 103);
+    text-decoration: none;
+    color: #818181;
 }
-
+  
 a:visited {
-    color: rgb(161, 117, 104);
+    text-decoration: none;
+    color: #818181;
 }
 
-.tetrahedral:hover {
-    color: #EC5064;
+#header {
+    font-size: large;
 }
 
-.cubic:hover {
-    color: #27686A;
-}
-
-.octahedral:hover {
-    color: #4949FF;
-}
-
-.dodecahedral:hover {
-    color: #6A359C;
-}
-
-.icosahedral:hover {
-    color: #FA8607;
-}
-
-.hexagonal:hover {
-    color: #1F8276;
+#content3 {
+    display: none;
 }

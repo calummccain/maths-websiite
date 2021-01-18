@@ -223,7 +223,6 @@
                     console.log(obj);
                     window.location = CONSTANTS.shapeLinks[obj.name];
                 } else {
-                    console.log("empty space");
                     clickObject = null;
                     document.getElementById("content1").innerHTML = "empty space";
                 }
@@ -259,6 +258,7 @@
                         });
                     }
                 } else {
+                    document.getElementById("content1").innerHTML = document.getElementById("content3").innerHTML;
                     meshes.children.forEach(mesh => { mesh.material.emissive.setRGB(0, 0, 0); });
                     intersectionObjectName = null;
                 }
