@@ -30,14 +30,14 @@
             import * as MAIN from "../js/main/main-utilities.js";
             import * as THREE from "../js/three.module.js";
 
-            import { hyperbolicTetrahedronGeometry } from "../js/geometries/33n-geometry.js";
-            import { hyperbolicOctahedronGeometry } from "../js/geometries/34n-geometry.js";
-            import { hyperbolicIcosahedronGeometry } from "../js/geometries/35n-geometry.js";
+            import { tetrahedronGeometry } from "../js/geometries/33n-geometry.js";
+            import { octahedronGeometry } from "../js/geometries/34n-geometry.js";
+            import { icosahedronGeometry } from "../js/geometries/35n-geometry.js";
             import { cubeGeometry } from "../js/geometries/43n-geometry.js";
-            import { hyperbolicDodecahedronGeometry } from "../js/geometries/53n-geometry.js";
-            import { hyperbolicHexagonalGeometry } from "../js/geometries/63n-geometry.js";
-            import { hyperbolicSquareGeometry } from "../js/geometries/44n-geometry.js";
-            import { hyperbolicTriangularGeometry } from "../js/geometries/36n-geometry.js";
+            import { dodecahedronGeometry } from "../js/geometries/53n-geometry.js";
+            import { hexagonalGeometry } from "../js/geometries/63n-geometry.js";
+            import { squareGeometry } from "../js/geometries/44n-geometry.js";
+            import { triangularGeometry } from "../js/geometries/36n-geometry.js";
 
             import { MapControls } from "../js/orbit-controls.js";
             import * as CONSTANTS from "../js/main/main-constants.js";
@@ -74,14 +74,14 @@
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
             const geom = {
-                "{3,5}": hyperbolicIcosahedronGeometry,
-                "{5,3}": hyperbolicDodecahedronGeometry,
+                "{3,5}": icosahedronGeometry,
+                "{5,3}": dodecahedronGeometry,
                 "{4,3}": cubeGeometry,
-                "{3,3}": hyperbolicTetrahedronGeometry,
-                "{3,4}": hyperbolicOctahedronGeometry,
-                "{6,3}": hyperbolicHexagonalGeometry,
-                "{4,4}": hyperbolicSquareGeometry,
-                "{3,6}": hyperbolicTriangularGeometry
+                "{3,3}": tetrahedronGeometry,
+                "{3,4}": octahedronGeometry,
+                "{6,3}": hexagonalGeometry,
+                "{4,4}": squareGeometry,
+                "{3,6}": triangularGeometry
             };
 
             // add the polyhedrons to the scene

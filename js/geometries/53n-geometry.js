@@ -2,7 +2,7 @@ import * as ORDERN from "../data/53n.js";
 import { hyperbolicGeometry } from "../geometries/hyperbolic-geometry.js";
 import { sphericalGeometry } from "../geometries/spherical-geometry.js";
 
-function hdodecahedronGeometry(transform, order, refinement, compact, metric) {
+function dodecahedronGeometry(transform, order, refinement, compact, metric) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;

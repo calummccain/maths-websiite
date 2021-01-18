@@ -7,8 +7,6 @@ function sphereFace(vertices, refinement) {
     var coords = vertices;
     var faces = [];
 
-    console.log(vertices)
-
     if (sideNumber == 3) {
 
         faces = [[0, 1, 2]];
@@ -26,8 +24,6 @@ function sphereFace(vertices, refinement) {
         coords.push(center);
 
     }
-
-    console.log([coords, faces])
 
     var j = 0;
 

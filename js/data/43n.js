@@ -1,6 +1,6 @@
 // Order n cubic
 
-import { p } from "../constants.js";
+import { p } from "./constants.js";
 
 
 const vertices = [
