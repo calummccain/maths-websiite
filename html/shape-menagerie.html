@@ -12,6 +12,7 @@
         <script>
             $(function () {
                 $("#side-menu").load("./menu-bars.html");
+                $("#top-menu").load("./top-nav.html");
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             });
         </script>
@@ -24,6 +25,7 @@
     <body>
 
         <div id="side-menu"></div>
+        <div id="top-menu"></div>
 
         <script type="module">
 
@@ -89,7 +91,8 @@
             CONSTANTS.names.forEach((name) => {
                 MAIN.addCellToGroup({
                     geometryFunction: geom[CONSTANTS.geometry[name]],
-                    group: meshes, metric: CONSTANTS.metric[name],
+                    group: meshes,
+                    metric: CONSTANTS.metric[name],
                     refinement: CONSTANTS.mainDefinition,
                     order: CONSTANTS.order[name],
                     colour: CONSTANTS.colour[name],
@@ -258,7 +261,7 @@
                         });
                     }
                 } else {
-                    document.getElementById("content1").innerHTML = document.getElementById("content3").innerHTML;
+                    document.getElementById("content1").innerHTML = document.getElementById("content1").innerHTML;
                     meshes.children.forEach(mesh => { mesh.material.emissive.setRGB(0, 0, 0); });
                     intersectionObjectName = null;
                 }
