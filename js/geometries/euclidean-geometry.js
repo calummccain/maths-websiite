@@ -59,8 +59,6 @@ function euclideanGeometry(vertices, faces, matrixDict, transform, numberOfSides
 
     }
 
-    console.log(cellGeometry)
-
     return cellGeometry;
 
 }
