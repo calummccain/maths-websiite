@@ -5,10 +5,9 @@ import * as CONSTANTS from "./main-constants.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function main(name, geometry, lines, vertices, f) {
+function main(name, geometry, lines, vertices, f, faces) {
 
     var view = document.getElementById("view");
-    var canvas = document.getElementById("testcanvas");
 
     var WIDTH = view.clientWidth;
     var HEIGHT = view.clientHeight;
@@ -206,7 +205,75 @@ function main(name, geometry, lines, vertices, f) {
                 //scene.add(lineGroup);
 
             }
+
+        });
+
+        faces.forEach((face) => {
+
+            for (var ii = 0; ii < face.length; ii++) {
+
+                var vertex1 = HF.hyperboloidToKlein(f(vertices[face[ii]]));
+                var vertex2 = HF.hyperboloidToKlein(f(vertices[face[(ii + 1) % face.length]]));
+                var vertex3 = HF.hyperboloidToKlein(f(vertices[face[(ii + 2) % face.length]]));
+
+                var i = 0;
+                var kleinVerts = [
+                    VF.lineSphereIntersection(vertex1, vertex2),
+                    VF.lineSphereIntersection(vertex3, vertex2)
+                ];
+
+                while (i < 3) {
+
+                    var newKleinVerts = [];
+
+                    for (var j = 0; j < kleinVerts.length - 1; j++) {
+
+                        newKleinVerts.push(kleinVerts[j]);
+                        newKleinVerts.push(VF.lineSphereIntersection(VF.midpoint(kleinVerts[j], kleinVerts[j + 1]), vertex2));
+
+                    }
+
+                    newKleinVerts.push(kleinVerts[kleinVerts.length - 1]);
+                    kleinVerts = newKleinVerts;
+                    i++;
+
+                }
+
+                for (var k = 0; k < kleinVerts.length - 1; k++) {
+                    var e1 = new THREE.Vector3().fromArray(HF.kleinToPoincare(kleinVerts[k]));
+                    var e2 = new THREE.Vector3().fromArray(HF.kleinToPoincare(kleinVerts[k + 1]));
+                    var f1 = new THREE.Vector3().fromArray(HF.kleinToPoincare(kleinVerts[k]));
+                    var f2 = new THREE.Vector3().fromArray(HF.kleinToPoincare(kleinVerts[k + 1]));
+
+                    var d1 = camPos.distanceTo(e1);
+                    var d2 = camPos.distanceTo(e2);
+
+                    var o1 = new THREE.Raycaster(camPos, e1.sub(camPos).normalize()).intersectObjects(meshes.children);
+                    var o2 = new THREE.Raycaster(camPos, e2.sub(camPos).normalize()).intersectObjects(meshes.children);
+
+                    if (o1.length === 0 && o2.length === 0) {
+                        drawLine(f1, f2);
+                    } else {
+                        if (o1.length === 0) {
+                            if (d2 - o2[0].distance < eps) {
+                                drawLine(f1, f2);
+                            }
+                        } else {
+                            if (o2.length === 0) {
+                                if (d1 - o1[0].distance < eps) {
+                                    drawLine(f1, f2);
+                                }
+                            } else if ((d1 - o1[0].distance < eps) && (d2 - o2[0].distance < eps)) {
+                                drawLine(f1, f2);
+                            }
+                        }
+                    }
+                    //scene.add(lineGroup);
+
+                }
+            }
         })
+
     }
 
     scene.add(lineGroup);
