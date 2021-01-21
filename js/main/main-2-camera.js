@@ -3,6 +3,7 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as CONSTANTS from "./main-constants.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
+import * as VF from "../maths-functions/vector-functions.js";
 
 function main(name, geometry, lines, vertices, f) {
 
@@ -83,7 +84,7 @@ function main(name, geometry, lines, vertices, f) {
         faceMode: true,
         transform: "",
         compact: CONSTANTS.compact[name],
-        opacity: 0.3
+        opacity: 0.01
     });
 
     // setup the renderer
@@ -103,64 +104,107 @@ function main(name, geometry, lines, vertices, f) {
 
     const material2 = new THREE.LineBasicMaterial({ color: 0x000000 });
 
+    var lineGroup = new THREE.Group();
+
     function drawLine(p1, p2) {
+
         var points = [p1, p2];
-
         var geometry = new THREE.BufferGeometry().setFromPoints(points);
-
         var line = new THREE.Line(geometry, material2);
-
-        scene.add(line);
+        lineGroup.add(line);
     }
 
 
     // add a raycaster to the scene for object selection
     var raycaster = new THREE.Raycaster(), mouseVector = new THREE.Vector2();
-    var camPos = new THREE.Vector3().fromArray(pos);
-    const eps = 1e-4;
-    lines.forEach((endpoints) => {
-        var e1 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(f(vertices[endpoints[0]])));
-        var e2 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(f(vertices[endpoints[1]])));
-        var f1 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(f(vertices[endpoints[0]])));
-        var f2 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(f(vertices[endpoints[1]])));
 
-        console.log(f1, f2)
-        var d1 = camPos.distanceTo(e1);
-        var d2 = camPos.distanceTo(e2);
+    function cameraLines() {
 
-        var o1 = new THREE.Raycaster(camPos, e1.sub(camPos).normalize()).intersectObjects(meshes.children);
-        var o2 = new THREE.Raycaster(camPos, e2.sub(camPos).normalize()).intersectObjects(meshes.children);
+        console.log("calculating")
 
-        if (o1.length === 0 && o2.length === 0) {
-            drawLine(f1, f2);
-        } else {
-            if (o1.length === 0) {
-                if (Math.abs(o2[0].distance - d2) < eps) {
-                    drawLine(f1, f2);
+        lineGroup.children = [];
+
+        var camPos = cameras[0].camera.position;
+        const eps = 1e-2;
+
+        lines.forEach((endpoints) => {
+
+            var i = 0;
+            var hypVerts = [f(vertices[endpoints[0]]), f(vertices[endpoints[1]])];
+
+            while (i < 4) {
+
+                var newHypVerts = [];
+
+                for (var j = 0; j < hypVerts.length - 1; j++) {
+
+                    newHypVerts.push(hypVerts[j]);
+                    var sum = VF.vectorSum(hypVerts[j], hypVerts[j + 1]);
+                    newHypVerts.push(VF.vectorScale(sum, 1 / Math.sqrt(HF.hyperbolicNorm(sum))));
+
                 }
-            } else {
-                if (o2.length === 0) {
-                    if (Math.abs(o1[0].distance - d1) < eps) {
-                        drawLine(f1, f2);
-                    }
-                } else if ((Math.abs(o1[0].distance - d1) < eps) && (Math.abs(o2[0].distance - d2) < eps)) {
+
+                newHypVerts.push(hypVerts[hypVerts.length - 1]);
+                hypVerts = newHypVerts;
+                i++;
+
+            }
+
+            for (var k = 0; k < hypVerts.length - 1; k++) {
+                var e1 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(hypVerts[k]));
+                var e2 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(hypVerts[k + 1]));
+                var f1 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(hypVerts[k]));
+                var f2 = new THREE.Vector3().fromArray(HF.hyperboloidToPoincare(hypVerts[k + 1]));
+
+                var d1 = camPos.distanceTo(e1);
+                var d2 = camPos.distanceTo(e2);
+
+                var o1 = new THREE.Raycaster(camPos, e1.sub(camPos).normalize()).intersectObjects(meshes.children);
+                var o2 = new THREE.Raycaster(camPos, e2.sub(camPos).normalize()).intersectObjects(meshes.children);
+
+                // if (o1.length != 0) {
+                //     console.log(o1[0].object.faceName)
+                // }
+
+                if (o1.length === 0 && o2.length === 0) {
                     drawLine(f1, f2);
+                } else {
+                    if (o1.length === 0) {
+                        if (d2 - o2[0].distance < eps) {
+                            drawLine(f1, f2);
+                        }
+                    } else {
+                        if (o2.length === 0) {
+                            if (d1 - o1[0].distance < eps) {
+                                drawLine(f1, f2);
+                            }
+                        } else if ((d1 - o1[0].distance < eps) && (d2 - o2[0].distance < eps)) {
+                            drawLine(f1, f2);
+                        }
+                    }
                 }
             }
-        }
+        })
+    }
 
-    })
-    var hit = [0, 0, 0]
+    scene.add(lineGroup);
 
     // add the meshes to the scene
     scene.add(meshes);
     scene.add(ghosts);
 
     // add some event listeners
-    window.addEventListener("click", onMouseClick, false);
-    window.addEventListener("mousemove", onMouseMove, false);
+    //window.addEventListener("click", onMouseClick, false);
+    //window.addEventListener("mousemove", onMouseMove, false);
     window.addEventListener("resize", onWindowResize, false);
-    window.addEventListener("touchend", touchEnd, false);
+    window.addEventListener('keydown', (event) => {
+        if (event.key === "Enter"){
+            cameraLines();
+        }
+
+    });
+    //window.addEventListener("touchstart", touchStart, false);
+    //window.addEventListener("touchend", touchEnd, false);
 
     var material = new THREE.MeshPhongMaterial({
         color: 0xff0000,
