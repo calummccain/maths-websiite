@@ -91,21 +91,21 @@ function midpoint(a, b, c, compact) {
 
     var newVector;
 
-    if ((norm(a) > 0.99999) && (norm(b) > 0.9999) && (compact === "uncompact")) {
+    // if ((norm(a) > 0.99999) && (norm(b) > 0.9999) && (compact === "uncompact")) {
 
-        //var halfDist = Math.sqrt((vectorDot(a, b) + 1) / 2);
-        var shiftedA = vectorDiff(a, c);
-        var shiftedB = vectorDiff(b, c);
-        var rad = norm(shiftedA);
-        //console.log(c, norm(c), rad, norm(shiftedB));
-        var unnormalisedSum = vectorScale(vectorSum(shiftedA, shiftedB), 1 / 2);
-        newVector = vectorSum(c, vectorScale(unnormalisedSum, rad / norm(unnormalisedSum)));
+    //     //var halfDist = Math.sqrt((vectorDot(a, b) + 1) / 2);
+    //     var shiftedA = vectorDiff(a, c);
+    //     var shiftedB = vectorDiff(b, c);
+    //     var rad = norm(shiftedA);
+    //     //console.log(c, norm(c), rad, norm(shiftedB));
+    //     var unnormalisedSum = vectorScale(vectorSum(shiftedA, shiftedB), 1 / 2);
+    //     newVector = vectorSum(c, vectorScale(unnormalisedSum, rad / norm(unnormalisedSum)));
 
-    } else {
+    // } else {
 
-        newVector = vectorScale(vectorSum(a, b), 1 / 2);
+    //     newVector = vectorScale(vectorSum(a, b), 1 / 2);
 
-    }
+    // }
 
     newVector = vectorScale(vectorSum(a, b), 0.5);
 
