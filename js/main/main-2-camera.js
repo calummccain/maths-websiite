@@ -42,10 +42,10 @@ function main(name, geometry, lines, vertices, f) {
             }
         },
         {
-            left: 0.55,
+            left: 0.75,
             bottom: 0.05,
-            width: 0.4,
-            height: 0.4,
+            width: 0.2,
+            height: 0.2,
             background: 0xAAAAAA,
             eye: pos,
             up: [0, 0, 1],
@@ -120,8 +120,6 @@ function main(name, geometry, lines, vertices, f) {
 
     function cameraLines() {
 
-        console.log("calculating")
-
         lineGroup.children = [];
 
         var camPos = cameras[0].camera.position;
@@ -132,7 +130,7 @@ function main(name, geometry, lines, vertices, f) {
             var i = 0;
             var hypVerts = [f(vertices[endpoints[0]]), f(vertices[endpoints[1]])];
 
-            while (i < 4) {
+            while (i < 5) {
 
                 var newHypVerts = [];
 
@@ -190,8 +188,8 @@ function main(name, geometry, lines, vertices, f) {
     scene.add(lineGroup);
 
     // add the meshes to the scene
-    scene.add(meshes);
-    scene.add(ghosts);
+    //scene.add(meshes);
+    //scene.add(ghosts);
 
     // add some event listeners
     //window.addEventListener("click", onMouseClick, false);

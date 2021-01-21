@@ -28,12 +28,12 @@
 
         <script type="module">
             import { main } from "../js/main/main-2-camera.js";
-            import { icosahedronGeometry } from "../js/geometries/35n-geometry.js";
-            import * as DATA from "../js/data/35n.js";
+            import { dodecahedronGeometry } from "../js/geometries/53n-geometry.js";
+            import * as DATA from "../js/data/53n.js";
             function f(x) {
-                return DATA.f(3, x);
+                return DATA.f(4, x);
             }
-            main("{3,5,3}", icosahedronGeometry, DATA.lines, DATA.vertices, f);
+            main("{5,3,4}", dodecahedronGeometry, DATA.edges, DATA.vertices, f);
 
         </script>
 

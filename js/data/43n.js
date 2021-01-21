@@ -15,6 +15,22 @@ const vertices = [
 ];
 
 
+const edges = [
+    [0, 3],
+    [3, 2],
+    [2, 1],
+    [1, 0],
+    [7, 4],
+    [4, 5],
+    [5, 6],
+    [6, 7],
+    [0, 4],
+    [1, 5],
+    [2, 6],
+    [3, 7]
+];
+
+
 const faces = [
     [0, 3, 2, 1],
     [4, 7, 3, 0],
@@ -174,4 +190,4 @@ function center(n) {
 
 }
 
-export { vertices, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
+export { vertices, edges, faces, a, b, c, d, e, f, matrixDict, faceReflections, center };
