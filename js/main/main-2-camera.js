@@ -112,6 +112,7 @@ function main(name, geometry, lines, vertices, f) {
         var geometry = new THREE.BufferGeometry().setFromPoints(points);
         var line = new THREE.Line(geometry, material2);
         lineGroup.add(line);
+
     }
 
 
@@ -121,6 +122,8 @@ function main(name, geometry, lines, vertices, f) {
     function cameraLines() {
 
         lineGroup.children = [];
+
+        console.log("yes")
 
         var camPos = cameras[0].camera.position;
         const eps = 1e-2;
@@ -181,6 +184,8 @@ function main(name, geometry, lines, vertices, f) {
                         }
                     }
                 }
+                //scene.add(lineGroup);
+
             }
         })
     }
