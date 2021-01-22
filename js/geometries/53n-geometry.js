@@ -2,7 +2,7 @@ import * as ORDERN from "../data/53n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
 
-function dodecahedronGeometry(transform, order, refinement, compact, metric) {
+function dodecahedronGeometry(transform, order, refinement, compact, metric, model) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -21,7 +21,7 @@ function dodecahedronGeometry(transform, order, refinement, compact, metric) {
 
     } else if (metric == "hyperbolic") {
 
-        dodecahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
+        dodecahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
 
     }
 

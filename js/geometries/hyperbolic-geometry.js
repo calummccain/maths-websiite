@@ -2,7 +2,7 @@ import * as THREE from "../three.module.js";
 import { hyperbolicFace } from "../faces/hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 
-function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, names) {
+function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, names, model) {
 
     // It is useful to have the f matrix separately defined
     function f(vector) {
@@ -42,10 +42,22 @@ function hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSide
         // Then add these to the faceGeometry (as THREE.Vector3)
         for (var j = 0; j < subdividedVertices.length; j++) {
 
-            // var vertex = subdividedVertices[j];
-            var vertex = HF.kleinToPoincare(subdividedVertices[j]);
-            // var vertex = HF.poincareToUpperHalfPlane(vertex2);
-            // var vertex = subdividedVertices[j];
+            var vertex = [0, 0, 0];
+
+            if (model === "klein") {
+
+                vertex = subdividedVertices[j]
+
+            } else if (model === "poincare") {
+
+                vertex = HF.kleinToPoincare(subdividedVertices[j]);
+
+            } else if (model === "uhp") {
+
+                vertex = HF.kleinToUpperHalfPlane(subdividedVertices[j]);
+
+            }
+
             faceGeometry.vertices.push(new THREE.Vector3(vertex[0], vertex[1], vertex[2]));
 
         }

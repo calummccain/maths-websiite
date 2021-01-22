@@ -2,7 +2,7 @@ import * as ORDERN from "../data/33n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
 
-function tetrahedronGeometry(transform, order, refinement, compact, metric) {
+function tetrahedronGeometry(transform, order, refinement, compact, metric, model) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -22,7 +22,7 @@ function tetrahedronGeometry(transform, order, refinement, compact, metric) {
 
     } else if (metric == "hyperbolic") {
 
-        tetrahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
+        tetrahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
 
     }
 

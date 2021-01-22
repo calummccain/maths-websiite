@@ -89,6 +89,7 @@
             // add the polyhedrons to the scene
 
             CONSTANTS.names.forEach((name) => {
+
                 MAIN.addCellToGroup({
                     geometryFunction: geom[CONSTANTS.geometry[name]],
                     group: meshes,
@@ -100,7 +101,8 @@
                     position: rotatePositions[name],
                     name: name,
                     transform: CONSTANTS.transform[name],
-                    compact: CONSTANTS.compact[name]
+                    compact: CONSTANTS.compact[name],
+                    model: CONSTANTS.model[name]
                 });
 
             })

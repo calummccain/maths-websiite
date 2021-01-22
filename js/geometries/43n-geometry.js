@@ -3,7 +3,7 @@ import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
 import { euclideanGeometry } from "./euclidean-geometry.js";
 
-function cubeGeometry(transform, order, refinement, compact, metric) {
+function cubeGeometry(transform, order, refinement, compact, metric, model) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -27,7 +27,7 @@ function cubeGeometry(transform, order, refinement, compact, metric) {
 
     } else if (metric == "hyperbolic") {
 
-        cube = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
+        cube = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
 
     }
 

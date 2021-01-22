@@ -45,9 +45,7 @@ function transformVertices(baseVertices, transformation, dictionary) {
 function hyperboloidToPoincare(point) {
 
     var scale = 1 + point[0];
-    var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
-
-    return newPoint;
+    return [point[1] / scale, point[2] / scale, point[3] / scale];
 
 }
 
@@ -59,16 +57,14 @@ function hyperboloidToPoincareMod(point) {
     if (Math.abs(point[0] ** 2 - point[1] ** 2 - point[2] ** 2 - point[3] ** 2) < 0.01) {
 
         var scale = point[0];
-        var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
+        return [point[1] / scale, point[2] / scale, point[3] / scale];
 
     } else {
 
         var scale = 1 + point[0];
-        var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
+        return [point[1] / scale, point[2] / scale, point[3] / scale];
 
     }
-
-    return newPoint;
 
 }
 
@@ -77,9 +73,7 @@ function hyperboloidToPoincareMod(point) {
 function hyperboloidToKlein(point) {
 
     var scale = point[0];
-    var newPoint = [point[1] / scale, point[2] / scale, point[3] / scale];
-
-    return newPoint;
+    return [point[1] / scale, point[2] / scale, point[3] / scale];
 
 }
 
@@ -90,20 +84,16 @@ function hyperboloidToKlein(point) {
 function poincareToUpperHalfPlane(point) {
 
     const x = point[0], y = point[1], z = point[2];
-    const s = x ** 2 + y ** 2 + (1 - z) ** 2;
-    var uhp = [2 * x / s, 2 * y / s, (1 - x ** 2 - y ** 2 - z ** 2) / s];
-
-    return uhp;
+    const s = (x ** 2) + (y ** 2) + (1 - z) ** 2;
+    return [2 * x / s, 2 * y / s, (1 - (x ** 2) - (y ** 2) - (z ** 2)) / s];
 
 }
 
 function upperHalfPlaneToPoincare(point) {
 
     const x = point[0], y = point[1], z = point[2];
-    const s = x ** 2 + y ** 2 + (1 + z) ** 2;
-    var uhp = [2 * x / s, 2 * y / s, (x ** 2 + y ** 2 + z ** 2 - 1) / s];
-
-    return uhp;
+    const s = (x ** 2) + (y ** 2) + (1 + z) ** 2;
+    return [2 * x / s, 2 * y / s, ((x ** 2) + (y ** 2) + (z ** 2) - 1) / s];
 
 }
 
@@ -126,16 +116,14 @@ function lightConeToUpperHalfPlane(point) {
     var y = point[2];
     var z = point[3];
     var s = x ** 2 + y ** 2 + (w - z) ** 2;
-    var uhp = [2 * x / s, 2 * y / s, (1 - x ** 2 - y ** 2) / s];
-
-    return uhp;
+    return [2 * x / s, 2 * y / s, (1 - x ** 2 - y ** 2) / s];
 
 }
 
 function kleinToPoincare(point) {
 
-    const dist = Math.sqrt(point[0] ** 2 + point[1] ** 2 + point[2] ** 2);
-    var hyperbolicDist = 1 / (1 + Math.sqrt(Math.abs(1 - dist ** 2)));
+    const dist = Math.sqrt((point[0] ** 2) + (point[1] ** 2) + (point[2] ** 2));
+    var hyperbolicDist = 1 / (1 + Math.sqrt(Math.abs(1 - (dist ** 2))));
 
     return VF.vectorScale(point, hyperbolicDist);
 
@@ -144,18 +132,14 @@ function kleinToPoincare(point) {
 function kleinToUpperHalfPlane(point) {
 
     var poin = kleinToPoincare(point);
-    var uhp = poincareToUpperHalfPlane(poin);
-
-    return uhp;
+    return poincareToUpperHalfPlane(poin);
 
 }
 
 function upperHalfPlaneToKlein(point) {
 
     var poin = upperHalfPlaneToPoincare(point);
-    var klein = poincareToKlein(poin);
-
-    return klein;
+    return poincareToKlein(poin);
 
 }
 
@@ -163,32 +147,27 @@ function poincareToKlein(point) {
 
     const x = point[0], y = point[1], z = point[2];
     const s = 1 + x ** 2 + y ** 2 + z ** 2;
-    var uhp = [2 * x / s, 2 * y / s, 2 * z / s];
-
-    return uhp;
+    return [2 * x / s, 2 * y / s, 2 * z / s];
 
 }
 
 // hyperboloid inner product
 function hyperboloidInnerProduct(x, y) {
 
-    var innerProduct = x[0] * y[0] - x[1] * y[1] - x[2] * y[2] - x[3] * y[3];
-
-    return innerProduct;
+    return x[0] * y[0] - x[1] * y[1] - x[2] * y[2] - x[3] * y[3];
 
 }
 
 function hyperbolicNorm(x) {
 
-    var norm = x[0] ** 2 - x[1] ** 2 - x[2] ** 2 - x[3] ** 2;
-
-    return norm;
+    return x[0] ** 2 - x[1] ** 2 - x[2] ** 2 - x[3] ** 2;
 
 }
 
 
 export {
     transformVertices,
+    poincareToHyperboloid,
     hyperboloidInnerProduct,
     hyperboloidToPoincare,
     poincareToUpperHalfPlane,

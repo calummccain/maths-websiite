@@ -15,10 +15,11 @@ function addCellToGroup(params) {
     var position = params.position || [0, 0, 0];
     var name = params.name || "";
     var faceMode = params.faceMode || false;
+    var model = params.model || "";
 
     var shapeGeometry, faceReflections;
 
-    [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact, metric);
+    [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact, metric, model);
 
     // faceMode keeps the faces as seperate meshes (and hence seperate objects)
     // without faceMode the polyhedron is made as one mesh/object and the individual faces cannot be selected by ray-casting

@@ -2,7 +2,7 @@ import * as ORDERN from "../data/34n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
 
-function octahedronGeometry(transform, order, refinement, compact, metric) {
+function octahedronGeometry(transform, order, refinement, compact, metric, model) {
 
     const vertices = ORDERN.vertices;
     const faces = ORDERN.faces;
@@ -21,7 +21,7 @@ function octahedronGeometry(transform, order, refinement, compact, metric) {
 
     } else if (metric == "hyperbolic") {
 
-        octahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections);
+        octahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
 
     }
 

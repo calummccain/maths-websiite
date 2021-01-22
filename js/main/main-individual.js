@@ -40,7 +40,8 @@ function main(name, geometry) {
         name: name,
         faceMode: true,
         transform: "",
-        compact: CONSTANTS.compact[name]
+        compact: CONSTANTS.compact[name],
+        model: CONSTANTS.model[name]
     });
 
     // setup the renderer
@@ -113,7 +114,8 @@ function main(name, geometry) {
                 name: name,
                 faceMode: true,
                 transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
-                compact: CONSTANTS.compact[name]
+                compact: CONSTANTS.compact[name],
+                model: CONSTANTS.model[name]
             });
         } else {
             clickObject = null;
@@ -136,9 +138,9 @@ function main(name, geometry) {
         raycaster.setFromCamera(mouseVector, camera);
 
         var intersects = raycaster.intersectObjects(meshes.children);
-        
+
         if (intersects.length != 0) {
-        
+
             var obj = intersects[0].object;
             document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
             var colour = new THREE.Color(
@@ -158,15 +160,16 @@ function main(name, geometry) {
                 name: name,
                 faceMode: true,
                 transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
-                compact: CONSTANTS.compact[name]
+                compact: CONSTANTS.compact[name],
+                model: CONSTANTS.model[name]
             });
 
         } else {
-            
+
             clickObject = null;
             document.getElementById("content1").innerHTML = "empty space";
             document.getElementById("content2").innerHTML = "";
-        
+
         }
 
     }
@@ -217,7 +220,8 @@ function main(name, geometry) {
                             faceMode: true,
                             transform: selectedObject.cellName + selectedObject.faceName + CONSTANTS.specialLetter[name],
                             opacity: 0.5,
-                            compact: CONSTANTS.compact[name]
+                            compact: CONSTANTS.compact[name],
+                            model: CONSTANTS.model[name]
                         });
                     } else {
                         mesh.material.emissive.setRGB(0, 0, 0);

@@ -397,6 +397,43 @@ const names = [
 ];
 
 
+const model = {
+    "{4,3,3}": "",
+    "{4,3,4}": "",
+    "{4,3,5}": "poincare",
+    "{4,3,6}": "poincare",
+    "{3,5,3}": "poincare",
+    "{3,5,4}": "poincare",
+    "{3,5,5}": "poincare",
+    "{3,5,6}": "poincare",
+    "{3,3,3}": "",
+    "{3,3,4}": "",
+    "{3,3,5}": "",
+    "{3,3,6}": "poincare",
+    "{3,4,3}": "",
+    "{3,4,4}": "poincare",
+    "{3,4,5}": "poincare",
+    "{3,4,6}": "poincare",
+    "{5,3,3}": "",
+    "{5,3,4}": "poincare",
+    "{5,3,5}": "poincare",
+    "{5,3,6}": "poincare",
+    "{6,3,3}": "poincare",
+    "{6,3,4}": "poincare",
+    "{6,3,5}": "poincare",
+    "{6,3,6}": "poincare",
+    "{4,4,3}": "poincare",
+    "{4,4,4}": "poincare",
+    "{4,4,5}": "poincare",
+    "{4,4,6}": "poincare",
+    "{3,6,3}": "poincare",
+    "{3,6,4}": "poincare",
+    "{3,6,5}": "poincare",
+    "{3,6,6}": "poincare"
+};
+
+
+
 const individualDefinition = 3;
 const mainDefinition = 3;
 const groupRadius = 3;
@@ -416,5 +453,6 @@ export {
     compact,
     transform,
     geometry,
-    groupRadius
+    groupRadius,
+    model
 };
