@@ -2,10 +2,10 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
-import * as DATA from "../data/43n.js";
+import * as DATA from "../data/33n.js";
 
 const eps = 1e-3;
-const n = 5;
+const n = 6;
 
 function f(x) {
     return DATA.f(n, x);
@@ -24,7 +24,7 @@ function drawLine(p1, p2, col) {
 
 function generateSpheres() {
     var spheres = [];
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 4; i++) {
         var center = HF.uhpCenter(
             HF.hyperboloidToUpperHalfPlane(f(DATA.vertices[DATA.faces[i][0]])),
             HF.hyperboloidToUpperHalfPlane(f(DATA.vertices[DATA.faces[i][1]])),
@@ -33,11 +33,11 @@ function generateSpheres() {
 
         var sphereDict = {
             "hyperboloid": {
-                center: DATA.planeCenters[i]
+                //center: DATA.planeCenters[i]
             },
             "poincare": {
-                center: HF.hyperboloidToPoincareMod(DATA.planeCenters[i]),
-                radius: VF.norm(VF.vectorDiff(HF.hyperboloidToPoincareMod(f(DATA.vertices[DATA.faces[i][0]])), HF.hyperboloidToPoincareMod(DATA.planeCenters[i])))
+                //center: HF.hyperboloidToPoincareMod(DATA.planeCenters[i]),
+                //radius: VF.norm(VF.vectorDiff(HF.hyperboloidToPoincareMod(f(DATA.vertices[DATA.faces[i][0]])), HF.hyperboloidToPoincareMod(DATA.planeCenters[i])))
             },
             "uhp": {
                 center: center,
@@ -51,7 +51,7 @@ function generateSpheres() {
 
 function generateVertices() {
     var verts = [];
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 4; i++) {
         var vertDict = {
             "hyperboloid": f(DATA.vertices[i]),
             "poincare": HF.hyperboloidToPoincareMod(f(DATA.vertices[i])),
@@ -86,7 +86,7 @@ function visibilityTest(point, camera, spheres, vertices, model) {
     var u = VF.vectorDiff(point, camera);
     var uu = VF.norm(u) ** 2;
 
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 4; i++) {
         var oc = VF.vectorDiff(o, spheres[i][model].center);
         var uoc = VF.vectorDot(u, oc);
         var delta = (uoc ** 2) - uu * ((VF.norm(oc) ** 2) - (spheres[i][model].radius ** 2));
@@ -146,7 +146,7 @@ function main() {
             height: 1.0,
             background: 0xDDDDDD,
             eye: [5, 0, 0],
-            up: [0, 1, 0],
+            up: [0, 0, 1],
             fov: 30,
             updateCamera: function (camera, scene) {
 
@@ -199,18 +199,7 @@ function main() {
     const spheres = generateSpheres();
     const vertices = generateVertices();
 
-    for (var i = 1; i < 1; i++) {
-        var geometry = new THREE.SphereGeometry(spheres[i]["uhp"].radius, 32, 32);
-        var material = new THREE.MeshBasicMaterial({ color: 0xFF0000, opacity: 0.2, transparent: true });
-        var sphere = new THREE.Mesh(geometry, material);
-
-        scene.add(sphere);
-        sphere.position.set(spheres[i]["uhp"].center[0], spheres[i]["uhp"].center[1], spheres[i]["uhp"].center[2]);
-    }
-
-    function cameraLines() {
-
-        console.log("redrawing")
+    function cameraLines(number) {
 
         lineGroup.children = [];
 
@@ -221,7 +210,7 @@ function main() {
             var i = 0;
             var kleinVerts = [vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]];
 
-            while (i < 7) {
+            while (i < number) {
 
                 var newKleinVerts = [];
 
@@ -244,6 +233,8 @@ function main() {
 
                 if (visibilityTest(e1, camPos, spheres, vertices, "uhp") && visibilityTest(e2, camPos, spheres, vertices, "uhp")) {
                     drawLine(e1, e2, 0x000000);
+                } else {
+                    drawLine(e1, e2, 0xaaaaaa);
                 }
             }
         })
@@ -253,6 +244,10 @@ function main() {
 
     window.addEventListener("resize", onWindowResize, false);
     window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(); } });
+    window.addEventListener('mousemove', () => { cameraLines(5); });
+    window.addEventListener('mouseup', () => { cameraLines(8); });
+
+    
 
     onWindowResize();
 

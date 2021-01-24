@@ -2,13 +2,13 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
-import * as DATA from "../data/35n.js";
+import * as DATA from "../data/43n.js";
 
 const eps = 1e-3;
-const n = 3;
+const n = 5;
 
 function f(x) {
-    return DATA.f(n, DATA.a(DATA.d(n, x)));
+    return DATA.f(n, x);
 }
 
 var lineGroup = new THREE.Group();
@@ -24,7 +24,7 @@ function drawLine(p1, p2, col) {
 
 function generateSpheres() {
     var spheres = [];
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 6; i++) {
         var center = HF.uhpCenter(
             HF.hyperboloidToUpperHalfPlane(f(DATA.vertices[DATA.faces[i][0]])),
             HF.hyperboloidToUpperHalfPlane(f(DATA.vertices[DATA.faces[i][1]])),
@@ -33,11 +33,11 @@ function generateSpheres() {
 
         var sphereDict = {
             "hyperboloid": {
-                // center: DATA.planeCenters[i]
+                center: DATA.planeCenters[i]
             },
             "poincare": {
-                // center: HF.hyperboloidToPoincareMod(DATA.planeCenters[i]),
-                // radius: VF.norm(VF.vectorDiff(HF.hyperboloidToPoincareMod(f(DATA.vertices[DATA.faces[i][0]])), HF.hyperboloidToPoincareMod(DATA.planeCenters[i])))
+                center: HF.hyperboloidToPoincareMod(DATA.planeCenters[i]),
+                radius: VF.norm(VF.vectorDiff(HF.hyperboloidToPoincareMod(f(DATA.vertices[DATA.faces[i][0]])), HF.hyperboloidToPoincareMod(DATA.planeCenters[i])))
             },
             "uhp": {
                 center: center,
@@ -51,7 +51,7 @@ function generateSpheres() {
 
 function generateVertices() {
     var verts = [];
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0; i < 8; i++) {
         var vertDict = {
             "hyperboloid": f(DATA.vertices[i]),
             "poincare": HF.hyperboloidToPoincareMod(f(DATA.vertices[i])),
@@ -86,7 +86,7 @@ function visibilityTest(point, camera, spheres, vertices, model) {
     var u = VF.vectorDiff(point, camera);
     var uu = VF.norm(u) ** 2;
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 6; i++) {
         var oc = VF.vectorDiff(o, spheres[i][model].center);
         var uoc = VF.vectorDot(u, oc);
         var delta = (uoc ** 2) - uu * ((VF.norm(oc) ** 2) - (spheres[i][model].radius ** 2));
@@ -146,7 +146,7 @@ function main() {
             height: 1.0,
             background: 0xDDDDDD,
             eye: [5, 0, 0],
-            up: [0, 1, 0],
+            up: [0, 0, 1],
             fov: 30,
             updateCamera: function (camera, scene) {
 
@@ -221,7 +221,7 @@ function main() {
             var i = 0;
             var kleinVerts = [vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]];
 
-            while (i < 5) {
+            while (i < 7) {
 
                 var newKleinVerts = [];
 

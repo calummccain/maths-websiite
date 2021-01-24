@@ -86,7 +86,7 @@ function poincareToUpperHalfPlane(point) {
     const x = point[0], y = point[1], z = point[2];
     const s = (x ** 2) + (y ** 2) + (1 - z) ** 2;
     if (s < 1e-3) {
-        return [0, 0, 0];
+        return [0, 0, 100];
     }
     if (VF.norm(point) > 1 - 1e-3) {
         return [2 * x / s, 2 * y / s, 0];
