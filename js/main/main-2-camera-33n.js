@@ -153,23 +153,7 @@ function main() {
                 camera.lookAt(scene.position);
 
             }
-        },
-        {
-            left: 0.75,
-            bottom: 0.05,
-            width: 0.2,
-            height: 0.2,
-            background: 0xAAAAAA,
-            eye: pos,
-            up: [0, 0, 1],
-            fov: 30,
-            updateCamera: function (camera, scene) {
-
-                camera.setRotationFromEuler(cameras[0].camera.rotation);
-                camera.lookAt(scene.position);
-
-            }
-        },
+        }
     ];
 
     for (let ii = 0; ii < cameras.length; ++ii) {
@@ -234,7 +218,7 @@ function main() {
                 if (visibilityTest(e1, camPos, spheres, vertices, "uhp") && visibilityTest(e2, camPos, spheres, vertices, "uhp")) {
                     drawLine(e1, e2, 0x000000);
                 } else {
-                    drawLine(e1, e2, 0xaaaaaa);
+                    drawLine(e1, e2, 0xAAAAAA);
                 }
             }
         })
@@ -247,7 +231,7 @@ function main() {
     window.addEventListener('mousemove', () => { cameraLines(5); });
     window.addEventListener('mouseup', () => { cameraLines(8); });
 
-    
+
 
     onWindowResize();
 

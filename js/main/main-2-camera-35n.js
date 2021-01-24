@@ -153,23 +153,7 @@ function main() {
                 camera.lookAt(scene.position);
 
             }
-        },
-        {
-            left: 0.75,
-            bottom: 0.05,
-            width: 0.2,
-            height: 0.2,
-            background: 0xAAAAAA,
-            eye: pos,
-            up: [0, 0, 1],
-            fov: 30,
-            updateCamera: function (camera, scene) {
-
-                camera.setRotationFromEuler(cameras[0].camera.rotation);
-                camera.lookAt(scene.position);
-
-            }
-        },
+        }
     ];
 
     for (let ii = 0; ii < cameras.length; ++ii) {
@@ -208,7 +192,7 @@ function main() {
         sphere.position.set(spheres[i]["uhp"].center[0], spheres[i]["uhp"].center[1], spheres[i]["uhp"].center[2]);
     }
 
-    function cameraLines() {
+    function cameraLines(number) {
 
         console.log("redrawing")
 
@@ -221,7 +205,7 @@ function main() {
             var i = 0;
             var kleinVerts = [vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]];
 
-            while (i < 5) {
+            while (i < number) {
 
                 var newKleinVerts = [];
 
@@ -244,6 +228,8 @@ function main() {
 
                 if (visibilityTest(e1, camPos, spheres, vertices, "uhp") && visibilityTest(e2, camPos, spheres, vertices, "uhp")) {
                     drawLine(e1, e2, 0x000000);
+                } else {
+                    drawLine(e1, e2, 0xAAAAAA)
                 }
             }
         })
@@ -253,6 +239,8 @@ function main() {
 
     window.addEventListener("resize", onWindowResize, false);
     window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(); } });
+    window.addEventListener('mousemove', () => { cameraLines(4); });
+    window.addEventListener('mouseup', () => { cameraLines(6); });
 
     onWindowResize();
 
@@ -262,8 +250,6 @@ function main() {
     render();
 
     function render() {
-
-        cameraLines();
 
         requestAnimationFrame(render);
 
