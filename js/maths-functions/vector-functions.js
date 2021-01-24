@@ -115,7 +115,7 @@ function midpoint(a, b, c, compact) {
 
 function norm(x) {
 
-    return Math.sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2);
+    return Math.sqrt((x[0] ** 2) + (x[1] ** 2) + (x[2] ** 2));
 
 }
 

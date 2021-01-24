@@ -5,7 +5,7 @@ import * as CONSTANTS from "./main-constants.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-function main(name, geometry, lines, vertices, f, faces) {
+function main(name, geometry, lines, vertices, f, faces, planeCenters) {
 
     var view = document.getElementById("view");
 
@@ -16,7 +16,6 @@ function main(name, geometry, lines, vertices, f, faces) {
     // setup scene
     var scene = new THREE.Scene();
     const pos = [3, 1, 1];
-    //scene.background = new THREE.Color(0xDDDDDD);
 
     // group of meshes
     var meshes = new THREE.Group();
@@ -90,14 +89,15 @@ function main(name, geometry, lines, vertices, f, faces) {
         group: meshes,
         metric: "hyperbolic",
         refinement: 5,
-        order: 6,
+        order: 5,
         colour: "#000000",
-        numberOfFaces: 12,
+        numberOfFaces: 6,
         name: name,
         faceMode: true,
         transform: "",
-        compact: "uncompact",
-        opacity: 0.2
+        compact: "paracompact",
+        opacity: 0.2,
+        model: "uhp"
     });
 
     // setup the renderer
@@ -147,13 +147,13 @@ function main(name, geometry, lines, vertices, f, faces) {
                 HF.hyperboloidToKlein(f(vertices[endpoints[1]]))
             ];
 
-            if (VF.norm(kleinVerts[0]) > 1 + eps) {
-                kleinVerts[0] = VF.lineSphereIntersection(kleinVerts[0], VF.midpoint(kleinVerts[0], kleinVerts[1]));
-            }
+            // if (VF.norm(kleinVerts[0]) > 1 + eps) {
+            //     kleinVerts[0] = VF.lineSphereIntersection(kleinVerts[0], VF.midpoint(kleinVerts[0], kleinVerts[1]));
+            // }
 
-            if (VF.norm(kleinVerts[1]) > 1 + eps) {
-                kleinVerts[1] = VF.lineSphereIntersection(kleinVerts[1], VF.midpoint(kleinVerts[0], kleinVerts[1]));
-            }
+            // if (VF.norm(kleinVerts[1]) > 1 + eps) {
+            //     kleinVerts[1] = VF.lineSphereIntersection(kleinVerts[1], VF.midpoint(kleinVerts[0], kleinVerts[1]));
+            // }
 
             while (i < 5) {
 
@@ -176,7 +176,7 @@ function main(name, geometry, lines, vertices, f, faces) {
             for (var k = 0; k < kleinVerts.length - 1; k++) {
                 var e1 = new THREE.Vector3().fromArray(HF.kleinToUpperHalfPlane(kleinVerts[k]));
                 var e2 = new THREE.Vector3().fromArray(HF.kleinToUpperHalfPlane(kleinVerts[k + 1]));
-                var f1 = new THREE.Vector3().fromArray(HF.kleinToUpperHalfPlane(kleinVerts[k]));
+                var f1 = new THREE.Vector3().fromArray(HF.kleinToUpperHalfPlane(kleinVerts[k]), 1);
                 var f2 = new THREE.Vector3().fromArray(HF.kleinToUpperHalfPlane(kleinVerts[k + 1]));
 
                 var d1 = camPos.distanceTo(e1);

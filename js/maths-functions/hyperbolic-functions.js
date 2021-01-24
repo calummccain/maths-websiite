@@ -54,7 +54,7 @@ function hyperboloidToPoincare(point) {
 // if on lightcone (w, x, y, z) ===> (x / w, y / w, z / w)
 function hyperboloidToPoincareMod(point) {
 
-    if (Math.abs(point[0] ** 2 - point[1] ** 2 - point[2] ** 2 - point[3] ** 2) < 0.01) {
+    if (Math.abs((point[0] ** 2) - (point[1] ** 2) - (point[2] ** 2) - (point[3] ** 2)) < 0.001) {
 
         var scale = point[0];
         return [point[1] / scale, point[2] / scale, point[3] / scale];
@@ -85,6 +85,13 @@ function poincareToUpperHalfPlane(point) {
 
     const x = point[0], y = point[1], z = point[2];
     const s = (x ** 2) + (y ** 2) + (1 - z) ** 2;
+    if (s < 1e-3) {
+        return [0, 0, 0];
+    }
+    if (VF.norm(point) > 1 - 1e-3) {
+        return [2 * x / s, 2 * y / s, 0];
+    }
+
     return [2 * x / s, 2 * y / s, (1 - (x ** 2) - (y ** 2) - (z ** 2)) / s];
 
 }
@@ -129,6 +136,20 @@ function kleinToPoincare(point) {
 
 }
 
+function hyperboloidToUpperHalfPlane(point) {
+
+    // var w = point[0];
+    // var x = point[1];
+    // var y = point[2];
+    // var z = point[3];
+
+    // var den = (w ** 2) + 1 - z * (w + 1);
+
+    //return [x * (w + 1) / den, y * (w + 1) / den, 2 * w / den];
+
+    return poincareToUpperHalfPlane(hyperboloidToPoincareMod(point));
+}
+
 function kleinToUpperHalfPlane(point) {
 
     var poin = kleinToPoincare(point);
@@ -164,6 +185,34 @@ function hyperbolicNorm(x) {
 
 }
 
+function uhpCenter(p1, p2, p3) {
+
+    var p12 = VF.midpoint(p1, p2);
+    var p13 = VF.midpoint(p1, p3);
+    var n12 = VF.vectorDiff(p1, p2);
+    var n13 = VF.vectorDiff(p1, p3);
+
+    var d12 = VF.vectorDot(p12, n12);
+    var d13 = VF.vectorDot(p13, n13);
+
+    var p0 = [0, 0, 0];
+    var n0 = [0, 0, 1];
+
+    var A = [n0[0], n12[0], n13[0]];
+    var B = [n0[1], n12[1], n13[1]];
+    var C = [n0[2], n12[2], n13[2]];
+    var D = [0, d12, d13];
+
+    var ABC = VF.determinant([A, B, C]);
+
+    return [
+        VF.determinant([D, B, C]) / ABC,
+        VF.determinant([A, D, C]) / ABC,
+        VF.determinant([A, B, D]) / ABC
+    ];
+
+}
+
 
 export {
     transformVertices,
@@ -175,7 +224,9 @@ export {
     hyperboloidToPoincareMod,
     hyperbolicNorm,
     kleinToPoincare,
+    hyperboloidToUpperHalfPlane,
     kleinToUpperHalfPlane,
     upperHalfPlaneToPoincare,
-    upperHalfPlaneToKlein
+    upperHalfPlaneToKlein,
+    uhpCenter
 };
