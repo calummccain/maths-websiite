@@ -8,7 +8,7 @@ const eps = 1e-3;
 const n = 3;
 
 function f(x) {
-    return DATA.f(n, x);
+    return DATA.f(n, DATA.a(DATA.d(n, x)));
 }
 
 var lineGroup = new THREE.Group();
