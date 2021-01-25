@@ -5,7 +5,7 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as DATA from "../data/44n.js";
 
 const eps = 1e-3;
-const n = 4;
+const n = 3;
 
 function f(x) {
     return DATA.f(n, DATA.conversion(n, x));
@@ -13,10 +13,13 @@ function f(x) {
 
 var lineGroup = new THREE.Group();
 
-function drawLine(p1, p2, col) {
+function drawLine(vectors, col) {
 
-    var points = [new THREE.Vector3().fromArray(p1), new THREE.Vector3().fromArray(p2)];
-    var geometry = new THREE.BufferGeometry().setFromPoints(points);
+    var threeVectors = [];
+    vectors.forEach((vect) => {
+        threeVectors.push(new THREE.Vector3().fromArray(vect));
+    });
+    var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
     var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col }));
     lineGroup.add(line);
 
@@ -124,7 +127,6 @@ function visibilityTest(point, camera, spheres, vertices, model) {
     return true;
 }
 
-
 function main() {
 
     var view = document.getElementById("view");
@@ -134,7 +136,6 @@ function main() {
 
     // setup scene
     var scene = new THREE.Scene();
-    scene.add(lineGroup);
     const pos = [3, 1, 1];
 
     // add camera and light to scene
@@ -163,6 +164,7 @@ function main() {
         const camera = new THREE.PerspectiveCamera(view.fov, window.innerWidth / window.innerHeight, 0.01, 100);
         camera.position.fromArray(view.eye);
         camera.up.fromArray(view.up);
+        camera.lookAt(scene.position);
         view.camera = camera;
 
     }
@@ -181,64 +183,65 @@ function main() {
     controls.maxZoom = 5;
     controls.update();
 
-    const spheres = generateSpheres();
-    const vertices = generateVertices();
+    function makeTheLines(number) {
 
-    for (var i = 1; i < 1; i++) {
-        var geometry = new THREE.SphereGeometry(spheres[i]["uhp"].radius, 32, 32);
-        var material = new THREE.MeshBasicMaterial({ color: 0xFF0000, opacity: 0.2, transparent: true });
-        var sphere = new THREE.Mesh(geometry, material);
+        var lineCoords = [];
 
-        scene.add(sphere);
-        sphere.position.set(spheres[i]["uhp"].center[0], spheres[i]["uhp"].center[1], spheres[i]["uhp"].center[2]);
+        DATA.edges.forEach((endpoints) => {
+
+            var p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+            var radVect = VF.vectorDiff(p2, p1);
+            var center = VF.midpoint(p1, p2);
+            var r = VF.norm(radVect) / 2;
+
+            console.log(p1, p2, radVect, r)
+
+            var uhpVertices = [];
+
+            for (var i = 0; i <= number; i++) {
+                var theta = i * Math.PI / number - Math.PI / 2;
+                uhpVertices.push([
+                    radVect[0] * Math.sin(theta) / 2 + center[0],
+                    radVect[1] * Math.sin(theta) / 2 + center[1],
+                    r * Math.cos(theta)
+                ])
+            }
+            lineCoords.push(uhpVertices);
+        })
+        return lineCoords;
     }
 
-    function cameraLines(number) {
+    const spheres = generateSpheres();
+    const vertices = generateVertices();
+    const uhpVertices = makeTheLines(20);
+
+    function cameraLines() {
 
         lineGroup.children = [];
 
         var camPos = cameras[0].camera.position.toArray();
 
-        DATA.edges.forEach((endpoints) => {
+        console.log(uhpVertices)
 
-            var i = 0;
-            var kleinVerts = [vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]];
-
-            while (i < number) {
-
-                var newKleinVerts = [];
-
-                for (var j = 0; j < kleinVerts.length - 1; j++) {
-
-                    newKleinVerts.push(kleinVerts[j]);
-                    newKleinVerts.push(VF.midpoint(kleinVerts[j], kleinVerts[j + 1]));
-
-                }
-
-                newKleinVerts.push(kleinVerts[kleinVerts.length - 1]);
-                kleinVerts = newKleinVerts;
-                i++;
-
-            }
-
-            for (var k = 0; k < kleinVerts.length - 1; k++) {
-                var e1 = HF.kleinToUpperHalfPlane(kleinVerts[k]);
-                var e2 = HF.kleinToUpperHalfPlane(kleinVerts[k + 1]);
-
+        uhpVertices.forEach((points) => {
+            for (var k = 0; k < points.length - 1; k++) {
+                var e1 = points[k];
+                var e2 = points[k + 1];
+    
                 if (visibilityTest(e1, camPos, spheres, vertices, "uhp") && visibilityTest(e2, camPos, spheres, vertices, "uhp")) {
-                    drawLine(e1, e2, 0x000000);
+                    drawLine([e1, e2], 0x000000);
                 } else {
-                    drawLine(e1, e2, 0xAAAAAA);
+                    drawLine([e1, e2], 0xAAAAAA);
                 }
             }
-        })
+        });
     }
 
+    scene.add(lineGroup);
 
     window.addEventListener("resize", onWindowResize, false);
-    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(5); } });
-    window.addEventListener('mousemove', () => { cameraLines(2); });
-    // window.addEventListener('mouseup', () => { cameraLines(5); });
+    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(); } });
+    window.addEventListener('mousemove', () => { cameraLines(5); });
 
     onWindowResize();
 
