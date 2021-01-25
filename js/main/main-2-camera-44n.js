@@ -8,7 +8,7 @@ const eps = 1e-3;
 const n = 4;
 
 function f(x) {
-    return DATA.f(n, DATA.c(DATA.d(n, x)));
+    return DATA.f(n, DATA.conversion(n, x));
 }
 
 var lineGroup = new THREE.Group();
@@ -134,6 +134,7 @@ function main() {
 
     // setup scene
     var scene = new THREE.Scene();
+    scene.add(lineGroup);
     const pos = [3, 1, 1];
 
     // add camera and light to scene
@@ -233,7 +234,6 @@ function main() {
         })
     }
 
-    scene.add(lineGroup);
 
     window.addEventListener("resize", onWindowResize, false);
     window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(5); } });
