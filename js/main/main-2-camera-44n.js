@@ -241,7 +241,7 @@ function main() {
 
     window.addEventListener("resize", onWindowResize, false);
     window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(); } });
-    window.addEventListener('mousemove', () => { cameraLines(5); });
+    // window.addEventListener('mousemove', () => { cameraLines(5); });
 
     onWindowResize();
 
