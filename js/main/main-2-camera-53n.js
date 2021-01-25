@@ -5,7 +5,7 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as DATA from "../data/53n.js";
 
 const eps = 1e-3;
-const n = 5;
+const n = 6;
 
 function f(x) {
     return DATA.f(n, x);
