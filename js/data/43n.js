@@ -169,6 +169,8 @@ const cubeData = {
 
     faceReflections: ['bc', 'c', 'cbabc', 'abc', '', 'babc'],
 
+    outerReflection = "d",
+
     center: (n) => {
 
         if (n == 3) {

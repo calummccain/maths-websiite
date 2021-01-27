@@ -244,6 +244,8 @@ dodecahedronData = {
         'bca', 'bacbca', 'bcbacbca'
     ],
 
+    outerReflection = "d",
+
     center: (n) => {
 
         if (n == 3) {

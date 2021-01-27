@@ -338,6 +338,8 @@ const hexagonalData = {
         'babdababdababdababdbababd'
     ],
 
+    outerReflection = "c",
+
     conversion: (n, v) => {
 
         var c = Math.cos(Math.PI / n) ** 2;

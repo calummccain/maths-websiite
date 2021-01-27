@@ -191,6 +191,8 @@ const tetrahedronData = {
 
     faceReflections: ['', 'cab', 'ab', 'b'],
 
+    outerReflection = "d",
+
     center: (n) => {
 
         if (n == 3) {

@@ -209,6 +209,8 @@ const icosahedronData = {
         'abcbaca'
     ],
 
+    outerReflection = "d",
+
     center: (n) => {
 
         if (n == 3) {

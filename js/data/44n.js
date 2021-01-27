@@ -372,6 +372,8 @@ const squareData = {
         'babdbabdbabdbabdbabdbabd'
     ],
 
+    outerReflection = "c",
+
     center: [1, 1, 0, 0],
 
     // TODO what goes in the else columnn?

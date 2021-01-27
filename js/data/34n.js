@@ -159,6 +159,8 @@ const octahedronData = {
 
     faceReflections: ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'],
 
+    outerReflection = "d",
+
     center: (n) => {
 
         if (n == 3) {
