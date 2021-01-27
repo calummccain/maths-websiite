@@ -1,6 +1,6 @@
 // Order n triangular
 
-const triangularData = {
+const triangleData = {
 
     vertices: [
         [252, -19, -7], [232.5, -19, -6], [216, -19, -5], [202.5, -19, -4],
@@ -521,29 +521,29 @@ const triangularData = {
 }
 
 
-//export { triangularData };
+export { triangleData };
 
-const edges = [];
-for (var i = 0; i < triangularData.vertices.length; i++) {
-    for (var j = i + 1; j < triangularData.vertices.length; j++) {
-        if ((Math.abs(triangularData.vertices[i][1] - triangularData.vertices[j][1]) == 0) && (Math.abs(triangularData.vertices[i][2] - triangularData.vertices[j][2]) == 2)) {
-            edges.push([i, j]);
-        } else if ((Math.abs(triangularData.vertices[i][1] - triangularData.vertices[j][1]) == 3) && (Math.abs(triangularData.vertices[i][2] - triangularData.vertices[j][2]) == 1)) {
-            edges.push([i, j]);
-        }
+// const edges = [];
+// for (var i = 0; i < triangularData.vertices.length; i++) {
+//     for (var j = i + 1; j < triangularData.vertices.length; j++) {
+//         if ((Math.abs(triangularData.vertices[i][1] - triangularData.vertices[j][1]) == 0) && (Math.abs(triangularData.vertices[i][2] - triangularData.vertices[j][2]) == 2)) {
+//             edges.push([i, j]);
+//         } else if ((Math.abs(triangularData.vertices[i][1] - triangularData.vertices[j][1]) == 3) && (Math.abs(triangularData.vertices[i][2] - triangularData.vertices[j][2]) == 1)) {
+//             edges.push([i, j]);
+//         }
 
-    }
+//     }
 
-}
-console.log(triangularData.vertices.length)
-console.log(edges.length)
-console.log(triangularData.faces.length)
-console.log(edges.slice(0, 100))
-console.log(edges.slice(100, 200))
-console.log(edges.slice(200, 300))
-console.log(edges.slice(300, 400))
-console.log(edges.slice(400, 500))
-console.log(edges.slice(500, 600))
+// }
+// console.log(triangularData.vertices.length)
+// console.log(edges.length)
+// console.log(triangularData.faces.length)
+// console.log(edges.slice(0, 100))
+// console.log(edges.slice(100, 200))
+// console.log(edges.slice(200, 300))
+// console.log(edges.slice(300, 400))
+// console.log(edges.slice(400, 500))
+// console.log(edges.slice(500, 600))
 
 //console.log(faces.length)
 // const numOfPoints = 7;
