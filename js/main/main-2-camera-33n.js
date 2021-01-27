@@ -5,7 +5,8 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as DATA from "../data/33n.js";
 
 const eps = 1e-3;
-const n = 6;
+const n = 7;
+const compact = false;
 
 function f(x) {
     return DATA.f(n, x);
@@ -137,6 +138,11 @@ function main() {
     // setup scene
     var scene = new THREE.Scene();
     const pos = [3, 1, 1];
+    const spheres = generateSpheres();
+    const vertices = generateVertices();
+
+    console.log(spheres)
+    const uhpVertices = makeTheLines(30);
 
     // add camera and light to scene
 
@@ -169,6 +175,19 @@ function main() {
 
     }
 
+    var material = new THREE.MeshBasicMaterial({
+        color: 0xff00ff,
+        transparent: true,
+        opacity: 0.2
+    });
+
+    spheres.forEach((sphere) => {
+        var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 20, 20), material);
+        mesh.position.fromArray(sphere["uhp"].center);
+        scene.add(mesh);
+    })
+
+
     // setup the renderer
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(WIDTH, HEIGHT);
@@ -189,17 +208,22 @@ function main() {
 
         DATA.edges.forEach((endpoints) => {
 
-            var p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+            if (!compact) {
+                var u = vertices[endpoints[0]]["klein"], v = vertices[endpoints[1]]["klein"];
+                var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
+                var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(v, u))
+            } else {
+                var p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+            }
+
             var radVect = VF.vectorDiff(p2, p1);
             var center = VF.midpoint(p1, p2);
             var r = VF.norm(radVect) / 2;
 
-            console.log(p1, p2, radVect, r)
-
             var uhpVertices = [];
 
             for (var i = 0; i <= number; i++) {
-                var theta = i * Math.PI / number - Math.PI / 2;
+                var theta = 2 * i * Math.PI / number - Math.PI;
                 uhpVertices.push([
                     radVect[0] * Math.sin(theta) / 2 + center[0],
                     radVect[1] * Math.sin(theta) / 2 + center[1],
@@ -211,10 +235,6 @@ function main() {
         return lineCoords;
     }
 
-    const spheres = generateSpheres();
-    const vertices = generateVertices();
-    const uhpVertices = makeTheLines(30);
-
     function cameraLines() {
 
         lineGroup.children = [];
@@ -224,7 +244,7 @@ function main() {
             for (var k = 0; k < points.length - 1; k++) {
                 var e1 = points[k];
                 var e2 = points[k + 1];
-    
+
                 if (visibilityTest(e1, camPos, spheres, vertices, "uhp") && visibilityTest(e2, camPos, spheres, vertices, "uhp")) {
                     drawLine([e1, e2], 0x000000);
                 } else {
@@ -238,7 +258,7 @@ function main() {
 
     window.addEventListener("resize", onWindowResize, false);
     window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(); } });
-    window.addEventListener('mousemove', () => { cameraLines(5); });
+    // window.addEventListener('mousemove', () => { cameraLines(5); });
 
     onWindowResize();
 

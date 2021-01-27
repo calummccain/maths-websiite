@@ -25,28 +25,28 @@ const faces = [
     [3, 0, 1]
 ];
 
-
+// (0,1,-1,0)
 function a(v) {
 
     return [v[0], v[2], v[1], v[3]];
 
 }
 
-
+// (0,0,1,-1)
 function b(v) {
 
     return [v[0], v[1], v[3], v[2]];
 
 }
 
-
+// 
 function c(v) {
 
     return [v[0], v[1], -v[3], -v[2]];
 
 }
 
-
+//
 function d(n, v) {
 
     if (n == 3) {
@@ -202,7 +202,7 @@ function center(n) {
 
     } else if (n == 5) {
 
-        return [Math.sqrt(7 - 3 * Math.sqrt(3)), 0, 0, 0];
+        return [2 * Math.sqrt(7 - 3 * Math.sqrt(5)), 0, 0, 0];
 
     } else if (n == 6) {
 

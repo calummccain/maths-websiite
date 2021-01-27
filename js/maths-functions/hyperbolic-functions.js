@@ -214,6 +214,13 @@ function uhpCenter(p1, p2, p3) {
 }
 
 
+function geodesicEndpoints(a, b) {
+    const inner = hyperboloidInnerProduct(a, b);
+    const eAlpha = inner + Math.sqrt(inner ** 2 - 1);
+    return [VF.vectorSum(VF.scale(a, 1 / eAlpha), b), VF.vectorDiff(VF.scale(b, 1 / eAlpha), a)];
+}
+
+
 export {
     transformVertices,
     poincareToHyperboloid,
@@ -228,5 +235,6 @@ export {
     kleinToUpperHalfPlane,
     upperHalfPlaneToPoincare,
     upperHalfPlaneToKlein,
-    uhpCenter
+    uhpCenter,
+    geodesicEndpoints
 };
