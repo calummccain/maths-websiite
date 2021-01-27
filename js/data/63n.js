@@ -338,7 +338,7 @@ const hexagonalData = {
         'babdababdababdababdbababd'
     ],
 
-    outerReflection = "c",
+    outerReflection: "c",
 
     conversion: (n, v) => {
 

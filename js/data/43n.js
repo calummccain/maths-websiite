@@ -169,7 +169,7 @@ const cubeData = {
 
     faceReflections: ['bc', 'c', 'cbabc', 'abc', '', 'babc'],
 
-    outerReflection = "d",
+    outerReflection: "d",
 
     center: (n) => {
 
