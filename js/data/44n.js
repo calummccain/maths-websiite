@@ -413,22 +413,22 @@ const squareData = {
 }
 
 
-//export { squareData };
+export { squareData };
 
-const edges = [];
-for (var i = 0; i < squareData.vertices.length; i++) {
-    for (var j = i + 1; j < squareData.vertices.length; j++) {
-        if ((Math.abs(squareData.vertices[i][2] - squareData.vertices[j][2]) == 1) && (Math.abs(squareData.vertices[i][3] - squareData.vertices[j][3]) == 1)) {
-            edges.push([i, j]);
-        }
+// const edges = [];
+// for (var i = 0; i < squareData.vertices.length; i++) {
+//     for (var j = i + 1; j < squareData.vertices.length; j++) {
+//         if ((Math.abs(squareData.vertices[i][2] - squareData.vertices[j][2]) == 1) && (Math.abs(squareData.vertices[i][3] - squareData.vertices[j][3]) == 1)) {
+//             edges.push([i, j]);
+//         }
 
-    }
+//     }
 
-}
-console.log(edges.slice(0, 95))
-console.log(edges.slice(95, 196))
-console.log(edges.slice(195, 200))
-console.log(edges.length)
+// }
+// console.log(edges.slice(0, 95))
+// console.log(edges.slice(95, 196))
+// console.log(edges.slice(195, 200))
+// console.log(edges.length)
 // const numOfPoints = 7;
 
 // function generatePoints(n) {
