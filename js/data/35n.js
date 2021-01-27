@@ -249,6 +249,33 @@ const icosahedronData = {
 
         }
 
+    },
+    
+    // TODO what goes in the else columnn?
+    compact: (n) => {
+
+        if (n == 3) {
+
+            return "compact";
+
+        } else if (n == 4) {
+
+            return "uncompact";
+
+        } else if (n == 5) {
+
+            return "uncompact";
+
+        } else if (n == 6) {
+
+            return "uncompact";
+
+        } else {
+
+            return "";
+
+        }
+
     }
 
 }

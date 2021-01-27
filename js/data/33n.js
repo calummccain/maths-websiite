@@ -244,6 +244,33 @@ const tetrahedronData = {
 
         }
 
+    },
+
+    // TODO what goes in the else columnn?
+    compact: (n) => {
+
+        if (n == 3) {
+
+            return "";
+
+        } else if (n == 4) {
+
+            return "";
+
+        } else if (n == 5) {
+
+            return "";
+
+        } else if (n == 6) {
+
+            return "paracompact";
+
+        } else {
+
+            return "";
+
+        }
+
     }
 
 }
