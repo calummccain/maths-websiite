@@ -186,7 +186,6 @@ function geodesicEndpoints(a, b) {
 export {
     poincareToHyperboloid,
     hyperboloidInnerProduct,
-    hyperboloidToPoincare,
     poincareToUpperHalfPlane,
     hyperboloidToKlein,
     hyperboloidToPoincare,
