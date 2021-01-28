@@ -1,19 +1,13 @@
-import * as ORDERN from "../data/35n.js";
+import { icosahedronData } from "../data/35n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
-function icosahedronGeometry(transform, order, refinement, compact, metric, model) {
+function icosahedronGeometry(transform, order, refinement, model) {
 
-    const vertices = ORDERN.vertices;
-    const faces = ORDERN.faces;
-    const numberOfSides = 3;
+    const data = icosahedronData(order);
 
-    function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector);
-    }
+    var icosahedron = hyperbolicGeometry(data, transform, refinement, model);
 
-    var icosahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model)
-
-    return [icosahedron, ORDERN.faceReflections];
+    return [icosahedron, data.faceReflections, data.numFaces];
 
 }
 

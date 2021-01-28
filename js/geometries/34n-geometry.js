@@ -1,31 +1,26 @@
-import * as ORDERN from "../data/34n.js";
+import { octahedronData } from "../data/34n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
 
-function octahedronGeometry(transform, order, refinement, compact, metric, model) {
+function octahedronGeometry(transform, order, refinement, model) {
 
-    const vertices = ORDERN.vertices;
-    const faces = ORDERN.faces;
-    const numberOfSides = 3;
     const d = 1;
 
-    function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector);
-    }
+    const data = octahedronData(order);
 
     var octahedron;
 
-    if (metric == "spherical") {
+    if (data.metric() == "spherical") {
 
-        octahedron = sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, ORDERN.faceReflections, d);
+        octahedron = sphericalGeometry(data, transform, refinement, d);
 
-    } else if (metric == "hyperbolic") {
+    } else if (data.metric() == "hyperbolic") {
 
-        octahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
+        octahedron = hyperbolicGeometry(data, transform, refinement, model);
 
     }
 
-    return [octahedron, ORDERN.faceReflections];
+    return [octahedron, data.faceReflections, data.numFaces];
 
 }
 

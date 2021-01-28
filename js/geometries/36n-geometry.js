@@ -1,22 +1,16 @@
-import * as ORDERN from "../data/36n.js";
+import { triangleData } from "../data/36n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
-function triangularGeometry(transform, order, refinement, compact, metric, model) {
+function triangularGeometry(transform, order, refinement, model) {
 
-    const vertices = ORDERN.vertices;
-    const faces = ORDERN.faces;
-    const numberOfSides = 3;
-
-    function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector);
-    }
+    const data = triangleData(order);
 
     const newVertices = [];
-    vertices.forEach((v) => { newVertices.push(ORDERN.conversion(order, v)) });
+    vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
 
-    var triangular = hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
+    var triangular = hyperbolicGeometry(newVertices, transform, refinement, model);
 
-    return [triangular, ORDERN.faceReflections];
+    return [triangular, ORDERN.faceReflections, data.numFaces];
 
 }
 

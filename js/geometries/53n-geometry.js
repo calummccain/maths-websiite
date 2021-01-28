@@ -1,31 +1,26 @@
-import * as ORDERN from "../data/53n.js";
+import { dodecahedronData } from "../data/53n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
 
-function dodecahedronGeometry(transform, order, refinement, compact, metric, model) {
+function dodecahedronGeometry(transform, order, refinement, model) {
 
-    const vertices = ORDERN.vertices;
-    const faces = ORDERN.faces;
-    const numberOfSides = 5;
+    const data = dodecahedronData(order);
+
     const d = 1;
-    
-    function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector);
-    }
 
     var dodecahedron;
 
-    if (metric == "spherical") {
+    if (data.metric() == "spherical") {
 
-        dodecahedron = sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, ORDERN.faceReflections, d);
+        dodecahedron = sphericalGeometry(vertices, transform, refinement, d);
 
-    } else if (metric == "hyperbolic") {
+    } else if (data.metric() == "hyperbolic") {
 
-        dodecahedron = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
+        dodecahedron = hyperbolicGeometry(vertices, transform, refinement, model);
 
     }
 
-    return [dodecahedron, ORDERN.faceReflections];
+    return [dodecahedron, data.faceReflections, data.numFaces];
 
 }
 
