@@ -6,7 +6,7 @@ function squareGeometry(transform, order, refinement, model) {
     const data = squareData(order);
 
     const newVertices = [];
-    vertices.forEach((v) => { newVertices.push(data.conversion(order, v)) });
+    data.vertices.forEach((v) => { newVertices.push(data.conversion(order, v)) });
 
     var square = hyperbolicGeometry(newVertices, transform, refinement, model);
 

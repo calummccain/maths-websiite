@@ -80,12 +80,12 @@ function lineSphereIntersection(a, b) {
     var l2 = (-B - Math.sqrt(B ** 2 - 4 * A * C)) / (2 * A);
 
     var l = Math.min(l1, l2);
-    return intersection = vectorSum(vectorScale(a, l), vectorScale(b, 1 - l));
+    return vectorSum(vectorScale(a, l), vectorScale(b, 1 - l));
 
 }
 
 // midpoint of a line
-function midpoint(a, b, c, compact) {
+function midpoint(a, b) {
 
     return vectorScale(vectorSum(a, b), 0.5);
 

@@ -66,7 +66,7 @@ function sphericalGeometry(data, transform, refinement, d) {
 
         for (var j = 0; j < hypersphereVertices.length; j++) {
 
-            var vertex = VF.vectorScale(hypersphereVertices[j], 1 / Math.sqrt(SF.sphereNorm(hypersphereVertices[j])));
+            var vertex = VF.vectorScale(hypersphereVertices[j], 1 / VF.norm(hypersphereVertices[j]));
             var vertex2 = SF.sphereToPoincare(vertex, d);
             faceGeometry.vertices.push(new THREE.Vector3(vertex2[0], vertex2[1], vertex2[2]));
 

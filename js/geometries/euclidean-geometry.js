@@ -1,8 +1,9 @@
 import * as THREE from "../three.module.js";
 import { euclideanFace } from "../faces/euclidean-faces.js";
+import * as VF from "../maths-functions/vector-functions.js";
 
 
-function euclideanGeometry(data, matrixDict, transform) {
+function euclideanGeometry(data, transform) {
 
     // matrix dictionary
     function matrixDict(letter, vector) {

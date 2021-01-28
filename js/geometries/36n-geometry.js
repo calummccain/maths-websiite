@@ -6,7 +6,7 @@ function triangularGeometry(transform, order, refinement, model) {
     const data = triangleData(order);
 
     const newVertices = [];
-    vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
+    data.vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
 
     var triangular = hyperbolicGeometry(newVertices, transform, refinement, model);
 
