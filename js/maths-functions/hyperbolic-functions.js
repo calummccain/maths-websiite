@@ -1,60 +1,26 @@
 import * as VF from "./vector-functions.js";
 
-function transformVertices(baseVertices, transformation, dictionary) {
+const tol = 1e-4;
 
-    var newVertices = [];
-    var e1 = [1, 0, 0, 0], e2 = [0, 1, 0, 0], e3 = [0, 0, 1, 0], e4 = [0, 0, 0, 1];
+// hyperboloid inner product
+function hyperboloidInnerProduct(x, y) {
 
-    if (transformation !== '') {
-
-        for (var i = transformation.length - 1; i > -1; i--) {
-
-            e1 = dictionary(transformation[i], e1);
-            e2 = dictionary(transformation[i], e2);
-            e3 = dictionary(transformation[i], e3);
-            e4 = dictionary(transformation[i], e4);
-
-        }
-
-    }
-
-    for (var j = 0; j < baseVertices.length; j++) {
-
-        var oldVertex = baseVertices[j];
-        var newVertex = VF.vectorSum(
-            VF.vectorSum(
-                VF.vectorScale(e1, oldVertex[0]),
-                VF.vectorScale(e2, oldVertex[1])
-            ),
-            VF.vectorSum(
-                VF.vectorScale(e3, oldVertex[2]),
-                VF.vectorScale(e4, oldVertex[3])
-            )
-        );
-
-        newVertices.push(newVertex);
-
-    }
-
-    return newVertices;
+    return x[0] * y[0] - x[1] * y[1] - x[2] * y[2] - x[3] * y[3];
 
 }
 
-// stereographic projection from the hyperboloid model to the poincare model
-// (w, x, y, z) ===>(x / (1 + w), y / (1 + w), z / (1 + w))
-function hyperboloidToPoincare(point) {
+function hyperbolicNorm(x) {
 
-    var scale = 1 + point[0];
-    return [point[1] / scale, point[2] / scale, point[3] / scale];
+    return x[0] ** 2 - x[1] ** 2 - x[2] ** 2 - x[3] ** 2;
 
 }
 
 // stereographic projection from the hyperboloid model to the poincare model 
 //                 (w, x, y, z) ===> (x / (1 + w), y / (1 + w), z / (1 + w))
 // if on lightcone (w, x, y, z) ===> (x / w, y / w, z / w)
-function hyperboloidToPoincareMod(point) {
+function hyperboloidToPoincare(point) {
 
-    if (Math.abs((point[0] ** 2) - (point[1] ** 2) - (point[2] ** 2) - (point[3] ** 2)) < 0.001) {
+    if (Math.abs(hyperbolicNorm(x)) < tol) {
 
         var scale = point[0];
         return [point[1] / scale, point[2] / scale, point[3] / scale];
@@ -85,11 +51,17 @@ function poincareToUpperHalfPlane(point) {
 
     const x = point[0], y = point[1], z = point[2];
     const s = (x ** 2) + (y ** 2) + (1 - z) ** 2;
-    if (s < 1e-3) {
-        return [0, 0, 100];
+
+    if (s < tol) {
+
+        return [0, 0, Infinity];
+
     }
-    if (VF.norm(point) > 1 - 1e-3) {
+
+    if (VF.norm(point) > 1 - tol) {
+
         return [2 * x / s, 2 * y / s, 0];
+
     }
 
     return [2 * x / s, 2 * y / s, (1 - (x ** 2) - (y ** 2) - (z ** 2)) / s];
@@ -104,11 +76,12 @@ function upperHalfPlaneToPoincare(point) {
 
 }
 
+// TODO what if point is ideal ie r = 1 - tol
 function poincareToHyperboloid(point) {
 
-    const r = point[0] ** 2 + point[1] ** 2 + point[2] ** 2;
+    const r = VF.norm(point) ** 2;
 
-    return [(1 + r) / (1 - r), 2 * point[0] / (1 - r), 2 * point[1] / (1 - r), 2 * point[2] / (1 - r)]
+    return [(1 + r) / (1 - r), 2 * point[0] / (1 - r), 2 * point[1] / (1 - r), 2 * point[2] / (1 - r)];
 
 }
 
@@ -116,20 +89,21 @@ function poincareToHyperboloid(point) {
 // (w, x, y, z) ===> (x / (w - z), 
 //                    y / (w - z), 
 //                    (z ** 2) / (2 * w * (w - z)))
-function lightConeToUpperHalfPlane(point) {
+// function lightConeToUpperHalfPlane(point) {
 
-    var w = point[0];
-    var x = point[1];
-    var y = point[2];
-    var z = point[3];
-    var s = x ** 2 + y ** 2 + (w - z) ** 2;
-    return [2 * x / s, 2 * y / s, (1 - x ** 2 - y ** 2) / s];
+//     var w = point[0];
+//     var x = point[1];
+//     var y = point[2];
+//     var z = point[3];
+//     var s = x ** 2 + y ** 2 + (w - z) ** 2;
+//     return [2 * x / s, 2 * y / s, (1 - x ** 2 - y ** 2) / s];
 
-}
+// }
 
+// TODO ideal point again
 function kleinToPoincare(point) {
 
-    const dist = Math.sqrt((point[0] ** 2) + (point[1] ** 2) + (point[2] ** 2));
+    const dist = VF.norm(point);
     var hyperbolicDist = 1 / (1 + Math.sqrt(Math.abs(1 - (dist ** 2))));
 
     return VF.vectorScale(point, hyperbolicDist);
@@ -152,15 +126,13 @@ function hyperboloidToUpperHalfPlane(point) {
 
 function kleinToUpperHalfPlane(point) {
 
-    var poin = kleinToPoincare(point);
-    return poincareToUpperHalfPlane(poin);
+    return poincareToUpperHalfPlane(kleinToPoincare(point));
 
 }
 
 function upperHalfPlaneToKlein(point) {
 
-    var poin = upperHalfPlaneToPoincare(point);
-    return poincareToKlein(poin);
+    return poincareToKlein(upperHalfPlaneToPoincare(point));
 
 }
 
@@ -172,19 +144,7 @@ function poincareToKlein(point) {
 
 }
 
-// hyperboloid inner product
-function hyperboloidInnerProduct(x, y) {
-
-    return x[0] * y[0] - x[1] * y[1] - x[2] * y[2] - x[3] * y[3];
-
-}
-
-function hyperbolicNorm(x) {
-
-    return x[0] ** 2 - x[1] ** 2 - x[2] ** 2 - x[3] ** 2;
-
-}
-
+// finds center of a crcle knowing two points and that it lies on z = 0
 function uhpCenter(p1, p2, p3) {
 
     var p12 = VF.midpoint(p1, p2);
@@ -215,20 +175,20 @@ function uhpCenter(p1, p2, p3) {
 
 
 function geodesicEndpoints(a, b) {
+
     const inner = hyperboloidInnerProduct(a, b);
     const eAlpha = inner + Math.sqrt(inner ** 2 - 1);
     return [VF.vectorSum(VF.scale(a, 1 / eAlpha), b), VF.vectorDiff(VF.scale(b, 1 / eAlpha), a)];
+
 }
 
 
 export {
-    transformVertices,
     poincareToHyperboloid,
     hyperboloidInnerProduct,
-    hyperboloidToPoincare,
     poincareToUpperHalfPlane,
     hyperboloidToKlein,
-    hyperboloidToPoincareMod,
+    hyperboloidToPoincare,
     hyperbolicNorm,
     kleinToPoincare,
     hyperboloidToUpperHalfPlane,

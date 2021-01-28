@@ -1,22 +1,17 @@
-import * as ORDERN from "../data/44n.js";
+import { squareData } from "../data/44n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
-function squareGeometry(transform, order, refinement, compact, metric, model) {
+function squareGeometry(transform, order, refinement, model) {
 
-    const vertices = ORDERN.vertices;
-    const faces = ORDERN.faces;
-    const numberOfSides = 4;
-
-    function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector);
-    }
+    var data = squareData(order);
 
     const newVertices = [];
-    vertices.forEach((v) => { newVertices.push(ORDERN.conversion(order, v)) });
+    data.vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
+    data.vertices = newVertices;
 
-    var square = hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
+    var square = hyperbolicGeometry(data, transform, refinement, model);
 
-    return [square, ORDERN.faceReflections];
+    return [square, data.faceReflections, data.numFaces];
 
 }
 

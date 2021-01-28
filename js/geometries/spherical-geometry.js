@@ -4,33 +4,61 @@ import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 
-function sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, names, d) {
+function sphericalGeometry(data, transform, refinement, d) {
 
-    // It is useful to have the f matrix separately defined
-    function f(vector) {
+    // matrix dictionary
+    function matrixDict(letter, vector) {
+    
+        if (letter === "a") {
+    
+            return data.a(vector)
+    
+        } else if (letter === "b") {
 
-        return matrixDict('f', vector);
+            return data.b(vector)
+
+        } else if (letter === "c") {
+
+            return data.c(vector)
+
+        } else if (letter === "d") {
+
+            return data.d(vector)
+
+        } else if (letter === "e") {
+
+            return data.e(vector)
+
+        } else if (letter === "f") {
+
+            return data.f(vector)
+
+        } else {
+
+            throw 'letter needs to be one of a, b, c, d, e, f!';
+
+        }
 
     }
-
+    console.log(data.vertices)
     // Transform the 'central' cell's vertices to the transformed cell's vertices
-    var newVertices = SF.transformVertices(vertices, transform, matrixDict);
+    var newVertices = VF.transformVertices(data.vertices, transform, matrixDict);
 
     var properVertices = [];
     for (var i = 0; i < newVertices.length; i++) {
 
-        properVertices[i] = f(newVertices[i]);
+        properVertices[i] = data.f(newVertices[i]);
 
     }
 
     var cellGeometry = [];
 
-    for (var i = 0; i < faces.length; i++) {
+    for (var i = 0; i < data.numFaces; i++) {
 
         var faceGeometry = new THREE.Geometry();
         var initial = 0;
-        var faceVertices = Array(numberOfSides).fill().map(() => initial++);
-        faceVertices = faceVertices.map((x) => properVertices[faces[i][x]]);
+        var faceVertices = Array(data.numSides).fill().map(() => initial++);
+        faceVertices = faceVertices.map((x) => properVertices[data.faces[i][x]]);
         var faceData = sphericalFace(faceVertices, refinement);
 
         var facets = faceData[0];
@@ -38,7 +66,7 @@ function sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides
 
         for (var j = 0; j < hypersphereVertices.length; j++) {
 
-            var vertex = VF.vectorScale(hypersphereVertices[j], 1 / Math.sqrt(SF.sphereNorm(hypersphereVertices[j])));
+            var vertex = VF.vectorScale(hypersphereVertices[j], 1 / VF.norm(hypersphereVertices[j]));
             var vertex2 = SF.sphereToPoincare(vertex, d);
             faceGeometry.vertices.push(new THREE.Vector3(vertex2[0], vertex2[1], vertex2[2]));
 
@@ -55,7 +83,7 @@ function sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides
         faceGeometry.mergeVertices();
 
         //  Give the face a name (useful for raycasting)
-        faceGeometry.name = names[i];
+        faceGeometry.name = data.faceReflections[i];
 
         // Add the face's geometry to the cellGeometry array
         cellGeometry.push(faceGeometry);

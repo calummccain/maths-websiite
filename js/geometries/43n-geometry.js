@@ -1,37 +1,32 @@
-import * as ORDERN from "../data/43n.js";
+import { cubeData } from "../data/43n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
 import { euclideanGeometry } from "./euclidean-geometry.js";
 
-function cubeGeometry(transform, order, refinement, compact, metric, model) {
+function cubeGeometry(transform, order, refinement, model) {
 
-    const vertices = ORDERN.vertices;
-    const faces = ORDERN.faces;
-    const numberOfSides = 4;
+    const data = cubeData(order);
+
     const d = 1;
-
-    function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector);
-    }
 
     var cube;
 
-    if (metric == "spherical") {
+    if (data.metric() == "spherical") {
 
         refinement += 1;
-        cube = sphericalGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, ORDERN.faceReflections, d);
+        cube = sphericalGeometry(data, transform, refinement, d);
 
-    } else if (metric == "euclidean") {
+    } else if (data.metric() == "euclidean") {
 
-        cube = euclideanGeometry(vertices, faces, matrixDict, transform, numberOfSides, ORDERN.faceReflections);
+        cube = euclideanGeometry(data, transform);
 
-    } else if (metric == "hyperbolic") {
+    } else if (data.metric() == "hyperbolic") {
 
-        cube = hyperbolicGeometry(vertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
+        cube = hyperbolicGeometry(data, transform, refinement, model);
 
     }
 
-    return [cube, ORDERN.faceReflections];
+    return [cube, data.faceReflections, data.numFaces];
 
 }
 

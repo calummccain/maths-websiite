@@ -4,23 +4,21 @@ function addCellToGroup(params) {
 
     var geometryFunction = params.geometryFunction;
     var group = params.group;
-    var metric = params.metric || "";
     var refinement = params.refinement || 3;
     var opacityValue = params.opacity || 1;
     var transform = params.transform || "";
     var order = params.order || 0;
-    var compact = params.compact || "compact";
     var colour = params.colour || "normal";
-    var numberofFaces = params.numberOfFaces || 0;
     var position = params.position || [0, 0, 0];
     var name = params.name || "";
     var faceMode = params.faceMode || false;
     var model = params.model || "";
 
-    var shapeGeometry, faceReflections;
+    var shapeGeometry, faceReflections, numberofFaces;
 
-    [shapeGeometry, faceReflections] = geometryFunction(transform, order, refinement, compact, metric, model);
+    [shapeGeometry, faceReflections, numberofFaces] = geometryFunction(transform, order, refinement, model);
 
+    console.log(numberofFaces)
     // faceMode keeps the faces as seperate meshes (and hence seperate objects)
     // without faceMode the polyhedron is made as one mesh/object and the individual faces cannot be selected by ray-casting
     if (faceMode) {

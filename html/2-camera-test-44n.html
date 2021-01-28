@@ -27,8 +27,14 @@
         <div id="view"></div>
 
         <script type="module">
-            import { main } from "../js/main/main-2-camera-44n.js";
-            
+
+            import { squareData } from "../js/data/44n.js";
+            console.log(squareData.vertices.length);
+            console.log(squareData.edges.length);
+            console.log(squareData.faces.length);
+            console.log(squareData.f(7, [1, 2, 3, 4]))
+            //import { main } from "../js/main/main-2-camera-44n.js";
+
             main();
 
         </script>

@@ -1,22 +1,17 @@
-import * as ORDERN from "../data/63n.js";
+import { hexagonData } from "../data/63n.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
-function hexagonalGeometry(transform, order, refinement, compact, metric, model) {
+function hexagonalGeometry(transform, order, refinement, model) {
 
-    const vertices = ORDERN.vertices;
-    const faces = ORDERN.faces;
-    const numberOfSides = 6;
-
-    function matrixDict(letter, vector) {
-        return ORDERN.matrixDict(order, letter, vector);
-    }
+    var data = hexagonData(order);
 
     const newVertices = [];
-    vertices.forEach((v) => { newVertices.push(ORDERN.conversion(order, v)) });
+    data.vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
+    data.vertices = newVertices;
 
-    var hexagonal = hyperbolicGeometry(newVertices, faces, matrixDict, transform, numberOfSides, refinement, compact, ORDERN.faceReflections, model);
+    var hexagonal = hyperbolicGeometry(data, transform, refinement, model);
 
-    return [hexagonal, ORDERN.faceReflections];
+    return [hexagonal, data.faceReflections, data.numFaces];
 
 }
 
