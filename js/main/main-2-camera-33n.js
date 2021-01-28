@@ -4,7 +4,7 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 const eps = 1e-3;
-const sphere = true;
+const sphere = false;
 
 let WIDTH, HEIGHT, view;
 let scene, spheres, vertices, uhpVertices, lineGroup, cameraConstants;
@@ -72,7 +72,7 @@ function makeTheLines(data, number) {
 
     data.edges.forEach((endpoints) => {
 
-        if (data.compact === "uncompact") {
+        if (data.compact() === "uncompact") {
 
             var u = vertices[endpoints[0]]["klein"], v = vertices[endpoints[1]]["klein"];
             var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
