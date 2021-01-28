@@ -18,7 +18,6 @@ function addCellToGroup(params) {
 
     [shapeGeometry, faceReflections, numberofFaces] = geometryFunction(transform, order, refinement, model);
 
-    console.log(numberofFaces)
     // faceMode keeps the faces as seperate meshes (and hence seperate objects)
     // without faceMode the polyhedron is made as one mesh/object and the individual faces cannot be selected by ray-casting
     if (faceMode) {
