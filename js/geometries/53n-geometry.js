@@ -12,11 +12,11 @@ function dodecahedronGeometry(transform, order, refinement, model) {
 
     if (data.metric() == "spherical") {
 
-        dodecahedron = sphericalGeometry(vertices, transform, refinement, d);
+        dodecahedron = sphericalGeometry(data, transform, refinement, d);
 
     } else if (data.metric() == "hyperbolic") {
 
-        dodecahedron = hyperbolicGeometry(vertices, transform, refinement, model);
+        dodecahedron = hyperbolicGeometry(data, transform, refinement, model);
 
     }
 

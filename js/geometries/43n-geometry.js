@@ -14,15 +14,15 @@ function cubeGeometry(transform, order, refinement, model) {
     if (data.metric() == "spherical") {
 
         refinement += 1;
-        cube = sphericalGeometry(data.vertices, transform, refinement, d);
+        cube = sphericalGeometry(data, transform, refinement, d);
 
     } else if (data.metric() == "euclidean") {
 
-        cube = euclideanGeometry(data.vertices, transform);
+        cube = euclideanGeometry(data, transform);
 
     } else if (data.metric() == "hyperbolic") {
 
-        cube = hyperbolicGeometry(data.vertices, transform, refinement, model);
+        cube = hyperbolicGeometry(data, transform, refinement, model);
 
     }
 

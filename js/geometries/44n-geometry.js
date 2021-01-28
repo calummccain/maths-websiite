@@ -3,12 +3,13 @@ import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function squareGeometry(transform, order, refinement, model) {
 
-    const data = squareData(order);
+    var data = squareData(order);
 
     const newVertices = [];
-    data.vertices.forEach((v) => { newVertices.push(data.conversion(order, v)) });
+    data.vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
+    data.vertices = newVertices;
 
-    var square = hyperbolicGeometry(newVertices, transform, refinement, model);
+    var square = hyperbolicGeometry(data, transform, refinement, model);
 
     return [square, data.faceReflections, data.numFaces];
 

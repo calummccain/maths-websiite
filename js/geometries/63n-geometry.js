@@ -3,12 +3,13 @@ import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function hexagonalGeometry(transform, order, refinement, model) {
 
-    const data = hexagonData(order);
-    console.log(data.vertices)
-    const newVertices = [];
-    data.vertices.forEach((v) => { newVertices.push(data.conversion(order, v)) });
+    var data = hexagonData(order);
 
-    var hexagonal = hyperbolicGeometry(newVertices, transform, refinement, model);
+    const newVertices = [];
+    data.vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
+    data.vertices = newVertices;
+
+    var hexagonal = hyperbolicGeometry(data, transform, refinement, model);
 
     return [hexagonal, data.faceReflections, data.numFaces];
 

@@ -3,14 +3,15 @@ import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function triangularGeometry(transform, order, refinement, model) {
 
-    const data = triangleData(order);
+    var data = triangleData(order);
 
     const newVertices = [];
     data.vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
+    data.vertices = newVertices;
 
-    var triangular = hyperbolicGeometry(newVertices, transform, refinement, model);
+    var triangular = hyperbolicGeometry(data, transform, refinement, model);
 
-    return [triangular, ORDERN.faceReflections, data.numFaces];
+    return [triangular, data.faceReflections, data.numFaces];
 
 }
 
