@@ -83,7 +83,7 @@ function sphericalGeometry(data, transform, refinement, d) {
         faceGeometry.mergeVertices();
 
         //  Give the face a name (useful for raycasting)
-        faceGeometry.name = names[i];
+        faceGeometry.name = data.faceReflections[i];
 
         // Add the face's geometry to the cellGeometry array
         cellGeometry.push(faceGeometry);
