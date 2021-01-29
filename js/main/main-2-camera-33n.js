@@ -78,30 +78,32 @@ function makeTheLines(data, number) {
         e1 = HF.hyperboloidToUpperHalfPlane(e1);
         e2 = HF.hyperboloidToUpperHalfPlane(e2);
 
-        var p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+        const p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
 
-        var radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
-        var center = VF.midpoint(e1, e2);
-        var r = VF.norm(radVect);
+        const radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
+        const center = VF.midpoint(e1, e2);
+        const r = VF.norm(radVect);
+
+        var startAngle, endAngle;
 
         if (data.compact() === "compact") {
 
-            var startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
-            var endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
+            startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
+            endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
 
         } else {
 
-            var startAngle = 0;
-            var endAngle = Math.PI;
+            startAngle = 0;
+            endAngle = Math.PI;
 
         }
 
-        var numPieces = Math.ceil(number * (endAngle - startAngle) / Math.PI);
-        var subAngle = (endAngle - startAngle) / numPieces
+        const numPieces = Math.ceil(number * (endAngle - startAngle) / Math.PI);
+        const subAngle = (endAngle - startAngle) / numPieces
 
         for (var i = 0; i <= numPieces; i++) {
 
-            var theta = startAngle + i * subAngle;
+            const theta = startAngle + i * subAngle;
 
             uhpVertices.push([
                 radVect[0] * Math.cos(theta) + center[0],
@@ -291,7 +293,7 @@ function main(data) {
 
     spheres = generateSpheres(data);
     vertices = generateVertices(data);
-    uhpVertices = makeTheLines(data, 30);
+    uhpVertices = makeTheLines(data, 50);
 
     lineGroup = new THREE.Group();
 
