@@ -10,34 +10,23 @@
         <script type="text/javascript" async
             src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
             </script>
-        <script>
-            $(function () {
-                $("#side-menu").load("./menu-bars.html");
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            });
-        </script>
 
         <title>2 camera test</title>
     </head>
 
     <body>
 
-        <div id="side-menu"></div>
-
-        <div id="view"></div>
+        <div id="view2"></div>
 
         <script type="module">
 
             import { main } from "../js/main/main-2-camera-33n.js";
-            import {cubeData} from "../js/data/43n.js";
+            import { cubeData } from "../js/data/43n.js";
 
-            main(cubeData(6));
+            main(cubeData(5));
 
         </script>
 
-        <canvas id="testcanvas">
-
-        </canvas>
     </body>
 
 </html>

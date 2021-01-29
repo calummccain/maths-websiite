@@ -247,7 +247,7 @@ const tetrahedronData = (n) => {
 
             } else {
 
-                return "";
+                return "compact";
 
             }
 

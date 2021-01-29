@@ -74,30 +74,39 @@ function makeTheLines(data, number) {
 
         var uhpVertices = [];
 
-        if (data.compact() === "uncompact") {
+        var [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
+        e1 = HF.hyperboloidToUpperHalfPlane(e1);
+        e2 = HF.hyperboloidToUpperHalfPlane(e2);
 
-            var u = vertices[endpoints[0]]["klein"], v = vertices[endpoints[1]]["klein"];
-            var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
-            var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(v, u));
+        var p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+
+        var radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
+        var center = VF.midpoint(e1, e2);
+        var r = VF.norm(radVect);
+
+        if (data.compact() === "compact") {
+
+            var startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
+            var endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
 
         } else {
 
-            var p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+            var startAngle = 0;
+            var endAngle = Math.PI;
 
         }
 
-        var radVect = VF.vectorDiff(p2, p1);
-        var center = VF.midpoint(p1, p2);
-        var r = VF.norm(radVect) / 2;
+        var numPieces = Math.ceil(number * (endAngle - startAngle) / Math.PI);
+        var subAngle = (endAngle - startAngle) / numPieces
 
-        for (var i = 0; i <= number; i++) {
+        for (var i = 0; i <= numPieces; i++) {
 
-            var theta = i * Math.PI / number - Math.PI / 2;
+            var theta = startAngle + i * subAngle;
 
             uhpVertices.push([
-                radVect[0] * Math.sin(theta) / 2 + center[0],
-                radVect[1] * Math.sin(theta) / 2 + center[1],
-                r * Math.cos(theta)
+                radVect[0] * Math.cos(theta) + center[0],
+                radVect[1] * Math.cos(theta) + center[1],
+                r * Math.sin(theta)
             ])
 
         }
@@ -273,12 +282,12 @@ function visibilityTest(point, camera, spheres, vertices, model, data) {
 
 function main(data) {
 
-    view = document.getElementById("view");
+    view = document.getElementById("view2");
     WIDTH = view.clientWidth, HEIGHT = view.clientHeight;
 
     // setup scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xDDDDDD);
+    scene.background = new THREE.Color(0xEEEEEE);
 
     spheres = generateSpheres(data);
     vertices = generateVertices(data);
