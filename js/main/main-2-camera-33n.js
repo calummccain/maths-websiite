@@ -72,11 +72,13 @@ function makeTheLines(data, number) {
 
     data.edges.forEach((endpoints) => {
 
+        var uhpVertices = [];
+
         if (data.compact() === "uncompact") {
 
             var u = vertices[endpoints[0]]["klein"], v = vertices[endpoints[1]]["klein"];
             var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
-            var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(v, u))
+            var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(v, u));
 
         } else {
 
@@ -87,8 +89,6 @@ function makeTheLines(data, number) {
         var radVect = VF.vectorDiff(p2, p1);
         var center = VF.midpoint(p1, p2);
         var r = VF.norm(radVect) / 2;
-
-        var uhpVertices = [];
 
         for (var i = 0; i <= number; i++) {
 
@@ -104,7 +104,44 @@ function makeTheLines(data, number) {
 
         lineCoords.push(uhpVertices);
 
-    })
+    });
+
+    // CHANGE!!
+    if (data.compact() === "zoinks") {
+
+        data.faces.forEach((face) => {
+
+            for (var i = 0; i < data.numSides; i++) {
+
+                var uhpVertices = [];
+
+                var u = vertices[face[i]]["klein"], v = vertices[face[(i + 1) % data.numSides]]["klein"], w = vertices[face[(i + 2) % data.numSides]]["klein"];
+                var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
+                var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
+
+                var radVect = VF.vectorDiff(p2, p1);
+                var center = VF.midpoint(p1, p2);
+                var r = VF.norm(radVect) / 2;
+
+                for (var j = 0; j <= number; j++) {
+
+                    var theta = j * Math.PI / number - Math.PI / 2;
+
+                    uhpVertices.push([
+                        radVect[0] * Math.cos(theta) / 2 + center[0],
+                        radVect[1] * Math.sin(theta) / 2 + center[1],
+                        0
+                    ])
+
+                }
+
+                lineCoords.push(uhpVertices);
+
+            }
+
+        })
+
+    }
 
     return lineCoords;
 
@@ -178,7 +215,7 @@ function visibilityTest(point, camera, spheres, vertices, model, data) {
     var u = VF.vectorDiff(point, camera);
     var uu = VF.norm(u) ** 2;
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < data.numFaces; i++) {
 
         var oc = VF.vectorDiff(o, spheres[i][model].center);
         var uoc = VF.vectorDot(u, oc);
@@ -274,13 +311,13 @@ function main(data) {
     if (sphere) {
 
         var material = new THREE.MeshBasicMaterial({
-            color: 0xff00ff,
             transparent: true,
             opacity: 0.2
         });
 
         spheres.forEach((sphere) => {
             var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 20, 20), material);
+            mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
             mesh.position.fromArray(sphere["uhp"].center);
             scene.add(mesh);
         })
