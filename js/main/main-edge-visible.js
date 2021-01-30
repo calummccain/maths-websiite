@@ -4,7 +4,7 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 const eps = 1e-3;
-const sphere = false;
+const sphere = true;
 
 let WIDTH, HEIGHT, view;
 let scene, spheres, vertices, uhpVertices, lineGroup, cameraConstants;
@@ -293,7 +293,7 @@ function main(data) {
 
     spheres = generateSpheres(data);
     vertices = generateVertices(data);
-    uhpVertices = makeTheLines(data, 50);
+    uhpVertices = makeTheLines(data, 30);
 
     lineGroup = new THREE.Group();
 
@@ -358,6 +358,8 @@ function main(data) {
 
     // add the renderer to the 'view' div
     view.appendChild(renderer.domElement);
+
+    cameraLines(data);
 
     render();
 
