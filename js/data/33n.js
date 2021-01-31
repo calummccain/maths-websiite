@@ -241,9 +241,13 @@ const tetrahedronData = (n) => {
 
                 return "paracompact";
 
+            } else if (n > 6) {
+
+                return "uncompact"
+
             } else {
 
-                return "";
+                return "compact";
 
             }
 

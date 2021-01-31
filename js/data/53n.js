@@ -296,7 +296,7 @@ const dodecahedronData = (n) => {
 
             } else {
 
-                return "";
+                return "uncompact";
 
             }
 

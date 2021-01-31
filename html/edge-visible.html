@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <meta charset="utf-8">
+
+        <link rel="stylesheet" href="../css/test.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+            </script>
+
+        <title>2 camera test</title>
+    </head>
+
+    <body>
+
+        <div id="view2"></div>
+
+        <script type="module">
+
+            import { main } from "../js/main/main-edge-visible.js";
+
+            import { dodecahedronData } from "../js/data/53n.js";
+            main(dodecahedronData(7));
+
+            // import { icosahedronData } from "../js/data/35n.js";
+            // main(icosahedronData(4));
+
+            // import { tetrahedronData } from "../js/data/33n.js";
+            // main(tetrahedronData(7));
+
+            // import { cubeData } from "../js/data/43n.js";
+            // main(cubeData(7));
+
+
+        </script>
+
+    </body>
+
+</html>

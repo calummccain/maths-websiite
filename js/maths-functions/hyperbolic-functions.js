@@ -20,7 +20,7 @@ function hyperbolicNorm(x) {
 // if on lightcone (w, x, y, z) ===> (x / w, y / w, z / w)
 function hyperboloidToPoincare(point) {
 
-    if (Math.abs(hyperbolicNorm(x)) < tol) {
+    if (Math.abs(hyperbolicNorm(point)) < tol) {
 
         var scale = point[0];
         return [point[1] / scale, point[2] / scale, point[3] / scale];
@@ -121,7 +121,7 @@ function hyperboloidToUpperHalfPlane(point) {
 
     //return [x * (w + 1) / den, y * (w + 1) / den, 2 * w / den];
 
-    return poincareToUpperHalfPlane(hyperboloidToPoincareMod(point));
+    return poincareToUpperHalfPlane(hyperboloidToPoincare(point));
 }
 
 function kleinToUpperHalfPlane(point) {
@@ -163,12 +163,12 @@ function uhpCenter(p1, p2, p3) {
     var C = [n0[2], n12[2], n13[2]];
     var D = [0, d12, d13];
 
-    var ABC = VF.determinant([A, B, C]);
+    var ABC = VF.determinant3([A, B, C]);
 
     return [
-        VF.determinant([D, B, C]) / ABC,
-        VF.determinant([A, D, C]) / ABC,
-        VF.determinant([A, B, D]) / ABC
+        VF.determinant3([D, B, C]) / ABC,
+        VF.determinant3([A, D, C]) / ABC,
+        VF.determinant3([A, B, D]) / ABC
     ];
 
 }
@@ -176,9 +176,15 @@ function uhpCenter(p1, p2, p3) {
 
 function geodesicEndpoints(a, b) {
 
+    if ((Math.abs(hyperbolicNorm(a)) < tol) && (Math.abs(hyperbolicNorm(a)) < tol)) {
+
+        return [a, b];
+
+    }
+
     const inner = hyperboloidInnerProduct(a, b);
     const eAlpha = inner + Math.sqrt(inner ** 2 - 1);
-    return [VF.vectorSum(VF.scale(a, 1 / eAlpha), b), VF.vectorDiff(VF.scale(b, 1 / eAlpha), a)];
+    return [VF.vectorDiff(VF.vectorScale(a, 1 / eAlpha), b), VF.vectorDiff(VF.vectorScale(b, 1 / eAlpha), a)];
 
 }
 

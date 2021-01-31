@@ -220,7 +220,7 @@ const cubeData = (n) => {
 
             } else {
 
-                return "";
+                return "uncompact";
 
             }
 
