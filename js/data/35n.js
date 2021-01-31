@@ -221,7 +221,7 @@ const icosahedronData = (n) => {
 
             } else {
 
-                return "";
+                return "hyperbolic";
 
             }
 

@@ -6,8 +6,8 @@ import * as VF from "../maths-functions/vector-functions.js";
 const eps = 1e-3;
 const sphere = false;
 
-let WIDTH, HEIGHT, view;
-let scene, spheres, vertices, uhpVertices, lineGroup, cameraConstants;
+var WIDTH, HEIGHT, view;
+var scene, spheres, vertices, uhpVertices, lineGroup, cameraConstants;
 
 // generate the spheres that bound the geometry (only for UHP)
 function generateSpheres(data) {
@@ -423,6 +423,13 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 }
 
 function main(data) {
+
+    WIDTH = 0;
+    HEIGHT = 0;
+    spheres = []; 
+    vertices =[]; 
+    uhpVertices =[];
+    view = 
 
     view = document.getElementById("view2");
     WIDTH = view.clientWidth, HEIGHT = view.clientHeight;

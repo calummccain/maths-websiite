@@ -8,41 +8,31 @@ import { hexagonData } from "./data/63n.js";
 import { triangleData } from "./data/36n.js";
 import { squareData } from "./data/44n.js";
 
-// window.onload = function () {
-//     var tetrahedronButton = document.getElementsByClassName("tetrahedronButton");
-//     tetrahedronButton.setAttribute("onclick", function () {
-//         main(tetrahedronData(7));
-//         console.log("hi");
-//     })
-// }
+const n = 6; 
+
 window.onload = function () {
     document.getElementById("tetrahedronButton").addEventListener("click", function () {
-        main(tetrahedronData(7));
+        main(tetrahedronData(n));
     });
     document.getElementById("cubeButton").addEventListener("click", function () {
-        main(cubeData(7));
+        main(cubeData(n));
     });
     document.getElementById("octahedronButton").addEventListener("click", function () {
-        main(octahedronData(7));
+        main(octahedronData(n));
     });
     document.getElementById("dodecahedronButton").addEventListener("click", function () {
-        main(dodecahedronData(7));
+        main(dodecahedronData(n));
     });
     document.getElementById("icosahedronButton").addEventListener("click", function () {
-        main(icosahedronData(7));
+        main(icosahedronData(n));
     });
     document.getElementById("hexagonButton").addEventListener("click", function () {
-        main(hexagonData(7));
+        main(hexagonData(n));
     });
     document.getElementById("triangleButton").addEventListener("click", function () {
-        main(triangleData(7));
+        main(triangleData(n));
     });
     document.getElementById("squareButton").addEventListener("click", function () {
-        main(squareData(7));
+        main(squareData(n));
     });
 }
-
-
-
-// main(tetrahedronData(7));
-// console.log("hi");
