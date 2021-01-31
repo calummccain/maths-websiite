@@ -4,7 +4,7 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 const eps = 1e-3;
-const sphere = true;
+const sphere = false;
 
 let WIDTH, HEIGHT, view;
 let scene, spheres, vertices, uhpVertices, lineGroup, cameraConstants;
@@ -16,11 +16,29 @@ function generateSpheres(data) {
 
     for (var i = 0; i < data.numFaces; i++) {
 
-        var center = HF.uhpCenter(
-            HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[data.faces[i][0]])),
-            HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[data.faces[i][1]])),
-            HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[data.faces[i][2]]))
-        );
+        var v1, v2, v3;
+
+        if (data.compact() === "uncompact") {
+
+            var u1, u2, u3;
+
+            u1 = vertices[data.faces[i][0]]["klein"];
+            u2 = vertices[data.faces[i][1]]["klein"];
+            u3 = vertices[data.faces[i][2]]["klein"];
+
+            v1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u1, u2));
+            v2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u1));
+            v3 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u3));
+
+        } else {
+
+            v1 = vertices[data.faces[i][0]]["uhp"];
+            v2 = vertices[data.faces[i][1]]["uhp"];
+            v3 = vertices[data.faces[i][2]]["uhp"];
+
+        }
+
+        var center = HF.uhpCenter(v1, v2, v3);
 
         var sphereDict = {
             "hyperboloid": {
@@ -32,7 +50,7 @@ function generateSpheres(data) {
             },
             "uhp": {
                 center: center,
-                radius: VF.distance(HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[data.faces[i][0]])), center)
+                radius: VF.distance(v1, center)
             },
         };
         spheres.push(sphereDict);
@@ -74,9 +92,20 @@ function makeTheLines(data, number) {
 
         var uhpVertices = [];
 
-        var [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
-        e1 = HF.hyperboloidToUpperHalfPlane(e1);
-        e2 = HF.hyperboloidToUpperHalfPlane(e2);
+        if (data.compact() === "uncompact") {
+
+            var e1 = VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]);
+            var e2 = VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]);
+            e1 = HF.kleinToUpperHalfPlane(e1);
+            e2 = HF.kleinToUpperHalfPlane(e2);
+
+        } else {
+
+            var [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
+            e1 = HF.hyperboloidToUpperHalfPlane(e1);
+            e2 = HF.hyperboloidToUpperHalfPlane(e2);
+
+        }
 
         const p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
 
@@ -117,10 +146,12 @@ function makeTheLines(data, number) {
 
     });
 
-    // CHANGE!!
-    if (data.compact() === "zoinks") {
+    // kinda works??
+    if (data.compact() === "uncompact") {
 
-        data.faces.forEach((face) => {
+        for (var j = 0; j < data.numFaces; j++) {
+
+            const face = data.faces[j];
 
             for (var i = 0; i < data.numSides; i++) {
 
@@ -130,17 +161,32 @@ function makeTheLines(data, number) {
                 var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
                 var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
 
-                var radVect = VF.vectorDiff(p2, p1);
-                var center = VF.midpoint(p1, p2);
-                var r = VF.norm(radVect) / 2;
+                var center = spheres[j]["uhp"].center;
+                var r = spheres[j]["uhp"].radius;
 
-                for (var j = 0; j <= number; j++) {
+                var theta1 = Math.acos((p1[0] - center[0]) / r) * (p1[1] >= center[1] ? 1 : -1);
+                var theta2 = Math.acos((p2[0] - center[0]) / r) * (p2[1] >= center[1] ? 1 : -1);
 
-                    var theta = j * Math.PI / number - Math.PI / 2;
+                var startAngle = Math.min(theta1, theta2);
+                var endAngle = Math.max(theta1, theta2);
+
+                if (endAngle - startAngle > Math.PI) {
+
+                    startAngle += 2 * Math.PI;
+                    [startAngle, endAngle] = [endAngle, startAngle];
+
+                }
+
+                const numPieces = Math.ceil(Math.abs(number * (endAngle - startAngle) / Math.PI));
+                const subAngle = (endAngle - startAngle) / numPieces;
+
+                for (var k = 0; k <= numPieces; k++) {
+
+                    const theta = startAngle + k * subAngle;
 
                     uhpVertices.push([
-                        radVect[0] * Math.cos(theta) / 2 + center[0],
-                        radVect[1] * Math.sin(theta) / 2 + center[1],
+                        r * Math.cos(theta) + center[0],
+                        r * Math.sin(theta) + center[1],
                         0
                     ])
 
@@ -150,7 +196,7 @@ function makeTheLines(data, number) {
 
             }
 
-        })
+        }
 
     }
 
@@ -183,7 +229,7 @@ function cameraLines(data) {
             var e1 = points[k];
             var e2 = points[k + 1];
 
-            if (visibilityTest(e1, camPos, spheres, vertices, "uhp", data) && visibilityTest(e2, camPos, spheres, vertices, "uhp", data)) {
+            if (visibilityTest(e1, camPos, spheres, vertices, data) && visibilityTest(e2, camPos, spheres, vertices, data)) {
 
                 drawLine([e1, e2], 0x000000);
 
@@ -219,18 +265,71 @@ function pointInPolygon(point, vertices) {
 
 }
 
+//moller thrumbore intersection algorithm
+function rayPolygonIntersection(point, polygon) {
+
+    for (var i = 0; i < polygon.length; i++) {
+
+        var v0 = polygon[i], v1 = polygon[(i + 1) % polygon.length], v2 = polygon[(i + 2) % polygon.length];
+
+        var e1 = VF.vectorDiff(v1, v0);
+        var e2 = VF.vectorDiff(v2, v0);
+
+        var h = VF.vectorCross(point, e2);
+        var a = VF.vectorDot(e1, h);
+
+        if ((a > -eps) && (a < eps)) {
+
+
+            continue;
+
+        }
+
+        var f = 1 / a;
+        var s = VF.vectorScale(v0, -1);
+        var u = f * VF.vectorDot(s, h);
+
+        if ((u < 0) || (u > 1)) {
+
+            continue;
+
+        }
+
+        var q = VF.vectorCross(s, e1);
+        var v = f * VF.vectorDot(point, q);
+
+        if ((v < 0) || (u + v > 1)) {
+
+            continue;
+
+        }
+
+        var t = f * VF.vectorDot(e2, q);
+
+        if (t > eps) {
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+
+}
+
 // ONLY WORKS FOR UHP
-function visibilityTest(point, camera, spheres, vertices, model, data) {
+function visibilityTest(point, camera, spheres, vertices, data) {
 
     var o = camera;
     var u = VF.vectorDiff(point, camera);
-    var uu = VF.norm(u) ** 2;
+    var uu = VF.vectorDot(u, u);
 
     for (var i = 0; i < data.numFaces; i++) {
 
-        var oc = VF.vectorDiff(o, spheres[i][model].center);
+        var oc = VF.vectorDiff(o, spheres[i]["uhp"].center);
         var uoc = VF.vectorDot(u, oc);
-        var delta = (uoc ** 2) - uu * ((VF.norm(oc) ** 2) - (spheres[i][model].radius ** 2));
+        var delta = (uoc ** 2) - uu * (VF.vectorDot(oc, oc) - (spheres[i]["uhp"].radius ** 2));
 
         if ((delta <= eps) || isNaN(delta)) {
 
@@ -242,33 +341,74 @@ function visibilityTest(point, camera, spheres, vertices, model, data) {
             var t2 = (-uoc - Math.sqrt(delta)) / uu;
 
             var polygon = [];
-            data.faces[i].forEach((j) => {
-                polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]])
-            });
 
-            if ((t1 > eps) && (t1 < 1 - eps)) {
+            if (data.compact() === "uncompact") {
 
-                var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
-                var v1 = [x1[0], x1[1]];
-                // drawLine(camera, x1, 0xFF0000);
+                data.faces[i].forEach((j) => {
+                    polygon.push(vertices[j]["klein"]);
+                });
 
-                if (pointInPolygon(v1, polygon) && (x1[2] > 0)) {
+            } else {
 
-                    return false;
-
-                }
+                data.faces[i].forEach((j) => {
+                    polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]])
+                });
 
             }
 
-            if ((t2 > eps) && (t2 < 1 - eps)) {
+            if (data.compact() === "uncompact") {
 
-                var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
-                var v2 = [x2[0], x2[1]];
-                // drawLine(camera, x2, 0x00FF00);
+                if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                if (pointInPolygon(v2, polygon) && (x2[2] > 0)) {
+                    var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
+                    var v1 = HF.upperHalfPlaneToKlein(x1);
 
-                    return false;
+                    if (rayPolygonIntersection(v1, polygon) && (x1[2] > 0)) {
+
+                        return false;
+
+                    }
+
+                }
+
+                if ((t2 > eps) && (t2 < 1 - eps)) {
+
+                    var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
+                    var v2 = HF.upperHalfPlaneToKlein(x2);
+
+                    if (rayPolygonIntersection(v2, polygon) && (x2[2] > 0)) {
+
+                        return false;
+
+                    }
+
+                }
+
+            } else {
+
+                if ((t1 > eps) && (t1 < 1 - eps)) {
+
+                    var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
+                    var v1 = [x1[0], x1[1]];
+
+                    if (pointInPolygon(v1, polygon) && (x1[2] > 0)) {
+
+                        return false;
+
+                    }
+
+                }
+
+                if ((t2 > eps) && (t2 < 1 - eps)) {
+
+                    var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
+                    var v2 = [x2[0], x2[1]];
+
+                    if (pointInPolygon(v2, polygon) && (x2[2] > 0)) {
+
+                        return false;
+
+                    }
 
                 }
 
@@ -291,8 +431,8 @@ function main(data) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xEEEEEE);
 
-    spheres = generateSpheres(data);
     vertices = generateVertices(data);
+    spheres = generateSpheres(data);
     uhpVertices = makeTheLines(data, 30);
 
     lineGroup = new THREE.Group();
@@ -326,11 +466,16 @@ function main(data) {
             opacity: 0.2
         });
 
+        var k = 7;
+
         spheres.forEach((sphere) => {
-            var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 20, 20), material);
-            mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
-            mesh.position.fromArray(sphere["uhp"].center);
-            scene.add(mesh);
+            if (k < 10) {
+                var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
+                mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
+                mesh.position.fromArray(sphere["uhp"].center);
+                scene.add(mesh);
+            }
+            k++;
         })
 
     }
