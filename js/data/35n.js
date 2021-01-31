@@ -248,7 +248,7 @@ const icosahedronData = (n) => {
 
             } else {
 
-                return "";
+                return "uncompact";
 
             }
 
