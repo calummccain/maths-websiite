@@ -235,7 +235,7 @@ function cameraLines(data) {
 
             } else {
 
-                drawLine([e1, e2], 0xAAAAAA);
+                //drawLine([e1, e2], 0xAAAAAA);
 
             }
 
@@ -433,7 +433,7 @@ function main(data) {
 
     vertices = generateVertices(data);
     spheres = generateSpheres(data);
-    uhpVertices = makeTheLines(data, 30);
+    uhpVertices = makeTheLines(data, 50);
 
     lineGroup = new THREE.Group();
 
@@ -456,7 +456,7 @@ function main(data) {
     const camera = new THREE.PerspectiveCamera(cameraConstants.fov, window.innerWidth / window.innerHeight, 0.01, 100);
     camera.position.fromArray(cameraConstants.eye);
     camera.up.fromArray(cameraConstants.up);
-    camera.lookAt(scene.position);
+    camera.lookAt(lineGroup.position);
     cameraConstants.camera = camera;
 
     if (sphere) {
