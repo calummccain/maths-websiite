@@ -342,7 +342,7 @@ const squareData = (n) => {
 
             if (n == 3) {
 
-                return "paracompact";
+                return "compact";
 
             } else if (n == 4) {
 

@@ -370,15 +370,15 @@ const hexagonData = (n) => {
 
             if (n == 3) {
 
-                return "paracompact";
+                return "compact";
 
             } else if (n == 4) {
 
-                return "paracompact";
+                return "compact";
 
             } else if (n == 5) {
 
-                return "paracompact";
+                return "compact";
 
             } else if (n == 6) {
 
