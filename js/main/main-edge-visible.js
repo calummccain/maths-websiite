@@ -200,6 +200,16 @@ function makeTheLines(data, number) {
 
     }
 
+    // var camPos = cameraConstants.camera.position.toArray();
+
+    // for (var i = 0; i < data.numFaces; i++) {
+
+    //     var dir = VF.vectorDiff(spheres[i]["uhp"].center, camPos);
+    //     dir = VF.vectorScale(dir, 1 / VF.norm(dir));
+    //     console.log(dir)
+
+    // }
+
     return lineCoords;
 
 }
@@ -224,21 +234,44 @@ function cameraLines(data) {
 
     uhpVertices.forEach((points) => {
 
-        for (var k = 0; k < points.length - 1; k++) {
+        var drawVerts = [];
+
+        for (var k = 0; k < points.length; k++) {
 
             var e1 = points[k];
-            var e2 = points[k + 1];
+            drawVerts.push([e1, visibilityTest(e1, camPos, spheres, vertices, data)]);
 
-            if (visibilityTest(e1, camPos, spheres, vertices, data) && visibilityTest(e2, camPos, spheres, vertices, data)) {
+        }
 
-                drawLine([e1, e2], 0x000000);
+        var segments = [[drawVerts[0]]];
+        var segmentsPoints = [[drawVerts[0][0]]];
+        var segNum = 0;
+
+        for (var k = 1; k < points.length; k++) {
+
+            if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                segments[segNum].push(drawVerts[k]);
+                segmentsPoints[segNum].push(drawVerts[k][0]);
 
             } else {
 
-                //drawLine([e1, e2], 0xAAAAAA);
+                segNum++;
+                segments.push([drawVerts[k]])
+                segmentsPoints.push([drawVerts[k][0]]);
 
             }
 
+        }
+
+        for (var k = 0; k < segments.length; k++) {
+
+            if ((segments[k].length > 1) && (segments[k][0][1])){
+
+                drawLine(segmentsPoints[k], 0x000000);
+
+            }
+        
         }
 
     });
@@ -438,12 +471,6 @@ function main(data) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xEEEEEE);
 
-    vertices = generateVertices(data);
-    spheres = generateSpheres(data);
-    uhpVertices = makeTheLines(data, 50);
-
-    lineGroup = new THREE.Group();
-
     cameraConstants = {
         left: 0,
         bottom: 0,
@@ -460,11 +487,17 @@ function main(data) {
         }
     };
 
+    lineGroup = new THREE.Group();
+
     const camera = new THREE.PerspectiveCamera(cameraConstants.fov, window.innerWidth / window.innerHeight, 0.01, 100);
     camera.position.fromArray(cameraConstants.eye);
     camera.up.fromArray(cameraConstants.up);
     camera.lookAt(lineGroup.position);
     cameraConstants.camera = camera;
+
+    vertices = generateVertices(data);
+    spheres = generateSpheres(data);
+    uhpVertices = makeTheLines(data, 50);
 
     if (sphere) {
 
