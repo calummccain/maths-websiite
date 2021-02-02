@@ -98,11 +98,8 @@ const hexagonData = (n) => {
             [126, 134], [126, 135], [127, 135], [128, 136], [129, 137],
             [130, 138], [131, 139], [132, 140], [133, 141], [134, 142],
             [135, 143], [136, 144], [137, 144], [137, 145], [138, 145],
-            [138, 146], [139, 146],
-            [139, 147], [140, 147],
-            [140, 148], [141, 148],
-            [141, 149], [142, 149],
-            [142, 150], [143, 150]
+            [138, 146], [139, 146], [139, 147], [140, 147], [140, 148],
+            [141, 148], [141, 149], [142, 149], [142, 150], [143, 150]
         ],
 
         faces: [
@@ -170,7 +167,7 @@ const hexagonData = (n) => {
 
         numVertices: 151,
 
-        numEdges: 194,
+        numEdges: 210,
 
         numFaces: 60,
 
@@ -403,11 +400,11 @@ const hexagonData = (n) => {
 
 export { hexagonData };
 
-//const data = hexagonData(6);
+// const data = hexagonData(6);
 
-// // console.log(data.vertices.length)
-// // console.log(data.edges.length)
-// // console.log(data.faces.length)
+// console.log(data.vertices.length)
+// console.log(data.edges.length)
+// console.log(data.faces.length)
 
 // var usedVerts = [];
 

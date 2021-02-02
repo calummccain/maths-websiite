@@ -8,7 +8,7 @@ import { hexagonData } from "./data/63n.js";
 import { triangleData } from "./data/36n.js";
 import { squareData } from "./data/44n.js";
 
-const n = 6; 
+const n = 3; 
 
 window.onload = function () {
     document.getElementById("tetrahedronButton").addEventListener("click", function () {
