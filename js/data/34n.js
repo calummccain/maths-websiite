@@ -202,11 +202,13 @@ const octahedronData = (n) => {
 
             } else {
 
-                return "";
+                return "uncompact";
 
             }
 
-        }
+        },
+
+        cellType: "spherical"
 
     }
 

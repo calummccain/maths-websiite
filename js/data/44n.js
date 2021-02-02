@@ -378,11 +378,13 @@ const squareData = (n) => {
 
             } else {
 
-                return "";
+                return "uncompact";
 
             }
 
-        }
+        },
+
+        cellType: "euclidean"
 
     }
 

@@ -247,11 +247,13 @@ const tetrahedronData = (n) => {
 
             } else {
 
-                return "compact";
+                return "uncompact";
 
             }
 
-        }
+        },
+
+        cellType: "spherical"
 
     }
 

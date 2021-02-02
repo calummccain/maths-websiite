@@ -224,7 +224,9 @@ const cubeData = (n) => {
 
             }
 
-        }
+        },
+
+        cellType: "spherical"
 
     }
 

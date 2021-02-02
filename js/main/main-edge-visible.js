@@ -66,16 +66,35 @@ function generateVertices(data) {
 
     var verts = [];
 
-    for (var i = 0; i < data.numVertices; i++) {
+    if (data.cellType === "euclidean") {
 
-        var vertDict = {
-            "hyperboloid": data.f(data.vertices[i]),
-            "poincare": HF.hyperboloidToPoincare(data.f(data.vertices[i])),
-            "klein": HF.hyperboloidToKlein(data.f(data.vertices[i])),
-            "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[i]))
-        };
+        for (var i = 0; i < data.numVertices; i++) {
 
-        verts.push(vertDict);
+            var vertDict = {
+                "hyperboloid": data.f(data.conversion(data.vertices[i])),
+                "poincare": HF.hyperboloidToPoincare(data.f(data.conversion(data.vertices[i]))),
+                "klein": HF.hyperboloidToKlein(data.f(data.conversion(data.vertices[i]))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.conversion(data.vertices[i])))
+            };
+
+            verts.push(vertDict);
+
+        }
+
+    } else {
+
+        for (var i = 0; i < data.numVertices; i++) {
+
+            var vertDict = {
+                "hyperboloid": data.f(data.vertices[i]),
+                "poincare": HF.hyperboloidToPoincare(data.f(data.vertices[i])),
+                "klein": HF.hyperboloidToKlein(data.f(data.vertices[i])),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[i]))
+            };
+
+            verts.push(vertDict);
+
+        }
 
     }
 
@@ -234,44 +253,48 @@ function cameraLines(data) {
 
     uhpVertices.forEach((points) => {
 
-        var drawVerts = [];
+        if (points.length > 0) {
 
-        for (var k = 0; k < points.length; k++) {
+            var drawVerts = [];
 
-            var e1 = points[k];
-            drawVerts.push([e1, visibilityTest(e1, camPos, spheres, vertices, data)]);
+            for (var k = 0; k < points.length; k++) {
 
-        }
-
-        var segments = [[drawVerts[0]]];
-        var segmentsPoints = [[drawVerts[0][0]]];
-        var segNum = 0;
-
-        for (var k = 1; k < points.length; k++) {
-
-            if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
-
-                segments[segNum].push(drawVerts[k]);
-                segmentsPoints[segNum].push(drawVerts[k][0]);
-
-            } else {
-
-                segNum++;
-                segments.push([drawVerts[k]])
-                segmentsPoints.push([drawVerts[k][0]]);
+                var e1 = points[k];
+                drawVerts.push([e1, visibilityTest(e1, camPos, spheres, vertices, data)]);
 
             }
 
-        }
+            var segments = [[drawVerts[0]]];
+            var segmentsPoints = [[drawVerts[0][0]]];
+            var segNum = 0;
 
-        for (var k = 0; k < segments.length; k++) {
+            for (var k = 1; k < points.length; k++) {
 
-            if ((segments[k].length > 1) && (segments[k][0][1])){
+                if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
 
-                drawLine(segmentsPoints[k], 0x000000);
+                    segments[segNum].push(drawVerts[k]);
+                    segmentsPoints[segNum].push(drawVerts[k][0]);
+
+                } else {
+
+                    segNum++;
+                    segments.push([drawVerts[k]])
+                    segmentsPoints.push([drawVerts[k][0]]);
+
+                }
 
             }
-        
+
+            for (var k = 0; k < segments.length; k++) {
+
+                if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                    drawLine(segmentsPoints[k], 0x000000);
+
+                }
+
+            }
+
         }
 
     });
@@ -459,11 +482,9 @@ function main(data) {
 
     WIDTH = 0;
     HEIGHT = 0;
-    spheres = []; 
-    vertices =[]; 
-    uhpVertices =[];
-    view = 
-
+    spheres = [];
+    vertices = [];
+    uhpVertices = [];
     view = document.getElementById("view2");
     WIDTH = view.clientWidth, HEIGHT = view.clientHeight;
 
@@ -497,7 +518,7 @@ function main(data) {
 
     vertices = generateVertices(data);
     spheres = generateSpheres(data);
-    uhpVertices = makeTheLines(data, 50);
+    uhpVertices = makeTheLines(data, 30);
 
     if (sphere) {
 
@@ -506,7 +527,7 @@ function main(data) {
             opacity: 0.2
         });
 
-        var k = 7;
+        var k = 0;
 
         spheres.forEach((sphere) => {
             if (k < 10) {

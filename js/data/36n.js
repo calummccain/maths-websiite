@@ -486,11 +486,13 @@ const triangleData = (n) => {
 
             } else {
 
-                return "";
+                return "uncompact";
 
             }
 
-        }
+        },
+
+        cellType: "euclidean"
 
     }
 

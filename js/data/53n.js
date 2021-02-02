@@ -300,7 +300,9 @@ const dodecahedronData = (n) => {
 
             }
 
-        }
+        },
+
+        cellType: "spherical"
 
     }
 

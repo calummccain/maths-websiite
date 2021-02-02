@@ -252,7 +252,9 @@ const icosahedronData = (n) => {
 
             }
 
-        }
+        },
+
+        cellType: "spherical"
 
     }
 
