@@ -71,11 +71,18 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.f(data.conversion(data.vertices[i])),
-                "poincare": HF.hyperboloidToPoincare(data.f(data.conversion(data.vertices[i]))),
-                "klein": HF.hyperboloidToKlein(data.f(data.conversion(data.vertices[i]))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.conversion(data.vertices[i])))
+                "hyperboloid": data.flip(data.f(data.conversion(data.vertices[i]))),
+                "poincare": HF.hyperboloidToPoincare(data.f(data.flip(data.conversion(data.vertices[i])))),
+                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.conversion(data.vertices[i])))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.conversion(data.vertices[i]))))
             };
+
+            // var vertDict = {
+            //     "hyperboloid": data.f(data.conversion(data.vertices[i])),
+            //     "poincare": HF.hyperboloidToPoincare(data.f(data.conversion(data.vertices[i]))),
+            //     "klein": HF.hyperboloidToKlein(data.f(data.conversion(data.vertices[i]))),
+            //     "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.conversion(data.vertices[i])))
+            // };
 
             verts.push(vertDict);
 
@@ -86,10 +93,10 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.f(data.vertices[i]),
-                "poincare": HF.hyperboloidToPoincare(data.f(data.vertices[i])),
-                "klein": HF.hyperboloidToKlein(data.f(data.vertices[i])),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[i]))
+                "hyperboloid": data.f(data.d(data.vertices[i])),
+                "poincare": HF.hyperboloidToPoincare(data.f(data.d(data.vertices[i]))),
+                "klein": HF.hyperboloidToKlein(data.f(data.d(data.vertices[i]))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.d(data.vertices[i])))
             };
 
             verts.push(vertDict);

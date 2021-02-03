@@ -392,7 +392,13 @@ const hexagonData = (n) => {
 
         },
 
-        cellType: "euclidean"
+        cellType: "euclidean",
+
+        flip: (v) => {
+
+            return [v[0], v[2], v[3], v[1]];
+
+        }
 
     }
 

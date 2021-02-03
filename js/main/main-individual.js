@@ -41,7 +41,7 @@ function main(name, geometry) {
         faceMode: true,
         transform: "",
         compact: CONSTANTS.compact[name],
-        model: CONSTANTS.model[name]
+        model: CONSTANTS.modelSingle[name]
     });
 
     // setup the renderer
