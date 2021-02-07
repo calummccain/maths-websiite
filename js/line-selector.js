@@ -7,6 +7,7 @@ import { icosahedronData } from "./data/35n.js";
 import { hexagonData } from "./data/63n.js";
 import { triangleData } from "./data/36n.js";
 import { squareData } from "./data/44n.js";
+import { testData } from "./data/test-data.js";
 
 const n = 5; 
 
@@ -34,5 +35,8 @@ window.onload = function () {
     });
     document.getElementById("squareButton").addEventListener("click", function () {
         main(squareData(n));
+    });
+    document.getElementById("testButton").addEventListener("click", function () {
+        main(testData());
     });
 }
