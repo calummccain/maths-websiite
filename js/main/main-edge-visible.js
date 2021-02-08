@@ -4,7 +4,7 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 const eps = 1e-3;
-const sphere = false;
+const sphere = true;
 
 var WIDTH, HEIGHT, view;
 var scene, spheres, vertices, uhpVertices, lineGroup, cameraConstants;
@@ -66,15 +66,15 @@ function generateVertices(data) {
 
     var verts = [];
 
-    if (data.cellType === "euclidean") {
+    if ((data.cellType === "euclidean") || (data.cellType === "hyperbolic")) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.flip(data.f(data.conversion(data.vertices[i]))),
-                "poincare": HF.hyperboloidToPoincare(data.f(data.flip(data.conversion(data.vertices[i])))),
-                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.conversion(data.vertices[i])))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.conversion(data.vertices[i]))))
+                "hyperboloid": data.flip(data.f(data.c(data.conversion(data.vertices[i])))),
+                "poincare": HF.hyperboloidToPoincare(data.f(data.flip(data.c(data.conversion(data.vertices[i]))))),
+                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.c(data.conversion(data.vertices[i]))))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.c(data.conversion(data.vertices[i])))))
             };
 
             // var vertDict = {

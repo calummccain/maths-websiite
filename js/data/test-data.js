@@ -1,7 +1,7 @@
 // Order n hexagonal
 
 const l = 3;
-const m = 3;
+const m = 7;
 const n = 9;
 
 const testData = () => {
@@ -24,22 +24,69 @@ const testData = () => {
             [1, 0, cn(11), sn(11)],
             [1, 0, cn(13), sn(13)],
             [1, 0, cn(15), sn(15)],
-            [1, 0, cn(17), sn(17)]
+            [1, 0, cn(17), sn(17)],
+            [1, 0, 0.939692620785908, 0.3420201433256687],
+            [
+                2.823826693844953,
+                1.158263250001967,
+                2.3793852415718173,
+                0.8660254037844386
+            ],
+            [
+                5.618091301908922,
+                2.932825502667836,
+                4.585122305476706,
+                0.984807753012208
+            ],
+            [
+                8.075326359286832,
+                4.4933493579126385,
+                6.524814926262616,
+                0.6427876096865395
+            ],
+            [
+                9.045764273505847,
+                5.109648360576541,
+                7.290859369381595,
+                1.2246467991473532e-16
+            ],
+            [
+                8.075326359286834,
+                4.49334935791264,
+                6.524814926262617,
+                -0.6427876096865389
+            ],
+            [
+                5.618091301908922,
+                2.9328255026678365,
+                4.585122305476706,
+                -0.984807753012208
+            ],
+            [
+                2.823826693844956,
+                1.158263250001969,
+                2.37938524157182,
+                -0.866025403784439
+            ],
+            [1, 0, 0.939692620785908, -0.3420201433256686]
+
         ],
 
         edges: [
-            [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 0]
+            [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 0],
+            [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15], [15, 16], [16, 17], [17, 9]
         ],
 
         faces: [
-            [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            [9, 10, 11, 12, 13, 14, 15, 16, 17]
         ],
 
-        numVertices: 9,
+        numVertices: 18,
 
-        numEdges: 9,
+        numEdges: 18,
 
-        numFaces: 1,
+        numFaces: 2,
 
         numSides: 9,
 
@@ -66,14 +113,15 @@ const testData = () => {
             const clc = cl(1);
             const smc = sm(1);
             const snc = sn(1);
+            const cnc = cn(1);
             const cmc = cm(1);
 
-            const rad = Math.sqrt(Math.abs(clc ** 2 - smc ** 2 * snc ** 2));
-            //return v;
+            const r = smc ** 2 * snc ** 2 - clc ** 2;
+            // return v;
             return [
-                (1 + 2 * (clc ** 2 / snc ** 2 - smc ** 2)) * v[0] - (2 * rad * cmc / snc) * v[1] - (2 * rad * clc / snc ** 2) * v[2],
-                (2 * rad * cmc / snc) * v[0] + (1 - 2 * cmc ** 2) * v[1] - (2 * cmc * clc / snc) * v[2],
-                (2 * rad * clc / snc ** 2) * v[0] - (2 * cmc * clc / snc) * v[1] + (1 - 2 * clc ** 2 / snc ** 2) * v[2],
+                (1 - 2 * r / (snc ** 2)) * v[0] + (2 * r * cmc / (snc * cnc * clc)) * v[1] + (2 * r / (cnc * (snc ** 2))) * v[2],
+                (2 * cnc * clc * cmc / snc) * v[0] + (1 - 2 * (cmc ** 2)) * v[1] - (2 * cmc * clc / snc) * v[2],
+                (2 * cnc * (clc) ** 2 / (snc ** 2)) * v[0] - (2 * cmc * clc / snc) * v[1] + (1 - 2 * (clc ** 2) / (snc ** 2)) * v[2],
                 v[3]
             ];
 
@@ -138,7 +186,7 @@ const testData = () => {
         // TODO what goes in the else columnn?
         compact: () => {
 
-            return "compact";
+            return "uncompact";
 
         },
 
@@ -150,7 +198,7 @@ const testData = () => {
 
         },
 
-        cellType: "euclidean",
+        cellType: "hyperbolic",
 
         conversion: (v) => {
 
@@ -164,8 +212,11 @@ const testData = () => {
 
 export { testData };
 
-// const data = hexagonData(6);
+// const data = testData();
 
+// for (var i = 0; i < data.numVertices; i++) {
+//     console.log(data.c(data.vertices[i]))
+// }
 // console.log(data.vertices.length)
 // console.log(data.edges.length)
 // console.log(data.faces.length)
