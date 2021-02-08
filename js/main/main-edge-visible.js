@@ -7,7 +7,23 @@ const eps = 1e-3;
 const sphere = true;
 
 var WIDTH, HEIGHT, view;
-var scene, spheres, vertices, uhpVertices, lineGroup, cameraConstants;
+var scene, spheres, vertices, uhpVertices, lineGroup = new THREE.Group(), dataSet, camera, camPos, sphereGroup = new THREE.Group();
+
+var cameraConstants = {
+    left: 0,
+    bottom: 0,
+    width: 1,
+    height: 1.0,
+    background: 0xDDDDDD,
+    eye: [5, 0, 0],
+    up: [0, 0, 1],
+    fov: 30,
+    updateCamera: function (camera, scene) {
+
+        camera.lookAt(scene.position);
+
+    }
+};
 
 // generate the spheres that bound the geometry (only for UHP)
 function generateSpheres(data) {
@@ -67,7 +83,7 @@ function generateVertices(data) {
     var verts = [];
 
     if ((data.cellType === "euclidean") || (data.cellType === "hyperbolic")) {
-
+        console.log("eh")
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
@@ -89,14 +105,15 @@ function generateVertices(data) {
         }
 
     } else {
+        console.log("s")
 
         for (var i = 0; i < data.numVertices; i++) {
-
+            
             var vertDict = {
-                "hyperboloid": data.f(data.d(data.vertices[i])),
-                "poincare": HF.hyperboloidToPoincare(data.f(data.d(data.vertices[i]))),
-                "klein": HF.hyperboloidToKlein(data.f(data.d(data.vertices[i]))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.d(data.vertices[i])))
+                "hyperboloid": data.f(data.vertices[i]),
+                "poincare": HF.hyperboloidToPoincare(data.f(data.vertices[i])),
+                "klein": HF.hyperboloidToKlein(data.f(data.vertices[i])),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[i]))
             };
 
             verts.push(vertDict);
@@ -243,11 +260,14 @@ function makeTheLines(data, number) {
 function drawLine(vectors, col) {
 
     var threeVectors = [];
+
     vectors.forEach((vect) => {
         threeVectors.push(new THREE.Vector3().fromArray(vect));
     });
+
     var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
     var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col }));
+
     lineGroup.add(line);
 
 }
@@ -256,7 +276,7 @@ function cameraLines(data) {
 
     lineGroup.children = [];
 
-    var camPos = cameraConstants.camera.position.toArray();
+    camPos = cameraConstants.camera.position.toArray();
 
     uhpVertices.forEach((points) => {
 
@@ -485,7 +505,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
 }
 
-function main(data) {
+function main() {
 
     WIDTH = 0;
     HEIGHT = 0;
@@ -499,54 +519,33 @@ function main(data) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xEEEEEE);
 
-    cameraConstants = {
-        left: 0,
-        bottom: 0,
-        width: 1,
-        height: 1.0,
-        background: 0xDDDDDD,
-        eye: [5, 0, 0],
-        up: [0, 0, 1],
-        fov: 30,
-        updateCamera: function (camera, scene) {
+    // cameraConstants = {
+    //     left: 0,
+    //     bottom: 0,
+    //     width: 1,
+    //     height: 1.0,
+    //     background: 0xDDDDDD,
+    //     eye: [5, 0, 0],
+    //     up: [0, 0, 1],
+    //     fov: 30,
+    //     updateCamera: function (camera, scene) {
 
-            camera.lookAt(scene.position);
+    //         camera.lookAt(scene.position);
 
-        }
-    };
+    //     }
+    // };
 
-    lineGroup = new THREE.Group();
+    // lineGroup = new THREE.Group();
 
-    const camera = new THREE.PerspectiveCamera(cameraConstants.fov, window.innerWidth / window.innerHeight, 0.01, 100);
+    camera = new THREE.PerspectiveCamera(cameraConstants.fov, window.innerWidth / window.innerHeight, 0.01, 100);
     camera.position.fromArray(cameraConstants.eye);
     camera.up.fromArray(cameraConstants.up);
     camera.lookAt(lineGroup.position);
     cameraConstants.camera = camera;
 
-    vertices = generateVertices(data);
-    spheres = generateSpheres(data);
-    uhpVertices = makeTheLines(data, 30);
-
-    if (sphere) {
-
-        var material = new THREE.MeshBasicMaterial({
-            transparent: true,
-            opacity: 0.2
-        });
-
-        var k = 0;
-
-        spheres.forEach((sphere) => {
-            if (k < 10) {
-                var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
-                mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
-                mesh.position.fromArray(sphere["uhp"].center);
-                scene.add(mesh);
-            }
-            k++;
-        })
-
-    }
+    // vertices = generateVertices(data);
+    // spheres = generateSpheres(data);
+    // uhpVertices = makeTheLines(data, 30);
 
     // setup the renderer
     var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -563,16 +562,17 @@ function main(data) {
     controls.update();
 
     scene.add(lineGroup);
+    scene.add(sphereGroup);
 
     window.addEventListener("resize", onWindowResize, false);
-    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(data); } });
+    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet); console.log(dataSet); console.log(vertices); } });
 
     onWindowResize();
 
     // add the renderer to the 'view' div
     view.appendChild(renderer.domElement);
 
-    cameraLines(data);
+    // cameraLines(data);
 
     render();
 
@@ -613,4 +613,43 @@ function main(data) {
 
 }
 
-export { main };
+function addDataToView(data) {
+
+    vertices = [], spheres = [], uhpVertices = [], dataSet = {};
+
+    dataSet = data;
+
+    console.log(dataSet.vertices)
+
+    vertices = generateVertices(dataSet);
+    spheres = generateSpheres(dataSet);
+    uhpVertices = makeTheLines(dataSet, 30);
+
+    cameraLines(dataSet);
+
+    sphereGroup.children = [];
+
+    if (sphere) {
+
+        var material = new THREE.MeshBasicMaterial({
+            transparent: true,
+            opacity: 0.2
+        });
+
+        var k = 0;
+
+        spheres.forEach((sphere) => {
+            if (k < 10) {
+                var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
+                mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
+                mesh.position.fromArray(sphere["uhp"].center);
+                sphereGroup.add(mesh);
+            }
+            k++;
+        })
+
+    }
+
+}
+
+export { main, addDataToView };

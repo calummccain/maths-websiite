@@ -49,29 +49,30 @@ function hyperboloidToKlein(point) {
 //                 (1 - x ** 2 - y ** 2 - z ** 2) / (x ** 2 + y ** 2 + (1 - z) ** 2))
 function poincareToUpperHalfPlane(point) {
 
-    const x = point[0], y = point[1], z = point[2];
-    const s = (x ** 2) + (y ** 2) + (1 - z) ** 2;
+    var x = point[0], y = point[1], z = point[2];
+    var s = (x ** 2) + (y ** 2) + (1 - z) ** 2;
 
     if (s < tol) {
 
-        return [0, 0, Infinity];
+        return [x, y, Infinity];
 
-    }
-
-    if (VF.norm(point) > 1 - tol) {
+    } else if (VF.norm([x, y, z]) > 1 - tol) {
 
         return [2 * x / s, 2 * y / s, 0];
 
-    }
+    } else {
 
-    return [2 * x / s, 2 * y / s, (1 - (x ** 2) - (y ** 2) - (z ** 2)) / s];
+        return [2 * x / s, 2 * y / s, (1 - (x ** 2) - (y ** 2) - (z ** 2)) / s];
+
+    }
 
 }
 
 function upperHalfPlaneToPoincare(point) {
 
-    const x = point[0], y = point[1], z = point[2];
-    const s = (x ** 2) + (y ** 2) + (1 + z) ** 2;
+    var x = point[0], y = point[1], z = point[2];
+    var s = (x ** 2) + (y ** 2) + (1 + z) ** 2;
+
     return [2 * x / s, 2 * y / s, ((x ** 2) + (y ** 2) + (z ** 2) - 1) / s];
 
 }
@@ -103,7 +104,7 @@ function poincareToHyperboloid(point) {
 // TODO ideal point again
 function kleinToPoincare(point) {
 
-    const dist = VF.norm(point);
+    var dist = VF.norm(point);
     var hyperbolicDist = 1 / (1 + Math.sqrt(Math.abs(1 - (dist ** 2))));
 
     return VF.vectorScale(point, hyperbolicDist);
@@ -121,7 +122,9 @@ function hyperboloidToUpperHalfPlane(point) {
 
     //return [x * (w + 1) / den, y * (w + 1) / den, 2 * w / den];
 
-    return poincareToUpperHalfPlane(hyperboloidToPoincare(point));
+    var poincare = hyperboloidToPoincare(point);
+
+    return poincareToUpperHalfPlane(poincare);
 }
 
 function kleinToUpperHalfPlane(point) {
@@ -138,8 +141,8 @@ function upperHalfPlaneToKlein(point) {
 
 function poincareToKlein(point) {
 
-    const x = point[0], y = point[1], z = point[2];
-    const s = 1 + x ** 2 + y ** 2 + z ** 2;
+    var x = point[0], y = point[1], z = point[2];
+    var s = 1 + x ** 2 + y ** 2 + z ** 2;
     return [2 * x / s, 2 * y / s, 2 * z / s];
 
 }
@@ -182,8 +185,8 @@ function geodesicEndpoints(a, b) {
 
     }
 
-    const inner = hyperboloidInnerProduct(a, b);
-    const eAlpha = inner + Math.sqrt(inner ** 2 - 1);
+    var inner = hyperboloidInnerProduct(a, b);
+    var eAlpha = inner + Math.sqrt(inner ** 2 - 1);
     return [VF.vectorDiff(VF.vectorScale(a, 1 / eAlpha), b), VF.vectorDiff(VF.vectorScale(b, 1 / eAlpha), a)];
 
 }
