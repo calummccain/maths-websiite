@@ -1,10 +1,10 @@
 // Order n hexagonal
 
 const l = 3;
-const m = 7;
+//const m = 7;
 const n = 9;
 
-const testData = () => {
+const testData = (m) => {
 
     const cl = (i) => Math.cos(Math.PI * i / l);
     const cm = (i) => Math.cos(Math.PI * i / m);

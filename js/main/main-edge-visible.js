@@ -108,7 +108,7 @@ function generateVertices(data) {
         console.log("s")
 
         for (var i = 0; i < data.numVertices; i++) {
-            
+
             var vertDict = {
                 "hyperboloid": data.f(data.vertices[i]),
                 "poincare": HF.hyperboloidToPoincare(data.f(data.vertices[i])),
@@ -627,29 +627,58 @@ function addDataToView(data) {
 
     cameraLines(dataSet);
 
-    sphereGroup.children = [];
+    // sphereGroup.children = [];
 
     if (sphere) {
 
-        var material = new THREE.MeshBasicMaterial({
-            transparent: true,
-            opacity: 0.2
-        });
+        // var material = new THREE.MeshBasicMaterial({
+        //     transparent: true,
+        //     opacity: 0.2
+        // });
 
-        var k = 0;
+        // var k = 0;
 
-        spheres.forEach((sphere) => {
-            if (k < 10) {
-                var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
-                mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
-                mesh.position.fromArray(sphere["uhp"].center);
-                sphereGroup.add(mesh);
-            }
-            k++;
-        })
+        // spheres.forEach((sphere) => {
+        //     if (k < 10) {
+        //         var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
+        //         mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
+        //         mesh.position.fromArray(sphere["uhp"].center);
+        //         sphereGroup.add(mesh);
+        //     }
+        //     k++;
+        // })
 
     }
 
 }
 
-export { main, addDataToView };
+function addSpheres() {
+
+    sphereGroup.children = [];
+
+    var material = new THREE.MeshBasicMaterial({
+        transparent: true,
+        opacity: 0.2
+    });
+
+    var k = 0;
+
+    spheres.forEach((sphere) => {
+        if (k < 10) {
+            var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
+            mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
+            mesh.position.fromArray(sphere["uhp"].center);
+            sphereGroup.add(mesh);
+        }
+        k++;
+    })
+
+}
+
+function removeSpheres() {
+
+    sphereGroup.children = [];
+
+}
+
+export { main, addDataToView, addSpheres, removeSpheres };
