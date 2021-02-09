@@ -77,15 +77,15 @@ function generateVertices(data) {
 
     var verts = [];
 
-    if ((data.cellType === "euclidean") || (data.cellType === "hyperbolic")) {
+    if ((data.cellType === "euclidean")) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.flip(data.f(data.c(data.conversion(data.vertices[i])))),
-                "poincare": HF.hyperboloidToPoincare(data.f(data.flip(data.c(data.conversion(data.vertices[i]))))),
-                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.c(data.conversion(data.vertices[i]))))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.c(data.conversion(data.vertices[i])))))
+                "hyperboloid": data.flip(data.f(data.conversion(data.vertices[i]))),
+                "poincare": HF.hyperboloidToPoincare(data.flip(data.f(data.conversion(data.vertices[i])))),
+                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.conversion(data.vertices[i])))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.conversion(data.vertices[i]))))
             };
 
             // var vertDict = {
@@ -94,6 +94,21 @@ function generateVertices(data) {
             //     "klein": HF.hyperboloidToKlein(data.f(data.conversion(data.vertices[i]))),
             //     "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.conversion(data.vertices[i])))
             // };
+
+            verts.push(vertDict);
+
+        }
+
+    } else if ((data.cellType === "hyperbolic")) {
+
+        for (var i = 0; i < data.numVertices; i++) {
+
+            var vertDict = {
+                "hyperboloid": data.flip(data.f(data.vertices[i])),
+                "poincare": HF.hyperboloidToPoincare(data.flip(data.f(data.vertices[i]))),
+                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.vertices[i]))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.vertices[i])))
+            };
 
             verts.push(vertDict);
 
@@ -560,7 +575,6 @@ function main() {
         renderer.render(scene, camera);
 
     }
-
 
     function onWindowResize() {
 

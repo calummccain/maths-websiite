@@ -8,7 +8,6 @@ import { hexagonData } from "./data/63n.js";
 import { triangleData } from "./data/36n.js";
 import { squareData } from "./data/44n.js";
 import { testData } from "./data/test-data.js";
-import { SubtractEquation } from "./three.module.js";
 
 var n = 6;
 var geom;
@@ -51,6 +50,18 @@ window.onload = function () {
     });
     document.getElementById("testButton").addEventListener("click", function () {
         geom = testData;
+        geometryDraw(geom, n);
+    });
+    document.getElementById("three").addEventListener("click", function () {
+        n = 3;
+        geometryDraw(geom, n);
+    });
+    document.getElementById("four").addEventListener("click", function () {
+        n = 4;
+        geometryDraw(geom, n);
+    });
+    document.getElementById("five").addEventListener("click", function () {
+        n = 5;
         geometryDraw(geom, n);
     });
     document.getElementById("six").addEventListener("click", function () {
