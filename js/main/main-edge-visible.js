@@ -4,7 +4,6 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 const eps = 1e-3;
-const sphere = true;
 
 var WIDTH, HEIGHT, view;
 var scene, spheres, vertices, uhpVertices, lineGroup = new THREE.Group(), dataSet, camera, camPos, sphereGroup = new THREE.Group();
@@ -23,6 +22,7 @@ var cameraConstants = {
         camera.lookAt(scene.position);
 
     }
+
 };
 
 // generate the spheres that bound the geometry (only for UHP)
@@ -57,13 +57,8 @@ function generateSpheres(data) {
         var center = HF.uhpCenter(v1, v2, v3);
 
         var sphereDict = {
-            "hyperboloid": {
-                //center: DATA.planeCenters[i]
-            },
-            "poincare": {
-                //center: HF.hyperboloidToPoincareMod(DATA.planeCenters[i]),
-                //radius: VF.norm(VF.vectorDiff(HF.hyperboloidToPoincareMod(f(DATA.vertices[DATA.faces[i][0]])), HF.hyperboloidToPoincareMod(DATA.planeCenters[i])))
-            },
+            "hyperboloid": {},
+            "poincare": {},
             "uhp": {
                 center: center,
                 radius: VF.distance(v1, center)
@@ -83,7 +78,7 @@ function generateVertices(data) {
     var verts = [];
 
     if ((data.cellType === "euclidean") || (data.cellType === "hyperbolic")) {
-        console.log("eh")
+
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
@@ -105,7 +100,6 @@ function generateVertices(data) {
         }
 
     } else {
-        console.log("s")
 
         for (var i = 0; i < data.numVertices; i++) {
 
@@ -171,7 +165,7 @@ function makeTheLines(data, number) {
         }
 
         const numPieces = Math.ceil(number * (endAngle - startAngle) / Math.PI);
-        const subAngle = (endAngle - startAngle) / numPieces
+        const subAngle = (endAngle - startAngle) / numPieces;
 
         for (var i = 0; i <= numPieces; i++) {
 
@@ -243,16 +237,6 @@ function makeTheLines(data, number) {
 
     }
 
-    // var camPos = cameraConstants.camera.position.toArray();
-
-    // for (var i = 0; i < data.numFaces; i++) {
-
-    //     var dir = VF.vectorDiff(spheres[i]["uhp"].center, camPos);
-    //     dir = VF.vectorScale(dir, 1 / VF.norm(dir));
-    //     console.log(dir)
-
-    // }
-
     return lineCoords;
 
 }
@@ -305,7 +289,7 @@ function cameraLines(data) {
                 } else {
 
                     segNum++;
-                    segments.push([drawVerts[k]])
+                    segments.push([drawVerts[k]]);
                     segmentsPoints.push([drawVerts[k][0]]);
 
                 }
@@ -334,7 +318,7 @@ function pointInPolygon(point, vertices) {
 
         var v = point, v0 = vertices[0], v1 = VF.vectorDiff(vertices[i], vertices[0]), v2 = VF.vectorDiff(vertices[i + 1], vertices[0]);
         var a = (VF.determinant2([v, v2]) - VF.determinant2([v0, v2])) / VF.determinant2([v1, v2]);
-        var b = - (VF.determinant2([v, v1]) - VF.determinant2([v0, v1])) / VF.determinant2([v1, v2])
+        var b = - (VF.determinant2([v, v1]) - VF.determinant2([v0, v1])) / VF.determinant2([v1, v2]);
 
         if ((a > eps) && (b > eps) && (a + b < 1 - eps)) {
 
@@ -434,7 +418,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             } else {
 
                 data.faces[i].forEach((j) => {
-                    polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]])
+                    polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]]);
                 });
 
             }
@@ -519,33 +503,11 @@ function main() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xEEEEEE);
 
-    // cameraConstants = {
-    //     left: 0,
-    //     bottom: 0,
-    //     width: 1,
-    //     height: 1.0,
-    //     background: 0xDDDDDD,
-    //     eye: [5, 0, 0],
-    //     up: [0, 0, 1],
-    //     fov: 30,
-    //     updateCamera: function (camera, scene) {
-
-    //         camera.lookAt(scene.position);
-
-    //     }
-    // };
-
-    // lineGroup = new THREE.Group();
-
     camera = new THREE.PerspectiveCamera(cameraConstants.fov, window.innerWidth / window.innerHeight, 0.01, 100);
     camera.position.fromArray(cameraConstants.eye);
     camera.up.fromArray(cameraConstants.up);
     camera.lookAt(lineGroup.position);
     cameraConstants.camera = camera;
-
-    // vertices = generateVertices(data);
-    // spheres = generateSpheres(data);
-    // uhpVertices = makeTheLines(data, 30);
 
     // setup the renderer
     var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -571,8 +533,6 @@ function main() {
 
     // add the renderer to the 'view' div
     view.appendChild(renderer.domElement);
-
-    // cameraLines(data);
 
     render();
 
@@ -619,36 +579,11 @@ function addDataToView(data) {
 
     dataSet = data;
 
-    console.log(dataSet.vertices)
-
     vertices = generateVertices(dataSet);
     spheres = generateSpheres(dataSet);
     uhpVertices = makeTheLines(dataSet, 30);
 
     cameraLines(dataSet);
-
-    // sphereGroup.children = [];
-
-    if (sphere) {
-
-        // var material = new THREE.MeshBasicMaterial({
-        //     transparent: true,
-        //     opacity: 0.2
-        // });
-
-        // var k = 0;
-
-        // spheres.forEach((sphere) => {
-        //     if (k < 10) {
-        //         var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
-        //         mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
-        //         mesh.position.fromArray(sphere["uhp"].center);
-        //         sphereGroup.add(mesh);
-        //     }
-        //     k++;
-        // })
-
-    }
 
 }
 
