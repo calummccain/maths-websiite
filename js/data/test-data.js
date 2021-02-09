@@ -615,14 +615,12 @@ const testData = (m) => {
 
         // },
 
-        // TODO what goes in the else columnn?
         metric: () => {
 
             return "hyperbolic";
 
         },
 
-        // TODO what goes in the else columnn?
         compact: () => {
 
             if ((l - 2) * (m - 2) < 4) {
@@ -641,21 +639,13 @@ const testData = (m) => {
 
         },
 
-        // cellType: "euclidean",
+        cellType: "hyperbolic",
 
         flip: (v) => {
 
             return [v[0], v[2], v[3], v[1]];
 
         },
-
-        cellType: "hyperbolic",
-
-        conversion: (v) => {
-
-            return v;
-
-        }
 
     }
 
