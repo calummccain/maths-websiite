@@ -595,7 +595,7 @@ function addDataToView(data) {
 
     vertices = generateVertices(dataSet);
     spheres = generateSpheres(dataSet);
-    uhpVertices = makeTheLines(dataSet, 30);
+    uhpVertices = makeTheLines(dataSet, 50);
 
     cameraLines(dataSet);
 

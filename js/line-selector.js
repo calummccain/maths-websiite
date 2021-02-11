@@ -49,7 +49,7 @@ window.onload = function () {
         geometryDraw(geom, n);
     });
     document.getElementById("testButton").addEventListener("click", function () {
-        geom = testData;
+        geom = (n) => testData(7, n, 7);
         geometryDraw(geom, n);
     });
     document.getElementById("three").addEventListener("click", function () {
@@ -89,8 +89,8 @@ function geometryDraw(geom, n) {
     addDataToView(geom(n));
 
     if (spheres) {
+        
         addSpheres();
-
 
     } else {
 
