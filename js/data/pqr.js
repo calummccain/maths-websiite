@@ -5,22 +5,7 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 
 const eps = 1e-4;
 
-function isInArray(testVector, groupVectors) {
-
-    for (var i = 0; i < groupVectors.length; i++) {
-
-        if (VF.distance(groupVectors[i], testVector) < eps) {
-
-            return true;
-
-        }
-    }
-
-    return false;
-
-}
-
-const testData = (p, q, r) => {
+const pqrData = (p, q, r) => {
 
     const cr = (i) => Math.cos(Math.PI * i / r);
     const sr = (i) => Math.sin(Math.PI * i / r);
@@ -113,7 +98,7 @@ const testData = (p, q, r) => {
             var testVertices = VF.transformVertices(verts, fNames[i], matrixDict);
 
             testVertices.forEach((vector) => {
-                if (!(isInArray(vector, verts) || isInArray(vector, newVerts))) {
+                if (!(VF.isInArray(vector, verts) || VF.isInArray(vector, newVerts))) {
 
                     newVerts.push(vector);
 
@@ -147,7 +132,7 @@ const testData = (p, q, r) => {
             var testEdges = VF.transformVertices(edges, fNames[i], matrixDict);
 
             testEdges.forEach((vector) => {
-                if (!(isInArray(vector, edges) || isInArray(vector, newEdges))) {
+                if (!(VF.isInArray(vector, edges) || VF.isInArray(vector, newEdges))) {
 
                     newEdges.push(vector);
 
@@ -216,7 +201,7 @@ const testData = (p, q, r) => {
 
                 for (var k = 0; k < testCenters.length; k++) {
 
-                    if (!(isInArray(testCenters[k], faces) || isInArray(testCenters[k], newFaces))) {
+                    if (!(VF.isInArray(testCenters[k], faces) || VF.isInArray(testCenters[k], newFaces))) {
                         newFaces.push(testCenters[k]);
                         newNames.push(append + faceNames[k]);
                     }
@@ -399,4 +384,4 @@ const testData = (p, q, r) => {
 
 }
 
-export { testData };
+export { pqrData };

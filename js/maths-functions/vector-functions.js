@@ -1,3 +1,5 @@
+const eps = 1e-4;
+
 //returns sum of two vectors
 function vectorSum(x, y) {
 
@@ -179,6 +181,21 @@ function transformVertices(baseVertices, transformation, dictionary) {
 
 }
 
+function isInArray(testVector, groupVectors) {
+
+    for (var i = 0; i < groupVectors.length; i++) {
+
+        if (distance(groupVectors[i], testVector) < eps) {
+
+            return true;
+
+        }
+    }
+
+    return false;
+
+}
+
 export {
     vectorScale,
     vectorSum,
@@ -193,5 +210,6 @@ export {
     circumcenter,
     determinant2,
     determinant3,
-    transformVertices
+    transformVertices,
+    isInArray
 }
