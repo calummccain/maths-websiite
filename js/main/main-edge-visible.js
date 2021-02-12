@@ -271,7 +271,7 @@ function drawLine(vectors, col) {
 
 }
 
-function cameraLines(data, invisible) {
+function cameraLines(data, invisibleLines) {
 
     lineGroup.children = [];
 
@@ -319,7 +319,9 @@ function cameraLines(data, invisible) {
 
                 } else {
 
-                    if (invisible) {
+                    console.log(invisibleLines)
+
+                    if (invisibleLines) {
 
                         console.log("hi")
 
@@ -552,7 +554,7 @@ function main() {
     scene.add(sphereGroup);
 
     window.addEventListener("resize", onWindowResize, false);
-    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); console.log(dataSet); console.log(vertices); } });
+    // window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); console.log(dataSet); console.log(vertices); } });
 
     onWindowResize();
 
@@ -597,7 +599,7 @@ function main() {
 
 }
 
-function addDataToView(data) {
+function addDataToView(data, invisible) {
 
     vertices = [], spheres = [], uhpVertices = [], dataSet = {};
 
@@ -608,6 +610,9 @@ function addDataToView(data) {
     uhpVertices = makeTheLines(dataSet, 50);
 
     cameraLines(dataSet, invisible);
+
+    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); console.log(dataSet); console.log(vertices); } });
+
 
 }
 

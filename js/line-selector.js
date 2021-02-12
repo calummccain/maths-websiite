@@ -81,12 +81,12 @@ window.onload = function () {
         spheres = false;
         removeSpheres();
     });
-    document.getElementById("invisible").addEventListener("click", function () {
+    document.getElementById("invisibleLines").addEventListener("click", function () {
         invisible = true;
         console.log(invisible)
         geometryDraw(geom, n, invisible);
     });
-    document.getElementById("visible").addEventListener("click", function () {
+    document.getElementById("visibleLines").addEventListener("click", function () {
         invisible = false;
         console.log(invisible)
         geometryDraw(geom, n, invisible);
@@ -96,9 +96,9 @@ window.onload = function () {
 }
 
 
-function geometryDraw(geom, n, invisible) {
+function geometryDraw(geom, n, lineMode) {
 
-    addDataToView(geom(n), invisible);
+    addDataToView(geom(n), lineMode);
 
     if (spheres) {
 
