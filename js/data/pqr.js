@@ -242,6 +242,8 @@ const pqrData = (p, q, r) => {
 
                 }
 
+                console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)))
+
                 if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - fv) < eps) {
                     nearestPoints.push(i)
                     j++;
@@ -333,20 +335,11 @@ const pqrData = (p, q, r) => {
 
         // center: [1, 1, 0, 0],
 
-        // face: () => {
+        face: () => {
 
-        //     if (n == 6) {
+            return faceCenter;
 
-        //         return [1, 0, 0, 0];
-
-        //     } else {
-
-        //         var c = Math.cos(Math.PI / n) ** 2;
-        //         return [Math.sqrt(Math.abs(1 - 4 * c / 3)), 0, 0, 0];
-
-        //     }
-
-        // },
+        },
 
         metric: () => {
 
