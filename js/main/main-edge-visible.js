@@ -317,9 +317,15 @@ function cameraLines(data, invisible) {
 
                     drawLine(segmentsPoints[k], 0x000000);
 
-                } else if (invisible) {
+                } else {
 
-                    drawLine(segmentsPoints[k], 0xAAAAAA);
+                    if (invisible) {
+
+                        console.log("hi")
+
+                        drawLine(segmentsPoints[k], 0xAAAAAA);
+
+                    }
 
                 }
 

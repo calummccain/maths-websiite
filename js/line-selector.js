@@ -12,7 +12,7 @@ import { testData } from "./data/test-data.js";
 var n = 6;
 var geom;
 var spheres = false;
-var invisible = true;
+var invisible = false;
 
 main();
 
@@ -83,10 +83,12 @@ window.onload = function () {
     });
     document.getElementById("invisible").addEventListener("click", function () {
         invisible = true;
+        console.log(invisible)
         geometryDraw(geom, n, invisible);
     });
     document.getElementById("visible").addEventListener("click", function () {
         invisible = false;
+        console.log(invisible)
         geometryDraw(geom, n, invisible);
     });
 
