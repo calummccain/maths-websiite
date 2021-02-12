@@ -134,9 +134,9 @@ const testData = (l, m, n) => {
 
         for (var i = 0; i < n; i++) {
 
-            console.log(1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([1, 0, cn(2 * i), sn(2 * i)])))))
-
-            edges.push(VF.vectorScale([1, 0, cn(2 * i), sn(2 * i)], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([1, 0, cn(2 * i), sn(2 * i)]))))));
+            var initialEdge = [1, 0, cn(1) * cn(2 * i), cn(1) * sn(2 * i)];
+            // console.log(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge)))));
+            edges.push(VF.vectorScale(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge))))));
 
         }
 
@@ -200,7 +200,7 @@ const testData = (l, m, n) => {
 
         var faces = [faceCenter];
         var faceNames = [""];
-        const numLayers = 1;
+        const numLayers = 2;
         var i = 0;
 
         while (i < numLayers) {
@@ -219,8 +219,6 @@ const testData = (l, m, n) => {
                     if (!(isInArray(testCenters[k], faces) || isInArray(testCenters[k], newFaces))) {
                         newFaces.push(testCenters[k]);
                         newNames.push(append + faceNames[k]);
-                    } else {
-                        //
                     }
 
                 }
@@ -290,15 +288,21 @@ const testData = (l, m, n) => {
 
                 }
 
-                //console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2)
-                //console.log((cn(1) ** 2 * cl(1) ** 2 / (sn(1) ** 2 * (sm(1) ** 2 - cl(1) ** 2))))
+                // console.log(HF.hyperbolicNorm(fmat(v[i])), HF.hyperbolicNorm(fmat(edge)))
+                // console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2)
+                // console.log((sm(1) ** 2 * cn(1) ** 2 / (sm(1) ** 2 - cl(1) ** 2)))
 
-                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - Math.abs(cn(1) ** 2 * cl(1) ** 2 / (sn(1) ** 2 * sm(1) ** 2))) < eps) {
+                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - Math.abs(sm(1) ** 2 * cn(1) ** 2 / (sm(1) ** 2 - cl(1) ** 2))) < eps) {
+
                     nearestPoints.push(i)
                     j++;
+
                 }
+
             }
+
             edgeData.push(nearestPoints);
+
         })
 
         return edgeData;
@@ -306,32 +310,32 @@ const testData = (l, m, n) => {
     }
 
     const [f, fNames] = makeFaces();
-    //console.log(f, fNames)
+    // console.log(f, fNames)
 
     const v = makeVertices();
-    //console.log(v)
+    // console.log(v)
 
     const e = makeEdges();
 
-    console.log(e)
+    // console.log(e)
 
     const faceData = generateFaceData();
-    //console.log(faceData)
+    // console.log(faceData)
 
     const edgeData = generateEdgeData();
-    console.log(edgeData)
+    // console.log(edgeData)
 
     return {
 
         vertices: v,
 
-        edges: e,
+        edges: edgeData,
 
-        faces: [0, 1, 2, 3, 4, 5, 6],
+        faces: faceData,
 
-        numVertices: n,
+        numVertices: v.length,
 
-        numEdges: n,
+        numEdges: edgeData.length,
 
         numFaces: fNames.length,
 

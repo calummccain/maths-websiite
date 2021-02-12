@@ -49,7 +49,7 @@ window.onload = function () {
         geometryDraw(geom, n);
     });
     document.getElementById("testButton").addEventListener("click", function () {
-        geom = (n) => testData(7, n, 7);
+        geom = (n) => testData(4, n, 5);
         geometryDraw(geom, n);
     });
     document.getElementById("three").addEventListener("click", function () {
