@@ -200,10 +200,10 @@ const testData = (l, m, n) => {
 
         var faces = [faceCenter];
         var faceNames = [""];
-        const numLayers = 2;
-        var i = 0;
+        const maxFaces = 80;
+        var i = 1;
 
-        while (i < numLayers) {
+        while (i < maxFaces) {
 
             var j = 0
             var append = "c";
@@ -231,7 +231,7 @@ const testData = (l, m, n) => {
             faces = faces.concat(newFaces);
             faceNames = faceNames.concat(newNames);
 
-            i++;
+            i = faces.length;
 
         }
 
