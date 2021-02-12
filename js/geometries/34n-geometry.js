@@ -1,6 +1,6 @@
 import { octahedronData } from "../data/34n.js";
-import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function octahedronGeometry(transform, order, refinement, model) {
 

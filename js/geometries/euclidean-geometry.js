@@ -42,8 +42,9 @@ function euclideanGeometry(data, transform) {
 
     // Transform the 'central' cell's vertices to the transformed cell's vertices
     var newVertices = VF.transformVertices(data.vertices, transform, matrixDict);
-
+    
     var properVertices = [];
+    
     for (var i = 0; i < newVertices.length; i++) {
 
         properVertices[i] = data.f(newVertices[i]);

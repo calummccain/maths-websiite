@@ -1,7 +1,7 @@
 import { cubeData } from "../data/43n.js";
-import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
-import { sphericalGeometry } from "./spherical-geometry.js";
 import { euclideanGeometry } from "./euclidean-geometry.js";
+import { sphericalGeometry } from "./spherical-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function cubeGeometry(transform, order, refinement, model) {
 

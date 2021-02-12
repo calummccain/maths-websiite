@@ -1,4 +1,4 @@
-// {n, , }
+// {p,q,r} data
 
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
@@ -20,18 +20,18 @@ function isInArray(testVector, groupVectors) {
 
 }
 
-const testData = (l, m, n) => {
+const testData = (p, q, r) => {
 
-    const cm = (i) => Math.cos(Math.PI * i / m);
-    const sm = (i) => Math.sin(Math.PI * i / m);
+    const cr = (i) => Math.cos(Math.PI * i / r);
+    const sr = (i) => Math.sin(Math.PI * i / r);
 
-    const cl = (i) => Math.cos(Math.PI * i / l);
-    const sl = (i) => Math.sin(Math.PI * i / l);
+    const cq = (i) => Math.cos(Math.PI * i / q);
+    const sq = (i) => Math.sin(Math.PI * i / q);
 
-    const cn = (i) => Math.cos(Math.PI * i / n);
-    const sn = (i) => Math.sin(Math.PI * i / n);
+    const cp = (i) => Math.cos(Math.PI * i / p);
+    const sp = (i) => Math.sin(Math.PI * i / p);
 
-    const faceCenter = [sn(1) * Math.sqrt(Math.abs(sm(1) ** 2 - cl(1) ** 2)) / (cn(1) * cl(1)), 0, 0, 0];
+    const faceCenter = [sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1)), 0, 0, 0];
 
     // cfe
     const amat = (v) => {
@@ -43,8 +43,8 @@ const testData = (l, m, n) => {
     //cfv
     const bmat = (v) => {
 
-        const c = cn(2);
-        const s = sn(2);
+        const c = cp(2);
+        const s = sp(2);
 
         return [v[0], v[1], c * v[2] + s * v[3], s * v[2] - c * v[3]];
 
@@ -53,18 +53,18 @@ const testData = (l, m, n) => {
     //cev
     const cmat = (v) => {
 
-        const clc = cl(1);
-        const smc = sm(1);
-        const snc = sn(1);
-        const cnc = cn(1);
-        const cmc = cm(1);
+        const cqc = cq(1);
+        const src = sr(1);
+        const spc = sp(1);
+        const cpc = cp(1);
+        const crc = cr(1);
 
-        const r = smc ** 2 * snc ** 2 - clc ** 2;
+        const r = src ** 2 * spc ** 2 - cqc ** 2;
 
         return [
-            (1 - 2 * r / (snc ** 2)) * v[0] + (2 * r * cmc / (snc * cnc * clc)) * v[1] + (2 * r / (cnc * (snc ** 2))) * v[2],
-            (2 * cnc * clc * cmc / snc) * v[0] + (1 - 2 * (cmc ** 2)) * v[1] - (2 * cmc * clc / snc) * v[2],
-            (2 * cnc * (clc) ** 2 / (snc ** 2)) * v[0] - (2 * cmc * clc / snc) * v[1] + (1 - 2 * (clc ** 2) / (snc ** 2)) * v[2],
+            (1 - 2 * r / (spc ** 2)) * v[0] + (2 * r * crc / (spc * cpc * cqc)) * v[1] + (2 * r / (cpc * (spc ** 2))) * v[2],
+            (2 * cpc * cqc * crc / spc) * v[0] + (1 - 2 * (crc ** 2)) * v[1] - (2 * crc * cqc / spc) * v[2],
+            (2 * cpc * (cqc) ** 2 / (spc ** 2)) * v[0] - (2 * crc * cqc / spc) * v[1] + (1 - 2 * (cqc ** 2) / (spc ** 2)) * v[2],
             v[3]
         ];
 
@@ -85,13 +85,13 @@ const testData = (l, m, n) => {
 
     const fmat = (v) => {
 
-        const den = sn(1) * Math.sqrt(Math.abs(sm(1) ** 2 - cl(1) ** 2));
+        const den = sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2));
 
         return [
-            cn(1) * cl(1) * v[0] / den,
-            Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[1] / den,
-            Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[2] / den,
-            Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[3] / den
+            cp(1) * cq(1) * v[0] / den,
+            Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[1] / den,
+            Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[2] / den,
+            Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[3] / den
         ];
 
     }
@@ -100,9 +100,9 @@ const testData = (l, m, n) => {
 
         var verts = [];
 
-        for (var i = 0; i < n; i++) {
+        for (var i = 0; i < p; i++) {
 
-            verts.push([1, 0, cn(2 * i + 1), sn(2 * i + 1)]);
+            verts.push([1, 0, cp(2 * i + 1), sp(2 * i + 1)]);
 
         }
 
@@ -132,10 +132,10 @@ const testData = (l, m, n) => {
 
         var edges = [];
 
-        for (var i = 0; i < n; i++) {
+        for (var i = 0; i < p; i++) {
 
-            var initialEdge = [1, 0, cn(1) * cn(2 * i), cn(1) * sn(2 * i)];
-            // console.log(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge)))));
+            var initialEdge = [1, 0, cp(1) * cp(2 * i), cp(1) * sp(2 * i)];
+
             edges.push(VF.vectorScale(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge))))));
 
         }
@@ -210,7 +210,7 @@ const testData = (l, m, n) => {
             var newFaces = [];
             var newNames = [];
 
-            while (j < n) {
+            while (j < p) {
 
                 const testCenters = VF.transformVertices(faces, append, matrixDict);
 
@@ -242,6 +242,7 @@ const testData = (l, m, n) => {
     function generateFaceData() {
 
         var faceData = [];
+        const fv = Math.abs(cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2)));
 
         f.forEach((face) => {
 
@@ -250,16 +251,13 @@ const testData = (l, m, n) => {
 
             for (var i = 0; i < v.length; i++) {
 
-                if (j === n) {
+                if (j === p) {
 
                     break;
 
                 }
 
-                //console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2)
-                //console.log((cn(1) ** 2 * cl(1) ** 2 / (sn(1) ** 2 * (sm(1) ** 2 - cl(1) ** 2))))
-
-                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - Math.abs(cn(1) ** 2 * cl(1) ** 2 / (sn(1) ** 2 * (sm(1) ** 2 - cl(1) ** 2)))) < eps) {
+                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - fv) < eps) {
                     nearestPoints.push(i)
                     j++;
                 }
@@ -274,6 +272,7 @@ const testData = (l, m, n) => {
     function generateEdgeData() {
 
         var edgeData = [];
+        const ev = Math.abs(sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2));
 
         e.forEach((edge) => {
 
@@ -288,11 +287,7 @@ const testData = (l, m, n) => {
 
                 }
 
-                // console.log(HF.hyperbolicNorm(fmat(v[i])), HF.hyperbolicNorm(fmat(edge)))
-                // console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2)
-                // console.log((sm(1) ** 2 * cn(1) ** 2 / (sm(1) ** 2 - cl(1) ** 2)))
-
-                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - Math.abs(sm(1) ** 2 * cn(1) ** 2 / (sm(1) ** 2 - cl(1) ** 2))) < eps) {
+                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - ev) < eps) {
 
                     nearestPoints.push(i)
                     j++;
@@ -310,20 +305,10 @@ const testData = (l, m, n) => {
     }
 
     const [f, fNames] = makeFaces();
-    // console.log(f, fNames)
-
     const v = makeVertices();
-    // console.log(v)
-
     const e = makeEdges();
-
-    // console.log(e)
-
     const faceData = generateFaceData();
-    // console.log(faceData)
-
     const edgeData = generateEdgeData();
-    // console.log(edgeData)
 
     return {
 
@@ -339,7 +324,7 @@ const testData = (l, m, n) => {
 
         numFaces: fNames.length,
 
-        numSides: n,
+        numSides: p,
 
         // cfe
         a: amat,
@@ -359,7 +344,7 @@ const testData = (l, m, n) => {
 
         faceReflections: fNames,
 
-        // outerReflection: "c",
+        outerReflection: "d",
 
         // center: [1, 1, 0, 0],
 
@@ -386,11 +371,11 @@ const testData = (l, m, n) => {
 
         compact: () => {
 
-            if ((l - 2) * (m - 2) < 4) {
+            if ((q - 2) * (r - 2) < 4) {
 
                 return "compact";
 
-            } else if ((l - 2) * (m - 2) === 4) {
+            } else if ((q - 2) * (r - 2) === 4) {
 
                 return "paracompact";
 

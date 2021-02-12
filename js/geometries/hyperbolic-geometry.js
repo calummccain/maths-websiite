@@ -45,6 +45,7 @@ function hyperbolicGeometry(data, transform, refinement, model) {
 
     // Project the transformed cell's vertices to the Klein Model
     var kleinVertices = [];
+    
     for (var i = 0; i < newVertices.length; i++) {
 
         kleinVertices[i] = HF.hyperboloidToKlein(data.f(newVertices[i]));

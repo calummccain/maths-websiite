@@ -50,7 +50,7 @@ window.onload = function () {
         geometryDraw(geom, n, invisible);
     });
     document.getElementById("testButton").addEventListener("click", function () {
-        geom = (n) => testData(4, n, 5);
+        geom = (n) => testData(7, 3, n);
         geometryDraw(geom, n, invisible);
     });
     document.getElementById("three").addEventListener("click", function () {

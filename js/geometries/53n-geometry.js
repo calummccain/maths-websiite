@@ -1,6 +1,6 @@
 import { dodecahedronData } from "../data/53n.js";
-import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 import { sphericalGeometry } from "./spherical-geometry.js";
+import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function dodecahedronGeometry(transform, order, refinement, model) {
 
