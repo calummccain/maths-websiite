@@ -5,6 +5,7 @@ import { p } from "./constants.js";
 const cubeData = (n) => {
 
     return {
+        
         vertices: [
             [1, 1, 1, 1],
             [1, 1, -1, 1],

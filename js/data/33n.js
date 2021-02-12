@@ -3,6 +3,7 @@
 const tetrahedronData = (n) => {
 
     return {
+        
         vertices: [
             [1, 1, 1, 1],
             [1, 1, -1, -1],

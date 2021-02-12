@@ -3,6 +3,7 @@
 const octahedronData = (n) => {
 
     return {
+        
         vertices: [
             [1, 1, 0, 0],
             [1, -1, 0, 0],

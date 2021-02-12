@@ -5,6 +5,7 @@ import { p } from "./constants.js";
 const icosahedronData = (n) => {
 
     return {
+        
         vertices: [
             [1, 1, p, 0],
             [1, 1, -p, 0],

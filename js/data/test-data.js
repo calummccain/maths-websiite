@@ -1,161 +1,363 @@
-// Order n hexagonal
+// {n, , }
 
-const l = 3;
-const m = 7;
-const n = 9;
+import * as VF from "../maths-functions/vector-functions.js";
+import * as HF from "../maths-functions/hyperbolic-functions.js";
 
-const testData = () => {
+const eps = 1e-4;
+
+function isInArray(testVector, groupVectors) {
+
+    for (var i = 0; i < groupVectors.length; i++) {
+
+        if (VF.distance(groupVectors[i], testVector) < eps) {
+
+            return true;
+
+        }
+    }
+
+    return false;
+
+}
+
+const testData = (l, m, n) => {
+
+    const cm = (i) => Math.cos(Math.PI * i / m);
+    const sm = (i) => Math.sin(Math.PI * i / m);
 
     const cl = (i) => Math.cos(Math.PI * i / l);
-    const cm = (i) => Math.cos(Math.PI * i / m);
-    const cn = (i) => Math.cos(Math.PI * i / n);
-
     const sl = (i) => Math.sin(Math.PI * i / l);
-    const sm = (i) => Math.sin(Math.PI * i / m);
+
+    const cn = (i) => Math.cos(Math.PI * i / n);
     const sn = (i) => Math.sin(Math.PI * i / n);
 
+    const faceCenter = [sn(1) * Math.sqrt(Math.abs(sm(1) ** 2 - cl(1) ** 2)) / (cn(1) * cl(1)), 0, 0, 0];
+
+    // cfe
+    const amat = (v) => {
+
+        return [v[0], v[1], v[2], -v[3]];
+
+    }
+
+    //cfv
+    const bmat = (v) => {
+
+        const c = cn(2);
+        const s = sn(2);
+
+        return [v[0], v[1], c * v[2] + s * v[3], s * v[2] - c * v[3]];
+
+    }
+
+    //cev
+    const cmat = (v) => {
+
+        const clc = cl(1);
+        const smc = sm(1);
+        const snc = sn(1);
+        const cnc = cn(1);
+        const cmc = cm(1);
+
+        const r = smc ** 2 * snc ** 2 - clc ** 2;
+
+        return [
+            (1 - 2 * r / (snc ** 2)) * v[0] + (2 * r * cmc / (snc * cnc * clc)) * v[1] + (2 * r / (cnc * (snc ** 2))) * v[2],
+            (2 * cnc * clc * cmc / snc) * v[0] + (1 - 2 * (cmc ** 2)) * v[1] - (2 * cmc * clc / snc) * v[2],
+            (2 * cnc * (clc) ** 2 / (snc ** 2)) * v[0] - (2 * cmc * clc / snc) * v[1] + (1 - 2 * (clc ** 2) / (snc ** 2)) * v[2],
+            v[3]
+        ];
+
+    }
+
+    // fev
+    const dmat = (v) => {
+
+        return [v[0], -v[1], v[2], v[3]];
+
+    }
+
+    const emat = (v) => {
+
+        return v;
+
+    }
+
+    const fmat = (v) => {
+
+        const den = sn(1) * Math.sqrt(Math.abs(sm(1) ** 2 - cl(1) ** 2));
+
+        return [
+            cn(1) * cl(1) * v[0] / den,
+            Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[1] / den,
+            Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[2] / den,
+            Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[3] / den
+        ];
+
+    }
+
+    function makeVertices() {
+
+        var verts = [];
+
+        for (var i = 0; i < n; i++) {
+
+            verts.push([1, 0, cn(2 * i + 1), sn(2 * i + 1)]);
+
+        }
+
+        var newVerts = [];
+
+        for (var i = 0; i < fNames.length; i++) {
+
+            var testVertices = VF.transformVertices(verts, fNames[i], matrixDict);
+
+            testVertices.forEach((vector) => {
+                if (!(isInArray(vector, verts) || isInArray(vector, newVerts))) {
+
+                    newVerts.push(vector);
+
+                }
+            })
+
+        }
+
+        verts = verts.concat(newVerts);
+
+        return verts;
+
+    }
+
+    function makeEdges() {
+
+        var edges = [];
+
+        for (var i = 0; i < n; i++) {
+
+            var initialEdge = [1, 0, cn(1) * cn(2 * i), cn(1) * sn(2 * i)];
+            // console.log(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge)))));
+            edges.push(VF.vectorScale(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge))))));
+
+        }
+
+        var newEdges = [];
+
+        for (var i = 0; i < fNames.length; i++) {
+
+            var testEdges = VF.transformVertices(edges, fNames[i], matrixDict);
+
+            testEdges.forEach((vector) => {
+                if (!(isInArray(vector, edges) || isInArray(vector, newEdges))) {
+
+                    newEdges.push(vector);
+
+                }
+            })
+
+        }
+
+        edges = edges.concat(newEdges);
+
+        return edges;
+
+    }
+
+    function matrixDict(letter, v) {
+
+        if (letter === "a") {
+
+            return amat(v);
+
+        } else if (letter === "b") {
+
+            return bmat(v);
+
+        } else if (letter === "c") {
+
+            return cmat(v);
+
+        } else if (letter === "d") {
+
+            return dmat(v);
+
+        } else if (letter === "e") {
+
+            return emat(v);
+
+        } else if (letter === "f") {
+
+            return fmat(v);
+
+        } else {
+
+            throw 'letter needs to be one of a, b, c, d, e, f!';
+
+        }
+
+    }
+
+    function makeFaces() {
+
+        var faces = [faceCenter];
+        var faceNames = [""];
+        const maxFaces = 80;
+        var i = 1;
+
+        while (i < maxFaces) {
+
+            var j = 0
+            var append = "c";
+            var newFaces = [];
+            var newNames = [];
+
+            while (j < n) {
+
+                const testCenters = VF.transformVertices(faces, append, matrixDict);
+
+                for (var k = 0; k < testCenters.length; k++) {
+
+                    if (!(isInArray(testCenters[k], faces) || isInArray(testCenters[k], newFaces))) {
+                        newFaces.push(testCenters[k]);
+                        newNames.push(append + faceNames[k]);
+                    }
+
+                }
+
+                append = "ab" + append;
+                j++;
+
+            }
+
+            faces = faces.concat(newFaces);
+            faceNames = faceNames.concat(newNames);
+
+            i = faces.length;
+
+        }
+
+        return [faces, faceNames];
+
+    }
+
+    function generateFaceData() {
+
+        var faceData = [];
+
+        f.forEach((face) => {
+
+            var nearestPoints = [];
+            var j = 0;
+
+            for (var i = 0; i < v.length; i++) {
+
+                if (j === n) {
+
+                    break;
+
+                }
+
+                //console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2)
+                //console.log((cn(1) ** 2 * cl(1) ** 2 / (sn(1) ** 2 * (sm(1) ** 2 - cl(1) ** 2))))
+
+                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - Math.abs(cn(1) ** 2 * cl(1) ** 2 / (sn(1) ** 2 * (sm(1) ** 2 - cl(1) ** 2)))) < eps) {
+                    nearestPoints.push(i)
+                    j++;
+                }
+            }
+            faceData.push(nearestPoints);
+        })
+
+        return faceData;
+
+    }
+
+    function generateEdgeData() {
+
+        var edgeData = [];
+
+        e.forEach((edge) => {
+
+            var nearestPoints = [];
+            var j = 0;
+
+            for (var i = 0; i < v.length; i++) {
+
+                if (j === 2) {
+
+                    break;
+
+                }
+
+                // console.log(HF.hyperbolicNorm(fmat(v[i])), HF.hyperbolicNorm(fmat(edge)))
+                // console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2)
+                // console.log((sm(1) ** 2 * cn(1) ** 2 / (sm(1) ** 2 - cl(1) ** 2)))
+
+                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - Math.abs(sm(1) ** 2 * cn(1) ** 2 / (sm(1) ** 2 - cl(1) ** 2))) < eps) {
+
+                    nearestPoints.push(i)
+                    j++;
+
+                }
+
+            }
+
+            edgeData.push(nearestPoints);
+
+        })
+
+        return edgeData;
+
+    }
+
+    const [f, fNames] = makeFaces();
+    // console.log(f, fNames)
+
+    const v = makeVertices();
+    // console.log(v)
+
+    const e = makeEdges();
+
+    // console.log(e)
+
+    const faceData = generateFaceData();
+    // console.log(faceData)
+
+    const edgeData = generateEdgeData();
+    // console.log(edgeData)
+
     return {
-        vertices: [
-            [1, 0, cn(1), sn(1)],
-            [1, 0, cn(3), sn(3)],
-            [1, 0, cn(5), sn(5)],
-            [1, 0, cn(7), sn(7)],
-            [1, 0, cn(9), sn(9)],
-            [1, 0, cn(11), sn(11)],
-            [1, 0, cn(13), sn(13)],
-            [1, 0, cn(15), sn(15)],
-            [1, 0, cn(17), sn(17)],
-            [1, 0, 0.939692620785908, 0.3420201433256687],
-            [
-                2.823826693844953,
-                1.158263250001967,
-                2.3793852415718173,
-                0.8660254037844386
-            ],
-            [
-                5.618091301908922,
-                2.932825502667836,
-                4.585122305476706,
-                0.984807753012208
-            ],
-            [
-                8.075326359286832,
-                4.4933493579126385,
-                6.524814926262616,
-                0.6427876096865395
-            ],
-            [
-                9.045764273505847,
-                5.109648360576541,
-                7.290859369381595,
-                1.2246467991473532e-16
-            ],
-            [
-                8.075326359286834,
-                4.49334935791264,
-                6.524814926262617,
-                -0.6427876096865389
-            ],
-            [
-                5.618091301908922,
-                2.9328255026678365,
-                4.585122305476706,
-                -0.984807753012208
-            ],
-            [
-                2.823826693844956,
-                1.158263250001969,
-                2.37938524157182,
-                -0.866025403784439
-            ],
-            [1, 0, 0.939692620785908, -0.3420201433256686]
 
-        ],
+        vertices: v,
 
-        edges: [
-            [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 0],
-            [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15], [15, 16], [16, 17], [17, 9]
-        ],
+        edges: edgeData,
 
-        faces: [
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [9, 10, 11, 12, 13, 14, 15, 16, 17]
-        ],
+        faces: faceData,
 
-        numVertices: 18,
+        numVertices: v.length,
 
-        numEdges: 18,
+        numEdges: edgeData.length,
 
-        numFaces: 2,
+        numFaces: fNames.length,
 
-        numSides: 9,
+        numSides: n,
 
         // cfe
-        a: (v) => {
-
-            return [v[0], v[1], v[2], -v[3]];
-
-        },
+        a: amat,
 
         //cfv
-        b: (v) => {
-
-            const c = Math.cos(2 * Math.PI / n);
-            const s = Math.sin(2 * Math.PI / n);
-
-            return [v[0], v[1], c * v[2] + s * v[3], s * v[2] - c * v[3]];
-
-        },
+        b: bmat,
 
         //cev
-        c: (v) => {
-
-            const clc = cl(1);
-            const smc = sm(1);
-            const snc = sn(1);
-            const cnc = cn(1);
-            const cmc = cm(1);
-
-            const r = smc ** 2 * snc ** 2 - clc ** 2;
-            // return v;
-            return [
-                (1 - 2 * r / (snc ** 2)) * v[0] + (2 * r * cmc / (snc * cnc * clc)) * v[1] + (2 * r / (cnc * (snc ** 2))) * v[2],
-                (2 * cnc * clc * cmc / snc) * v[0] + (1 - 2 * (cmc ** 2)) * v[1] - (2 * cmc * clc / snc) * v[2],
-                (2 * cnc * (clc) ** 2 / (snc ** 2)) * v[0] - (2 * cmc * clc / snc) * v[1] + (1 - 2 * (clc ** 2) / (snc ** 2)) * v[2],
-                v[3]
-            ];
-
-        },
+        c: cmat,
 
         // fev
-        d: (v) => {
+        d: dmat,
 
-            return [v[0], -v[1], v[2], v[3]];
+        e: emat,
 
-        },
+        f: fmat,
 
-        e: (v) => {
-
-            return v;
-
-        },
-
-        f: (v) => {
-
-            const den = sn(1) * Math.sqrt(Math.abs(sm(1) ** 2 - cl(1) ** 2));
-
-            return [
-                cn(1) * cl(1) * v[0] / den,
-                Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[1] / den,
-                Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[2] / den,
-                Math.sqrt(Math.abs(sn(1) ** 2 * sm(1) ** 2 - cl(1) ** 2)) * v[3] / den
-            ];
-
-        },
-
-        faceReflections: [
-            ""
-        ],
+        faceReflections: fNames,
 
         // outerReflection: "c",
 
@@ -176,21 +378,31 @@ const testData = () => {
 
         // },
 
-        // TODO what goes in the else columnn?
         metric: () => {
 
             return "hyperbolic";
 
         },
 
-        // TODO what goes in the else columnn?
         compact: () => {
 
-            return "uncompact";
+            if ((l - 2) * (m - 2) < 4) {
+
+                return "compact";
+
+            } else if ((l - 2) * (m - 2) === 4) {
+
+                return "paracompact";
+
+            } else {
+
+                return "uncompact";
+
+            }
 
         },
 
-        // cellType: "euclidean",
+        cellType: "hyperbolic",
 
         flip: (v) => {
 
@@ -198,244 +410,8 @@ const testData = () => {
 
         },
 
-        cellType: "hyperbolic",
-
-        conversion: (v) => {
-
-            return v;
-
-        }
-
     }
 
 }
 
 export { testData };
-
-// const data = testData();
-
-// for (var i = 0; i < data.numVertices; i++) {
-//     console.log(data.c(data.vertices[i]))
-// }
-// console.log(data.vertices.length)
-// console.log(data.edges.length)
-// console.log(data.faces.length)
-
-// var usedVerts = [];
-
-// for (var i = 0; i < data.numFaces; i++) {
-//     data.faces[i].forEach((num) => {
-//         console.log(num)
-//         if (!usedVerts.includes(num)) {
-//             usedVerts.push(num);
-//         }
-//     })
-// }
-
-// usedVerts.sort((a, b) => a - b);
-
-// // console.log(usedVerts, usedVerts.length)
-
-// var newVerts = [];
-// usedVerts.forEach((num) => {
-//     newVerts.push(data.vertices[num]);
-// })
-// //console.log(newVerts.slice(0, 99))
-// //console.log(newVerts.slice(99, 200))
-
-// var newEdges = [];
-// data.edges.forEach((edge) => {
-//     var newEdge = [usedVerts.indexOf(edge[0]), usedVerts.indexOf(edge[1])];
-//     if ((newEdge[0] !== -1) && newEdge[1] !== -1) {
-//         newEdges.push(newEdge)
-//     }
-// })
-
-// console.log(newEdges.slice(0, 100));
-// console.log(newEdges.slice(100, 200));
-// console.log(newEdges.slice(200, 300));
-
-// var newFaces = [];
-// data.faces.forEach((face) => {
-//     newFaces.push([
-//         usedVerts.indexOf(face[0]),
-//         usedVerts.indexOf(face[1]),
-//         usedVerts.indexOf(face[2]),
-//         usedVerts.indexOf(face[3]),
-//         usedVerts.indexOf(face[4]),
-//         usedVerts.indexOf(face[5])
-//     ]);
-// })
-
-// console.log(newFaces);
-
-
-// const edges = [];
-// for (var i = 0; i < data.vertices.length; i++) {
-//     for (var j = i + 1; j < data.vertices.length; j++) {
-//         if ((Math.abs(data.vertices[i][2] - data.vertices[j][2]) == 2) && (Math.abs(data.vertices[i][3] - data.vertices[j][3]) == 0)) {
-//             edges.push([i, j]);
-//         } else if ((Math.abs(data.vertices[i][2] - data.vertices[j][2]) == 1) && (Math.abs(data.vertices[i][3] - data.vertices[j][3]) == 1)) {
-//             edges.push([i, j]);
-//         }
-
-//     }
-
-// }
-// console.log(edges.slice(0, 100))
-// console.log(edges.slice(100, 200))
-// console.log(edges.slice(200, 300))
-// console.log(edges.slice(300, 400))
-// console.log(edges.slice(400, 500))
-// console.log(hexagonData.vertices.length)
-// console.log(edges.length)
-// console.log(hexagonData.faces.length)
-
-// const numOfPoints = 4;
-
-// function generatePoints(n) {
-
-//     if (n == 6) {
-
-//         var c = 3 / 4;
-
-//     } else {
-
-//         var c = Math.cos(Math.PI / n) ** 2;
-
-//     }
-
-//     var vertices = [];
-
-//     for (var i = 1 - 3 * numOfPoints; i <= 3 * numOfPoints + 2; i++) {
-
-//         for (var j = -2 * numOfPoints; j <= 2 * numOfPoints; j++) {
-
-//             if (i % 3 != 0) {
-
-//                 const x = i ** 2 + 3 * j ** 2 + 4;
-//                 vertices.push([1 + c * x, x, i, j]);
-
-//             }
-
-//         }
-
-//     }
-
-//     return vertices;
-
-// }
-
-// function generateFaces(n, number) {
-//     var faces = [];
-//     var names = [""];
-//     const eps = 1e-5;
-
-//     faces.push(face(n));
-
-//     function isIn(v) {
-//         for (var i = 0; i < faces.length; i++) {
-//             if (
-//                 (Math.abs(v[0] - faces[i][0]) < eps) &&
-//                 (Math.abs(v[1] - faces[i][1]) < eps) &&
-//                 (Math.abs(v[2] - faces[i][2]) < eps) &&
-//                 (Math.abs(v[3] - faces[i][3]) < eps)
-//             ) {
-//                 return true;
-//             }
-//         }
-//         return false;
-//     }
-
-//     var i = 1;
-//     while (i <= number) {
-//         for (var j = 0; j < i; j++) {
-//             if (!isIn(a(faces[j]))) {
-//                 faces.push(a(faces[j]));
-//                 names.push("a" + names[j]);
-//             }
-//             if (!isIn(b(faces[j]))) {
-//                 faces.push(b(faces[j]));
-//                 names.push("b" + names[j]);
-//             }
-//             if (!isIn(d(n, faces[j]))) {
-//                 faces.push(d(n, faces[j]));
-//                 names.push("d" + names[j]);
-//             }
-//         }
-//         i = names.length;
-
-//     }
-//     return [names, faces];
-
-// }
-
-// var points = generatePoints(6);
-// //console.log(points.slice(0, 99));
-// //console.log(points.slice(99, 198));
-// //console.log(points.slice(198, 297));
-// //console.log(points.slice(297));
-// var [names, centers] = generateFaces(6, 200);
-// //console.log(names, centers)
-
-// function generateFaceVertex() {
-//     var grouping = [];
-//     var newNames = [];
-//     for (var i = 0; i < centers.length; i++) {
-//         var corners = [];
-//         for (var j = 0; j < points.length; j++) {
-//             if (Math.abs(points[j][2] - centers[i][2]) + Math.abs(points[j][3] - centers[i][3]) == 2) {
-//                 corners.push(j);
-//             }
-//         }
-
-//         if (corners.length == 6) {
-//             console.log(i, centers[i], corners);
-//             corners.forEach((elem) => { console.log(elem, points[elem]) });
-//             grouping.push(corners);
-//             newNames.push(names[i]);
-//         }
-//     }
-
-//     return [grouping, newNames];
-// }
-
-// var fauxFaces = generateFaceVertex();
-// console.log(fauxFaces[1])
-
-
-// function tidyFaces() {
-//     var tidy = [];
-//     data.faces.forEach((face) => {
-//         console.log(face)
-//         var newList = [0, 0, 0, 0, 0, 0];
-//         var v1 = data.vertices[face[0]], v2 = data.vertices[face[1]], v3 = data.vertices[face[2]], v4 = data.vertices[face[3]], v5 = data.vertices[face[4]], v6 = data.vertices[face[5]];
-//         var v = [v1, v2, v3, v4, v5, v6];
-//         var cx = (v1[2] + v2[2] + v3[2] + v4[2] + v5[2] + v6[2]) / 6;
-//         var cy = (v1[3] + v2[3] + v3[3] + v4[3] + v5[3] + v6[3]) / 6;
-//         for (var i = 0; i < 6; i++) {
-//             if (v[i][2] - cx == 2) {
-//                 newList[0] = face[i];
-//             } else if (v[i][2] - cx == -2) {
-//                 newList[3] = face[i];
-//             } else if (v[i][2] - cx == 1) {
-//                 if (v[i][3] - cy == 1) {
-//                     newList[1] = face[i];
-//                 } else {
-//                     newList[5] = face[i];
-//                 }
-//             } else if (v[i][2] - cx == -1) {
-//                 if (v[i][3] - cy == 1) {
-//                     newList[2] = face[i];
-//                 } else {
-//                     newList[4] = face[i];
-//                 }
-//             }
-//         }
-//         tidy.push(newList);
-
-//     })
-//     return tidy;
-// }
-
-// console.log(tidyFaces());
