@@ -550,8 +550,7 @@ function main() {
     scene.add(sphereGroup);
 
     window.addEventListener("resize", onWindowResize, false);
-    // window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); console.log(dataSet); console.log(vertices); } });
-
+    
     onWindowResize();
 
     // add the renderer to the 'view' div
