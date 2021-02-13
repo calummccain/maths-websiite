@@ -83,15 +83,12 @@ window.onload = function () {
     });
     document.getElementById("invisibleLines").addEventListener("click", function () {
         invisible = true;
-        console.log(invisible)
         geometryDraw(geom, n, invisible);
     });
     document.getElementById("visibleLines").addEventListener("click", function () {
         invisible = false;
-        console.log(invisible)
         geometryDraw(geom, n, invisible);
     });
-
 
 }
 

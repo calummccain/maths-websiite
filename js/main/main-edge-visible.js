@@ -319,11 +319,7 @@ function cameraLines(data, invisibleLines) {
 
                 } else {
 
-                    console.log(invisibleLines)
-
                     if (invisibleLines) {
-
-                        console.log("hi")
 
                         drawLine(segmentsPoints[k], 0xAAAAAA);
 
@@ -611,7 +607,7 @@ function addDataToView(data, invisible) {
 
     cameraLines(dataSet, invisible);
 
-    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); console.log(dataSet); console.log(vertices); } });
+    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); } });
 
 
 }

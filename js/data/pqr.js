@@ -16,7 +16,9 @@ const pqrData = (p, q, r) => {
     const cp = (i) => Math.cos(Math.PI * i / p);
     const sp = (i) => Math.sin(Math.PI * i / p);
 
-    const faceCenter = [sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1)), 0, 0, 0];
+    const qr = (q - 2) * (r - 2);
+
+    const faceCenter = [(qr === 4 ? 1 : sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1))), 0, 0, 0];
 
     // cfe
     const amat = (v) => {
@@ -70,14 +72,22 @@ const pqrData = (p, q, r) => {
 
     const fmat = (v) => {
 
-        const den = sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2));
+        if (qr === 4) {
 
-        return [
-            cp(1) * cq(1) * v[0] / den,
-            Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[1] / den,
-            Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[2] / den,
-            Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[3] / den
-        ];
+            return v;
+
+        } else {
+
+            const den = sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2));
+
+            return [
+                cp(1) * cq(1) * v[0] / den,
+                Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[1] / den,
+                Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[2] / den,
+                Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[3] / den
+            ];
+
+        }
 
     }
 
@@ -185,7 +195,7 @@ const pqrData = (p, q, r) => {
 
         var faces = [faceCenter];
         var faceNames = [""];
-        const maxFaces = 80;
+        const maxFaces = 40;
         var i = 1;
 
         while (i < maxFaces) {
@@ -227,7 +237,17 @@ const pqrData = (p, q, r) => {
     function generateFaceData() {
 
         var faceData = [];
-        const fv = Math.abs(cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2)));
+        var fv = 0;
+
+        if (qr !== 4) {
+
+            fv = Math.abs(cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2)));
+
+        } else {
+
+            fv = 1;
+
+        }
 
         f.forEach((face) => {
 
@@ -242,14 +262,17 @@ const pqrData = (p, q, r) => {
 
                 }
 
-                console.log(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)))
-
                 if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - fv) < eps) {
+
                     nearestPoints.push(i)
                     j++;
+
                 }
+
             }
+
             faceData.push(nearestPoints);
+
         })
 
         return faceData;
@@ -259,7 +282,17 @@ const pqrData = (p, q, r) => {
     function generateEdgeData() {
 
         var edgeData = [];
-        const ev = Math.abs(sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2));
+        var ev = 0;
+
+        if (qr !== 4) {
+
+            ev = Math.abs(sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2));
+
+        } else {
+
+            ev = HF.hyperboloidInnerProduct(fmat(v[0]), fmat(e[0])) ** 2;
+
+        }
 
         e.forEach((edge) => {
 
@@ -349,11 +382,11 @@ const pqrData = (p, q, r) => {
 
         compact: () => {
 
-            if ((q - 2) * (r - 2) < 4) {
+            if (qr < 4) {
 
                 return "compact";
 
-            } else if ((q - 2) * (r - 2) === 4) {
+            } else if (qr === 4) {
 
                 return "paracompact";
 
