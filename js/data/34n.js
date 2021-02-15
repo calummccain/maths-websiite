@@ -138,63 +138,25 @@ const octahedronData = (n) => {
         outerReflection: "d",
 
         // (1, 1, 0, 0)
-        V: () => {
-
-            return [1, 1, 0, 0];
-
-        },
+        V: [1, 1, 0, 0],
 
         //(2, 1, 1, 0)
-        E: () => {
-
-            return [rt, 1 / rt, 1 / rt, 0];
-
-        },
+        E: [2, 1, 1, 0],
 
         // (3, 1, 1, 1)
-        F: () => {
-
-            if (n == 3) {
-
-                return [Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3)];
-
-            } else if (n == 4) {
-
-                return [1, 1 / 3, 1 / 3, 1 / 3];
-
-            } else {
-
-                return [1 / cot2, 1 / (3 * cot2), 1 / (3 * cot2), 1 / (3 * cot2)];
-
-            }
-
-        },
+        F: [3, 1, 1, 1],
 
         // (1, 0, 0, 0)
-        C: () => {
+        C: [1, 0, 0, 0],
 
-            if (n == 3) {
-
-                return [rt, 0, 0, 0];
-
-            } else if (n == 4) {
-
-                return [1, 0, 0, 0];
-
-            } else {
-
-                return [Math.sqrt(Math.abs(tan - 1)), 0, 0, 0];
-
-            }
-
-        },
-        
+        // 3 4 5 6 7
+        // s p u u u
         metric: () => {
 
             return (boundaries(n, Math.pi / Math.atan(rt), 4));
 
         },
-        
+
         cellType: "spherical"
 
     }

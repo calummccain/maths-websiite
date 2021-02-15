@@ -1,9 +1,11 @@
 // Order n tetrahedral
 
+import { boundaries } from "./geometry-decider.js";
+
 const tetrahedronData = (n) => {
 
     return {
-        
+
         vertices: [
             [1, 1, 1, 1],
             [1, 1, -1, -1],
@@ -12,19 +14,13 @@ const tetrahedronData = (n) => {
         ],
 
         edges: [
-            [0, 1],
-            [0, 2],
-            [0, 3],
-            [1, 2],
-            [1, 3],
-            [2, 3]
+            [0, 1], [0, 2], [0, 3],
+            [1, 2], [1, 3], [2, 3]
         ],
 
         faces: [
-            [0, 2, 1],
-            [1, 2, 3],
-            [2, 0, 3],
-            [3, 0, 1]
+            [0, 2, 1], [1, 2, 3],
+            [2, 0, 3], [3, 0, 1]
         ],
 
         numVertices: 4,
@@ -35,28 +31,32 @@ const tetrahedronData = (n) => {
 
         numSides: 3,
 
-        // (0,1,-1,0)
-        a: function (v) {
-
-            return [v[0], v[2], v[1], v[3]];
-
-        },
-
-        // (0,0,1,-1)
-        b: (v) => {
-
-            return [v[0], v[1], v[3], v[2]];
-
-        },
-
-        // 
-        c: (v) => {
+        // CFE
+        // (0, 0, 1, 1) 
+        a: (v) => {
 
             return [v[0], v[1], -v[3], -v[2]];
 
         },
 
-        //
+        // CVF
+        // (0, 1, -1, 0)
+        b: function (v) {
+
+            return [v[0], v[2], v[1], v[3]];
+
+        },
+
+        // CEV
+        // (0, 0, 1, -1)
+        c: (v) => {
+
+            return [v[0], v[1], v[3], v[2]];
+
+        },
+
+        // FEV
+        // (cot^2-2, cot^2, 0, 0)
         d: (v) => {
 
             if (n == 3) {
@@ -115,6 +115,7 @@ const tetrahedronData = (n) => {
 
         },
 
+        // Identity matrix
         e: (v) => {
 
             return [v[0], v[1], v[2], v[3]];
@@ -164,93 +165,27 @@ const tetrahedronData = (n) => {
 
         },
 
-        faceReflections: ['', 'cab', 'ab', 'b'],
+        faceReflections: ['', 'abc', 'bc', 'c'],
 
         outerReflection: "d",
 
-        center: () => {
+        // (1, 1, 1, 1)
+        V: [1, 1, 1, 1],
 
-            if (n == 3) {
+        // (1, 1, 0, 0)
+        E: [1, 1, 0, 0],
 
-                return [4, 0, 0, 0];
+        // (3, 1, 1, -1)
+        F: [3, 1, 1, -1],
 
-            } else if (n == 4) {
+        // (1, 0, 0, 0)
+        C: [1, 0, 0, 0],
 
-                return [2, 0, 0, 0];
-
-            } else if (n == 5) {
-
-                return [2 * Math.sqrt(7 - 3 * Math.sqrt(5)), 0, 0, 0];
-
-            } else if (n == 6) {
-
-                return [1 / Math.sqrt(3), 0, 0, 0];
-
-            } else {
-
-                const cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
-                return [1 / Math.sqrt(Math.abs(cot / (2 * (3 - cot)))), 0, 0, 0];
-
-            }
-
-        },
-
-        // TODO what goes in the else columnn?
+        // 3 4 5 6 7
+        // s s s p u
         metric: () => {
 
-            if (n == 3) {
-
-                return "spherical";
-
-            } else if (n == 4) {
-
-                return "spherical";
-
-            } else if (n == 5) {
-
-                return "spherical";
-
-            } else if (n == 6) {
-
-                return "hyperbolic";
-
-            } else {
-
-                return "";
-
-            }
-
-        },
-
-        // TODO what goes in the else columnn?
-        compact: () => {
-
-            if (n == 3) {
-
-                return "";
-
-            } else if (n == 4) {
-
-                return "";
-
-            } else if (n == 5) {
-
-                return "";
-
-            } else if (n == 6) {
-
-                return "paracompact";
-
-            } else if (n > 6) {
-
-                return "uncompact"
-
-            } else {
-
-                return "uncompact";
-
-            }
+            return boundaries(n, Math.PI / Math.atan(1 / Math.sqrt(2)), 6);
 
         },
 
