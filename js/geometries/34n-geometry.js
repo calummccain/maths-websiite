@@ -8,6 +8,8 @@ function octahedronGeometry(transform, order, refinement, model) {
 
     const data = octahedronData(order);
 
+    console.log(data.f)
+
     var octahedron;
 
     if (data.metric() == "spherical") {
