@@ -1,5 +1,7 @@
 // Order n octahedral
 
+import { boundaries } from "./geometry-decider.js";
+
 const octahedronData = (n) => {
 
     const tan = Math.tan(Math.PI / n) ** 2;
@@ -28,8 +30,9 @@ const octahedronData = (n) => {
         ],
 
         faces: [
-            [0, 2, 4], [0, 5, 2], [0, 4, 3],
-            [0, 3, 5], [1, 4, 2], [1, 2, 5],
+            [0, 2, 4], [0, 5, 2],
+            [0, 4, 3], [0, 3, 5],
+            [1, 4, 2], [1, 2, 5],
             [1, 3, 4], [1, 5, 3]
         ],
 
@@ -41,25 +44,32 @@ const octahedronData = (n) => {
 
         numSides: 3,
 
+        // CFE
+        // (0, 1, -1, 0)
         a: (v) => {
 
             return [v[0], v[2], v[1], v[3]];
 
         },
 
+        // CFV
+        // (0, 0, 1, -1)
         b: (v) => {
 
             return [v[0], v[1], v[3], v[2]];
 
         },
 
+        // CEV
+        // (0, 0, 0, 1)
         c: (v) => {
 
             return [v[0], v[1], v[2], -v[3]];
 
         },
 
-        //fev
+        // FEV
+        // (2 cot^2 - 1, cot^2, cot^2, cot^2)
         d: (v) => {
 
             if (n == 3) {
@@ -93,6 +103,7 @@ const octahedronData = (n) => {
 
         },
 
+        // Identity matrix
         e: (v) => {
 
             return [v[0], v[1], v[2], v[3]];
@@ -126,27 +137,30 @@ const octahedronData = (n) => {
 
         outerReflection: "d",
 
+        // (1, 1, 0, 0)
         V: () => {
 
             return [1, 1, 0, 0];
 
         },
 
+        //(2, 1, 1, 0)
         E: () => {
 
             return [rt, 1 / rt, 1 / rt, 0];
 
         },
 
+        // (3, 1, 1, 1)
         F: () => {
 
             if (n == 3) {
 
-                return [rt, 0, 0, 0];
+                return [Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3)];
 
             } else if (n == 4) {
 
-                return [1, 0, 0, 0];
+                return [1, 1 / 3, 1 / 3, 1 / 3];
 
             } else {
 
@@ -156,6 +170,7 @@ const octahedronData = (n) => {
 
         },
 
+        // (1, 0, 0, 0)
         C: () => {
 
             if (n == 3) {
@@ -173,61 +188,13 @@ const octahedronData = (n) => {
             }
 
         },
-
-        // TODO what goes in the else columnn?
+        
         metric: () => {
 
-            if (n == 3) {
-
-                return "spherical";
-
-            } else if (n == 4) {
-
-                return "hyperbolic";
-
-            } else if (n == 5) {
-
-                return "hyperbolic";
-
-            } else if (n == 6) {
-
-                return "hyperbolic";
-
-            } else {
-
-                return "";
-
-            }
+            return (boundaries(n, Math.pi / Math.atan(rt), 4));
 
         },
-
-        // TODO what goes in the else columnn?
-        compact: () => {
-
-            if (n == 3) {
-
-                return "";
-
-            } else if (n == 4) {
-
-                return "paracompact";
-
-            } else if (n == 5) {
-
-                return "uncompact";
-
-            } else if (n == 6) {
-
-                return "uncompact";
-
-            } else {
-
-                return "uncompact";
-
-            }
-
-        },
-
+        
         cellType: "spherical"
 
     }
