@@ -67,7 +67,7 @@ function hyperbolicGeometry(data, transform, refinement, model) {
         [subdividedFaces, subdividedVertices] = hyperbolicFace(
             faceVertices,
             refinement,
-            data.compact()
+            data.metric()
         );
 
         // Transform the vertices from the Klein Model to the Poincare Model

@@ -153,7 +153,7 @@ const octahedronData = (n) => {
         // s p u u u
         metric: () => {
 
-            return (boundaries(n, Math.pi / Math.atan(rt), 4));
+            return (boundaries(n, Math.PI / Math.atan(rt), 4));
 
         },
 

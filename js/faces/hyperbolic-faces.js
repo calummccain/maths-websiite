@@ -41,9 +41,9 @@ function hyperbolicFace(vertices, refinement, metric) {
 
         for (var i = 0; i < faces.length; i++) {
 
-            var u = VF.midpoint(coords[faces[i][0]], coords[faces[i][1]], center, compact);
-            var v = VF.midpoint(coords[faces[i][1]], coords[faces[i][2]], center, compact);
-            var w = VF.midpoint(coords[faces[i][2]], coords[faces[i][0]], center, compact);
+            var u = VF.midpoint(coords[faces[i][0]], coords[faces[i][1]]);
+            var v = VF.midpoint(coords[faces[i][1]], coords[faces[i][2]]);
+            var w = VF.midpoint(coords[faces[i][2]], coords[faces[i][0]]);
 
             newCoords = newCoords.concat([
                 coords[faces[i][0]],
