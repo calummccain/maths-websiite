@@ -376,23 +376,17 @@ const pqrData = (p, q, r) => {
 
         metric: () => {
 
-            return "hyperbolic";
-
-        },
-
-        compact: () => {
-
             if (qr < 4) {
 
-                return "compact";
+                return "h";
 
             } else if (qr === 4) {
 
-                return "paracompact";
+                return "p";
 
             } else {
 
-                return "uncompact";
+                return "u";
 
             }
 
