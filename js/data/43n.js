@@ -1,53 +1,28 @@
 // Order n cubic
 
 import { p } from "./constants.js";
+import { boundaries } from "./geometry-decider.js";
 
 const cubeData = (n) => {
 
     return {
-        
-        vertices: [
-            [1, 1, 1, 1],
-            [1, 1, -1, 1],
-            [1, -1, -1, 1],
-            [1, -1, 1, 1],
-            [1, 1, 1, -1],
-            [1, 1, -1, -1],
-            [1, -1, -1, -1],
-            [1, -1, 1, -1]
-        ],
 
-        planeCenters: [
-            [1, 0, 0, 1],
-            [1, 0, 1, 0],
-            [1, -1, 0, 0],
-            [1, 0, 0, -1],
-            [1, 1, 0, 0],
-            [1, 0, -1, 0]
+        vertices: [
+            [1, 1, 1, 1], [1, 1, -1, 1],
+            [1, -1, -1, 1], [1, -1, 1, 1],
+            [1, 1, 1, -1], [1, 1, -1, -1],
+            [1, -1, -1, -1], [1, -1, 1, -1]
         ],
 
         edges: [
-            [0, 3],
-            [3, 2],
-            [2, 1],
-            [1, 0],
-            [7, 4],
-            [4, 5],
-            [5, 6],
-            [6, 7],
-            [0, 4],
-            [1, 5],
-            [2, 6],
-            [3, 7]
+            [0, 3], [3, 2], [2, 1], [1, 0],
+            [7, 4], [4, 5], [5, 6], [6, 7],
+            [0, 4], [1, 5], [2, 6], [3, 7]
         ],
 
         faces: [
-            [0, 3, 2, 1],
-            [4, 7, 3, 0],
-            [7, 6, 2, 3],
-            [7, 4, 5, 6],
-            [0, 1, 5, 4],
-            [1, 2, 6, 5]
+            [0, 3, 2, 1], [4, 7, 3, 0], [7, 6, 2, 3],
+            [7, 4, 5, 6], [0, 1, 5, 4], [1, 2, 6, 5]
         ],
 
         numVertices: 8,
@@ -58,25 +33,32 @@ const cubeData = (n) => {
 
         numSides: 4,
 
+        // CFE
+        // (0, 0, 0, 1)
         a: (v) => {
 
             return [v[0], v[1], v[2], -v[3]];
 
         },
 
-
+        // CFV
+        // (0, 0, 1, -1)
         b: (v) => {
 
             return [v[0], v[1], v[3], v[2]];
 
         },
 
+        // CEV
+        // (0, 1, -1, 0)
         c: (v) => {
 
             return [v[0], v[2], v[1], v[3]];
 
         },
 
+        // FEV
+        // (cot ** 2 - 1, 2 cot ** 2, 0, 0)
         d: (v) => {
 
             if (n == 3) {
@@ -104,6 +86,7 @@ const cubeData = (n) => {
 
         },
 
+        // Identity matrix
         e: (v) => {
 
             return [v[0], v[1], v[2], v[3]];
@@ -146,84 +129,23 @@ const cubeData = (n) => {
 
         outerReflection: "d",
 
-        center: () => {
+        // (1, 1, 1, 1)
+        V: [1, 1, 1, 1],
 
-            if (n == 3) {
+        // (1, 1, 1, 0)
+        E: [1, 1, 1, 0],
 
-                return [2, 0, 0, 0];
+        // (1, 1, 0, 0)
+        F: [1, 1, 0, 0],
 
-            } else if (n == 4) {
+        // (1, 0, 0, 0)
+        C: [1, 0, 0, 0],
 
-                return [1, 0, 0, 0];
-
-            } else if (n == 5) {
-
-                return [Math.sqrt(2) / (p ** 2), 0, 0, 0];
-
-            } else if (n == 6) {
-
-                return [1 / Math.sqrt(3), 0, 0, 0];
-
-            } else {
-
-                var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-                return [1 / Math.sqrt(Math.abs(2 * cot / (3 - cot))), 0, 0, 0];
-
-            }
-
-        },
-
-        // TODO what goes in the else columnn?
+        // 3 4 5 6 7
+        // s e h d u
         metric: () => {
 
-            if (n == 3) {
-
-                return "spherical";
-
-            } else if (n == 4) {
-
-                return "euclidean";
-
-            } else if (n == 5) {
-
-                return "hyperbolic";
-
-            } else if (n == 6) {
-
-                return "hyperbolic";
-
-            } else {
-
-                return "";
-
-            }
-
-        },
-
-        // TODO what goes in the else columnn?
-        compact: () => {
-
-            if (n == 3) {
-
-                return "";
-
-            } else if (n == 4) {
-
-                return "";
-
-            } else if (n == 5) {
-
-                return "compact";
-
-            } else if (n == 6) {
-
-                return "paracompact";
-
-            } else {
-
-                return "uncompact";
-
-            }
+            return boundaries(n, 4, 6);
 
         },
 

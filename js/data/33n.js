@@ -181,8 +181,6 @@ const tetrahedronData = (n) => {
         // (1, 0, 0, 0)
         C: [1, 0, 0, 0],
 
-        // 3 4 5 6 7
-        // s s s p u
         metric: () => {
 
             return boundaries(n, Math.PI / Math.atan(1 / Math.sqrt(2)), 6);
