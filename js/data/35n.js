@@ -41,17 +41,9 @@ const icosahedronData = (n) => {
 
         numSides: 3,
 
-        // CEV
-        // (0, 0, 0, 1)
-        a: (v) => {
-
-            return [v[0], v[1], v[2], -v[3]];
-
-        },
-
         // CFE
         // (0, 1, 0, 0)
-        b: (v) => {
+        a: (v) => {
 
             return [v[0], -v[1], v[2], v[3]];
 
@@ -59,9 +51,17 @@ const icosahedronData = (n) => {
 
         // CFV
         // (0, p, -1, 1 / p)
-        c: (v) => {
+        b: (v) => {
 
             return [v[0], (v[1] + v[2] / p - p * v[3]) / 2, (v[1] / p + p * v[2] + v[3]) / 2, (-p * v[1] + v[2] - v[3] / p) / 2];
+
+        },
+
+        // CEV
+        // (0, 0, 0, 1)
+        c: (v) => {
+
+            return [v[0], v[1], v[2], -v[3]];
 
         },
 
@@ -93,6 +93,7 @@ const icosahedronData = (n) => {
 
         },
 
+        // Identity matrix
         e: (v) => {
 
             return [v[0], v[1], v[2], v[3]];
@@ -126,29 +127,26 @@ const icosahedronData = (n) => {
         },
 
         faceReflections: [
-            '', 'a', 'caca', 'ca', 'aca', 'cbacabcbaca',
-            'acbacabcbaca', 'cbabcbaca', 'cabcbaca',
-            'acabcbaca', 'bcaca', 'bca', 'baca',
-            'bcbabcbaca', 'bcabcbaca', 'bacabcbaca',
-            'cbaca', 'bcbaca', 'babcbaca', 'abcbaca'
+            '', 'c', 'bcbc', 'bc', 'cbc', 'bacbcabacbc',
+            'cbacbcabacbc', 'bacabacbc', 'bcabacbc',
+            'cbcabacbc', 'abcbc', 'abc', 'acbc',
+            'abacabacbc', 'abcabacbc', 'bacaacbcabacbcbcbaca',
+            'bacbc', 'abacbc', 'acabacbc', 'cabacbc'
         ],
 
         outerReflection: "d",
 
-        center: () => {
+        // (1, 1, p, 0)
+        V: [1, 1, p, 0],
 
-            if (n == 3) {
+        // (1, 0, p, 0)
+        E: [1, 0, p, 0],
 
-                return [2 / (p ** 3), 0, 0, 0];
+        // (3, 0, p ** 3, p)
+        F: [3, 0, p ** 3, p],
 
-            } else {
-
-                var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-                return [Math.sqrt(((p ** 4) * cot - 1 - (p ** 2)) / cot) / (p ** 3), 0, 0, 0];
-
-            }
-
-        },
+        // (1, 0, 0, 0)
+        C: [1, 0, 0, 0],
 
         // 3 4 5 6 7
         // h u u u u
