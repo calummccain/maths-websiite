@@ -1,5 +1,7 @@
 // Order n square
 
+import { boundaries } from "./geometry-decider.js";
+
 const squareData = (n) => {
 
     return {
@@ -311,57 +313,11 @@ const squareData = (n) => {
 
         center: [1, 1, 0, 0],
 
-        // TODO what goes in the else columnn?
+        // 3 4 5 6 7
+        // h p u u u
         metric: () => {
 
-            if (n == 3) {
-
-                return "hyperbolic";
-
-            } else if (n == 4) {
-
-                return "hyperbolic";
-
-            } else if (n == 5) {
-
-                return "hyperbolic";
-
-            } else if (n == 6) {
-
-                return "hyperbolic";
-
-            } else {
-
-                return "";
-
-            }
-
-        },
-
-        // TODO what goes in the else columnn?
-        compact: () => {
-
-            if (n == 3) {
-
-                return "compact";
-
-            } else if (n == 4) {
-
-                return "paracompact";
-
-            } else if (n == 5) {
-
-                return "uncompact";
-
-            } else if (n == 6) {
-
-                return "uncompact";
-
-            } else {
-
-                return "uncompact";
-
-            }
+            return boundaries(n, 2, 4)
 
         },
 
