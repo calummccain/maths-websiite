@@ -1,9 +1,11 @@
 // Order n hexagonal
 
+import { boundaries } from "./geometry-decider.js";
+
 const hexagonData = (n) => {
 
     return {
-        
+
         vertices: [
             [205, 272, -11, -7], [151, 200, -11, -5], [115, 152, -11, -3],
             [97, 128, -11, -1], [97, 128, -11, 1], [115, 152, -11, 3],
@@ -339,57 +341,11 @@ const hexagonData = (n) => {
 
         },
 
-        // TODO what goes in the else columnn?
+        // 3 4 5 6 7
+        // p u u u u
         metric: () => {
 
-            if (n == 3) {
-
-                return "hyperbolic";
-
-            } else if (n == 4) {
-
-                return "hyperbolic";
-
-            } else if (n == 5) {
-
-                return "hyperbolic";
-
-            } else if (n == 6) {
-
-                return "hyperbolic";
-
-            } else {
-
-                return "hyperbolic";
-
-            }
-
-        },
-
-        // TODO what goes in the else columnn?
-        compact: () => {
-
-            if (n == 3) {
-
-                return "compact";
-
-            } else if (n == 4) {
-
-                return "compact";
-
-            } else if (n == 5) {
-
-                return "compact";
-
-            } else if (n == 6) {
-
-                return "paracompact";
-
-            } else {
-
-                return "uncompact";
-
-            }
+            return boundaries(n, 2, 3)
 
         },
 
