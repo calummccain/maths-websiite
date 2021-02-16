@@ -1,6 +1,6 @@
 import * as VF from "../maths-functions/vector-functions.js";
 
-function hyperbolicFace(vertices, refinement, compact) {
+function hyperbolicFace(vertices, refinement, metric) {
 
     var sideNumber = vertices.length;
     var faces = [];
@@ -8,7 +8,7 @@ function hyperbolicFace(vertices, refinement, compact) {
 
     var coords = vertices;
 
-    if (compact === "uncompact") {
+    if (metric === "u") {
 
         refinement += 1;
 
@@ -68,7 +68,7 @@ function hyperbolicFace(vertices, refinement, compact) {
 
     }
 
-    if (compact === "uncompact") {
+    if (metric === "u") {
 
         var outside = [];
         var newFaces = [];
