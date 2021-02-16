@@ -20,14 +20,16 @@ const pqrData = (p, q, r) => {
 
     const faceCenter = [(qr === 4 ? 1 : sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1))), 0, 0, 0];
 
-    // cfe
+    // CFE
+    // (0, 0, 0, 1)
     const amat = (v) => {
 
         return [v[0], v[1], v[2], -v[3]];
 
     }
 
-    //cfv
+    // CFV
+    // ()
     const bmat = (v) => {
 
         const c = cp(2);
@@ -37,7 +39,8 @@ const pqrData = (p, q, r) => {
 
     }
 
-    //cev
+    // CEV
+    // ()
     const cmat = (v) => {
 
         const cqc = cq(1);
@@ -57,7 +60,8 @@ const pqrData = (p, q, r) => {
 
     }
 
-    // fev
+    // FEV
+    // (0, 1, 0, 0)
     const dmat = (v) => {
 
         return [v[0], -v[1], v[2], v[3]];
