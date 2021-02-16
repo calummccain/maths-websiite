@@ -1,9 +1,11 @@
 // Order n triangular
 
+import { boundaries } from "./geometry-decider.js";
+
 const triangleData = (n) => {
 
     return {
-        
+
         vertices: [
             [252, -19, -7], [216, -19, -5], [192, -19, -3], [180, -19, -1],
             [180, -19, 1], [192, -19, 3], [216, -19, 5], [252, -19, 7],
@@ -352,57 +354,11 @@ const triangleData = (n) => {
 
         center: [1, 1, 0, 0],
 
-        // TODO what goes in the else columnn?
+        // 3 4 5 6 7
+        // p u u u u
         metric: () => {
 
-            if (n == 3) {
-
-                return "hyperbolic";
-
-            } else if (n == 4) {
-
-                return "hyperbolic";
-
-            } else if (n == 5) {
-
-                return "hyperbolic";
-
-            } else if (n == 6) {
-
-                return "hyperbolic";
-
-            } else {
-
-                return "hyperbolic";
-
-            }
-
-        },
-
-        // TODO what goes in the else columnn?
-        compact: () => {
-
-            if (n == 3) {
-
-                return "paracompact";
-
-            } else if (n == 4) {
-
-                return "uncompact";
-
-            } else if (n == 5) {
-
-                return "uncompact";
-
-            } else if (n == 6) {
-
-                return "uncompact";
-
-            } else {
-
-                return "uncompact";
-
-            }
+            return boundaries(n, 2, 3)
 
         },
 
