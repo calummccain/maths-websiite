@@ -13,6 +13,41 @@ const octahedronData = (n) => {
 
     const metric = boundaries(n, Math.PI / Math.atan(rt), 4);
 
+    const d =
+        (n == 3) ? (v) => [
+            (v[0] + v[1] + v[2] + v[3]) / 2,
+            (v[0] + v[1] - v[2] - v[3]) / 2,
+            (v[0] - v[1] + v[2] - v[3]) / 2,
+            (v[0] - v[1] - v[2] + v[3]) / 2
+        ] :
+            (n == 4) ? (v) => [
+                2 * v[0] - v[1] - v[2] - v[3],
+                v[0] - v[2] - v[3],
+                v[0] - v[1] - v[3],
+                v[0] - v[1] - v[2]
+            ] : (v) => [
+                (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
+                2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
+                2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
+                2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
+            ];
+
+    const f =
+        (n == 3) ? (v) => [
+            v[0] / rt,
+            v[1] / rt,
+            v[2] / rt,
+            v[3] / rt
+        ] :
+            (n == 4) ? (v) => v :
+                (v) => [
+                    v[0] / Math.sqrt(Math.abs(tan - 1)),
+                    cot2 * v[1] / cot3,
+                    cot2 * v[2] / cot3,
+                    cot2 * v[3] / cot3,
+                ];
+
+
 
     return {
 
@@ -72,38 +107,7 @@ const octahedronData = (n) => {
 
         // FEV
         // (2 cot^2 - 1, cot^2, cot^2, cot^2)
-        d: (v) => {
-
-            if (n == 3) {
-
-                return [
-                    (v[0] + v[1] + v[2] + v[3]) / 2,
-                    (v[0] + v[1] - v[2] - v[3]) / 2,
-                    (v[0] - v[1] + v[2] - v[3]) / 2,
-                    (v[0] - v[1] - v[2] + v[3]) / 2
-                ];
-
-            } else if (n == 4) {
-
-                return [
-                    2 * v[0] - v[1] - v[2] - v[3],
-                    v[0] - v[2] - v[3],
-                    v[0] - v[1] - v[3],
-                    v[0] - v[1] - v[2]
-                ];
-
-            } else {
-
-                return [
-                    (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
-                    2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
-                    2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
-                    2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
-                ];
-
-            }
-
-        },
+        d: d,
 
         // Identity matrix
         e: (v) => {
@@ -112,28 +116,7 @@ const octahedronData = (n) => {
 
         },
 
-        f: (v) => {
-
-            if (n == 3) {
-
-                return [v[0] / rt, v[1] / rt, v[2] / rt, v[3] / rt]
-
-            } else if (n == 4) {
-
-                return v;
-
-            } else {
-
-                return [
-                    v[0] / Math.sqrt(Math.abs(tan - 1)),
-                    cot2 * v[1] / cot3,
-                    cot2 * v[2] / cot3,
-                    cot2 * v[3] / cot3,
-                ];
-
-            }
-
-        },
+        f: f,
 
         faceReflections: ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'],
 
