@@ -19,18 +19,17 @@ const octahedronData = (n) => {
             (v[0] + v[1] - v[2] - v[3]) / 2,
             (v[0] - v[1] + v[2] - v[3]) / 2,
             (v[0] - v[1] - v[2] + v[3]) / 2
-        ] :
-            (n == 4) ? (v) => [
-                2 * v[0] - v[1] - v[2] - v[3],
-                v[0] - v[2] - v[3],
-                v[0] - v[1] - v[3],
-                v[0] - v[1] - v[2]
-            ] : (v) => [
-                (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
-                2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
-                2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
-                2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
-            ];
+        ] : (n == 4) ? (v) => [
+            2 * v[0] - v[1] - v[2] - v[3],
+            v[0] - v[2] - v[3],
+            v[0] - v[1] - v[3],
+            v[0] - v[1] - v[2]
+        ] : (v) => [
+            (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
+            2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
+            2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
+            2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
+        ];
 
     const f =
         (n == 3) ? (v) => [
@@ -38,16 +37,17 @@ const octahedronData = (n) => {
             v[1] / rt,
             v[2] / rt,
             v[3] / rt
-        ] :
-            (n == 4) ? (v) => v :
-                (v) => [
-                    v[0] / Math.sqrt(Math.abs(tan - 1)),
-                    cot2 * v[1] / cot3,
-                    cot2 * v[2] / cot3,
-                    cot2 * v[3] / cot3,
-                ];
-
-
+        ] : (n == 4) ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            v[0] / Math.sqrt(Math.abs(tan - 1)),
+            cot2 * v[1] / cot3,
+            cot2 * v[2] / cot3,
+            cot2 * v[3] / cot3,
+        ];
 
     return {
 

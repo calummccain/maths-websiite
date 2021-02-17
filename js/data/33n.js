@@ -17,31 +17,27 @@ const tetrahedronData = (n) => {
             Math.sqrt(5) * v[1] / 4,
             Math.sqrt(5) * v[2] / 4,
             Math.sqrt(5) * v[3] / 4
-        ] :
-            (n == 4) ? (v) => [
-                v[0] / 2,
-                v[1] / 2,
-                v[2] / 2,
-                v[3] / 2
-            ] :
-                (n == 5) ? (v) => [
-                    Math.sqrt(7 + 3 * Math.sqrt(3)) * v[0] / 4,
-                    Math.sqrt(3 - Math.sqrt(3)) * v[1] / 4,
-                    Math.sqrt(3 - Math.sqrt(3)) * v[2] / 4,
-                    Math.sqrt(3 - Math.sqrt(3)) * v[3] / 4
-                ] :
-                    (n == 6) ? (v) => [
-                        Math.sqrt(3) * v[0],
-                        v[1],
-                        v[2],
-                        v[3]
-                    ] :
-                        (v) => [
-                            Math.sqrt(Math.abs(cot / (2 * (3 - cot)))) * v[0],
-                            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[1],
-                            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[2],
-                            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[3]
-                        ];
+        ] : (n == 4) ? (v) => [
+            v[0] / 2,
+            v[1] / 2,
+            v[2] / 2,
+            v[3] / 2
+        ] : (n == 5) ? (v) => [
+            Math.sqrt(7 + 3 * Math.sqrt(3)) * v[0] / 4,
+            Math.sqrt(3 - Math.sqrt(3)) * v[1] / 4,
+            Math.sqrt(3 - Math.sqrt(3)) * v[2] / 4,
+            Math.sqrt(3 - Math.sqrt(3)) * v[3] / 4
+        ] : (n == 6) ? (v) => [
+            Math.sqrt(3) * v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            Math.sqrt(Math.abs(cot / (2 * (3 - cot)))) * v[0],
+            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[1],
+            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[2],
+            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[3]
+        ];
 
     const d =
         (n == 3) ? (v) => [
@@ -49,31 +45,27 @@ const tetrahedronData = (n) => {
             (v[0] + 3 * v[1] - v[2] + v[3]) / 4,
             (v[0] - v[1] + 3 * v[2] + v[3]) / 4,
             (-v[0] + v[1] + v[2] + 3 * v[3]) / 4
-        ] :
-            (n == 4) ? (v) => [
-                (v[0] + v[1] + v[2] - v[3]) / 2,
-                (v[0] + v[1] - v[2] + v[3]) / 2,
-                (v[0] - v[1] + v[2] + v[3]) / 2,
-                (-v[0] + v[1] + v[2] + v[3]) / 2
-            ] :
-                (n == 5) ? (v) => [
-                    (2 - 3 * sin5) * v[0] + (3 * sin5 - 1) * v[1] + (3 * sin5 - 1) * v[2] + (1 - 3 * sin5) * v[3],
-                    cos5 * v[0] + sin5 * v[1] - cos5 * v[2] + cos5 * v[3],
-                    cos5 * v[0] - cos5 * v[1] + sin5 * v[2] + cos5 * v[3],
-                    -cos5 * v[0] + cos5 * v[1] + cos5 * v[2] + sin5 * v[3]
-                ] :
-                    (n == 6) ? (v) => [
-                        (5 * v[0] - v[1] - v[2] + v[3]) / 4,
-                        (3 * v[0] + v[1] - 3 * v[2] + 3 * v[3]) / 4,
-                        (3 * v[0] - 3 * v[1] + v[2] + 3 * v[3]) / 4,
-                        (-3 * v[0] + 3 * v[1] + 3 * v[2] + v[3]) / 4
-                    ] :
-                        (v) => [
-                            (2 - 3 * sin) * v[0] + (3 * sin - 1) * v[1] + (3 * sin - 1) * v[2] + (1 - 3 * sin) * v[3],
-                            cos * v[0] + sin * v[1] - cos * v[2] + cos * v[3],
-                            cos * v[0] - cos * v[1] + sin * v[2] + cos * v[3],
-                            -cos * v[0] + cos * v[1] + cos * v[2] + sin * v[3]
-                        ];
+        ] : (n == 4) ? (v) => [
+            (v[0] + v[1] + v[2] - v[3]) / 2,
+            (v[0] + v[1] - v[2] + v[3]) / 2,
+            (v[0] - v[1] + v[2] + v[3]) / 2,
+            (-v[0] + v[1] + v[2] + v[3]) / 2
+        ] : (n == 5) ? (v) => [
+            (2 - 3 * sin5) * v[0] + (3 * sin5 - 1) * v[1] + (3 * sin5 - 1) * v[2] + (1 - 3 * sin5) * v[3],
+            cos5 * v[0] + sin5 * v[1] - cos5 * v[2] + cos5 * v[3],
+            cos5 * v[0] - cos5 * v[1] + sin5 * v[2] + cos5 * v[3],
+            -cos5 * v[0] + cos5 * v[1] + cos5 * v[2] + sin5 * v[3]
+        ] : (n == 6) ? (v) => [
+            (5 * v[0] - v[1] - v[2] + v[3]) / 4,
+            (3 * v[0] + v[1] - 3 * v[2] + 3 * v[3]) / 4,
+            (3 * v[0] - 3 * v[1] + v[2] + 3 * v[3]) / 4,
+            (-3 * v[0] + 3 * v[1] + 3 * v[2] + v[3]) / 4
+        ] : (v) => [
+            (2 - 3 * sin) * v[0] + (3 * sin - 1) * v[1] + (3 * sin - 1) * v[2] + (1 - 3 * sin) * v[3],
+            cos * v[0] + sin * v[1] - cos * v[2] + cos * v[3],
+            cos * v[0] - cos * v[1] + sin * v[2] + cos * v[3],
+            -cos * v[0] + cos * v[1] + cos * v[2] + sin * v[3]
+        ];
 
     return {
 
