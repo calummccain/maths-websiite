@@ -75,7 +75,6 @@ const tetrahedronData = (n) => {
                             -cos * v[0] + cos * v[1] + cos * v[2] + sin * v[3]
                         ];
 
-
     return {
 
         vertices: [
