@@ -7,6 +7,35 @@ const icosahedronData = (n) => {
 
     const metric = boundaries(n, Math.PI / Math.atan(p ** 2), 10 / 3);
 
+    const cos = Math.cos(Math.PI / n) ** 2;
+    const cot = 1 / (Math.tan(Math.PI / n) ** 2);
+
+    const d =
+        (n == 3) ? (v) => [
+            ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
+            v[1],
+            ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
+            ((p ** 3) * v[0] - (p ** 2) * v[2] + v[3]) / 2
+        ] : (v) => [
+            (6 * (p ** 2) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / p) * v[3],
+            v[1],
+            2 * (p ** 5) * cos * v[0] + (1 - 2 * (p ** 4) * cos) * v[2] - 2 * (p ** 2) * cos * v[3],
+            2 * (p ** 3) * cos * v[0] - 2 * (p ** 2) * cos * v[2] + (1 - 2 * cos) * v[3]
+        ];
+
+    const f =
+        (n == 3) ? (v) => [
+            ((p ** 3) / 2) * v[0],
+            (Math.sqrt(3 * p - 1) / 2) * v[1],
+            (Math.sqrt(3 * p - 1) / 2) * v[2],
+            (Math.sqrt(3 * p - 1) / 2) * v[3]
+        ] : (v) => [
+            (p ** 3) * Math.sqrt(cot / ((p ** 4) * cot - 1 - (p ** 2))) * v[0],
+            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[1],
+            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[2],
+            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[3]
+        ];
+
     return {
 
         vertices: [
@@ -69,31 +98,7 @@ const icosahedronData = (n) => {
 
         // FEV
         // (p cot ** 2 - 1 / p ** 3, 0, p ** 2, 1)
-        d: (v) => {
-
-            if (n == 3) {
-
-                return [
-                    ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
-                    v[1],
-                    ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
-                    ((p ** 3) * v[0] - (p ** 2) * v[2] + v[3]) / 2
-                ];
-
-            } else {
-
-                var cos = Math.cos(Math.PI / n) ** 2;
-
-                return [
-                    (6 * (p ** 2) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / p) * v[3],
-                    v[1],
-                    2 * (p ** 5) * cos * v[0] + (1 - 2 * (p ** 4) * cos) * v[2] - 2 * (p ** 2) * cos * v[3],
-                    2 * (p ** 3) * cos * v[0] - 2 * (p ** 2) * cos * v[2] + (1 - 2 * cos) * v[3]
-                ];
-
-            }
-
-        },
+        d: d,
 
         // Identity matrix
         e: (v) => {
@@ -102,31 +107,7 @@ const icosahedronData = (n) => {
 
         },
 
-        f: (v) => {
-
-            if (n == 3) {
-
-                return [
-                    ((p ** 3) / 2) * v[0],
-                    (Math.sqrt(3 * p - 1) / 2) * v[1],
-                    (Math.sqrt(3 * p - 1) / 2) * v[2],
-                    (Math.sqrt(3 * p - 1) / 2) * v[3]
-                ];
-
-            } else {
-
-                var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
-                return [
-                    (p ** 3) * Math.sqrt(cot / ((p ** 4) * cot - 1 - (p ** 2))) * v[0],
-                    Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[1],
-                    Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[2],
-                    Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[3]
-                ];
-
-            }
-
-        },
+        f: f,
 
         faceReflections: [
             '', 'c', 'bcbc', 'bc', 'cbc', 'bacbcabacbc',
