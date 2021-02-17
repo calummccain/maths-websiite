@@ -11,16 +11,16 @@ function cubeGeometry(transform, order, refinement, model) {
 
     var cube;
 
-    if (data.metric() == "s") {
+    if (data.metric == "s") {
 
         refinement += 1;
         cube = sphericalGeometry(data, transform, refinement, d);
 
-    } else if (data.metric() == "e") {
+    } else if (data.metric == "e") {
 
         cube = euclideanGeometry(data, transform);
 
-    } else if (data.metric() == "h" || data.metric() == "p" || data.metric() == "u") {
+    } else if (data.metric == "h" || data.metric == "p" || data.metric == "u") {
 
         cube = hyperbolicGeometry(data, transform, refinement, model);
 

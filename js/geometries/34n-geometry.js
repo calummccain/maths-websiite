@@ -11,16 +11,16 @@ function octahedronGeometry(transform, order, refinement, model) {
 
     var octahedron;
 
-    if (data.metric() == "s") {
+    if (data.metric == "s") {
 
         refinement += 1;
         octahedron = sphericalGeometry(data, transform, refinement, d);
 
-    } else if (data.metric() == "e") {
+    } else if (data.metri == "e") {
 
         octahedron = euclideanGeometry(data, transform);
 
-    } else if (data.metric() == "h" || data.metric() == "p" || data.metric() == "u") {
+    } else if (data.metric == "h" || data.metric == "p" || data.metric == "u") {
 
         octahedron = hyperbolicGeometry(data, transform, refinement, model);
 

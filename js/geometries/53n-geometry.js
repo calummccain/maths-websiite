@@ -11,16 +11,16 @@ function dodecahedronGeometry(transform, order, refinement, model) {
 
     var dodecahedron;
 
-    if (data.metric() == "s") {
+    if (data.metric == "s") {
 
         refinement += 1;
         dodecahedron = sphericalGeometry(data, transform, refinement, d);
 
-    } else if (data.metric() == "e") {
+    } else if (data.metric == "e") {
 
         dodecahedron = euclideanGeometry(data, transform);
 
-    } else if (data.metric() == "h" || data.metric() == "p" || data.metric() == "u") {
+    } else if (data.metric == "h" || data.metric == "p" || data.metric == "u") {
 
         dodecahedron = hyperbolicGeometry(data, transform, refinement, model);
 

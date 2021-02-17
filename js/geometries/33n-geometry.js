@@ -11,16 +11,16 @@ function tetrahedronGeometry(transform, order, refinement, model) {
 
     var tetrahedron;
 
-    if (data.metric() == "s") {
+    if (data.metric == "s") {
 
         refinement += 1;
         tetrahedron = sphericalGeometry(data, transform, refinement, d);
 
-    } else if (data.metric() == "e") {
+    } else if (data.metric == "e") {
 
         tetrahedron = euclideanGeometry(data, transform);
 
-    } else if (data.metric() == "h" || data.metric() == "p" || data.metric() == "u") {
+    } else if (data.metric == "h" || data.metric == "p" || data.metric == "u") {
 
         tetrahedron = hyperbolicGeometry(data, transform, refinement, model);
 
