@@ -5,6 +5,8 @@ import { boundaries } from "./geometry-decider.js";
 
 const cubeData = (n) => {
 
+    const metric = boundaries(n, 4, 6);
+
     return {
 
         vertices: [
@@ -143,11 +145,7 @@ const cubeData = (n) => {
 
         // 3 4 5 6 7
         // s e h d u
-        metric: () => {
-
-            return boundaries(n, 4, 6);
-
-        },
+        metric: metric,
 
         cellType: "spherical"
 

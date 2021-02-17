@@ -4,6 +4,8 @@ import { boundaries } from "./geometry-decider.js";
 
 const tetrahedronData = (n) => {
 
+    const metric = boundaries(n, Math.PI / Math.atan(1 / Math.sqrt(2)), 6);
+
     return {
 
         vertices: [
@@ -181,11 +183,7 @@ const tetrahedronData = (n) => {
         // (1, 0, 0, 0)
         C: [1, 0, 0, 0],
 
-        metric: () => {
-
-            return boundaries(n, Math.PI / Math.atan(1 / Math.sqrt(2)), 6);
-
-        },
+        metric: metric,
 
         cellType: "spherical"
 

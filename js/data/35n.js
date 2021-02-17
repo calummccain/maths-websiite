@@ -5,6 +5,8 @@ import { boundaries } from "./geometry-decider.js";
 
 const icosahedronData = (n) => {
 
+    const metric = boundaries(n, Math.PI / Math.atan(p ** 2), 10 / 3);
+
     return {
 
         vertices: [
@@ -150,11 +152,7 @@ const icosahedronData = (n) => {
 
         // 3 4 5 6 7
         // h u u u u
-        metric: () => {
-
-            return boundaries(n, Math.PI / Math.atan(p ** 2), 10 / 3);
-
-        },
+        metric: metric,
 
         cellType: "spherical"
 

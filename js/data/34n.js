@@ -11,6 +11,8 @@ const octahedronData = (n) => {
     const cot2 = Math.sqrt(Math.abs(1 - 2 * cot));
     const cot3 = Math.sqrt(Math.abs(1 - cot));
 
+    const metric = boundaries(n, Math.PI / Math.atan(rt), 4);
+
 
     return {
 
@@ -151,11 +153,7 @@ const octahedronData = (n) => {
 
         // 3 4 5 6 7
         // s p u u u
-        metric: () => {
-
-            return (boundaries(n, Math.PI / Math.atan(rt), 4));
-
-        },
+        metric: metric,
 
         cellType: "spherical"
 

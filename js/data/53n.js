@@ -5,6 +5,8 @@ import { boundaries } from "./geometry-decider.js";
 
 const dodecahedronData = (n) => {
 
+    const metric = boundaries(n, Math.PI / Math.atan(p), 6);
+
     return {
 
         vertices: [
@@ -200,11 +202,7 @@ const dodecahedronData = (n) => {
 
         // 3 4 5 6 7
         // s h h p u
-        metric: () => {
-
-            return boundaries(n, Math.PI / Math.atan(p), 6);
-
-        },
+        metric: metric,
 
         cellType: "spherical"
 

@@ -4,6 +4,8 @@ import { boundaries } from "./geometry-decider.js";
 
 const squareData = (n) => {
 
+    const metric = boundaries(n, 2, 4);
+
     return {
         
         vertices: [
@@ -315,11 +317,7 @@ const squareData = (n) => {
 
         // 3 4 5 6 7
         // h p u u u
-        metric: () => {
-
-            return boundaries(n, 2, 4)
-
-        },
+        metric: metric,
 
         cellType: "euclidean",
 

@@ -4,6 +4,8 @@ import { boundaries } from "./geometry-decider.js";
 
 const hexagonData = (n) => {
 
+    const metric = boundaries(n, 2, 6);
+
     return {
 
         vertices: [
@@ -343,11 +345,7 @@ const hexagonData = (n) => {
 
         // 3 4 5 6 7
         // h h h p u
-        metric: () => {
-
-            return boundaries(n, 2, 6)
-
-        },
+        metric: metric,
 
         cellType: "euclidean",
 
