@@ -76,6 +76,8 @@ function generateSpheres(data) {
 // generate the positions of the vertices in several models
 function generateVertices(data) {
 
+    console.log(data)
+
     var verts = [];
 
     if (data.cellType === "euclidean") {
