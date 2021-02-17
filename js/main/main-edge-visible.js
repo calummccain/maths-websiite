@@ -9,6 +9,7 @@ var WIDTH, HEIGHT, view;
 var scene, spheres, vertices, uhpVertices, lineGroup = new THREE.Group(), dataSet, camera, camPos, sphereGroup = new THREE.Group();
 
 var cameraConstants = {
+
     left: 0,
     bottom: 0,
     width: 1,
@@ -34,7 +35,7 @@ function generateSpheres(data) {
 
         var v1, v2, v3;
 
-        if (data.compact() === "uncompact") {
+        if (data.metric() === "u") {
 
             var u1, u2, u3;
 
@@ -77,7 +78,7 @@ function generateVertices(data) {
 
     var verts = [];
 
-    if ((data.cellType === "euclidean")) {
+    if (data.cellType === "euclidean") {
 
         for (var i = 0; i < data.numVertices; i++) {
 
@@ -99,7 +100,7 @@ function generateVertices(data) {
 
         }
 
-    } else if ((data.cellType === "hyperbolic")) {
+    } else if (data.cellType === "hyperbolic") {
 
         for (var i = 0; i < data.numVertices; i++) {
 
@@ -144,7 +145,7 @@ function makeTheLines(data, number) {
 
         var uhpVertices = [];
 
-        if (data.compact() === "uncompact") {
+        if (data.metric() === "u") {
 
             var e1 = VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]);
             var e2 = VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]);
@@ -167,7 +168,7 @@ function makeTheLines(data, number) {
 
         var startAngle, endAngle;
 
-        if (data.compact() === "compact") {
+        if (data.metric() === "h") {
 
             startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
             endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
@@ -199,7 +200,7 @@ function makeTheLines(data, number) {
     });
 
     // kinda works??
-    if (data.compact() === "uncompact") {
+    if (data.metric() === "u") {
 
         for (var j = 0; j < data.numFaces; j++) {
 
@@ -432,7 +433,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             var polygon = [];
 
-            if (data.compact() === "uncompact") {
+            if (data.metric() === "u") {
 
                 data.faces[i].forEach((j) => {
                     polygon.push(vertices[j]["klein"]);
@@ -446,7 +447,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             }
 
-            if (data.compact() === "uncompact") {
+            if (data.metric() === "u") {
 
                 if ((t1 > eps) && (t1 < 1 - eps)) {
 
