@@ -6,6 +6,64 @@ import { boundaries } from "./geometry-decider.js";
 const dodecahedronData = (n) => {
 
     const metric = boundaries(n, Math.PI / Math.atan(p), 6);
+    const cos = Math.cos(Math.PI / n) ** 2;
+    const rt = Math.sqrt(5);
+
+    const d =
+        (n == 3) ? (v) => [
+            (p * v[0] + v[1] / (p ** 3) + v[3] / (p ** 4)) / 2,
+            ((p ** 3) * v[0] - v[1] / p - p * v[3]) / 2,
+            v[2],
+            ((p ** 2) * v[0] - p * v[1] + v[3]) / 2
+        ] : (n == 4) ? (v) => [
+            p ** 2 * v[0] - v[1] - v[3] / p,
+            p ** 3 * v[0] - p * v[1] - p * v[3],
+            v[2],
+            p ** 2 * v[0] - p * v[1]
+        ] : (n == 5) ? (v) => [
+            ((4 * p + 1) * v[0] - (4 * p - 1) / p * v[1] - (4 * p - 1) / (p ** 2) * v[3]) / 2,
+            (p ** 5 * v[0] + (2 - p ** 4) * v[1] - p ** 3 * v[3]) / 2,
+            v[2],
+            (p ** 4 * v[0] - p ** 3 * v[1] - v[3] / p) / 2
+        ] : (n == 6) ? (v) => [
+            ((2 + p ** 4) * v[0] - p ** 3 * v[1] - p ** 2 * v[3]) / 2,
+            (3 * p ** 3 * v[0] + (2 - 3 * p ** 2) * v[1] - 3 * p * v[3]) / 2,
+            v[2],
+            (3 * p ** 2 * v[0] - 3 * p * v[1] - v[3]) / 2
+        ] : (v) => [
+            (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 / p) * v[1] - (2 * rt * cos / p - 2 / (p ** 2)) * v[3],
+            2 * (p ** 3) * cos * v[0] + (1 - 2 * (p ** 2) * cos) * v[1] - 2 * p * cos * v[3],
+            v[2],
+            2 * (p ** 2) * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
+        ];
+
+    const f =
+        (n == 3) ? (v) => [
+            (p ** 2) * v[0] / Math.sqrt(8),
+            v[1] / (p * Math.sqrt(8)),
+            v[2] / (p * Math.sqrt(8)),
+            v[3] / (p * Math.sqrt(8))
+        ] : (n == 4) ? (v) => [
+            p ** 2 / Math.sqrt(2) * v[0],
+            Math.sqrt(p / 2) * v[1],
+            Math.sqrt(p / 2) * v[2],
+            Math.sqrt(p / 2) * v[3]
+        ] : (n == 5) ? (v) => [
+            (p ** 4) / 2 * v[0],
+            p * Math.sqrt(4 * p - 1) / 2 * v[1],
+            p * Math.sqrt(4 * p - 1) / 2 * v[2],
+            p * Math.sqrt(4 * p - 1) / 2 * v[3]
+        ] : (n == 6) ? (v) => [
+            Math.sqrt(3) * v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            (p ** 2) * Math.sqrt(cot / (cot - 3)) * v[0],
+            Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[1],
+            Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[2],
+            Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[3]
+        ];
 
     return {
 
@@ -71,59 +129,7 @@ const dodecahedronData = (n) => {
 
         // FEV
         // ?????
-        d: (v) => {
-
-            if (n == 3) {
-
-                return [
-                    (p * v[0] + v[1] / (p ** 3) + v[3] / (p ** 4)) / 2,
-                    ((p ** 3) * v[0] - v[1] / p - p * v[3]) / 2,
-                    v[2],
-                    ((p ** 2) * v[0] - p * v[1] + v[3]) / 2
-                ];
-
-            } else if (n == 4) {
-
-                return [
-                    p ** 2 * v[0] - v[1] - v[3] / p,
-                    p ** 3 * v[0] - p * v[1] - p * v[3],
-                    v[2],
-                    p ** 2 * v[0] - p * v[1]
-                ];
-
-            } else if (n == 5) {
-
-                return [
-                    ((4 * p + 1) * v[0] - (4 * p - 1) / p * v[1] - (4 * p - 1) / (p ** 2) * v[3]) / 2,
-                    (p ** 5 * v[0] + (2 - p ** 4) * v[1] - p ** 3 * v[3]) / 2,
-                    v[2],
-                    (p ** 4 * v[0] - p ** 3 * v[1] - v[3] / p) / 2
-                ];
-
-            } else if (n == 6) {
-
-                return [
-                    ((2 + p ** 4) * v[0] - p ** 3 * v[1] - p ** 2 * v[3]) / 2,
-                    (3 * p ** 3 * v[0] + (2 - 3 * p ** 2) * v[1] - 3 * p * v[3]) / 2,
-                    v[2],
-                    (3 * p ** 2 * v[0] - 3 * p * v[1] - v[3]) / 2
-                ];
-
-            } else {
-
-                var cos = Math.cos(Math.PI / n) ** 2;
-                var rt = Math.sqrt(5);
-
-                return [
-                    (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 / p) * v[1] - (2 * rt * cos / p - 2 / (p ** 2)) * v[3],
-                    2 * (p ** 3) * cos * v[0] + (1 - 2 * (p ** 2) * cos) * v[1] - 2 * p * cos * v[3],
-                    v[2],
-                    2 * (p ** 2) * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
-                ];
-
-            }
-
-        },
+        d: d,
 
         e: (v) => {
 
@@ -131,54 +137,7 @@ const dodecahedronData = (n) => {
 
         },
 
-        f: (v) => {
-
-            if (n == 3) {
-
-                return [
-                    (p ** 2) * v[0] / Math.sqrt(8),
-                    v[1] / (p * Math.sqrt(8)),
-                    v[2] / (p * Math.sqrt(8)),
-                    v[3] / (p * Math.sqrt(8))
-                ];
-
-            } else if (n == 4) {
-
-                return [
-                    p ** 2 / Math.sqrt(2) * v[0],
-                    Math.sqrt(p / 2) * v[1],
-                    Math.sqrt(p / 2) * v[2],
-                    Math.sqrt(p / 2) * v[3]
-                ];
-
-            } else if (n == 5) {
-
-                return [
-                    (p ** 4) / 2 * v[0],
-                    p * Math.sqrt(4 * p - 1) / 2 * v[1],
-                    p * Math.sqrt(4 * p - 1) / 2 * v[2],
-                    p * Math.sqrt(4 * p - 1) / 2 * v[3]
-                ];
-
-
-            } else if (n == 6) {
-
-                return [Math.sqrt(3) * v[0], v[1], v[2], v[3]];
-
-            } else {
-
-                var cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
-                return [
-                    (p ** 2) * Math.sqrt(cot / (cot - 3)) * v[0],
-                    Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[1],
-                    Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[2],
-                    Math.sqrt(((p ** 2) * cot - 1) / (cot - 3)) * v[3]
-                ];
-
-            }
-
-        },
+        f: f,
 
         faceReflections: [
             '', 'c', 'bc', 'acacbabc', 'cacbabc',
