@@ -23,10 +23,10 @@ function main(name, geometry) {
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
     camera.position.set(3, 0, 0);
     camera.updateProjectionMatrix();
-    camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
+    camera.add(new THREE.HemisphereLight(0xFFFFFF, 0x000000));
 
     scene.add(camera);
-    scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
+    //scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
     // add the main polyhedron to the scene
     MAIN.addCellToGroup({
