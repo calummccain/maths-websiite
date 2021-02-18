@@ -603,7 +603,7 @@ function addDataToView(data, invisible) {
 
     dataSet = data;
 
-    console.log(dataSet.f, dataSet.d)
+    console.log(dataSet, dataSet)
 
     vertices = generateVertices(dataSet);
     spheres = generateSpheres(dataSet);
