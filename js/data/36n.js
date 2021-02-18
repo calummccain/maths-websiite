@@ -19,19 +19,11 @@ const triangleData = (n) => {
 
     // CFE
     // (0, 0, 3, -1)
-    const amat = (v) => {
-
-        return [v[0], v[1], (-v[2] + 3 * v[3]) / 2, (v[2] + v[3]) / 2];
-
-    }
+    const amat = (v) => [v[0], v[1], (-v[2] + 3 * v[3]) / 2, (v[2] + v[3]) / 2];
 
     // CFV
     // (0, 0, 0, 1)
-    const bmat = (v) => {
-
-        return [v[0], v[1], v[2], -v[3]];
-
-    }
+    const bmat = (v) => [v[0], v[1], v[2], -v[3]];
 
     // CEV
     // (2 cn ** 2, 2, 1, 1)
@@ -44,17 +36,9 @@ const triangleData = (n) => {
 
     // FEV
     // (0, 1, 0, 0)
-    const dmat = (v) => {
+    const dmat = (v) => [v[0], -v[1], v[2], v[3]];
 
-        return [v[0], -v[1], v[2], v[3]];
-
-    }
-
-    const emat = (v) => {
-
-        return v;
-
-    }
+    const emat = (v) => V;
 
     const fmat =
         (n == 3) ? (v) => [
@@ -348,7 +332,7 @@ const triangleData = (n) => {
 
         flip: (v) => {
 
-            return [v[0], v[1], v[2], v[3]];
+            return [v[0], v[2], v[3], v[1]];
 
         }
 

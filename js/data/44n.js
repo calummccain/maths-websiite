@@ -1,319 +1,332 @@
 // Order n square
 
 import { boundaries } from "./geometry-decider.js";
+import * as VF from "../maths-functions/vector-functions.js";
+import * as HF from "../maths-functions/hyperbolic-functions.js";
+
+const eps = 1e-4;
 
 const squareData = (n) => {
 
     const metric = boundaries(n, 2, 4);
+    const c = Math.cos(Math.PI / n) ** 2;
+    const den = Math.sqrt(Math.abs(1 - 2 * c));
+
+    const V = [1, 0, 1, 0];
+    const E = [2, 0, 1, 1];
+    const F = [1, 0, 0, 0];
+    const C = [1, 1, 0, 0];
+
+    // CFE
+    // ()
+    const amat = (v) => [v[0], v[1], v[3], v[2]];
+
+    // CFV
+    // ()
+    const bmat = (v) => [v[0], v[1], v[2], -v[3]]
+
+    // CEV
+    // ()
+    const cmat =
+        (n == 4) ? (v) => [
+            2 * v[0] - v[1] / 2 - v[2] - v[3],
+            2 * v[0] - 2 * v[2] - 2 * v[3],
+            v[0] - v[1] / 2 - v[3],
+            v[0] - v[1] / 2 - v[2]
+        ] : (v) => [
+            (1 + 2 * c) * v[0] - 2 * (c ** 2) * v[1] - 2 * c * v[2] - 2 * c * v[3],
+            2 * v[0] + (1 - 2 * c) * v[1] - 2 * v[2] - 2 * v[3],
+            v[0] - c * v[1] - v[3],
+            v[0] - c * v[1] - v[2]
+        ];
+
+    // FEV
+    // ()
+    const dmat = (v) => [v[0], -v[1], v[2], v[3]];
+
+    const emat = (v) => v;
+
+    const fmat =
+        (n == 4) ? (v) => [
+            v[0],
+            v[1] / 2,
+            v[2],
+            v[3]
+        ] : (v) => [
+            v[0] / den,
+            c * v[1] / den,
+            Math.sqrt(2 * c) * v[2] / den,
+            Math.sqrt(2 * c) * v[3] / den
+        ];
+
+    function makeVertices() {
+
+        var verts = [
+            [1, 0, 1, 0],
+            [1, 0, -1, 0],
+            [1, 0, 0, 1],
+            [1, 0, 0, -1]
+        ];
+
+        var newVerts = [];
+
+        for (var i = 0; i < fNames.length; i++) {
+
+            var testVertices = VF.transformVertices(verts, fNames[i], matrixDict);
+
+            testVertices.forEach((vector) => {
+                if (!(VF.isInArray(vector, verts) || VF.isInArray(vector, newVerts))) {
+
+                    newVerts.push(vector);
+
+                }
+            })
+
+        }
+
+        verts = verts.concat(newVerts);
+
+        return verts;
+
+    }
+
+    function makeEdges() {
+
+        var edges = [
+            VF.vectorScale([2, 0, 1, 1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 1, 1]))))),
+            VF.vectorScale([2, 0, 1, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 1, -1]))))),
+            VF.vectorScale([2, 0, -1, 1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, -1, 1]))))),
+            VF.vectorScale([2, 0, -1, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, -1, -1])))))
+        ];
+
+        var newEdges = [];
+
+        for (var i = 0; i < fNames.length; i++) {
+
+            var testEdges = VF.transformVertices(edges, fNames[i], matrixDict);
+
+            testEdges.forEach((vector) => {
+                if (!(VF.isInArray(vector, edges) || VF.isInArray(vector, newEdges))) {
+
+                    newEdges.push(vector);
+
+                }
+            })
+
+        }
+
+        edges = edges.concat(newEdges);
+
+        return edges;
+
+    }
+
+    function matrixDict(letter, v) {
+
+        if (letter === "a") {
+
+            return amat(v);
+
+        } else if (letter === "b") {
+
+            return bmat(v);
+
+        } else if (letter === "c") {
+
+            return cmat(v);
+
+        } else if (letter === "d") {
+
+            return dmat(v);
+
+        } else if (letter === "e") {
+
+            return emat(v);
+
+        } else if (letter === "f") {
+
+            return fmat(v);
+
+        } else {
+
+            throw 'letter needs to be one of a, b, c, d, e, f!';
+
+        }
+
+    }
+
+    function makeFaces() {
+
+        var faces = [[(n == 4) ? 1 : den, 0, 0, 0]];
+        var faceNames = [""];
+        const maxFaces = 100;
+        var i = 1;
+
+        while (i < maxFaces) {
+
+            var j = 0
+            var append = "c";
+            var newFaces = [];
+            var newNames = [];
+
+            while (j < 4) {
+
+                const testCenters = VF.transformVertices(faces, append, matrixDict);
+
+                for (var k = 0; k < testCenters.length; k++) {
+
+                    if (!(VF.isInArray(testCenters[k], faces) || VF.isInArray(testCenters[k], newFaces))) {
+                        newFaces.push(testCenters[k]);
+                        newNames.push(append + faceNames[k]);
+                    }
+
+                }
+
+                append = "ab" + append;
+                j++;
+
+            }
+
+            faces = faces.concat(newFaces);
+            faceNames = faceNames.concat(newNames);
+
+            i = faces.length;
+
+        }
+
+        return [faces, faceNames];
+
+    }
+
+    function generateFaceData() {
+
+        var faceData = [];
+        var fv = 0;
+
+        if (metric !== "p") {
+
+            fv = Math.abs(1 / (1 - 2 * c));
+
+        } else {
+
+            fv = 1;
+
+        }
+
+        f.forEach((face) => {
+
+            var nearestPoints = [];
+            var j = 0;
+
+            for (var i = 0; i < v.length; i++) {
+
+                if (j === 4) {
+
+                    break;
+
+                }
+
+                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - fv) < eps) {
+
+                    nearestPoints.push(i)
+                    j++;
+
+                }
+
+            }
+
+            faceData.push(nearestPoints);
+
+        })
+
+        return faceData;
+
+    }
+
+    function generateEdgeData() {
+
+        var edgeData = [];
+        var ev = 0;
+
+        if (metric !== "p") {
+
+            ev = Math.abs((1 - c) / (1 - 2 * c));
+
+        } else {
+
+            ev = HF.hyperboloidInnerProduct(fmat(v[0]), fmat(e[0])) ** 2;
+
+        }
+
+        e.forEach((edge) => {
+
+            var nearestPoints = [];
+            var j = 0;
+
+            for (var i = 0; i < v.length; i++) {
+
+                if (j === 2) {
+
+                    break;
+
+                }
+
+                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - ev) < eps) {
+
+                    nearestPoints.push(i)
+                    j++;
+
+                }
+
+            }
+
+            edgeData.push(nearestPoints);
+
+        })
+
+        return edgeData;
+
+    }
+
+    const [f, fNames] = makeFaces();
+    const v = makeVertices();
+    const e = makeEdges();
+    const faceData = generateFaceData();
+    const edgeData = generateEdgeData();
 
     return {
-        
-        vertices: [
-            [43, 84, -7, -6], [33, 64, -7, -4], [27, 52, -7, -2], [25, 48, -7, 0],
-            [27, 52, -7, 2], [33, 64, -7, 4], [43, 84, -7, 6], [43, 84, -6, -7],
-            [31, 60, -6, -5], [23, 44, -6, -3], [19, 36, -6, -1], [19, 36, -6, 1],
-            [23, 44, -6, 3], [31, 60, -6, 5], [43, 84, -6, 7], [31, 60, -5, -6],
-            [21, 40, -5, -4], [15, 28, -5, -2], [13, 24, -5, 0], [15, 28, -5, 2],
-            [21, 40, -5, 4], [31, 60, -5, 6], [33, 64, -4, -7], [21, 40, -4, -5],
-            [13, 24, -4, -3], [9, 16, -4, -1], [9, 16, -4, 1], [13, 24, -4, 3],
-            [21, 40, -4, 5], [33, 64, -4, 7], [23, 44, -3, -6], [13, 24, -3, -4],
-            [7, 12, -3, -2], [5, 8, -3, 0], [7, 12, -3, 2], [13, 24, -3, 4],
-            [23, 44, -3, 6], [27, 52, -2, -7], [15, 28, -2, -5], [7, 12, -2, -3],
-            [3, 4, -2, -1], [3, 4, -2, 1], [7, 12, -2, 3], [15, 28, -2, 5],
-            [27, 52, -2, 7], [19, 36, -1, -6], [9, 16, -1, -4], [3, 4, -1, -2],
-            [1, 0, -1, 0], [3, 4, -1, 2], [9, 16, -1, 4], [19, 36, -1, 6],
-            [25, 48, 0, -7], [13, 24, 0, -5], [5, 8, 0, -3], [1, 0, 0, -1],
-            [1, 0, 0, 1], [5, 8, 0, 3], [13, 24, 0, 5], [25, 48, 0, 7],
-            [19, 36, 1, -6], [9, 16, 1, -4], [3, 4, 1, -2], [1, 0, 1, 0],
-            [3, 4, 1, 2], [9, 16, 1, 4], [19, 36, 1, 6], [27, 52, 2, -7],
-            [15, 28, 2, -5], [7, 12, 2, -3], [3, 4, 2, -1], [3, 4, 2, 1],
-            [7, 12, 2, 3], [15, 28, 2, 5], [27, 52, 2, 7], [23, 44, 3, -6],
-            [13, 24, 3, -4], [7, 12, 3, -2], [5, 8, 3, 0], [7, 12, 3, 2],
-            [13, 24, 3, 4], [23, 44, 3, 6], [33, 64, 4, -7], [21, 40, 4, -5],
-            [13, 24, 4, -3], [9, 16, 4, -1], [9, 16, 4, 1], [13, 24, 4, 3],
-            [21, 40, 4, 5], [33, 64, 4, 7], [31, 60, 5, -6], [21, 40, 5, -4],
-            [15, 28, 5, -2], [13, 24, 5, 0], [15, 28, 5, 2], [21, 40, 5, 4],
-            [31, 60, 5, 6], [43, 84, 6, -7], [31, 60, 6, -5], [23, 44, 6, -3],
-            [19, 36, 6, -1], [19, 36, 6, 1], [23, 44, 6, 3], [31, 60, 6, 5],
-            [43, 84, 6, 7], [43, 84, 7, -6], [33, 64, 7, -4], [27, 52, 7, -2],
-            [25, 48, 7, 0], [27, 52, 7, 2], [33, 64, 7, 4], [43, 84, 7, 6]
-        ],
 
-        edges: [
-            [0, 7], [0, 8], [1, 8], [1, 9], [2, 9],
-            [2, 10], [3, 10], [3, 11], [4, 11], [4, 12],
-            [5, 12], [5, 13], [6, 13], [6, 14], [7, 15],
-            [8, 15], [8, 16], [9, 16], [9, 17], [10, 17],
-            [10, 18], [11, 18], [11, 19], [12, 19], [12, 20],
-            [13, 20], [13, 21], [14, 21], [15, 22], [15, 23],
-            [16, 23], [16, 24], [17, 24], [17, 25], [18, 25],
-            [18, 26], [19, 26], [19, 27], [20, 27], [20, 28],
-            [21, 28], [21, 29], [22, 30], [23, 30], [23, 31],
-            [24, 31], [24, 32], [25, 32], [25, 33], [26, 33],
-            [26, 34], [27, 34], [27, 35], [28, 35], [28, 36],
-            [29, 36], [30, 37], [30, 38], [31, 38], [31, 39],
-            [32, 39], [32, 40], [33, 40], [33, 41], [34, 41],
-            [34, 42], [35, 42], [35, 43], [36, 43], [36, 44],
-            [37, 45], [38, 45], [38, 46], [39, 46], [39, 47],
-            [40, 47], [40, 48], [41, 48], [41, 49], [42, 49],
-            [42, 50], [43, 50], [43, 51], [44, 51], [45, 52],
-            [45, 53], [46, 53], [46, 54], [47, 54], [47, 55],
-            [48, 55], [48, 56], [49, 56], [49, 57], [50, 57],
-            [50, 58], [51, 58], [51, 59], [52, 60], [53, 60],
-            [53, 61], [54, 61], [54, 62], [55, 62], [55, 63],
-            [56, 63], [56, 64], [57, 64], [57, 65], [58, 65],
-            [58, 66], [59, 66], [60, 67], [60, 68], [61, 68],
-            [61, 69], [62, 69], [62, 70], [63, 70], [63, 71],
-            [64, 71], [64, 72], [65, 72], [65, 73], [66, 73],
-            [66, 74], [67, 75], [68, 75], [68, 76], [69, 76],
-            [69, 77], [70, 77], [70, 78], [71, 78], [71, 79],
-            [72, 79], [72, 80], [73, 80], [73, 81], [74, 81],
-            [75, 82], [75, 83], [76, 83], [76, 84], [77, 84],
-            [77, 85], [78, 85], [78, 86], [79, 86], [79, 87],
-            [80, 87], [80, 88], [81, 88], [81, 89], [82, 90],
-            [83, 90], [83, 91], [84, 91], [84, 92], [85, 92],
-            [85, 93], [86, 93], [86, 94], [87, 94], [87, 95],
-            [88, 95], [88, 96], [89, 96], [90, 97], [90, 98],
-            [91, 98], [91, 99], [92, 99], [92, 100], [93, 100],
-            [93, 101], [94, 101], [94, 102], [95, 102], [95, 103],
-            [96, 103], [96, 104], [97, 105], [98, 105], [98, 106],
-            [99, 106], [99, 107], [100, 107], [100, 108], [101, 108],
-            [101, 109], [102, 109], [102, 110], [103, 110], [103, 111],
-            [104, 111]
-        ],
+        vertices: v,
 
-        faces: [
-            [63, 56, 48, 55], [71, 64, 56, 63], [70, 63, 55, 62],
-            [56, 49, 41, 48], [78, 71, 63, 70], [55, 48, 40, 47],
-            [64, 57, 49, 56], [79, 72, 64, 71], [62, 55, 47, 54],
-            [77, 70, 62, 69], [48, 41, 33, 40], [86, 79, 71, 78],
-            [49, 42, 34, 41], [85, 78, 70, 77], [72, 65, 57, 64],
-            [47, 40, 32, 39], [57, 50, 42, 49], [69, 62, 54, 61],
-            [87, 80, 72, 79], [54, 47, 39, 46], [41, 34, 26, 33],
-            [93, 86, 78, 85], [84, 77, 69, 76], [40, 33, 25, 32],
-            [94, 87, 79, 86], [65, 58, 50, 57], [42, 35, 27, 34],
-            [92, 85, 77, 84], [80, 73, 65, 72], [61, 54, 46, 53],
-            [39, 32, 24, 31], [50, 43, 35, 42], [76, 69, 61, 68],
-            [33, 26, 18, 25], [101, 94, 86, 93], [95, 88, 80, 87],
-            [46, 39, 31, 38], [34, 27, 19, 26], [100, 93, 85, 92],
-            [73, 66, 58, 65], [91, 84, 76, 83], [32, 25, 17, 24],
-            [102, 95, 87, 94], [58, 51, 43, 50], [68, 61, 53, 60],
-            [35, 28, 20, 27], [99, 92, 84, 91], [88, 81, 73, 80],
-            [53, 46, 38, 45], [26, 19, 11, 18], [108, 101, 93, 100],
-            [31, 24, 16, 23], [43, 36, 28, 35], [83, 76, 68, 75],
-            [25, 18, 10, 17], [109, 102, 94, 101], [66, 59, 51, 58],
-            [103, 96, 88, 95], [38, 31, 23, 30], [27, 20, 12, 19],
-            [107, 100, 92, 99], [81, 74, 66, 73], [60, 53, 45, 52],
-            [98, 91, 83, 90], [24, 17, 9, 16], [110, 103, 95, 102],
-            [51, 44, 36, 43], [75, 68, 60, 67], [18, 11, 3, 10],
-            [28, 21, 13, 20], [106, 99, 91, 98], [96, 89, 81, 88],
-            [45, 38, 30, 37], [19, 12, 4, 11], [23, 16, 8, 15],
-            [36, 29, 21, 28], [90, 83, 75, 82], [17, 10, 2, 9],
-            [111, 104, 96, 103], [30, 23, 15, 22], [20, 13, 5, 12],
-            [105, 98, 90, 97], [16, 9, 1, 8], [21, 14, 6, 13],
-            [15, 8, 0, 7]
-        ],
+        edges: edgeData,
 
-        numVertices: 112,
+        faces: faceData,
 
-        numEdges: 196,
+        numVertices: v.length,
 
-        numFaces: 85,
+        numEdges: edgeData.length,
+
+        numFaces: faceData.length,
 
         numSides: 4,
 
-        // cfe
-        a: (v) => {
+        a: amat,
 
-            return [v[0], v[1], v[3], v[2]];
+        b: bmat,
 
-        },
+        c: cmat,
 
-        //cfv
-        b: (v) => {
+        d: dmat,
 
-            return [v[0], v[1], v[2], -v[3]];
+        e: emat,
 
-        },
+        f: fmat,
 
-        //fev
-        c: (v) => {
+        conversion: (v) => [1 + c * v[1], v[1], v[2], v[3]],
 
-            return [v[0], -v[1], v[2], v[3]];
+        faceReflections: fNames,
 
-        },
-
-        //cev
-        d: (v) => {
-
-            if (n == 4) {
-
-                return [
-                    2 * v[0] - v[1] / 2 - v[2] - v[3],
-                    2 * v[0] - 2 * v[2] - 2 * v[3],
-                    v[0] - v[1] / 2 - v[3],
-                    v[0] - v[1] / 2 - v[2]
-                ];
-
-            } else {
-
-                const c = Math.cos(Math.PI / n) ** 2;
-                return [
-                    (1 + 2 * c) * v[0] - 2 * (c ** 2) * v[1] - 2 * c * v[2] - 2 * c * v[3],
-                    2 * v[0] + (1 - 2 * c) * v[1] - 2 * v[2] - 2 * v[3],
-                    v[0] - c * v[1] - v[3],
-                    v[0] - c * v[1] - v[2]
-                ];
-
-            }
-
-        },
-
-        e: (v) => {
-
-            return [v[0], v[1], v[2], v[3]];
-
-        },
-
-        f: (v) => {
-
-            if (n == 4) {
-
-                return [
-                    v[0],
-                    v[1] / 2,
-                    v[2],
-                    v[3]
-                ];
-
-            } else {
-
-                const c = Math.cos(Math.PI / n) ** 2;
-                const den = Math.sqrt(Math.abs(1 - 2 * c));
-                return [
-                    v[0] / den,
-                    c * v[1] / den,
-                    Math.sqrt(2 * c) * v[2] / den,
-                    Math.sqrt(2 * c) * v[3] / den
-                ];
-
-            }
-
-        },
-
-        conversion: (v) => {
-
-            var c = Math.cos(Math.PI / n) ** 2;
-            return [1 + c * v[1], v[1], v[2], v[3]];
-
-        },
-
-        face: () => {
-
-            if (n == 4) {
-
-                return [1, 0, 0, 0];
-
-            } else {
-
-                var c = Math.cos(Math.PI / n) ** 2;
-                return [Math.sqrt(Math.abs(1 - 2 * c)), 0, 0, 0];
-
-            }
-
-        },
-
-        faceReflections: [
-            '',
-            'd',
-            'bd',
-            'abd',
-            'dbd',
-            'babd',
-            'dabd',
-            'dbabd',
-            'bdabd',
-            'bdbabd',
-            'abdabd',
-            'dbdabd',
-            'abdbabd',
-            'dbdbabd',
-            'dabdabd',
-            'babdbabd',
-            'dabdbabd',
-            'bdabdabd',
-            'dbabdbabd',
-            'bdabdbabd',
-            'abdabdabd',
-            'dbdabdabd',
-            'bdbabdbabd',
-            'abdabdbabd',
-            'dbdabdbabd',
-            'dabdabdabd',
-            'abdbabdbabd',
-            'dbdbabdbabd',
-            'dabdabdbabd',
-            'bdabdabdabd',
-            'babdbabdbabd',
-            'dabdbabdbabd',
-            'bdabdabdbabd',
-            'abdabdabdabd',
-            'dbdabdabdabd',
-            'dbabdbabdbabd',
-            'bdabdbabdbabd',
-            'abdabdabdbabd',
-            'dbdabdabdbabd',
-            'dabdabdabdabd',
-            'bdbabdbabdbabd',
-            'abdabdbabdbabd',
-            'dbdabdbabdbabd',
-            'dabdabdabdbabd',
-            'bdabdabdabdabd',
-            'abdbabdbabdbabd',
-            'dbdbabdbabdbabd',
-            'dabdabdbabdbabd',
-            'bdabdabdabdbabd',
-            'abdabdabdabdabd',
-            'dbdabdabdabdabd',
-            'babdbabdbabdbabd',
-            'dabdbabdbabdbabd',
-            'bdabdabdbabdbabd',
-            'abdabdabdabdbabd',
-            'dbdabdabdabdbabd',
-            'dabdabdabdabdabd',
-            'dbabdbabdbabdbabd',
-            'bdabdbabdbabdbabd',
-            'abdabdabdbabdbabd',
-            'dbdabdabdbabdbabd',
-            'dabdabdabdabdbabd',
-            'bdabdabdabdabdabd',
-            'bdbabdbabdbabdbabd',
-            'abdabdbabdbabdbabd',
-            'dbdabdbabdbabdbabd',
-            'dabdabdabdbabdbabd',
-            'bdabdabdabdabdbabd',
-            'abdabdabdabdabdabd',
-            'abdbabdbabdbabdbabd',
-            'dbdbabdbabdbabdbabd',
-            'dabdabdbabdbabdbabd',
-            'bdabdabdabdbabdbabd',
-            'abdabdabdabdabdbabd',
-            'babdbabdbabdbabdbabd',
-            'dabdbabdbabdbabdbabd',
-            'bdabdabdbabdbabdbabd',
-            'abdabdabdabdbabdbabd',
-            'dbabdbabdbabdbabdbabd',
-            'bdabdbabdbabdbabdbabd',
-            'abdabdabdbabdbabdbabd',
-            'bdbabdbabdbabdbabdbabd',
-            'abdabdbabdbabdbabdbabd',
-            'abdbabdbabdbabdbabdbabd',
-            'babdbabdbabdbabdbabdbabd'
-        ],
-
-        outerReflection: "c",
-
-        center: [1, 1, 0, 0],
+        outerReflection: "d",
 
         // 3 4 5 6 7
         // h p u u u
