@@ -71,7 +71,11 @@ const triangleData = (n) => {
 
     function makeVertices() {
 
-        var verts = [[1, 0, 2, 0], [1, 0, -1, -1], [1, 0, -1, 1]];
+        var verts = [
+            [1, 0, 2, 0],
+            [1, 0, -1, -1],
+            [1, 0, -1, 1]
+        ];
 
         var newVerts = [];
 
@@ -98,7 +102,7 @@ const triangleData = (n) => {
     function makeEdges() {
 
         var edges = [
-            VF.vectorScale([1+2*c, 0, 1, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 1, -1]))))),
+            VF.vectorScale([2, 0, 1, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 1, -1]))))),
             VF.vectorScale([2, 0, 1, 1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 1, 1]))))),
             VF.vectorScale([1, 0, -1, 0], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([1, 0, -1, 0])))))
         ];
@@ -161,7 +165,7 @@ const triangleData = (n) => {
 
     function makeFaces() {
 
-        var faces = [F];
+        var faces = [[(n == 3) ? 1 : den, 0, 0, 0]];
         var faceNames = [""];
         const maxFaces = 40;
         var i = 1;
@@ -326,11 +330,11 @@ const triangleData = (n) => {
 
         f: fmat,
 
-        // conversion: (v) => {
+        conversion: (v) => {
 
-        //     return [1 + c * v[0], v[1], v[2], v[3]];
+            return [1 + c * v[1], v[1], v[2], v[3]];
 
-        // },
+        },
 
         faceReflections: fNames,
 
