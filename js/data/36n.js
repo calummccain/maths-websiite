@@ -167,7 +167,7 @@ const triangleData = (n) => {
 
         var faces = [[(n == 3) ? 1 : den, 0, 0, 0]];
         var faceNames = [""];
-        const maxFaces = 40;
+        const maxFaces = 100;
         var i = 1;
 
         while (i < maxFaces) {
@@ -348,7 +348,7 @@ const triangleData = (n) => {
 
         flip: (v) => {
 
-            return [v[0], v[2], v[3], v[1]];
+            return [v[0], v[1], v[2], v[3]];
 
         }
 
