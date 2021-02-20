@@ -18,15 +18,15 @@ const hexagonData = (n) => {
     // const C = [1, 1, 0, 0];
 
     // CFE
-    // ()
+    // (0, 0, 1, -1)
     const amat = (v) => [v[0], v[1], (v[2] + 3 * v[3]) / 2, (v[2] - v[3]) / 2];
 
     // CFV
-    // ()
+    // (0, 0, 0, 1)
     const bmat = (v) => [v[0], v[1], v[2], -v[3]];
 
     // CEV
-    // ()
+    // (2 cos^2, 2 * cos^2, 3, 1)
     const cmat = (v) => [
         (1 + 2 * c) * v[0] - 2 * (c ** 2) * v[1] - c * v[2] - c * v[3],
         2 * v[0] + (1 - 2 * c) * v[1] - v[2] - v[3],
@@ -35,17 +35,17 @@ const hexagonData = (n) => {
     ];
 
     // FEV
-    // ()
+    // (0, 1, 0, 0)
     const dmat = (v) => [v[0], -v[1], v[2], v[3]];
 
     const emat = (v) => v;
 
     const fmat =
         (n == 6) ? (v) => [
-            Math.sqrt(3) * v[0],
-            Math.sqrt(27 / 16) * v[1],
-            Math.sqrt(3 / 4) * v[2],
-            Math.sqrt(9 / 4) * v[3]
+            v[0],
+            3 * v[1] / 4,
+            v[2] / 2,
+            Math.sqrt(3) * v[3] / 2
         ] : (v) => [
             v[0] / den,
             c * v[1] / den,
@@ -92,9 +92,9 @@ const hexagonData = (n) => {
             VF.vectorScale([2, 0, 3, 1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 3, 1]))))),
             VF.vectorScale([2, 0, 0, 2], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 0, 2]))))),
             VF.vectorScale([2, 0, -3, 1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, -3, 1]))))),
-            VF.vectorScale([2, 0, -1, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, -1, -1]))))),
+            VF.vectorScale([2, 0, -3, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, -3, -1]))))),
             VF.vectorScale([2, 0, 0, -2], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 0, -2]))))),
-            VF.vectorScale([2, 0, 1, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 1, -1])))))
+            VF.vectorScale([2, 0, 3, -1], 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat([2, 0, 3, -1])))))
         ];
 
         var newEdges = [];
@@ -157,7 +157,7 @@ const hexagonData = (n) => {
 
         var faces = [[(n == 6) ? 1 : den, 0, 0, 0]];
         var faceNames = [""];
-        const maxFaces = 100;
+        const maxFaces = 80;
         var i = 1;
 
         while (i < maxFaces) {
@@ -203,11 +203,11 @@ const hexagonData = (n) => {
 
         if (metric !== "p") {
 
-            fv = Math.abs(1 / (1 - 4 * c));
+            fv = Math.abs(1 / (1 - 4 * c / 3));
 
         } else {
 
-            fv = 1;
+            fv = HF.hyperboloidInnerProduct(fmat(v[0]), fmat(f[0])) ** 2;
 
         }
 
@@ -320,8 +320,6 @@ const hexagonData = (n) => {
 
         f: fmat,
 
-        conversion: (v) => [1 + c * v[1], v[1], v[2], v[3]],
-
         faceReflections: fNames,
 
         outerReflection: "d",
@@ -332,11 +330,7 @@ const hexagonData = (n) => {
 
         cellType: "euclidean",
 
-        flip: (v) => {
-
-            return [v[0], v[2], v[3], v[1]];
-
-        }
+        flip: (v) => [v[0], v[2], v[3], v[1]],
 
     }
 

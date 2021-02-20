@@ -314,12 +314,6 @@ const triangleData = (n) => {
 
         f: fmat,
 
-        conversion: (v) => {
-
-            return [1 + c * v[1], v[1], v[2], v[3]];
-
-        },
-
         faceReflections: fNames,
 
         outerReflection: "d",
@@ -330,11 +324,7 @@ const triangleData = (n) => {
 
         cellType: "euclidean",
 
-        flip: (v) => {
-
-            return [v[0], v[2], v[3], v[1]];
-
-        }
+        flip: (v) => [v[0], v[2], v[3], v[1]],
 
     }
 
