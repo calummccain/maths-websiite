@@ -40,7 +40,7 @@ function sphericalGeometry(data, transform, refinement, d) {
         }
 
     }
-    console.log(data.vertices)
+
     // Transform the 'central' cell's vertices to the transformed cell's vertices
     var newVertices = VF.transformVertices(data.vertices, transform, matrixDict);
 

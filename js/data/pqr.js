@@ -18,16 +18,19 @@ const pqrData = (p, q, r) => {
 
     const qr = (q - 2) * (r - 2);
 
-    const faceCenter = [(qr === 4 ? 1 : sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1))), 0, 0, 0];
+    const den = sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2));
 
-    // cfe
-    const amat = (v) => {
+    const V = [1, 0, cp(1), sp(1)];
+    const E = [1, 0, cp(1), 0];
+    const F = [(qr === 4 ? 1 : sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1))), 0, 0, 0];
+    const C = [cp(1) * cq(1) / (sp(1) * cr(1)), 1, 0, 0];
 
-        return [v[0], v[1], v[2], -v[3]];
+    // CFE
+    // (0, 0, 0, 1)
+    const amat = (v) => [v[0], v[1], v[2], -v[3]];
 
-    }
-
-    //cfv
+    // CFV
+    // (0, 0, sp -cq)
     const bmat = (v) => {
 
         const c = cp(2);
@@ -37,7 +40,8 @@ const pqrData = (p, q, r) => {
 
     }
 
-    //cev
+    // CEV
+    // (sp ** 2 sr ** 2 - cq ** 2, -cp cq cr sp, -cp cq ** 2, 0)
     const cmat = (v) => {
 
         const cqc = cq(1);
@@ -57,39 +61,18 @@ const pqrData = (p, q, r) => {
 
     }
 
-    // fev
-    const dmat = (v) => {
+    // FEV
+    // (0, 1, 0, 0)
+    const dmat = (v) => [v[0], -v[1], v[2], v[3]];
 
-        return [v[0], -v[1], v[2], v[3]];
+    const emat = (v) => v;
 
-    }
-
-    const emat = (v) => {
-
-        return v;
-
-    }
-
-    const fmat = (v) => {
-
-        if (qr === 4) {
-
-            return v;
-
-        } else {
-
-            const den = sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2));
-
-            return [
-                cp(1) * cq(1) * v[0] / den,
-                Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[1] / den,
-                Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[2] / den,
-                Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[3] / den
-            ];
-
-        }
-
-    }
+    const fmat = (qr == 4) ? (v) => v : (v) => [
+        cp(1) * cq(1) * v[0] / den,
+        Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[1] / den,
+        Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[2] / den,
+        Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[3] / den
+    ];
 
     function makeVertices() {
 
@@ -193,7 +176,7 @@ const pqrData = (p, q, r) => {
 
     function makeFaces() {
 
-        var faces = [faceCenter];
+        var faces = [F];
         var faceNames = [""];
         const maxFaces = 40;
         var i = 1;
@@ -329,6 +312,7 @@ const pqrData = (p, q, r) => {
     const e = makeEdges();
     const faceData = generateFaceData();
     const edgeData = generateEdgeData();
+    const metric = (qr < 4) ? "h" : (qr == 4) ? "p" : "u";
 
     return {
 
@@ -346,16 +330,12 @@ const pqrData = (p, q, r) => {
 
         numSides: p,
 
-        // cfe
         a: amat,
 
-        //cfv
         b: bmat,
 
-        //cev
         c: cmat,
 
-        // fev
         d: dmat,
 
         e: emat,
@@ -366,45 +346,23 @@ const pqrData = (p, q, r) => {
 
         outerReflection: "d",
 
-        // center: [1, 1, 0, 0],
+        //(1, 0, cp, sp)
+        V: V,
 
-        face: () => {
+        //(1, 0, cp, 0)
+        E: E,
 
-            return faceCenter;
+        //(sp sqrt(sr ** 2 - cq ** 2) / (cp cq), 0, 0, 0)
+        F: F,
 
-        },
+        //(cp * cq / (sp * cr), 1, 0, 0)
+        C: C,
 
-        metric: () => {
-
-            return "hyperbolic";
-
-        },
-
-        compact: () => {
-
-            if (qr < 4) {
-
-                return "compact";
-
-            } else if (qr === 4) {
-
-                return "paracompact";
-
-            } else {
-
-                return "uncompact";
-
-            }
-
-        },
+        metric: metric,
 
         cellType: "hyperbolic",
 
-        flip: (v) => {
-
-            return [v[0], v[2], v[3], v[1]];
-
-        },
+        flip: (v) => [v[0], v[2], v[3], v[1]],
 
     }
 
