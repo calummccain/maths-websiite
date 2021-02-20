@@ -7,11 +7,7 @@ function squareGeometry(transform, order, refinement, model) {
 
     const d = 1;
 
-    var data = squareData(order);
-
-    const newVertices = [];
-    data.vertices.forEach((v) => { newVertices.push(data.conversion(v)) });
-    data.vertices = newVertices;
+    const data = squareData(order);
 
     var square;
 
