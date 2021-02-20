@@ -27,11 +27,7 @@ const pqrData = (p, q, r) => {
 
     // CFE
     // (0, 0, 0, 1)
-    const amat = (v) => {
-
-        return [v[0], v[1], v[2], -v[3]];
-
-    }
+    const amat = (v) => [v[0], v[1], v[2], -v[3]];
 
     // CFV
     // (0, 0, sp -cq)
@@ -67,17 +63,9 @@ const pqrData = (p, q, r) => {
 
     // FEV
     // (0, 1, 0, 0)
-    const dmat = (v) => {
+    const dmat = (v) => [v[0], -v[1], v[2], v[3]];
 
-        return [v[0], -v[1], v[2], v[3]];
-
-    }
-
-    const emat = (v) => {
-
-        return v;
-
-    }
+    const emat = (v) => v;
 
     const fmat = (qr == 4) ? (v) => v : (v) => [
         cp(1) * cq(1) * v[0] / den,
@@ -374,11 +362,7 @@ const pqrData = (p, q, r) => {
 
         cellType: "hyperbolic",
 
-        flip: (v) => {
-
-            return [v[0], v[2], v[3], v[1]];
-
-        },
+        flip: (v) => [v[0], v[2], v[3], v[1]],
 
     }
 
