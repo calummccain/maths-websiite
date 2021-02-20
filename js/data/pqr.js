@@ -307,11 +307,46 @@ const pqrData = (p, q, r) => {
 
     }
 
+    function orderFaces() {
+
+        var newFaceData = [];
+
+        faceData.forEach((face) => {
+
+            var newFace = [face[0]];
+            var k = 1;
+
+            while (k < p) {
+
+                for (var i = 1; i < p; i++) {
+
+                    if (VF.isInArray([Math.min(newFace[newFace.length - 1], face[i]), Math.max(newFace[newFace.length - 1], face[i])], edgeData) && !newFace.includes(face[i])) {
+
+                        newFace.push(face[i]);
+                        k++;
+
+                    }
+
+                }
+
+            }
+
+            newFaceData.push(newFace);
+
+        })
+
+        return newFaceData;
+
+    }
+
     const [f, fNames] = makeFaces();
     const v = makeVertices();
     const e = makeEdges();
-    const faceData = generateFaceData();
+    var faceData = generateFaceData();
     const edgeData = generateEdgeData();
+
+    faceData = orderFaces();
+
     const metric = (qr < 4) ? "h" : (qr == 4) ? "p" : "u";
 
     return {

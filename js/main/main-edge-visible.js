@@ -145,18 +145,16 @@ function makeTheLines(data, number) {
 
     data.edges.forEach((endpoints) => {
 
-        var uhpVertices = [];
+        var uhpVertices = [], e1, e2;
 
         if (data.metric === "u") {
 
-            var e1 = VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]);
-            var e2 = VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]);
-            e1 = HF.kleinToUpperHalfPlane(e1);
-            e2 = HF.kleinToUpperHalfPlane(e2);
+            e1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]));
+            e2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]));
 
         } else {
 
-            var [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
+            [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
             e1 = HF.hyperboloidToUpperHalfPlane(e1);
             e2 = HF.hyperboloidToUpperHalfPlane(e2);
 
@@ -219,8 +217,8 @@ function makeTheLines(data, number) {
                 var center = spheres[j]["uhp"].center;
                 var r = spheres[j]["uhp"].radius;
 
-                var theta1 = Math.acos((p1[0] - center[0]) / r) * (p1[1] >= center[1] ? 1 : -1);
-                var theta2 = Math.acos((p2[0] - center[0]) / r) * (p2[1] >= center[1] ? 1 : -1);
+                var theta1 = Math.acos(Math.max(-1, Math.min(1, (p1[0] - center[0]) / r))) * ((p1[1] - center[1] > 0) ? 1 : -1);
+                var theta2 = Math.acos(Math.max(-1, Math.min(1, (p2[0] - center[0]) / r))) * ((p2[1] - center[1] > 0) ? 1 : -1);
 
                 var startAngle = Math.min(theta1, theta2);
                 var endAngle = Math.max(theta1, theta2);
@@ -553,7 +551,7 @@ function main() {
     scene.add(sphereGroup);
 
     window.addEventListener("resize", onWindowResize, false);
-    
+
     onWindowResize();
 
     // add the renderer to the 'view' div

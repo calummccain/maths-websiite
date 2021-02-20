@@ -288,11 +288,45 @@ const squareData = (n) => {
 
     }
 
+    function orderFaces() {
+
+        var newFaceData = [];
+
+        faceData.forEach((face) => {
+            
+            var newFace = [face[0]];
+            var k = 1;
+
+            while (k < 4) {
+
+                for (var i = 1; i < 4; i++) {
+
+                    if (VF.isInArray([Math.min(newFace[newFace.length - 1], face[i]), Math.max(newFace[newFace.length - 1], face[i])], edgeData) && !newFace.includes(face[i])) {
+
+                        newFace.push(face[i]);
+                        k++;
+
+                    }
+
+                }
+
+            }
+
+            newFaceData.push(newFace);
+
+        })
+
+        return newFaceData;
+
+    }
+
     const [f, fNames] = makeFaces();
     const v = makeVertices();
     const e = makeEdges();
-    const faceData = generateFaceData();
+    var faceData = generateFaceData();
     const edgeData = generateEdgeData();
+
+    faceData = orderFaces();
 
     return {
 
