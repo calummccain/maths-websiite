@@ -33,11 +33,7 @@ function main(name, data) {
         parseInt(name.split(",")[2].replace("}", ""))
     ];
 
-    console.log("hi")
-
     const mainData = ((order[0] - 2) * (order[1] - 2) <= 4) ? data(order[2]) : data(order[0], order[1], order[2]);
-
-    console.log(mainData)
 
     // add the main polyhedron to the scene
     UTILITIES.addCellToGroup({
