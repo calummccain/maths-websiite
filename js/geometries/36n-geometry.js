@@ -7,7 +7,7 @@ function triangularGeometry(transform, order, refinement, model) {
 
     const d = 1;
 
-    const data = triangleData(order);
+    const data = triangleData(order[2]);
 
     var triangular;
 

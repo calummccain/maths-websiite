@@ -7,7 +7,7 @@ function icosahedronGeometry(transform, order, refinement, model) {
 
     const d = 1
 
-    const data = icosahedronData(order);
+    const data = icosahedronData(order[2]);
 
     var icosahedron;
 

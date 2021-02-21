@@ -1,12 +1,12 @@
 import { pqrData } from "../data/pqr.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
-function pqrGeometry(transform, p, q, r, refinement, model) {
+function pqrGeometry(transform, order, refinement, model) {
 
-    var data = pqrData(p, q, r);
+    var data = pqrData(order[0], order[1], order[2]);
 
     const newVertices = [];
-    data.vertices.forEach((v) => { newVertices.push(v) });
+    data.vertices.forEach((v) => { newVertices.push(data.flip(v)) });
     data.vertices = newVertices;
 
     var pqr = hyperbolicGeometry(data, transform, refinement, model);

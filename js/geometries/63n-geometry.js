@@ -7,7 +7,7 @@ function hexagonalGeometry(transform, order, refinement, model) {
 
     const d = 1;
 
-    const data = hexagonData(order);
+    const data = hexagonData(order[2]);
 
     var hexagonal;
 

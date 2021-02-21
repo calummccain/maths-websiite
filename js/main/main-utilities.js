@@ -5,10 +5,10 @@ function addCellToGroup(params) {
     var geometryFunction = params.geometryFunction;
     var group = params.group;
     var refinement = params.refinement || 3;
+    var order = params.order || 0;
     var opacityValue = params.opacity || 1;
     var transform = params.transform || "";
-    var order = params.order || 0;
-    var colour = params.colour || "normal";
+    var colour = params.colour || "#" + Math.floor(Math.random() * 16777215).toString(16);
     var position = params.position || [0, 0, 0];
     var name = params.name || "";
     var faceMode = params.faceMode || false;

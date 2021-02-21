@@ -7,7 +7,7 @@ function dodecahedronGeometry(transform, order, refinement, model) {
 
     const d = 1;
 
-    const data = dodecahedronData(order);
+    const data = dodecahedronData(order[2]);
 
     var dodecahedron;
 
