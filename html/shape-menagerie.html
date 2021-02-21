@@ -12,7 +12,6 @@
         <script>
             $(function () {
                 $("#side-menu").load("./menu-bars.html");
-                $("#top-menu").load("./top-nav.html");
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             });
         </script>
@@ -25,7 +24,6 @@
     <body>
 
         <div id="side-menu"></div>
-        <div id="top-menu"></div>
 
         <script type="module">
 
@@ -90,19 +88,19 @@
 
             CONSTANTS.names.forEach((name) => {
 
+                const geometry = name.split(",");
+                console.log(geometry[0] + "," + geometry[1] + "}", parseInt(geometry[2].replace("}", "")))
+
                 MAIN.addCellToGroup({
-                    geometryFunction: geom[CONSTANTS.geometry[name]],
+                    geometryFunction: geom[geometry[0] + "," + geometry[1] + "}"],
                     group: meshes,
-                    metric: CONSTANTS.metric[name],
                     refinement: CONSTANTS.mainDefinition,
-                    order: CONSTANTS.order[name],
+                    order: parseInt(geometry[2].replace("}", "")),
                     colour: CONSTANTS.colour[name],
-                    numberOfFaces: CONSTANTS.numberOfFaces[name],
                     position: rotatePositions[name],
                     name: name,
-                    transform: CONSTANTS.transform[name],
-                    compact: CONSTANTS.compact[name],
-                    model: CONSTANTS.model[name]
+                    transform: "",
+                    model: "poincare"
                 });
 
             })

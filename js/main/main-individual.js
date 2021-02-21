@@ -1,9 +1,9 @@
-import * as MAIN from "./main-utilities.js";
+import * as UTILITIES from "./main-utilities.js";
 import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as CONSTANTS from "./main-constants.js";
 
-function main(name, geometry) {
+function main(name, geometry, order) {
 
     var view = document.getElementById("view");
 
@@ -26,22 +26,18 @@ function main(name, geometry) {
     camera.add(new THREE.HemisphereLight(0xFFFFFF, 0x000000));
 
     scene.add(camera);
-    //scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
     // add the main polyhedron to the scene
-    MAIN.addCellToGroup({
+    UTILITIES.addCellToGroup({
         geometryFunction: geometry,
         group: meshes,
-        metric: CONSTANTS.metric[name],
         refinement: CONSTANTS.individualDefinition,
-        order: CONSTANTS.order[name],
+        order: order,
         colour: CONSTANTS.colour[name],
-        numberOfFaces: CONSTANTS.numberOfFaces[name],
         name: name,
         faceMode: true,
         transform: "",
-        compact: CONSTANTS.compact[name],
-        model: CONSTANTS.modelSingle[name]
+        model: CONSTANTS.model
     });
 
     // setup the renderer
@@ -96,25 +92,22 @@ function main(name, geometry) {
         var intersects = raycaster.intersectObjects(meshes.children);
         if (intersects.length != 0) {
             var obj = intersects[0].object;
-            document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
+            document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + "d";
             var colour = new THREE.Color(
                 Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1),
                 Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1),
                 Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
             );
             document.getElementById("content2").innerHTML = colour.r;
-            MAIN.addCellToGroup({
+            UTILITIES.addCellToGroup({
                 geometryFunction: geometry,
                 group: meshes,
-                metric: CONSTANTS.metric[name],
                 refinement: CONSTANTS.individualDefinition,
-                order: CONSTANTS.order[name],
+                order: order,
                 colour: "#" + colour.getHexString(),
-                numberOfFaces: CONSTANTS.numberOfFaces[name],
                 name: name,
                 faceMode: true,
-                transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
-                compact: CONSTANTS.compact[name],
+                transform: obj.cellName + obj.faceName + "d",
                 model: CONSTANTS.model[name]
             });
         } else {
@@ -142,25 +135,22 @@ function main(name, geometry) {
         if (intersects.length != 0) {
 
             var obj = intersects[0].object;
-            document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + CONSTANTS.specialLetter[name];
+            document.getElementById("content1").innerHTML = obj.cellName + obj.faceName + "d";
             var colour = new THREE.Color(
                 Math.min(Math.max(obj.material.color.r + (2 * Math.random() - 1) / 10, 0), 1),
                 Math.min(Math.max(obj.material.color.g + (2 * Math.random() - 1) / 10, 0), 1),
                 Math.min(Math.max(obj.material.color.b + (2 * Math.random() - 1) / 10, 0), 1)
             );
             document.getElementById("content2").innerHTML = colour.r;
-            MAIN.addCellToGroup({
+            UTILITIES.addCellToGroup({
                 geometryFunction: geometry,
                 group: meshes,
-                metric: CONSTANTS.metric[name],
                 refinement: CONSTANTS.individualDefinition,
-                order: CONSTANTS.order[name],
+                order: order,
                 colour: "#" + colour.getHexString(),
-                numberOfFaces: CONSTANTS.numberOfFaces[name],
                 name: name,
                 faceMode: true,
-                transform: obj.cellName + obj.faceName + CONSTANTS.specialLetter[name],
-                compact: CONSTANTS.compact[name],
+                transform: obj.cellName + obj.faceName + "d",
                 model: CONSTANTS.model[name]
             });
 
@@ -208,19 +198,16 @@ function main(name, geometry) {
                             selectedObject.material.color.b
                         );
                         mesh.material.emissive.setRGB(colour.r, colour.g, colour.b);
-                        MAIN.addCellToGroup({
+                        UTILITIES.addCellToGroup({
                             geometryFunction: geometry,
                             group: ghosts,
-                            metric: CONSTANTS.metric[name],
                             refinement: Math.max(CONSTANTS.individualDefinition - 1, 1),
-                            order: CONSTANTS.order[name],
+                            order: order,
                             colour: "#" + colour.getHexString(),
-                            numberOfFaces: CONSTANTS.numberOfFaces[name],
                             name: name,
                             faceMode: true,
-                            transform: selectedObject.cellName + selectedObject.faceName + CONSTANTS.specialLetter[name],
+                            transform: selectedObject.cellName + selectedObject.faceName + "d",
                             opacity: 0.5,
-                            compact: CONSTANTS.compact[name],
                             model: CONSTANTS.model[name]
                         });
                     } else {
