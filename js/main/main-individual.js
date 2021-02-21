@@ -110,7 +110,7 @@ function main(name, geometry) {
                 name: name,
                 faceMode: true,
                 transform: obj.cellName + obj.faceName + "d",
-                model: CONSTANTS.model[name]
+                model: CONSTANTS.model
             });
         } else {
             clickObject = null;
@@ -153,7 +153,7 @@ function main(name, geometry) {
                 name: name,
                 faceMode: true,
                 transform: obj.cellName + obj.faceName + "d",
-                model: CONSTANTS.model[name]
+                model: CONSTANTS.model
             });
 
         } else {
@@ -210,7 +210,7 @@ function main(name, geometry) {
                             faceMode: true,
                             transform: selectedObject.cellName + selectedObject.faceName + "d",
                             opacity: 0.5,
-                            model: CONSTANTS.model[name]
+                            model: CONSTANTS.model
                         });
                     } else {
                         mesh.material.emissive.setRGB(0, 0, 0);
