@@ -30,14 +30,14 @@
             import * as MAIN from "../js/main/main-utilities.js";
             import * as THREE from "../js/three.module.js";
 
-            import { tetrahedronGeometry } from "../js/geometries/33n-geometry.js";
-            import { octahedronGeometry } from "../js/geometries/34n-geometry.js";
-            import { icosahedronGeometry } from "../js/geometries/35n-geometry.js";
-            import { cubeGeometry } from "../js/geometries/43n-geometry.js";
-            import { dodecahedronGeometry } from "../js/geometries/53n-geometry.js";
-            import { hexagonalGeometry } from "../js/geometries/63n-geometry.js";
-            import { squareGeometry } from "../js/geometries/44n-geometry.js";
-            import { triangularGeometry } from "../js/geometries/36n-geometry.js";
+            import { tetrahedronData } from "../js/data/33n.js";
+            import { octahedronData } from "../js/data/34n.js";
+            import { icosahedronData } from "../js/data/35n.js";
+            import { cubeData } from "../js/data/43n.js";
+            import { dodecahedronData } from "../js/data/53n.js";
+            import { hexagonData } from "../js/data/63n.js";
+            import { squareData } from "../js/data/44n.js";
+            import { triangleData } from "../js/data/36n.js";
 
             import { MapControls } from "../js/orbit-controls.js";
             import * as CONSTANTS from "../js/main/main-constants.js";
@@ -50,7 +50,6 @@
             // constants for canvas
             // s = scale of arrangement
             // rotatePositions = where the shapes rotate
-
             const s = 3;
             const rotatePositions = CONSTANTS.rotatePositions(s);
 
@@ -73,28 +72,34 @@
             scene.add(camera);
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
-            const geom = {
-                "{3,5}": icosahedronGeometry,
-                "{5,3}": dodecahedronGeometry,
-                "{4,3}": cubeGeometry,
-                "{3,3}": tetrahedronGeometry,
-                "{3,4}": octahedronGeometry,
-                "{6,3}": hexagonalGeometry,
-                "{4,4}": squareGeometry,
-                "{3,6}": triangularGeometry
-            };
-
             // add the polyhedrons to the scene
+
+            const geom = {
+                "{3,5}": icosahedronData,
+                "{5,3}": dodecahedronData,
+                "{4,3}": cubeData,
+                "{3,3}": tetrahedronData,
+                "{3,4}": octahedronData,
+                "{6,3}": hexagonData,
+                "{4,4}": squareData,
+                "{3,6}": triangleData
+            };
 
             CONSTANTS.names.forEach((name) => {
 
-                const geometry = name.split(",");
+                const order = [
+                    parseInt(name.split(",")[0].replace("{", "")),
+                    parseInt(name.split(",")[1]),
+                    parseInt(name.split(",")[2].replace("}", ""))
+                ];
+
+                const data = geom["{" + order[0].toString() + "," + order[1].toString() + "}"];
+                const mainData = ((order[0] - 2) * (order[1] - 2) <= 4) ? data(order[2]) : data(order[0], order[1], order[2]);
 
                 MAIN.addCellToGroup({
-                    geometryFunction: geom[geometry[0] + "," + geometry[1] + "}"],
+                    data: mainData,
                     group: meshes,
                     refinement: CONSTANTS.mainDefinition,
-                    order: parseInt(geometry[2].replace("}", "")),
                     colour: CONSTANTS.colour[name],
                     position: rotatePositions[name],
                     name: name,
