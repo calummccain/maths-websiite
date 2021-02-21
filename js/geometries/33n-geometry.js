@@ -7,7 +7,7 @@ function tetrahedronGeometry(transform, order, refinement, model) {
 
     const d = 1;
 
-    const data = tetrahedronData(order);
+    const data = tetrahedronData(order[2]);
 
     var tetrahedron;
 

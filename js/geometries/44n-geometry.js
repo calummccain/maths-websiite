@@ -7,7 +7,7 @@ function squareGeometry(transform, order, refinement, model) {
 
     const d = 1;
 
-    const data = squareData(order);
+    const data = squareData(order[2]);
 
     var square;
 

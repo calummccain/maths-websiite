@@ -178,7 +178,7 @@ const pqrData = (p, q, r) => {
 
         var faces = [F];
         var faceNames = [""];
-        const maxFaces = 40;
+        const maxFaces = 70;
         var i = 1;
 
         while (i < maxFaces) {
@@ -397,7 +397,7 @@ const pqrData = (p, q, r) => {
 
         cellType: "hyperbolic",
 
-        flip: (v) => [v[0], v[2], v[3], v[1]],
+        flip: (v) => [v[0], v[1], v[2], v[3]],
 
     }
 

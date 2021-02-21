@@ -27,8 +27,9 @@ function main(name, geometry) {
 
     scene.add(camera);
 
-    const order = parseInt(name.split(",")[2].replace("}", ""));
+    const order = [parseInt(name.split(",")[0].replace("{", "")), parseInt(name.split(",")[1]), parseInt(name.split(",")[2].replace("}", ""))];
 
+    console.log(order)
     // add the main polyhedron to the scene
     UTILITIES.addCellToGroup({
         geometryFunction: geometry,

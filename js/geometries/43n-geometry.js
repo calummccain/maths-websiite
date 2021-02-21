@@ -5,7 +5,7 @@ import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function cubeGeometry(transform, order, refinement, model) {
 
-    const data = cubeData(order);
+    const data = cubeData(order[2]);
 
     const d = 1;
 

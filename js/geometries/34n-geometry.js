@@ -7,7 +7,7 @@ function octahedronGeometry(transform, order, refinement, model) {
 
     const d = 1;
 
-    const data = octahedronData(order);
+    const data = octahedronData(order[2]);
 
     var octahedron;
 
