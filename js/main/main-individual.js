@@ -3,7 +3,7 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as CONSTANTS from "./main-constants.js";
 
-function main(name, geometry) {
+function main(name, data) {
 
     var view = document.getElementById("view");
 
@@ -27,15 +27,19 @@ function main(name, geometry) {
 
     scene.add(camera);
 
-    const order = [parseInt(name.split(",")[0].replace("{", "")), parseInt(name.split(",")[1]), parseInt(name.split(",")[2].replace("}", ""))];
+    const order = [
+        parseInt(name.split(",")[0].replace("{", "")),
+        parseInt(name.split(",")[1]),
+        parseInt(name.split(",")[2].replace("}", ""))
+    ];
 
-    console.log(order)
+    const mainData = ((order[0] - 2) * (order[1] - 2) <= 4) ? data(order[2]) : data(order[0], order[1], order[2]);
+
     // add the main polyhedron to the scene
     UTILITIES.addCellToGroup({
-        geometryFunction: geometry,
+        data: mainData,
         group: meshes,
         refinement: CONSTANTS.individualDefinition,
-        order: order,
         colour: CONSTANTS.colour[name],
         name: name,
         faceMode: true,
@@ -103,10 +107,9 @@ function main(name, geometry) {
             );
             document.getElementById("content2").innerHTML = colour.r;
             UTILITIES.addCellToGroup({
-                geometryFunction: geometry,
+                data: mainData,
                 group: meshes,
                 refinement: CONSTANTS.individualDefinition,
-                order: order,
                 colour: "#" + colour.getHexString(),
                 name: name,
                 faceMode: true,
@@ -146,10 +149,9 @@ function main(name, geometry) {
             );
             document.getElementById("content2").innerHTML = colour.r;
             UTILITIES.addCellToGroup({
-                geometryFunction: geometry,
+                data: mainData,
                 group: meshes,
                 refinement: CONSTANTS.individualDefinition,
-                order: order,
                 colour: "#" + colour.getHexString(),
                 name: name,
                 faceMode: true,
@@ -202,10 +204,9 @@ function main(name, geometry) {
                         );
                         mesh.material.emissive.setRGB(colour.r, colour.g, colour.b);
                         UTILITIES.addCellToGroup({
-                            geometryFunction: geometry,
+                            data: mainData,
                             group: ghosts,
                             refinement: Math.max(CONSTANTS.individualDefinition - 1, 1),
-                            order: order,
                             colour: "#" + colour.getHexString(),
                             name: name,
                             faceMode: true,

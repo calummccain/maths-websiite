@@ -1,11 +1,11 @@
 import * as THREE from "../three.module.js";
+import * as GM from "../geometries/geometry-maker.js";
 
 function addCellToGroup(params) {
 
-    var geometryFunction = params.geometryFunction;
+    var data = params.data;
     var group = params.group;
     var refinement = params.refinement || 3;
-    var order = params.order || 0;
     var opacityValue = params.opacity || 1;
     var transform = params.transform || "";
     var colour = params.colour || "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -14,15 +14,15 @@ function addCellToGroup(params) {
     var faceMode = params.faceMode || false;
     var model = params.model || "";
 
-    var shapeGeometry, faceReflections, numberofFaces;
+    var shapeGeometry;
 
-    [shapeGeometry, faceReflections, numberofFaces] = geometryFunction(transform, order, refinement, model);
+    shapeGeometry = GM.honeycombGeometry(data, transform, refinement, model);
 
     // faceMode keeps the faces as seperate meshes (and hence seperate objects)
     // without faceMode the polyhedron is made as one mesh/object and the individual faces cannot be selected by ray-casting
     if (faceMode) {
 
-        for (var j = 0; j < numberofFaces; j++) {
+        for (var j = 0; j < data.numFaces; j++) {
 
             if (colour === "normal") {
 
@@ -54,7 +54,7 @@ function addCellToGroup(params) {
             faceMesh.position.set(position[0], position[1], position[2]);
             faceMesh.cellName = transform;
             faceMesh.name = name;
-            faceMesh.faceName = faceReflections[j];
+            faceMesh.faceName = data.faceReflections[j];
             faceMesh.params = params;
 
             group.add(faceMesh);
@@ -65,7 +65,7 @@ function addCellToGroup(params) {
 
         var cellGeometry = new THREE.Geometry();
 
-        for (var j = 0; j < numberofFaces; j++) {
+        for (var j = 0; j < data.numFaces; j++) {
 
             cellGeometry.merge(shapeGeometry[j]);
 
