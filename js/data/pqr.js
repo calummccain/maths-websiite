@@ -2,6 +2,7 @@
 
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
+import * as GT from "../maths-functions/generate-tesselations.js";
 
 const eps = 1e-4;
 
@@ -19,6 +20,8 @@ const pqrData = (p, q, r) => {
     const qr = (q - 2) * (r - 2);
 
     const den = sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2));
+
+    const metric = (qr < 4) ? "h" : (qr == 4) ? "p" : "u";
 
     const V = [1, 0, cp(1), sp(1)];
     const E = [1, 0, cp(1), 0];
@@ -74,280 +77,33 @@ const pqrData = (p, q, r) => {
         Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[3] / den
     ];
 
-    function makeVertices() {
+    var initialVerts = [];
 
-        var verts = [];
+    for (var i = 0; i < p; i++) {
 
-        for (var i = 0; i < p; i++) {
-
-            verts.push([1, 0, cp(2 * i + 1), sp(2 * i + 1)]);
-
-        }
-
-        var newVerts = [];
-
-        for (var i = 0; i < fNames.length; i++) {
-
-            var testVertices = VF.transformVertices(verts, fNames[i], matrixDict);
-
-            testVertices.forEach((vector) => {
-                if (!(VF.isInArray(vector, verts) || VF.isInArray(vector, newVerts))) {
-
-                    newVerts.push(vector);
-
-                }
-            })
-
-        }
-
-        verts = verts.concat(newVerts);
-
-        return verts;
+        initialVerts.push([1, 0, cp(2 * i + 1), sp(2 * i + 1)]);
 
     }
 
-    function makeEdges() {
+    var initialEdges = [];
 
-        var edges = [];
+    for (var i = 0; i < p; i++) {
 
-        for (var i = 0; i < p; i++) {
+        var initialEdge = [1, 0, cp(1) * cp(2 * i), cp(1) * sp(2 * i)];
 
-            var initialEdge = [1, 0, cp(1) * cp(2 * i), cp(1) * sp(2 * i)];
-
-            edges.push(VF.vectorScale(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge))))));
-
-        }
-
-        var newEdges = [];
-
-        for (var i = 0; i < fNames.length; i++) {
-
-            var testEdges = VF.transformVertices(edges, fNames[i], matrixDict);
-
-            testEdges.forEach((vector) => {
-                if (!(VF.isInArray(vector, edges) || VF.isInArray(vector, newEdges))) {
-
-                    newEdges.push(vector);
-
-                }
-            })
-
-        }
-
-        edges = edges.concat(newEdges);
-
-        return edges;
+        initialEdges.push(VF.vectorScale(initialEdge, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(fmat(initialEdge))))));
 
     }
 
-    function matrixDict(letter, v) {
-
-        if (letter === "a") {
-
-            return amat(v);
-
-        } else if (letter === "b") {
-
-            return bmat(v);
-
-        } else if (letter === "c") {
-
-            return cmat(v);
-
-        } else if (letter === "d") {
-
-            return dmat(v);
-
-        } else if (letter === "e") {
-
-            return emat(v);
-
-        } else if (letter === "f") {
-
-            return fmat(v);
-
-        } else {
-
-            throw 'letter needs to be one of a, b, c, d, e, f!';
-
-        }
-
-    }
-
-    function makeFaces() {
-
-        var faces = [F];
-        var faceNames = [""];
-        const maxFaces = 70;
-        var i = 1;
-
-        while (i < maxFaces) {
-
-            var j = 0
-            var append = "c";
-            var newFaces = [];
-            var newNames = [];
-
-            while (j < p) {
-
-                const testCenters = VF.transformVertices(faces, append, matrixDict);
-
-                for (var k = 0; k < testCenters.length; k++) {
-
-                    if (!(VF.isInArray(testCenters[k], faces) || VF.isInArray(testCenters[k], newFaces))) {
-                        newFaces.push(testCenters[k]);
-                        newNames.push(append + faceNames[k]);
-                    }
-
-                }
-
-                append = "ab" + append;
-                j++;
-
-            }
-
-            faces = faces.concat(newFaces);
-            faceNames = faceNames.concat(newNames);
-
-            i = faces.length;
-
-        }
-
-        return [faces, faceNames];
-
-    }
-
-    function generateFaceData() {
-
-        var faceData = [];
-        var fv = 0;
-
-        if (qr !== 4) {
-
-            fv = Math.abs(cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2)));
-
-        } else {
-
-            fv = 1;
-
-        }
-
-        f.forEach((face) => {
-
-            var nearestPoints = [];
-            var j = 0;
-
-            for (var i = 0; i < v.length; i++) {
-
-                if (j === p) {
-
-                    break;
-
-                }
-
-                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - fv) < eps) {
-
-                    nearestPoints.push(i)
-                    j++;
-
-                }
-
-            }
-
-            faceData.push(nearestPoints);
-
-        })
-
-        return faceData;
-
-    }
-
-    function generateEdgeData() {
-
-        var edgeData = [];
-        var ev = 0;
-
-        if (qr !== 4) {
-
-            ev = Math.abs(sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2));
-
-        } else {
-
-            ev = HF.hyperboloidInnerProduct(fmat(v[0]), fmat(e[0])) ** 2;
-
-        }
-
-        e.forEach((edge) => {
-
-            var nearestPoints = [];
-            var j = 0;
-
-            for (var i = 0; i < v.length; i++) {
-
-                if (j === 2) {
-
-                    break;
-
-                }
-
-                if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - ev) < eps) {
-
-                    nearestPoints.push(i)
-                    j++;
-
-                }
-
-            }
-
-            edgeData.push(nearestPoints);
-
-        })
-
-        return edgeData;
-
-    }
-
-    function orderFaces() {
-
-        var newFaceData = [];
-
-        faceData.forEach((face) => {
-
-            var newFace = [face[0]];
-            var k = 1;
-
-            while (k < p) {
-
-                for (var i = 1; i < p; i++) {
-
-                    if (VF.isInArray([Math.min(newFace[newFace.length - 1], face[i]), Math.max(newFace[newFace.length - 1], face[i])], edgeData) && !newFace.includes(face[i])) {
-
-                        newFace.push(face[i]);
-                        k++;
-
-                    }
-
-                }
-
-            }
-
-            newFaceData.push(newFace);
-
-        })
-
-        return newFaceData;
-
-    }
-
-    const [f, fNames] = makeFaces();
-    const v = makeVertices();
-    const e = makeEdges();
-    var faceData = generateFaceData();
-    const edgeData = generateEdgeData();
-
-    faceData = orderFaces();
-
-    const metric = (qr < 4) ? "h" : (qr == 4) ? "p" : "u";
+    const matrixDict = (letter, v) => GT.matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v);
+
+    const [f, fNames] = GT.makeFaces(F, 70, p, matrixDict);
+    const v = GT.makeVertices(initialVerts, matrixDict, fNames);
+    const e = GT.makeEdges(initialEdges, matrixDict, fNames);
+    var faceData = GT.generateFaceData(Math.abs(cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2))), p, metric, f, v, fmat);
+    const edgeData = GT.generateEdgeData(Math.abs(sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2)), metric, e, v, fmat);
+
+    faceData = GT.orderFaces(p, faceData, edgeData);
 
     return {
 
@@ -397,7 +153,7 @@ const pqrData = (p, q, r) => {
 
         cellType: "hyperbolic",
 
-        flip: (v) => [v[0], v[1], v[2], v[3]],
+        flip: (v) => [v[0], v[2], v[3], v[1]],
 
     }
 

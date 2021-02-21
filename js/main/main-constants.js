@@ -150,7 +150,7 @@ const names = [
 const individualDefinition = 3;
 const mainDefinition = 3;
 const groupRadius = 3;
-const model = "uhp";
+const model = "poincare";
 
 
 export {
