@@ -3,7 +3,7 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as CONSTANTS from "./main-constants.js";
 
-function main(name, geometry, order) {
+function main(name, geometry) {
 
     var view = document.getElementById("view");
 
@@ -26,6 +26,8 @@ function main(name, geometry, order) {
     camera.add(new THREE.HemisphereLight(0xFFFFFF, 0x000000));
 
     scene.add(camera);
+
+    const order = parseInt(name.split(",")[2].replace("}", ""));
 
     // add the main polyhedron to the scene
     UTILITIES.addCellToGroup({
