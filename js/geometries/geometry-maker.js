@@ -19,7 +19,7 @@ function honeycombGeometry(data, transform, refinement, model) {
 
     } else if (data.metric == "h" || data.metric == "p" || data.metric == "u") {
 
-        if (data.cellType === "euclidean" || data.cellType === "hyperbolic") {
+        if ((data.cellType === "euclidean" || data.cellType === "hyperbolic") && model === "uhp") {
 
             const newVertices = [];
             data.vertices.forEach((v) => { newVertices.push(data.flip(v)) });
