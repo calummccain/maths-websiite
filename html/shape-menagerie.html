@@ -66,9 +66,9 @@
             camera.up = new THREE.Vector3(0, -1, 0);
             camera.updateProjectionMatrix();
             camera.add(new THREE.HemisphereLight(0xaaaaaa, 0x555555));
-            // const light = new THREE.PointLight(0xFFFFFF, 1, 100);
-            // light.position.set(s, s, s);
-            // camera.add(light);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(3.5 * s, s, -4 * s);
+            camera.add(directionalLight);
             scene.add(camera);
             scene.add(new THREE.HemisphereLight(0xcccccc, 0x222222));
 
