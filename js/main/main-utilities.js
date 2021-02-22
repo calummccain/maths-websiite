@@ -31,19 +31,14 @@ function addCellToGroup(params) {
                     shapeGeometry[j],
                     new THREE.MeshNormalMaterial({
                         side: THREE.DoubleSide
-                        //wireframe: true,
-                        //wireframeLineWidth: 2
                     }));
 
             } else {
 
                 var faceMesh = new THREE.Mesh(
                     shapeGeometry[j],
-                    new THREE.MeshStandardMaterial({
+                    new THREE.MeshLambertMaterial({
                         color: new THREE.Color(colour),
-                        roughness: 0.5,
-                        metalness: 0,
-                        flatShading: true,
                         opacity: opacityValue,
                         transparent: true,
                         side: THREE.DoubleSide
@@ -56,6 +51,7 @@ function addCellToGroup(params) {
             faceMesh.name = name;
             faceMesh.faceName = data.faceReflections[j];
             faceMesh.params = params;
+            faceMesh.geometry.computeVertexNormals();
 
             group.add(faceMesh);
 
@@ -73,25 +69,18 @@ function addCellToGroup(params) {
 
         if (colour === "normal") {
 
-            cellGeometry.computeVertexNormals();
             var cellMesh = new THREE.Mesh(
                 cellGeometry,
                 new THREE.MeshNormalMaterial({
                     side: THREE.DoubleSide
-                    //wireframe: true,
-                    //wireframeLineWidth: 2
                 }));
 
         } else {
-            cellGeometry.computeFaceNormals();
+
             var cellMesh = new THREE.Mesh(
                 cellGeometry,
                 new THREE.MeshLambertMaterial({
                     color: new THREE.Color(colour),
-                    //roughness: 0,
-                    //metalness: 0,
-                    // wireframe: true,
-                    flatShading: true,
                     opacity: opacityValue,
                     transparent: true,
                     side: THREE.DoubleSide
@@ -101,6 +90,7 @@ function addCellToGroup(params) {
 
         cellMesh.position.set(position[0], position[1], position[2]);
         cellMesh.name = name;
+        cellMesh.geometry.computeVertexNormals();
 
         group.add(cellMesh);
 
@@ -111,11 +101,15 @@ function addCellToGroup(params) {
 function removeCellFromGroup(cellName, group) {
 
     var newChilren = [];
+    
     group.children.forEach(element => {
         if (element.cellName !== cellName) {
+        
             newChilren.push(element);
+        
         }
     });
+    
     group.children = newChilren;
 
 }
