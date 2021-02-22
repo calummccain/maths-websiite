@@ -90,9 +90,9 @@ function hyperbolicFace(vertices, refinement, metric) {
             var faceBadVertices = [];
             var faceGoodVertices = [];
 
-            face.forEach((i) => {
+            for (var i = 0; i < 3; i++) {
 
-                if (outside.includes(i)) {
+                if (outside.includes(face[i])) {
 
                     faceBadNumber += 1;
                     faceBadVertices.push(i);
@@ -103,7 +103,7 @@ function hyperbolicFace(vertices, refinement, metric) {
 
                 }
 
-            })
+            }
 
             if (faceBadNumber == 0) {
 
@@ -111,21 +111,39 @@ function hyperbolicFace(vertices, refinement, metric) {
 
             } else if (faceBadNumber == 1) {
 
-                var p1 = VF.lineSphereIntersection(coords[faceGoodVertices[0]], coords[faceBadVertices[0]]);
-                var p2 = VF.lineSphereIntersection(coords[faceGoodVertices[1]], coords[faceBadVertices[0]]);
+                const bv = faceBadVertices[0];
+
+                var p1 = VF.lineSphereIntersection(coords[face[(bv + 1) % 3]], coords[face[bv]]);
+                var p2 = VF.lineSphereIntersection(coords[face[(bv + 2) % 3]], coords[face[bv]]);
+
                 coords.push(p1);
                 coords.push(p2);
-                newFaces.push([faceGoodVertices[0], faceGoodVertices[1], numberOfCoords]);
-                newFaces.push([faceGoodVertices[1], numberOfCoords + 1, numberOfCoords]);
+
+                newFaces.push([face[(bv + 1) % 3], face[(bv + 2) % 3], numberOfCoords]);
+                newFaces.push([face[(bv + 2) % 3], numberOfCoords + 1, numberOfCoords]);
+
                 numberOfCoords += 2;
 
             } else if (faceBadNumber == 2) {
 
-                var p1 = VF.lineSphereIntersection(coords[faceGoodVertices[0]], coords[faceBadVertices[0]]);
-                var p2 = VF.lineSphereIntersection(coords[faceGoodVertices[0]], coords[faceBadVertices[1]]);
+                var bv1 = faceBadVertices[0];
+                var bv2 = faceBadVertices[1];
+
+                const dbv = bv1 - bv2;
+
+                if (dbv == 1 || dbv == -2) {
+
+                    [bv1, bv2] = [bv2, bv1];
+
+                }
+
+                var p1 = VF.lineSphereIntersection(coords[face[3 - bv1 - bv2]], coords[face[bv1]]);
+                var p2 = VF.lineSphereIntersection(coords[face[3 - bv1 - bv2]], coords[face[bv2]]);
+
                 coords.push(p1);
                 coords.push(p2);
-                newFaces.push([faceGoodVertices[0], numberOfCoords, numberOfCoords + 1]);
+
+                newFaces.push([face[3 - bv1 - bv2], numberOfCoords, numberOfCoords + 1]);
                 numberOfCoords += 2;
 
             } else {

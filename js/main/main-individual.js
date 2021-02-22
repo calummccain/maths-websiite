@@ -27,6 +27,10 @@ function main(name, data) {
 
     scene.add(camera);
 
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(1, 0, 0);
+    camera.add(directionalLight);
+
     const order = [
         parseInt(name.split(",")[0].replace("{", "")),
         parseInt(name.split(",")[1]),

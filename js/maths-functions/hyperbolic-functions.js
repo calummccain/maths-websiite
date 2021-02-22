@@ -20,15 +20,24 @@ function hyperbolicNorm(x) {
 // if on lightcone (w, x, y, z) ===> (x / w, y / w, z / w)
 function hyperboloidToPoincare(point) {
 
+    console.log(hyperbolicNorm(point))
+
     if (Math.abs(hyperbolicNorm(point)) < tol) {
 
-        var scale = point[0];
+        const scale = point[0];
+        return [point[1] / scale, point[2] / scale, point[3] / scale];
+
+    } else if (hyperbolicNorm(point) > tol) {
+
+        const scale = 1 + point[0];
         return [point[1] / scale, point[2] / scale, point[3] / scale];
 
     } else {
 
-        var scale = 1 + point[0];
-        return [point[1] / scale, point[2] / scale, point[3] / scale];
+        const initialVect = [point[1], point[2], point[3]];
+        const l = VF.norm(initialVect);
+
+        return VF.vectorScale(initialVect, 1 / l);
 
     }
 
@@ -105,7 +114,7 @@ function poincareToHyperboloid(point) {
 function kleinToPoincare(point) {
 
     var dist = VF.norm(point);
-    var hyperbolicDist = 1 / (1 + Math.sqrt(Math.abs(1 - (dist ** 2))));
+    var hyperbolicDist = (dist < 1 - tol) ? 1 / (1 + Math.sqrt(Math.abs(1 - (dist ** 2)))) : 1;
 
     return VF.vectorScale(point, hyperbolicDist);
 
