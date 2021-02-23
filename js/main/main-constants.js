@@ -1,5 +1,5 @@
 function rotatePositions(s) {
-    var posDict = {
+    return {
         "{4,3,3}": [0, -s, 0],
         "{4,3,4}": [0, 0, 0],
         "{4,3,5}": [0, s, 0],
@@ -35,9 +35,9 @@ function rotatePositions(s) {
         "{3,6,3}": [7 * s, -s, 0],
         "{3,6,4}": [7 * s, 0, 0],
         "{3,6,5}": [7 * s, s, 0],
-        "{3,6,6}": [7 * s, 2 * s, 0]
+        "{3,6,6}": [7 * s, 2 * s, 0],
+        "{p,q,r}": [8 * s, 0, 0]
     };
-    return posDict;
 }
 
 

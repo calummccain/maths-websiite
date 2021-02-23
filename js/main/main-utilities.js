@@ -22,6 +22,8 @@ function addCellToGroup(params) {
     // without faceMode the polyhedron is made as one mesh/object and the individual faces cannot be selected by ray-casting
     if (faceMode) {
 
+        const col = new THREE.Color().setHSL(Math.random(), 0.5, Math.random() * 0.5 + 0.1);
+
         for (var j = 0; j < data.numFaces; j++) {
 
             if (colour === "normal") {
@@ -38,7 +40,8 @@ function addCellToGroup(params) {
                 var faceMesh = new THREE.Mesh(
                     shapeGeometry[j],
                     new THREE.MeshLambertMaterial({
-                        color: new THREE.Color(colour),
+                        // color: new THREE.Color(colour),
+                        color: col,
                         opacity: opacityValue,
                         transparent: true,
                         side: THREE.DoubleSide
@@ -80,7 +83,8 @@ function addCellToGroup(params) {
             var cellMesh = new THREE.Mesh(
                 cellGeometry,
                 new THREE.MeshLambertMaterial({
-                    color: new THREE.Color(colour),
+                    // color: new THREE.Color(colour),
+                    color: new THREE.Color().setHSL(Math.random(), 0.5, Math.random() * 0.5 + 0.1),
                     opacity: opacityValue,
                     transparent: true,
                     side: THREE.DoubleSide
@@ -101,15 +105,15 @@ function addCellToGroup(params) {
 function removeCellFromGroup(cellName, group) {
 
     var newChilren = [];
-    
+
     group.children.forEach(element => {
         if (element.cellName !== cellName) {
-        
+
             newChilren.push(element);
-        
+
         }
     });
-    
+
     group.children = newChilren;
 
 }
