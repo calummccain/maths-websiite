@@ -8,6 +8,7 @@ const dodecahedronData = (n) => {
     const metric = boundaries(n, Math.PI / Math.atan(p), 6);
     const cos = Math.cos(Math.PI / n) ** 2;
     const rt = Math.sqrt(5);
+    const cot = cos / (1 - cos);
 
     const d =
         (n == 3) ? (v) => [
@@ -105,37 +106,20 @@ const dodecahedronData = (n) => {
 
         // CFE
         // (0, 0, 1, 0)
-        a: (v) => {
-
-            return [v[0], v[1], -v[2], v[3]];
-
-        },
-
+        a: (v) => [v[0], v[1], -v[2], v[3]],
         // CFV
         // (0, 1, -p ** 2, p)
-        b: (v) => {
-
-            return [v[0], (p * v[1] + v[2] + v[3] / p) / 2, (v[1] - v[2] / p - p * v[3]) / 2, (v[1] / p - p * v[2] + v[3]) / 2];
-
-        },
+        b: (v) => [v[0], (p * v[1] + v[2] + v[3] / p) / 2, (v[1] - v[2] / p - p * v[3]) / 2, (v[1] / p - p * v[2] + v[3]) / 2],
 
         // CEV
         // (0, 0, 0, 1)
-        c: (v) => {
-
-            return [v[0], v[1], v[2], -v[3]];
-
-        },
+        c: (v) => [v[0], v[1], v[2], -v[3]],
 
         // FEV
         // ?????
         d: d,
 
-        e: (v) => {
-
-            return [v[0], v[1], v[2], v[3]];
-
-        },
+        e: (v) => v,
 
         f: f,
 
