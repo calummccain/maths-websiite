@@ -20,40 +20,40 @@ main();
 
 window.onload = function () {
     document.getElementById("tetrahedronButton").addEventListener("click", function () {
-        geom = tetrahedronData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => tetrahedronData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("cubeButton").addEventListener("click", function () {
-        geom = cubeData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => cubeData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("octahedronButton").addEventListener("click", function () {
-        geom = octahedronData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => octahedronData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("dodecahedronButton").addEventListener("click", function () {
-        geom = dodecahedronData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => dodecahedronData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("icosahedronButton").addEventListener("click", function () {
-        geom = icosahedronData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => icosahedronData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("hexagonButton").addEventListener("click", function () {
-        geom = hexagonData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => hexagonData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("triangleButton").addEventListener("click", function () {
-        geom = triangleData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => triangleData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("squareButton").addEventListener("click", function () {
-        geom = squareData;
-        geometryDraw(geom, r, invisible);
+        geom = (p, q, r) => squareData(r);
+        geometryDraw(geom, p, q, r, invisible);
     });
-    document.getElementById("testButton").addEventListener("click", function () {
-        geom = (r) => pqrData(p, q, r);
-        geometryDraw(geom, r, invisible);
+    document.getElementById("pqrButton").addEventListener("click", function () {
+        geom = (p, q, r) => pqrData(Math.floor(p), Math.floor(q), r);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("spheres").addEventListener("click", function () {
         spheres = true;
@@ -65,19 +65,19 @@ window.onload = function () {
     });
     document.getElementById("invisibleLines").addEventListener("click", function () {
         invisible = true;
-        geometryDraw(geom, r, invisible);
+        geometryDraw(geom, p, q, r, invisible);
     });
     document.getElementById("visibleLines").addEventListener("click", function () {
         invisible = false;
-        geometryDraw(geom, r, invisible);
+        geometryDraw(geom, p, q, r, invisible);
     });
 
 }
 
 
-function geometryDraw(geom, r, lineMode) {
+function geometryDraw(geom, p, q, r, lineMode) {
 
-    addDataToView(geom(r), lineMode);
+    addDataToView(geom(p, q, r), lineMode);
 
     if (spheres) {
 
@@ -91,8 +91,21 @@ function geometryDraw(geom, r, lineMode) {
 
 }
 
+var slider = document.getElementById("myRange1");
+slider.oninput = function () {
+    p = this.value / 2;
+    geometryDraw(geom, p, q, r, invisible);
+}
+
+var slider = document.getElementById("myRange2");
+slider.oninput = function () {
+    q = this.value / 2;
+    geometryDraw(geom, p, q, r, invisible);
+}
+
+
 var slider = document.getElementById("myRange3");
 slider.oninput = function () {
     r = this.value / 2;
-    geometryDraw(geom, r, invisible);
+    geometryDraw(geom, p, q, r, invisible);
 }
