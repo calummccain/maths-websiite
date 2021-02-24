@@ -37,7 +37,7 @@ const triangleData = (n) => {
     // (0, 1, 0, 0)
     const dmat = (v) => [v[0], -v[1], v[2], v[3]];
 
-    const emat = (v) => V;
+    const emat = (v) => v;
 
     const fmat =
         (n == 3) ? (v) => [

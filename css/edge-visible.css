@@ -20,3 +20,7 @@ html, body {
     bottom: 0;
     background-color: #DDDDDD;
 }
+
+.slidecontainer {
+    width: 100%;
+}

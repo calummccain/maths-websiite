@@ -20,8 +20,6 @@ function hyperbolicNorm(x) {
 // if on lightcone (w, x, y, z) ===> (x / w, y / w, z / w)
 function hyperboloidToPoincare(point) {
 
-    console.log(hyperbolicNorm(point))
-
     if (Math.abs(hyperbolicNorm(point)) < tol) {
 
         const scale = point[0];

@@ -4,8 +4,6 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as GT from "../maths-functions/generate-tesselations.js";
 
-const eps = 1e-4;
-
 const pqrData = (p, q, r) => {
 
     const cr = (i) => Math.cos(Math.PI * i / r);

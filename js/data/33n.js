@@ -96,38 +96,22 @@ const tetrahedronData = (n) => {
 
         // CFE
         // (0, 0, 1, 1) 
-        a: (v) => {
-
-            return [v[0], v[1], -v[3], -v[2]];
-
-        },
+        a: (v) => [v[0], v[1], -v[3], -v[2]],
 
         // CVF
         // (0, 1, -1, 0)
-        b: function (v) {
-
-            return [v[0], v[2], v[1], v[3]];
-
-        },
+        b: (v) => [v[0], v[2], v[1], v[3]],
 
         // CEV
         // (0, 0, 1, -1)
-        c: (v) => {
-
-            return [v[0], v[1], v[3], v[2]];
-
-        },
+        c: (v) => [v[0], v[1], v[3], v[2]],
 
         // FEV
         // (cot^2-2, cot^2, 0, 0)
         d: d,
 
         // Identity matrix
-        e: (v) => {
-
-            return [v[0], v[1], v[2], v[3]];
-
-        },
+        e: (v) => v,
 
         f: f,
 

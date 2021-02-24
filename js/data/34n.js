@@ -83,38 +83,22 @@ const octahedronData = (n) => {
 
         // CFE
         // (0, 1, -1, 0)
-        a: (v) => {
-
-            return [v[0], v[2], v[1], v[3]];
-
-        },
+        a: (v) => [v[0], v[2], v[1], v[3]],
 
         // CFV
         // (0, 0, 1, -1)
-        b: (v) => {
-
-            return [v[0], v[1], v[3], v[2]];
-
-        },
+        b: (v) => [v[0], v[1], v[3], v[2]],
 
         // CEV
         // (0, 0, 0, 1)
-        c: (v) => {
-
-            return [v[0], v[1], v[2], -v[3]];
-
-        },
+        c: (v) => [v[0], v[1], v[2], -v[3]],
 
         // FEV
         // (2 cot^2 - 1, cot^2, cot^2, cot^2)
         d: d,
 
         // Identity matrix
-        e: (v) => {
-
-            return [v[0], v[1], v[2], v[3]];
-
-        },
+        e: (v) => v,
 
         f: f,
 
