@@ -3,7 +3,7 @@ import { OrbitControls } from "../orbit-controls.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
-const eps = 1e-3;
+const eps = 1e-4;
 
 var WIDTH, HEIGHT, view;
 var scene, spheres, vertices, uhpVertices, lineGroup = new THREE.Group(), dataSet, camera, camPos, sphereGroup = new THREE.Group();
@@ -369,7 +369,6 @@ function rayPolygonIntersection(point, polygon) {
 
         if ((a > -eps) && (a < eps)) {
 
-
             continue;
 
         }
@@ -410,9 +409,7 @@ function rayPolygonIntersection(point, polygon) {
 // ONLY WORKS FOR UHP
 function visibilityTest(point, camera, spheres, vertices, data) {
 
-    var o = camera;
-    var u = VF.vectorDiff(point, camera);
-    var uu = VF.vectorDot(u, u);
+    const o = camera, u = VF.vectorDiff(point, camera), uu = VF.vectorDot(u, u);
 
     for (var i = 0; i < data.numFaces; i++) {
 
@@ -606,7 +603,7 @@ function addDataToView(data, invisible) {
     cameraLines(dataSet, invisible);
 
     window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); } });
-
+    window.addEventListener("touchend", () => { cameraLines(dataSet, invisible); }, false);
 
 }
 
