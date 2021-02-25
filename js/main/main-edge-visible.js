@@ -2,6 +2,7 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
+import * as RF from "../maths-functions/rotation-functions.js";
 
 const eps = 1e-4;
 
@@ -74,7 +75,7 @@ function generateSpheres(data) {
 }
 
 // generate the positions of the vertices in several models
-function generateVertices(data) {
+function generateVertices(data, thetax, thetay, thetaz) {
 
     var verts = [];
 
@@ -83,10 +84,10 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.flip(data.f(data.vertices[i])),
-                "poincare": HF.hyperboloidToPoincare(data.flip(data.f(data.vertices[i]))),
-                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.vertices[i]))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.vertices[i])))
+                "hyperboloid": data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "poincare": HF.hyperboloidToPoincare(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "klein": HF.hyperboloidToKlein(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)))
             };
 
             // var vertDict = {
@@ -105,10 +106,10 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.flip(data.f(data.vertices[i])),
-                "poincare": HF.hyperboloidToPoincare(data.flip(data.f(data.vertices[i]))),
-                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.vertices[i]))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.vertices[i])))
+                "hyperboloid": data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "poincare": HF.hyperboloidToPoincare(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "klein": HF.hyperboloidToKlein(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)))
             };
 
             verts.push(vertDict);
@@ -120,10 +121,10 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.f(data.vertices[i]),
-                "poincare": HF.hyperboloidToPoincare(data.f(data.vertices[i])),
-                "klein": HF.hyperboloidToKlein(data.f(data.vertices[i])),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[i]))
+                "hyperboloid": RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz),
+                "poincare": HF.hyperboloidToPoincare(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "klein": HF.hyperboloidToKlein(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "uhp": HF.hyperboloidToUpperHalfPlane(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))
             };
 
             verts.push(vertDict);
@@ -590,13 +591,13 @@ function main() {
 
 }
 
-function addDataToView(data, invisible) {
+function addDataToView(data, invisible, thetax, thetay, thetaz) {
 
     vertices = [], spheres = [], uhpVertices = [], dataSet = {};
 
     dataSet = data;
 
-    vertices = generateVertices(dataSet);
+    vertices = generateVertices(dataSet, thetax, thetay, thetaz);
     spheres = generateSpheres(dataSet);
     uhpVertices = makeTheLines(dataSet, 50);
 

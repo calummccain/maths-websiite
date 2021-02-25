@@ -12,6 +12,9 @@ import { pqrData } from "./data/pqr.js";
 var p = 6;
 var q = 6;
 var r = 6;
+var thetax = 0;
+var thetay = 0;
+var thetaz = 0;
 var geom;
 var spheres = false;
 var invisible = false;
@@ -21,39 +24,39 @@ main();
 window.onload = function () {
     document.getElementById("tetrahedronButton").addEventListener("click", function () {
         geom = (p, q, r) => tetrahedronData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("cubeButton").addEventListener("click", function () {
         geom = (p, q, r) => cubeData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("octahedronButton").addEventListener("click", function () {
         geom = (p, q, r) => octahedronData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("dodecahedronButton").addEventListener("click", function () {
         geom = (p, q, r) => dodecahedronData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("icosahedronButton").addEventListener("click", function () {
         geom = (p, q, r) => icosahedronData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("hexagonButton").addEventListener("click", function () {
         geom = (p, q, r) => hexagonData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("triangleButton").addEventListener("click", function () {
         geom = (p, q, r) => triangleData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("squareButton").addEventListener("click", function () {
         geom = (p, q, r) => squareData(r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("pqrButton").addEventListener("click", function () {
         geom = (p, q, r) => pqrData(Math.floor(p), Math.floor(q), r);
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("spheres").addEventListener("click", function () {
         spheres = true;
@@ -65,11 +68,11 @@ window.onload = function () {
     });
     document.getElementById("invisibleLines").addEventListener("click", function () {
         invisible = true;
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
     document.getElementById("visibleLines").addEventListener("click", function () {
         invisible = false;
-        geometryDraw(geom, p, q, r, invisible);
+        geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
     });
 
 }
@@ -77,7 +80,7 @@ window.onload = function () {
 
 function geometryDraw(geom, p, q, r, lineMode) {
 
-    addDataToView(geom(p, q, r), lineMode);
+    addDataToView(geom(p, q, r), lineMode, thetax, thetay, thetaz);
 
     if (spheres) {
 
@@ -91,21 +94,38 @@ function geometryDraw(geom, p, q, r, lineMode) {
 
 }
 
-var slider = document.getElementById("myRange1");
+var slider = document.getElementById("myRangep");
 slider.oninput = function () {
     p = this.value / 2;
-    geometryDraw(geom, p, q, r, invisible);
+    geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
 }
 
-var slider = document.getElementById("myRange2");
+var slider = document.getElementById("myRangeq");
 slider.oninput = function () {
     q = this.value / 2;
-    geometryDraw(geom, p, q, r, invisible);
+    geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
 }
 
-
-var slider = document.getElementById("myRange3");
+var slider = document.getElementById("myRanger");
 slider.oninput = function () {
     r = this.value / 2;
-    geometryDraw(geom, p, q, r, invisible);
+    geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
+}
+
+var slider = document.getElementById("myRangex");
+slider.oninput = function () {
+    thetax = Math.PI * this.value / 50;
+    geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
+}
+
+var slider = document.getElementById("myRangey");
+slider.oninput = function () {
+    thetay = Math.PI * this.value / 50;
+    geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
+}
+
+var slider = document.getElementById("myRangez");
+slider.oninput = function () {
+    thetaz = Math.PI * this.value / 50;
+    geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz);
 }
