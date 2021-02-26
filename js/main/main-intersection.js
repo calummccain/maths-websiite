@@ -131,69 +131,65 @@ function generateVertices(data, thetax, thetay, thetaz) {
 }
 
 // find the coordinates of the lines
-function makeTheLines(data, number, intersection) {
+function makeTheLines(data, number) {
 
     var lineCoords = [];
 
-    if (intersection) {
+    data.edges.forEach((endpoints) => {
 
-        data.edges.forEach((endpoints) => {
+        var uhpVertices = [], e1, e2;
 
-            var uhpVertices = [], e1, e2;
+        if (data.metric === "u") {
 
-            if (data.metric === "u") {
+            e1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]));
+            e2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]));
 
-                e1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]));
-                e2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]));
+        } else {
 
-            } else {
+            [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
+            e1 = HF.hyperboloidToUpperHalfPlane(e1);
+            e2 = HF.hyperboloidToUpperHalfPlane(e2);
 
-                [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
-                e1 = HF.hyperboloidToUpperHalfPlane(e1);
-                e2 = HF.hyperboloidToUpperHalfPlane(e2);
+        }
 
-            }
+        const p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
 
-            const p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+        const radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
+        const center = VF.midpoint(e1, e2);
+        const r = VF.norm(radVect);
 
-            const radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
-            const center = VF.midpoint(e1, e2);
-            const r = VF.norm(radVect);
+        var startAngle, endAngle;
 
-            var startAngle, endAngle;
+        if (data.metric === "h") {
 
-            if (data.metric === "h") {
+            startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
+            endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
 
-                startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
-                endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
+        } else {
 
-            } else {
+            startAngle = 0;
+            endAngle = Math.PI;
 
-                startAngle = 0;
-                endAngle = Math.PI;
+        }
 
-            }
+        const numPieces = Math.ceil(number * (endAngle - startAngle) / Math.PI);
+        const subAngle = (endAngle - startAngle) / numPieces;
 
-            const numPieces = Math.ceil(number * (endAngle - startAngle) / Math.PI);
-            const subAngle = (endAngle - startAngle) / numPieces;
+        for (var i = 0; i <= numPieces; i++) {
 
-            for (var i = 0; i <= numPieces; i++) {
+            const theta = startAngle + i * subAngle;
 
-                const theta = startAngle + i * subAngle;
+            uhpVertices.push([
+                radVect[0] * Math.cos(theta) + center[0],
+                radVect[1] * Math.cos(theta) + center[1],
+                r * Math.sin(theta)
+            ])
 
-                uhpVertices.push([
-                    radVect[0] * Math.cos(theta) + center[0],
-                    radVect[1] * Math.cos(theta) + center[1],
-                    r * Math.sin(theta)
-                ])
+        }
 
-            }
+        lineCoords.push(uhpVertices);
 
-            lineCoords.push(uhpVertices);
-
-        });
-
-    }
+    });
 
     // kinda works??
     if (data.metric === "u") {
@@ -660,7 +656,7 @@ function main() {
 
 }
 
-function addDataToView(data, invisible, thetax, thetay, thetaz, intersection) {
+function addDataToView(data, invisible, thetax, thetay, thetaz) {
 
     vertices = [], spheres = [], uhpVertices = [], dataSet = {};
 
@@ -668,7 +664,7 @@ function addDataToView(data, invisible, thetax, thetay, thetaz, intersection) {
 
     vertices = generateVertices(dataSet, thetax, thetay, thetaz);
     spheres = generateSpheres(dataSet);
-    uhpVertices = makeTheLines(dataSet, 50, intersection);
+    uhpVertices = makeTheLines(dataSet, 50);
 
     cameraLines(dataSet, invisible);
 
