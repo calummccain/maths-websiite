@@ -256,6 +256,74 @@ function makeTheLines(data, number) {
 
 }
 
+function outline(data, number) {
+
+    var lineCoords = [];
+    const camPos = cameraConstants.camera.position.toArray();
+
+    for (var i = 0; i < data.numFaces; i++) {
+
+        var center = spheres[i]["uhp"].center;
+        var r = spheres[i]["uhp"].radius;
+
+        var diff = VF.vectorDiff(camPos, center);
+        // var proj = [diff[0], diff[1], 0];
+        var perp = [-diff[1], diff[0], 0];
+        var normal = VF.vectorCross(diff, perp);
+        perp = VF.vectorScale(perp, 1 / VF.norm(perp));
+        normal = VF.vectorScale(normal, 1 / VF.norm(normal));
+
+        var curve = [];
+
+        for (var k = 0; k <= number; k++) {
+
+            const theta = Math.PI * k / number;
+            const v = VF.vectorSum(
+                VF.vectorSum(
+                    VF.vectorScale(perp, (r * 1.01) * Math.cos(theta)),
+                    VF.vectorScale(normal, (r * 1.01) * Math.sin(theta))
+                ),
+                center
+            )
+
+            curve.push(v);
+
+        }
+
+        var polygon = [];
+
+        if (data.metric === "u") {
+
+            data.faces[i].forEach((j) => {
+                polygon.push(vertices[j]["klein"]);
+            });
+
+        } else {
+
+            data.faces[i].forEach((j) => {
+                polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]]);
+            });
+
+        }
+
+        var newCurve = [];
+
+        curve.forEach((vert) => {
+            if (pointInPolygon([vert[0], vert[1]], polygon)) {
+
+                newCurve.push(vert);
+
+            }
+        })
+
+        lineCoords.push(newCurve);
+
+    }
+
+    return lineCoords;
+
+}
+
 function drawLine(vectors, col) {
 
     var threeVectors = [];
@@ -277,7 +345,11 @@ function cameraLines(data, invisibleLines) {
 
     camPos = cameraConstants.camera.position.toArray();
 
-    uhpVertices.forEach((points) => {
+    // var extraVerts = uhpVertices.concat(outline(data, 100));
+
+    var extraVerts = uhpVertices;
+
+    extraVerts.forEach((points) => {
 
         if (points.length > 0) {
 
