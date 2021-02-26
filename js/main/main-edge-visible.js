@@ -2,6 +2,7 @@ import * as THREE from "../three.module.js";
 import { OrbitControls } from "../orbit-controls.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
+import * as RF from "../maths-functions/rotation-functions.js";
 
 const eps = 1e-4;
 
@@ -74,7 +75,7 @@ function generateSpheres(data) {
 }
 
 // generate the positions of the vertices in several models
-function generateVertices(data) {
+function generateVertices(data, thetax, thetay, thetaz) {
 
     var verts = [];
 
@@ -83,10 +84,10 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.flip(data.f(data.vertices[i])),
-                "poincare": HF.hyperboloidToPoincare(data.flip(data.f(data.vertices[i]))),
-                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.vertices[i]))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.vertices[i])))
+                "hyperboloid": data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "poincare": HF.hyperboloidToPoincare(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "klein": HF.hyperboloidToKlein(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)))
             };
 
             // var vertDict = {
@@ -105,10 +106,10 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.flip(data.f(data.vertices[i])),
-                "poincare": HF.hyperboloidToPoincare(data.flip(data.f(data.vertices[i]))),
-                "klein": HF.hyperboloidToKlein(data.flip(data.f(data.vertices[i]))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(data.f(data.vertices[i])))
+                "hyperboloid": data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "poincare": HF.hyperboloidToPoincare(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "klein": HF.hyperboloidToKlein(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
+                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)))
             };
 
             verts.push(vertDict);
@@ -120,10 +121,10 @@ function generateVertices(data) {
         for (var i = 0; i < data.numVertices; i++) {
 
             var vertDict = {
-                "hyperboloid": data.f(data.vertices[i]),
-                "poincare": HF.hyperboloidToPoincare(data.f(data.vertices[i])),
-                "klein": HF.hyperboloidToKlein(data.f(data.vertices[i])),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.f(data.vertices[i]))
+                "hyperboloid": RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz),
+                "poincare": HF.hyperboloidToPoincare(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "klein": HF.hyperboloidToKlein(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
+                "uhp": HF.hyperboloidToUpperHalfPlane(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))
             };
 
             verts.push(vertDict);
@@ -255,6 +256,74 @@ function makeTheLines(data, number) {
 
 }
 
+function outline(data, number) {
+
+    var lineCoords = [];
+    const camPos = cameraConstants.camera.position.toArray();
+
+    for (var i = 0; i < data.numFaces; i++) {
+
+        var center = spheres[i]["uhp"].center;
+        var r = spheres[i]["uhp"].radius;
+
+        var diff = VF.vectorDiff(camPos, center);
+        // var proj = [diff[0], diff[1], 0];
+        var perp = [-diff[1], diff[0], 0];
+        var normal = VF.vectorCross(diff, perp);
+        perp = VF.vectorScale(perp, 1 / VF.norm(perp));
+        normal = VF.vectorScale(normal, 1 / VF.norm(normal));
+
+        var curve = [];
+
+        for (var k = 0; k <= number; k++) {
+
+            const theta = Math.PI * k / number;
+            const v = VF.vectorSum(
+                VF.vectorSum(
+                    VF.vectorScale(perp, (r * 1.01) * Math.cos(theta)),
+                    VF.vectorScale(normal, (r * 1.01) * Math.sin(theta))
+                ),
+                center
+            )
+
+            curve.push(v);
+
+        }
+
+        var polygon = [];
+
+        if (data.metric === "u") {
+
+            data.faces[i].forEach((j) => {
+                polygon.push(vertices[j]["klein"]);
+            });
+
+        } else {
+
+            data.faces[i].forEach((j) => {
+                polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]]);
+            });
+
+        }
+
+        var newCurve = [];
+
+        curve.forEach((vert) => {
+            if (pointInPolygon([vert[0], vert[1]], polygon)) {
+
+                newCurve.push(vert);
+
+            }
+        })
+
+        lineCoords.push(newCurve);
+
+    }
+
+    return lineCoords;
+
+}
+
 function drawLine(vectors, col) {
 
     var threeVectors = [];
@@ -276,7 +345,11 @@ function cameraLines(data, invisibleLines) {
 
     camPos = cameraConstants.camera.position.toArray();
 
-    uhpVertices.forEach((points) => {
+    // var extraVerts = uhpVertices.concat(outline(data, 100));
+
+    var extraVerts = uhpVertices;
+
+    extraVerts.forEach((points) => {
 
         if (points.length > 0) {
 
@@ -590,13 +663,13 @@ function main() {
 
 }
 
-function addDataToView(data, invisible) {
+function addDataToView(data, invisible, thetax, thetay, thetaz) {
 
     vertices = [], spheres = [], uhpVertices = [], dataSet = {};
 
     dataSet = data;
 
-    vertices = generateVertices(dataSet);
+    vertices = generateVertices(dataSet, thetax, thetay, thetaz);
     spheres = generateSpheres(dataSet);
     uhpVertices = makeTheLines(dataSet, 50);
 
