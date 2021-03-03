@@ -14,7 +14,7 @@ html, body {
 
 #menu {
     position: fixed;
-    height: 40%;
+    height: 50%;
     width: 20%;
     z-index: 1;
     bottom: 0;
