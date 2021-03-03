@@ -18,7 +18,7 @@ var thetaz = 0;
 var geom;
 var spheres = false;
 var invisible = false;
-var intersection = false;
+var intersection = true;
 
 main();
 
@@ -88,7 +88,7 @@ window.onload = function () {
 }
 
 
-function geometryDraw(geom, p, q, r, lineMode, intersection) {
+function geometryDraw(geom, p, q, r, lineMode, thetax, thetay, thetaz, intersection) {
 
     addDataToView(geom(p, q, r), lineMode, thetax, thetay, thetaz, intersection);
 

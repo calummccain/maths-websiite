@@ -174,7 +174,7 @@ function makeTheLines(data, number, intersection) {
 
             }
 
-            const numPieces = Math.ceil(number * (endAngle - startAngle) / Math.PI);
+            const numPieces = Math.ceil(Math.min(10 * r, 50) * number * (endAngle - startAngle) / Math.PI);
             const subAngle = (endAngle - startAngle) / numPieces;
 
             for (var i = 0; i <= numPieces; i++) {
@@ -226,7 +226,7 @@ function makeTheLines(data, number, intersection) {
 
                 }
 
-                const numPieces = Math.ceil(Math.abs(number * (endAngle - startAngle) / Math.PI));
+                const numPieces = Math.ceil(Math.abs(Math.min(10 * r, 50) * number * (endAngle - startAngle) / Math.PI));
                 const subAngle = (endAngle - startAngle) / numPieces;
 
                 for (var k = 0; k <= numPieces; k++) {
