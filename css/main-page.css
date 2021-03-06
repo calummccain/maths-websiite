@@ -1,0 +1,26 @@
+.text {
+    background-color:#E5E5E5;
+    color: darkslategray;
+    margin: 0% 15%;
+    text-align: justify;
+    font-family: 'Roboto Mono', monospace;
+    position: relative;
+    padding: 0% 10%;
+}
+
+.visual {
+    background: cyan;
+    position: relative;
+}
+
+.small {
+    width: 40vw;
+    height: 40vh;
+    left: calc(-20vw + 50%);
+}
+
+.big {
+    width: 80vw;
+    height: 80vh;
+    left: calc(-40vw + 50%);
+}
