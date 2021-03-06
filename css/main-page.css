@@ -11,6 +11,7 @@
 .visual {
     background: cyan;
     position: relative;
+    transition: 1s;
 }
 
 .small {
