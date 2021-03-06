@@ -1,15 +1,16 @@
 .text {
     background-color:#E5E5E5;
     color: darkslategray;
-    margin: 0% 10%;
+    margin: 0% auto;
     text-align: justify;
     font-family: 'Roboto Mono', monospace;
     position: relative;
     padding: 0% 5%;
+    max-width: 1000px;
 }
 
 .visual {
-    background: cyan;
+    background: #BBBBBB;
     position: relative;
     transition: 1s;
 }
