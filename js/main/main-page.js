@@ -1,5 +1,6 @@
 import * as THREE from "../three.module.js";
 import { objectMaker } from "../main/object-maker.js";
+import { MapControls } from "../orbit-controls.js";
 
 const data = [
     [
@@ -73,9 +74,13 @@ function main() {
         scene.userData.visual = visuals[n];
 
         const camera = new THREE.PerspectiveCamera(70, visuals[n].clientWidth / visuals[n].clientHeight, 0.1, 10);
-        camera.position.set(0, 0, 3);
+        camera.position.set(0, 3, 0);
         camera.lookAt(0, 0, 0);
         scene.userData.camera = camera;
+
+        var controls = new MapControls(camera, visuals[n]);
+        controls.enabled = true;
+        controls.update();
 
         const light = new THREE.HemisphereLight(0xFFFFFF, 0x555555, 1);
         light.position.set(0, 2, 0);
