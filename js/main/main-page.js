@@ -3,12 +3,12 @@ import { objectMaker } from "../main/object-maker.js";
 
 const data = [
     [
-        { name: "{3,3,3}", model: "", refinement: 4, colour: 0x127548, position: [-10, 0, 0], transform: "", faceMode: false },
-        { name: "{3,3,4}", model: "", refinement: 4, colour: 0x127548, position: [-6, 0, 0], transform: "", faceMode: false },
-        { name: "{3,3,5}", model: "", refinement: 4, colour: 0x127548, position: [-2, 0, 0], transform: "", faceMode: false },
-        { name: "{3,4,3}", model: "", refinement: 4, colour: 0x127548, position: [2, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,3}", model: "", refinement: 4, colour: 0x127548, position: [6, 0, 0], transform: "", faceMode: false },
-        { name: "{5,3,3}", model: "", refinement: 4, colour: 0x127548, position: [10, 0, 0], transform: "", faceMode: false }
+        { name: "{3,3,3}", model: "", refinement: 4, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
+        { name: "{3,3,4}", model: "", refinement: 4, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
+        { name: "{3,3,5}", model: "", refinement: 4, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
+        { name: "{3,4,3}", model: "", refinement: 4, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
+        { name: "{4,3,3}", model: "", refinement: 4, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
+        { name: "{5,3,3}", model: "", refinement: 4, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false }
     ],
     [{
         name: "{3,3,3}",
@@ -43,7 +43,7 @@ const data = [
         transform: "",
         faceMode: false
     }]
-]
+];
 
 window.onload = main;
 
@@ -62,8 +62,12 @@ function main() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xEEEEEE);
 
+        var objects = [];
+
         data[n].forEach((params) => {
-            scene.add(objectMaker(params));
+            const obj = objectMaker(params);
+            scene.add(obj);
+            objects.push(obj);
         });
 
         scene.userData.visual = visuals[n];
@@ -77,9 +81,13 @@ function main() {
         light.position.set(0, 2, 0);
         scene.add(light);
 
+        scene.userData.objects = objects;
+
         scenes.push(scene);
 
     }
+
+    window.addEventListener("resize", updateSize, false);
 
     function updateSize() {
 
@@ -91,6 +99,11 @@ function main() {
             renderer.setSize(width, height, false);
 
         }
+
+        scenes.forEach((scene) => {
+            scene.userData.camera.aspect = width / height;
+            scene.userData.camera.updateProjectionMatrix();
+        });
 
     }
 
@@ -115,8 +128,10 @@ function main() {
         scenes.forEach((scene) => {
 
             const rect = scene.userData.visual.getBoundingClientRect();
-            scene.children[0].rotation.y = t * 0.01;
-            scene.children[0].rotation.z = t * 0.013;
+            scene.userData.objects.forEach((obj) => {
+                obj.rotation.y = t * 0.0051;
+                obj.rotation.z = t * 0.003;
+            });
 
             // check if it's offscreen. If so skip it
 
