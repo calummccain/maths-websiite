@@ -12,15 +12,15 @@
         <link rel="stylesheet" href="../../css/main-page.css">
         <script>
             $(document).ready(function () {
-                $(".toggle-size").click(function () {
-                    $(this).parent().toggleClass("big small");
-                });
+                $(".toggle-size").click(function () { $(this).parent().toggleClass("big small"); });
             });
         </script>
 
     </head>
 
     <body>
+
+        <canvas id="c"></canvas>
 
         <div class="text">
 
@@ -174,36 +174,50 @@
                 made of octahedra and 1 of dodecahedra. More info on these can be found here ****LINK****
             </p>
 
-            <div class="visual small">
-                <button class="toggle-size">
-                    Toggle
-                </button>
-            </div>
+        </div>
 
-            <p>
-                \(\mathbb{E}^3\): There is only one honeycomb which is made up of cubes: ****LINK****
-            </p>
+        <div class="visual small">
+            <button class="toggle-size">
+                Toggle
+            </button>
+        </div>
 
-            <div class="visual small">
-                <button class="toggle-size">
-                    Toggle
-                </button>
-            </div>
+        <div class="text">
 
-            <p>
-                \(\mathbb{H}^3\): There are infinitely many hyperbolic honeycombs and can have a number of different
-                characteristics ****LINK****. In the Klein/Poincare model they look like this:
-            </p>
+        <p>
+            \(\mathbb{E}^3\): There is only one honeycomb which is made up of cubes: ****LINK****
+        </p>
 
-            <div class="visual small">
-                <button class="toggle-size">
-                    Toggle
-                </button>
-            </div>
+        </div>
+
+        <div class="visual small">
+            <button class="toggle-size">
+                Toggle
+            </button>
+        </div>
+
+        <div class="text">
+
+        <p>
+            \(\mathbb{H}^3\): There are infinitely many hyperbolic honeycombs and can have a number of different
+            characteristics ****LINK****. In the Klein/Poincare model they look like this:
+        </p>
+
+        </div>
+
+        <div class="visual small">
+            <button class="toggle-size">
+                Toggle
+            </button>
+        </div>
+
+
+        <div class="text">
 
             <p>
                 This isn't the only way to group the honeycombs. It turns out that they naturally fall into classes
-                formed by fixing \(p\), \(q\) in \(\{p,q,r\}\) and varying \(r\). For example this gives the cubic honeycomb
+                formed by fixing \(p\), \(q\) in \(\{p,q,r\}\) and varying \(r\). For example this gives the cubic
+                honeycomb
                 family:
             </p>
 
@@ -218,14 +232,19 @@
                 \(\mathbb{S}^3\) to \(\mathbb{E}^3\) to \(\mathbb{H}^3\).
             </p>
 
-            <div class="visual small">
-                <button class="toggle-size">
-                    Toggle
-                </button>
-            </div>
+        </div>
+
+        <div class="visual small">
+            <button class="toggle-size">
+                Toggle
+            </button>
+        </div>
+
+        <div class="text">
 
             <p>
-                Spherical ones look rounder, euclidean ones look flat (although they only exist for \(\{4,3,4\}\)...) while
+                Spherical ones look rounder, euclidean ones look flat (although they only exist for \(\{4,3,4\}\)...)
+                while
                 hyperbolic ones look pointy and some even have their corners cut-off - more details here
                 ****LINK****.
             </p>
@@ -235,13 +254,15 @@
                 "catacomb" structure becomes apparent. ****LINK TO PDF****
             </p>
 
-            <div class="visual small">
-                <button class="toggle-size">
-                    Toggle
-                </button>
-            </div>
-
         </div>
+
+        <div class="visual small">
+            <button class="toggle-size">
+                Toggle
+            </button>
+        </div>
+
+        <script type="module" src="../js/main/main-page.js"></script>
 
     </body>
 
