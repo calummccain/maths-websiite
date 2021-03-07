@@ -22,9 +22,9 @@
 }
 
 .small {
-    width: 40vw;
-    height: 40vh;
-    left: calc(-20vw + 50%);
+    width: 30vw;
+    height: 30vh;
+    left: calc(-15vw + 50%);
 }
 
 .big {
