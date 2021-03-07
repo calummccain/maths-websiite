@@ -1,4 +1,49 @@
 import * as THREE from "../three.module.js";
+import { objectMaker } from "../main/object-maker.js";
+
+const data = [
+    [
+        { name: "{3,3,3}", model: "", refinement: 4, colour: 0x127548, position: [-10, 0, 0], transform: "", faceMode: false },
+        { name: "{3,3,4}", model: "", refinement: 4, colour: 0x127548, position: [-6, 0, 0], transform: "", faceMode: false },
+        { name: "{3,3,5}", model: "", refinement: 4, colour: 0x127548, position: [-2, 0, 0], transform: "", faceMode: false },
+        { name: "{3,4,3}", model: "", refinement: 4, colour: 0x127548, position: [2, 0, 0], transform: "", faceMode: false },
+        { name: "{4,3,3}", model: "", refinement: 4, colour: 0x127548, position: [6, 0, 0], transform: "", faceMode: false },
+        { name: "{5,3,3}", model: "", refinement: 4, colour: 0x127548, position: [10, 0, 0], transform: "", faceMode: false }
+    ],
+    [{
+        name: "{3,3,3}",
+        model: "",
+        refinement: 4,
+        colour: 0x127548,
+        position: [0, 0, 0],
+        transform: "",
+        faceMode: false
+    }], [{
+        name: "{3,3,3}",
+        model: "",
+        refinement: 4,
+        colour: 0x127548,
+        position: [0, 0, 0],
+        transform: "",
+        faceMode: false
+    }], [{
+        name: "{3,3,3}",
+        model: "",
+        refinement: 4,
+        colour: 0x127548,
+        position: [0, 0, 0],
+        transform: "",
+        faceMode: false
+    }], [{
+        name: "{3,3,3}",
+        model: "",
+        refinement: 4,
+        colour: 0x127548,
+        position: [0, 0, 0],
+        transform: "",
+        faceMode: false
+    }]
+]
 
 window.onload = main;
 
@@ -17,11 +62,9 @@ function main() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xEEEEEE);
 
-        const geometry = new THREE.CubeGeometry(2, 1);
-        const material = new THREE.MeshPhongMaterial({ color: new THREE.Color().setHSL( Math.random(), 1, 0.75 )})
-        const mesh = new THREE.Mesh(geometry, material);
-
-        scene.add(mesh);
+        data[n].forEach((params) => {
+            scene.add(objectMaker(params));
+        });
 
         scene.userData.visual = visuals[n];
 
