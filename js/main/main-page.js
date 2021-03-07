@@ -15,10 +15,10 @@ function main() {
     for (var n = 0; n < visuals.length; n++) {
 
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xFF0000);
+        scene.background = new THREE.Color(0xEEEEEE);
 
-        const geometry = new THREE.DodecahedronGeometry(5, 1);
-        const material = new THREE.MeshPhongMaterial({ color: "blue", flatShading: true })
+        const geometry = new THREE.CubeGeometry(2, 1);
+        const material = new THREE.MeshPhongMaterial({ color: new THREE.Color().setHSL( Math.random(), 1, 0.75 )})
         const mesh = new THREE.Mesh(geometry, material);
 
         scene.add(mesh);
@@ -30,7 +30,7 @@ function main() {
         camera.lookAt(0, 0, 0);
         scene.userData.camera = camera;
 
-        const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+        const light = new THREE.HemisphereLight(0xFFFFFF, 0x555555, 1);
         light.position.set(0, 2, 0);
         scene.add(light);
 
@@ -72,7 +72,8 @@ function main() {
         scenes.forEach((scene) => {
 
             const rect = scene.userData.visual.getBoundingClientRect();
-            scene.children[0].rotation.y += t * 0.1;
+            scene.children[0].rotation.y = t * 0.01;
+            scene.children[0].rotation.z = t * 0.013;
 
             // check if it's offscreen. If so skip it
 
