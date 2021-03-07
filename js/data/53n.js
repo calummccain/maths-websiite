@@ -10,8 +10,6 @@ const dodecahedronData = (n) => {
     const rt = Math.sqrt(5);
     const cot = cos / (1 - cos);
 
-    console.log(cos, cot)
-
     const d =
         (n == 3) ? (v) => [
             (p * v[0] + v[1] / (p ** 3) + v[3] / (p ** 4)) / 2,
