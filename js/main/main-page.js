@@ -4,22 +4,28 @@ import { MapControls } from "../orbit-controls.js";
 
 const data = [
     [
-        { name: "{3,3,3}", model: "", refinement: 4, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
-        { name: "{3,3,4}", model: "", refinement: 4, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
-        { name: "{3,3,5}", model: "", refinement: 4, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
-        { name: "{3,4,3}", model: "", refinement: 4, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,3}", model: "", refinement: 4, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
-        { name: "{5,3,3}", model: "", refinement: 4, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false }
+        { name: "{3,3,3}", model: "", refinement: 3, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
+        { name: "{3,3,4}", model: "", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
+        { name: "{3,3,5}", model: "", refinement: 3, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
+        { name: "{3,4,3}", model: "", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
+        { name: "{4,3,3}", model: "", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
+        { name: "{5,3,3}", model: "", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false }
+    ],
+    [
+        { name: "{4,3,4}", model: "", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false }
+    ],
+    [
+        { name: "{3,5,3}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 3], transform: "", faceMode: false },
+        { name: "{3,4,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
+        { name: "{5,3,7}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, -3], transform: "", faceMode: false },
+        { name: "{6,3,3}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 3], transform: "", faceMode: false },
+        { name: "{4,4,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false },
+        { name: "{6,3,7}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, -3], transform: "", faceMode: false },
+        { name: "{3,7,3}", model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 3], transform: "", faceMode: false },
+        { name: "{4,4,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
+        { name: "{5,5,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, -3], transform: "", faceMode: false },
     ],
     [{
-        name: "{3,3,3}",
-        model: "",
-        refinement: 4,
-        colour: 0x127548,
-        position: [0, 0, 0],
-        transform: "",
-        faceMode: false
-    }], [{
         name: "{3,3,3}",
         model: "",
         refinement: 4,
