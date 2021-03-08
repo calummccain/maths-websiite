@@ -1,5 +1,6 @@
 import * as THREE from "../three.module.js";
 import * as GM from "../geometries/geometry-maker.js";
+import * as EM from "../main/edge-maker.js";
 
 import { tetrahedronData } from "../data/33n.js";
 import { octahedronData } from "../data/34n.js";
@@ -34,14 +35,47 @@ function objectMaker(parameters) {
     ];
 
     const data = (!("{" + p + "," + q + "}" in geom)) ? pqrData(p, q, r) : geom["{" + p + "," + q + "}"](r);
-    const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
 
-    if (parameters.faceMode) {
+    if (parameters.model === "poincare" || parameters.model === "") {
 
-        for (var j = 0; j < data.numFaces; j++) {
+        const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
 
-            var faceMesh = new THREE.Mesh(
-                shapeGeometry[j],
+        if (parameters.faceMode) {
+
+            for (var j = 0; j < data.numFaces; j++) {
+
+                var faceMesh = new THREE.Mesh(
+                    shapeGeometry[j],
+                    new THREE.MeshLambertMaterial({
+                        color: new THREE.Color(parameters.colour),
+                        opacity: 1,
+                        transparent: true,
+                        side: THREE.DoubleSide
+                    }));
+
+                faceMesh.position.set(position[0], position[1], position[2]);
+                faceMesh.cellName = parameters.transform;
+                faceMesh.name = name;
+                faceMesh.faceName = data.faceReflections[j];
+                faceMesh.parameters = parameters;
+                faceMesh.geometry.computeVertexNormals();
+
+                // RETURN WHAT???
+
+            }
+
+        } else {
+
+            var cellGeometry = new THREE.Geometry();
+
+            for (var j = 0; j < data.numFaces; j++) {
+
+                cellGeometry.merge(shapeGeometry[j]);
+
+            }
+
+            var cellMesh = new THREE.Mesh(
+                cellGeometry,
                 new THREE.MeshLambertMaterial({
                     color: new THREE.Color(parameters.colour),
                     opacity: 1,
@@ -49,41 +83,24 @@ function objectMaker(parameters) {
                     side: THREE.DoubleSide
                 }));
 
-            faceMesh.position.set(position[0], position[1], position[2]);
-            faceMesh.cellName = parameters.transform;
-            faceMesh.name = name;
-            faceMesh.faceName = data.faceReflections[j];
-            faceMesh.parameters = parameters;
-            faceMesh.geometry.computeVertexNormals();
+            cellMesh.position.set(position[0], position[1], position[2]);
+            cellMesh.name = name;
+            cellMesh.geometry.computeVertexNormals();
 
-            // RETURN WHAT???
+            return cellMesh;
 
         }
 
-    } else {
+    } else if (parameters.model === "uhp") {
 
-        var cellGeometry = new THREE.Geometry();
+        const cameraLines = (rx, ry, rz, camera) => EM.cameraLines(
+            data,
+            EM.generateData(data, rx, ry, rz, parameters.refinement, parameters.intersection),
+            parameters.invisible,
+            camera
+        );
 
-        for (var j = 0; j < data.numFaces; j++) {
-
-            cellGeometry.merge(shapeGeometry[j]);
-
-        }
-
-        var cellMesh = new THREE.Mesh(
-            cellGeometry,
-            new THREE.MeshLambertMaterial({
-                color: new THREE.Color(parameters.colour),
-                opacity: 1,
-                transparent: true,
-                side: THREE.DoubleSide
-            }));
-
-        cellMesh.position.set(position[0], position[1], position[2]);
-        cellMesh.name = name;
-        cellMesh.geometry.computeVertexNormals();
-
-        return cellMesh;
+        return cameraLines;
 
     }
 

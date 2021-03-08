@@ -32,16 +32,10 @@ const data = [
         { name: "{4,3,6}", model: "poincare", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
         { name: "{4,3,7}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
         { name: "{4,3,8}", model: "poincare", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false },
-        
-    ], [{
-        name: "{3,3,3}",
-        model: "",
-        refinement: 4,
-        colour: 0x127548,
-        position: [0, 0, 0],
-        transform: "",
-        faceMode: false
-    }]
+
+    ], [
+        { name: "{4,5,8}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false },
+    ]
 ];
 
 window.onload = main;
@@ -67,6 +61,8 @@ function main() {
             const obj = objectMaker(params);
             scene.add(obj);
             objects.push(obj);
+
+            scene.userData.model = params.model;
         });
 
         scene.userData.visual = visuals[n];
@@ -132,8 +128,12 @@ function main() {
 
             const rect = scene.userData.visual.getBoundingClientRect();
             scene.userData.objects.forEach((obj) => {
-                obj.rotation.y = t * 0.0051;
-                obj.rotation.z = t * 0.003;
+                if (scene.userData.model !== "uhp") {
+                    obj.rotation.y = t * 0.0051;
+                    obj.rotation.z = t * 0.003;
+                } else {
+                    
+                }
             });
 
             // check if it's offscreen. If so skip it
