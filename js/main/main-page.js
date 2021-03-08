@@ -34,7 +34,7 @@ const data = [
         { name: "{4,3,8}", model: "poincare", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false },
 
     ], [
-        { name: "{4,5,8}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false },
+        { name: "{5,3,7}", model: "uhp", refinement: 20, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false, intersection: true },
     ]
 ];
 
@@ -48,6 +48,7 @@ function main() {
     const visuals = document.querySelectorAll(".visual");
     var scenes = [];
     var t = 0;
+    var camera;
 
     // Loop over the visuals
     for (var n = 0; n < visuals.length; n++) {
@@ -57,20 +58,33 @@ function main() {
 
         var objects = [];
 
-        data[n].forEach((params) => {
-            const obj = objectMaker(params);
-            scene.add(obj);
-            objects.push(obj);
-
-            scene.userData.model = params.model;
-        });
-
-        scene.userData.visual = visuals[n];
-
-        const camera = new THREE.PerspectiveCamera(70, visuals[n].clientWidth / visuals[n].clientHeight, 0.1, 10);
+        camera = new THREE.PerspectiveCamera(70, visuals[n].clientWidth / visuals[n].clientHeight, 0.1, 10);
         camera.position.set(0, 3, 0);
         camera.lookAt(0, 0, 0);
         scene.userData.camera = camera;
+
+        data[n].forEach((params) => {
+            var obj = objectMaker(params);
+            objects.push(obj);
+
+            if (params.model === "uhp") {
+
+                var shape = obj(0, 0, 0, camera.position.toArray());
+                scene.userData.shape = shape;
+                scene.add(shape);
+
+            } else {
+
+                scene.add(obj);
+
+            }
+
+            scene.userData.model = params.model;
+
+        });
+
+        scene.userData.visual = visuals[n];
+        scene.userData.objects = objects;
 
         var controls = new MapControls(camera, visuals[n]);
         controls.enabled = true;
@@ -117,7 +131,7 @@ function main() {
 
         updateSize();
 
-        renderer.setClearColor(0xffffff);
+        renderer.setClearColor(0xFFFFFF);
         renderer.setScissorTest(false);
         renderer.clear();
 
@@ -127,13 +141,20 @@ function main() {
         scenes.forEach((scene) => {
 
             const rect = scene.userData.visual.getBoundingClientRect();
+
             scene.userData.objects.forEach((obj) => {
+
                 if (scene.userData.model !== "uhp") {
-                    obj.rotation.y = t * 0.0051;
-                    obj.rotation.z = t * 0.003;
+
+                    obj.rotation.y = t * 0.0053;
+                    obj.rotation.z = t * 0.0031;
+
                 } else {
-                    
+
+                    scene.userData.shape = obj(0, 0, 0, camera.position.toArray());
+
                 }
+
             });
 
             // check if it's offscreen. If so skip it

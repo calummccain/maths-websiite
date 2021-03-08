@@ -6,17 +6,18 @@ import * as RF from "../maths-functions/rotation-functions.js";
 
 const eps = 1e-4;
 
-function generateData(data, thetax, thetay, thetaz, number, intersection) {
+function generateData(data, thetax, thetay, thetaz, number, intersection, invisibleLines, camera) {
 
-    const spheres = generateSpheres(data);
     const vertices = generateVertices(data, thetax, thetay, thetaz);
+    const spheres = generateSpheres(data, vertices);
+    const uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
 
-    return makeTheLines(data, number, vertices, spheres, intersection);
+    return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
 }
 
 // generate the spheres that bound the geometry (only for UHP)
-function generateSpheres(data) {
+function generateSpheres(data, vertices) {
 
     var spheres = [];
 
@@ -322,9 +323,9 @@ function drawLine(vectors, col) {
 
 }
 
-function cameraLines(data, uhpVertices, invisibleLines, camera) {
+function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices) {
 
-    camPos = camera.position.toArray();
+    const camPos = camera;
 
     var lineGroup = new THREE.Group();
 
@@ -562,4 +563,4 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 }
 
 
-export { generateData, cameraLines, drawLine };
+export { generateData, drawLine };
