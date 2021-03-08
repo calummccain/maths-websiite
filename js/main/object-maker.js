@@ -34,7 +34,6 @@ function objectMaker(parameters) {
     ];
 
     const data = (!("{" + p + "," + q + "}" in geom)) ? pqrData(p, q, r) : geom["{" + p + "," + q + "}"](r);
-    console.log(data)
     const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
 
     if (parameters.faceMode) {

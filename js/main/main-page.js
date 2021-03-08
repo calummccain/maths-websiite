@@ -41,14 +41,6 @@ const data = [
         position: [0, 0, 0],
         transform: "",
         faceMode: false
-    }], [{
-        name: "{3,3,3}",
-        model: "",
-        refinement: 4,
-        colour: 0x127548,
-        position: [0, 0, 0],
-        transform: "",
-        faceMode: false
     }]
 ];
 
@@ -88,7 +80,7 @@ function main() {
         controls.enabled = true;
         controls.update();
 
-        const light = new THREE.HemisphereLight(0xFFFFFF, 0x555555, 1);
+        const light = new THREE.HemisphereLight(0xFFFFFF, 0x333333, 1);
         light.position.set(0, 2, 0);
         scene.add(light);
 
