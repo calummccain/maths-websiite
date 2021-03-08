@@ -83,14 +83,14 @@ function generateVertices(data, thetax, thetay, thetaz) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            var vertDict = {
-                "hyperboloid": data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
-                "poincare": HF.hyperboloidToPoincare(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
-                "klein": HF.hyperboloidToKlein(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)))
-            };
+            const p = data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz));
 
-            verts.push(vertDict);
+            verts.push({
+                "hyperboloid": p,
+                "poincare": HF.hyperboloidToPoincare(p),
+                "klein": HF.hyperboloidToKlein(p),
+                "uhp": HF.hyperboloidToUpperHalfPlane(p)
+            });
 
         }
 
@@ -98,14 +98,14 @@ function generateVertices(data, thetax, thetay, thetaz) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            var vertDict = {
-                "hyperboloid": data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
-                "poincare": HF.hyperboloidToPoincare(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
-                "klein": HF.hyperboloidToKlein(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))),
-                "uhp": HF.hyperboloidToUpperHalfPlane(data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)))
-            };
+            const p = data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz));
 
-            verts.push(vertDict);
+            verts.push({
+                "hyperboloid": p,
+                "poincare": HF.hyperboloidToPoincare(p),
+                "klein": HF.hyperboloidToKlein(p),
+                "uhp": HF.hyperboloidToUpperHalfPlane(p)
+            });
 
         }
 
@@ -113,14 +113,14 @@ function generateVertices(data, thetax, thetay, thetaz) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            var vertDict = {
-                "hyperboloid": RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz),
-                "poincare": HF.hyperboloidToPoincare(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
-                "klein": HF.hyperboloidToKlein(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz)),
-                "uhp": HF.hyperboloidToUpperHalfPlane(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz))
-            };
+            const p = RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz);
 
-            verts.push(vertDict);
+            verts.push({
+                "hyperboloid": p,
+                "poincare": HF.hyperboloidToPoincare(p),
+                "klein": HF.hyperboloidToKlein(p),
+                "uhp": HF.hyperboloidToUpperHalfPlane(p)
+            });
 
         }
 
@@ -275,15 +275,13 @@ function outline(data, number) {
         for (var k = 0; k <= number; k++) {
 
             const theta = Math.PI * k / number;
-            const v = VF.vectorSum(
+            curve.push(VF.vectorSum(
                 VF.vectorSum(
                     VF.vectorScale(perp, (r * 1.01) * Math.cos(theta)),
                     VF.vectorScale(normal, (r * 1.01) * Math.sin(theta))
                 ),
                 center
-            )
-
-            curve.push(v);
+            ));
 
         }
 
@@ -343,7 +341,6 @@ function cameraLines(data, invisibleLines) {
     camPos = cameraConstants.camera.position.toArray();
 
     // var extraVerts = uhpVertices.concat(outline(data, 100));
-
     var extraVerts = uhpVertices;
 
     extraVerts.forEach((points) => {
@@ -354,8 +351,7 @@ function cameraLines(data, invisibleLines) {
 
             for (var k = 0; k < points.length; k++) {
 
-                var e1 = points[k];
-                drawVerts.push([e1, visibilityTest(e1, camPos, spheres, vertices, data)]);
+                drawVerts.push([points[k], visibilityTest(points[k], camPos, spheres, vertices, data)]);
 
             }
 

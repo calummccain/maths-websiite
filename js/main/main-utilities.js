@@ -8,7 +8,8 @@ function addCellToGroup(params) {
     var refinement = params.refinement || 3;
     var opacityValue = params.opacity || 1;
     var transform = params.transform || "";
-    var colour = params.colour || "#" + Math.floor(Math.random() * 16777215).toString(16);
+    // var colour = params.colour || "#" + Math.floor(Math.random() * 16777215).toString(16);
+    var colour = params.colour; 
     var position = params.position || [0, 0, 0];
     var name = params.name || "";
     var faceMode = params.faceMode || false;
@@ -40,8 +41,8 @@ function addCellToGroup(params) {
                 var faceMesh = new THREE.Mesh(
                     shapeGeometry[j],
                     new THREE.MeshLambertMaterial({
-                        // color: new THREE.Color(colour),
-                        color: col,
+                        color: new THREE.Color(colour),
+                        // color: col,
                         opacity: opacityValue,
                         transparent: true,
                         side: THREE.DoubleSide
@@ -83,8 +84,8 @@ function addCellToGroup(params) {
             var cellMesh = new THREE.Mesh(
                 cellGeometry,
                 new THREE.MeshLambertMaterial({
-                    // color: new THREE.Color(colour),
-                    color: new THREE.Color().setHSL(Math.random(), 0.5, Math.random() * 0.5 + 0.1),
+                    color: new THREE.Color(colour),
+                    //color: new THREE.Color().setHSL(Math.random(), 0.5, Math.random() * 0.5 + 0.1),
                     opacity: opacityValue,
                     transparent: true,
                     side: THREE.DoubleSide
