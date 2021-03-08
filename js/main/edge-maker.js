@@ -6,29 +6,18 @@ import * as RF from "../maths-functions/rotation-functions.js";
 
 const eps = 1e-4;
 
-var WIDTH, HEIGHT, view;
-var scene, spheres, vertices, uhpVertices, lineGroup = new THREE.Group(), dataSet, camera, camPos, sphereGroup = new THREE.Group();
+function generateData(data, thetax, thetay, thetaz, number, intersection, invisibleLines, camera) {
 
-var cameraConstants = {
+    const vertices = generateVertices(data, thetax, thetay, thetaz);
+    const spheres = generateSpheres(data, vertices);
+    const uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
 
-    left: 0,
-    bottom: 0,
-    width: 1,
-    height: 1.0,
-    background: 0xDDDDDD,
-    eye: [5, 0, 0],
-    up: [0, 0, 1],
-    fov: 30,
-    updateCamera: function (camera, scene) {
+    return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
-        camera.lookAt(scene.position);
-
-    }
-
-};
+}
 
 // generate the spheres that bound the geometry (only for UHP)
-function generateSpheres(data) {
+function generateSpheres(data, vertices) {
 
     var spheres = [];
 
@@ -131,7 +120,7 @@ function generateVertices(data, thetax, thetay, thetaz) {
 }
 
 // find the coordinates of the lines
-function makeTheLines(data, number, intersection) {
+function makeTheLines(data, number, vertices, spheres, intersection) {
 
     var lineCoords = [];
 
@@ -330,20 +319,17 @@ function drawLine(vectors, col) {
     var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
     var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col }));
 
-    lineGroup.add(line);
+    return line;
 
 }
 
-function cameraLines(data, invisibleLines) {
+function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices) {
 
-    lineGroup.children = [];
+    const camPos = camera;
 
-    camPos = cameraConstants.camera.position.toArray();
+    var lineGroup = new THREE.Group();
 
-    // var extraVerts = uhpVertices.concat(outline(data, 100));
-    var extraVerts = uhpVertices;
-
-    extraVerts.forEach((points) => {
+    uhpVertices.forEach((points) => {
 
         if (points.length > 0) {
 
@@ -380,13 +366,13 @@ function cameraLines(data, invisibleLines) {
 
                 if ((segments[k].length > 1) && (segments[k][0][1])) {
 
-                    drawLine(segmentsPoints[k], 0x000000);
+                    lineGroup.add(drawLine(segmentsPoints[k], 0x000000));
 
                 } else {
 
                     if (invisibleLines) {
 
-                        drawLine(segmentsPoints[k], 0xAAAAAA);
+                        lineGroup.add(drawLine(segmentsPoints[k], 0xAAAAAA));
 
                     }
 
@@ -397,6 +383,8 @@ function cameraLines(data, invisibleLines) {
         }
 
     });
+
+    return lineGroup;
 
 }
 
@@ -574,132 +562,5 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
 }
 
-function main() {
 
-    WIDTH = 0;
-    HEIGHT = 0;
-    spheres = [];
-    vertices = [];
-    uhpVertices = [];
-    view = document.getElementById("view2");
-    WIDTH = view.clientWidth, HEIGHT = view.clientHeight;
-
-    // setup scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xEEEEEE);
-
-    camera = new THREE.PerspectiveCamera(cameraConstants.fov, window.innerWidth / window.innerHeight, 0.01, 100);
-    camera.position.fromArray(cameraConstants.eye);
-    camera.up.fromArray(cameraConstants.up);
-    camera.lookAt(lineGroup.position);
-    cameraConstants.camera = camera;
-
-    // setup the renderer
-    var renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(WIDTH, HEIGHT);
-    renderer.setClearColor(0x000000, 0);
-    renderer.setPixelRatio(window.devicePixelRatio);
-
-    // add controls to the camera
-    var controls = new OrbitControls(cameraConstants.camera, renderer.domElement);
-    controls.enableZoom = true;
-    controls.enabled = true;
-    controls.minZoom = 1;
-    controls.maxZoom = 5;
-    controls.update();
-
-    scene.add(lineGroup);
-    scene.add(sphereGroup);
-
-    window.addEventListener("resize", onWindowResize, false);
-
-    onWindowResize();
-
-    // add the renderer to the 'view' div
-    view.appendChild(renderer.domElement);
-
-    render();
-
-    function render() {
-
-        requestAnimationFrame(render);
-
-        const camera = cameraConstants.camera;
-
-        cameraConstants.updateCamera(camera, scene);
-
-        const left = Math.floor(WIDTH * cameraConstants.left);
-        const bottom = Math.floor(HEIGHT * cameraConstants.bottom);
-        const width = Math.floor(WIDTH * cameraConstants.width);
-        const height = Math.floor(HEIGHT * cameraConstants.height);
-
-        renderer.setViewport(left, bottom, width, height);
-        renderer.setScissor(left, bottom, width, height);
-        renderer.setScissorTest(true);
-        renderer.setClearColor(view.background);
-
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-
-        renderer.render(scene, camera);
-
-    }
-
-    function onWindowResize() {
-
-        WIDTH = view.clientWidth;
-        HEIGHT = view.clientHeight;
-
-        renderer.setSize(WIDTH, HEIGHT);
-
-    }
-
-}
-
-function addDataToView(data, invisible, thetax, thetay, thetaz, intersection) {
-
-    vertices = [], spheres = [], uhpVertices = [], dataSet = {};
-
-    dataSet = data;
-
-    vertices = generateVertices(dataSet, thetax, thetay, thetaz);
-    spheres = generateSpheres(dataSet);
-    uhpVertices = makeTheLines(dataSet, 50, intersection);
-
-    cameraLines(dataSet, invisible);
-
-    window.addEventListener('keydown', (event) => { if (event.key === "Enter") { cameraLines(dataSet, invisible); } });
-    window.addEventListener("touchend", () => { cameraLines(dataSet, invisible); }, false);
-
-}
-
-function addSpheres() {
-
-    sphereGroup.children = [];
-
-    var material = new THREE.MeshBasicMaterial({
-        transparent: true,
-        opacity: 0.2
-    });
-
-    var k = 0;
-
-    spheres.forEach((sphere) => {
-        if (k < 10) {
-            var mesh = new THREE.Mesh(new THREE.SphereBufferGeometry(sphere["uhp"].radius, 40, 40), material);
-            mesh.material.color = new THREE.Color(Math.random(), Math.random(), Math.random());
-            mesh.position.fromArray(sphere["uhp"].center);
-            sphereGroup.add(mesh);
-        }
-        k++;
-    })
-
-}
-
-function removeSpheres() {
-
-    sphereGroup.children = [];
-
-}
-
-export { main, addDataToView, addSpheres, removeSpheres };
+export { generateData, drawLine };

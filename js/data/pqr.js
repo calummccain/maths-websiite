@@ -21,6 +21,8 @@ const pqrData = (p, q, r) => {
 
     const metric = (qr < 4) ? "h" : (qr == 4) ? "p" : "u";
 
+    const cellType = "hyperbolic";
+
     const V = [1, 0, cp(1), sp(1)];
     const E = [1, 0, cp(1), 0];
     const F = [(qr === 4 ? 1 : sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1))), 0, 0, 0];
@@ -149,7 +151,7 @@ const pqrData = (p, q, r) => {
 
         metric: metric,
 
-        cellType: "hyperbolic",
+        cellType: cellType,
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
