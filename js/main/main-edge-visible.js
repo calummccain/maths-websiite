@@ -4,10 +4,12 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 
+import { SVGRenderer } from "../SVGRenderer.js";
+
 const eps = 1e-4;
 
 var WIDTH, HEIGHT, view;
-var scene, spheres, vertices, uhpVertices, lineGroup = new THREE.Group(), dataSet, camera, camPos, sphereGroup = new THREE.Group();
+var scene, spheres, vertices, uhpVertices, lineGroup = new THREE.Group(), dataSet, camera, camPos, sphereGroup = new THREE.Group(), renderer;
 
 var cameraConstants = {
 
@@ -595,7 +597,8 @@ function main() {
     cameraConstants.camera = camera;
 
     // setup the renderer
-    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    // var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new SVGRenderer();
     renderer.setSize(WIDTH, HEIGHT);
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -633,9 +636,10 @@ function main() {
         const width = Math.floor(WIDTH * cameraConstants.width);
         const height = Math.floor(HEIGHT * cameraConstants.height);
 
-        renderer.setViewport(left, bottom, width, height);
-        renderer.setScissor(left, bottom, width, height);
-        renderer.setScissorTest(true);
+        //renderer.setViewport(left, bottom, width, height);
+        renderer.setSize(width, height)
+        //renderer.setScissor(left, bottom, width, height);
+        //renderer.setScissorTest(true);
         renderer.setClearColor(view.background);
 
         camera.aspect = width / height;
@@ -702,4 +706,20 @@ function removeSpheres() {
 
 }
 
-export { main, addDataToView, addSpheres, removeSpheres };
+function ExportToSVG(filename) {
+    var XMLS = new XMLSerializer();
+    var svgfile = XMLS.serializeToString(renderer.domElement);
+
+    var svgData = svgfile;
+    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+    var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+    var svgUrl = URL.createObjectURL(svgBlob);
+    var downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = filename;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+
+export { main, addDataToView, addSpheres, removeSpheres, ExportToSVG };

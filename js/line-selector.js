@@ -1,4 +1,4 @@
-import { main, addDataToView, addSpheres, removeSpheres } from "./main/main-edge-visible.js";
+import { main, addDataToView, addSpheres, removeSpheres, ExportToSVG } from "./main/main-edge-visible.js";
 import { tetrahedronData } from "./data/33n.js";
 import { cubeData } from "./data/43n.js";
 import { octahedronData } from "./data/34n.js";
@@ -83,8 +83,9 @@ window.onload = function () {
         intersection = false;
         geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz, intersection);
     });
-
-
+    document.getElementById("svg").addEventListener("click", function () {
+        ExportToSVG("test.svg");
+    });
 }
 
 
