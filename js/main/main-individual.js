@@ -1,6 +1,6 @@
 import * as UTILITIES from "./main-utilities.js";
-import * as THREE from "../three.module.js";
-import { OrbitControls } from "../orbit-controls.js";
+import * as THREE from "../three-bits/three.module.js";
+import { OrbitControls } from "../three-bits/orbit-controls.js";
 import * as CONSTANTS from "./main-constants.js";
 
 function main(name, data) {

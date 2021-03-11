@@ -1,5 +1,5 @@
-import * as THREE from "../three.module.js";
-import { OrbitControls } from "../orbit-controls.js";
+import * as THREE from "../three-bits/three.module.js";
+import { OrbitControls } from "../three-bits/orbit-controls.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
@@ -584,7 +584,8 @@ function main() {
     vertices = [];
     uhpVertices = [];
     view = document.getElementById("view2");
-    WIDTH = view.clientWidth, HEIGHT = view.clientHeight;
+    WIDTH = Math.min(view.clientWidth, view.clientHeight);
+    HEIGHT = WIDTH;
 
     // setup scene
     scene = new THREE.Scene();

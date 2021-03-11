@@ -1,4 +1,4 @@
-import * as THREE from "../three.module.js";
+import * as THREE from "../three-bits/three.module.js";
 import * as GM from "../geometries/geometry-maker.js";
 
 function addCellToGroup(params) {
