@@ -34,7 +34,8 @@ const data = [
         { name: "{4,3,8}", model: "poincare", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false },
 
     ], [
-        { name: "{5,3,7}", model: "uhp", refinement: 15, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false, intersection: true }    ]
+        { name: "{5,3,7}", model: "uhp", refinement: 15, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false, intersection: true }
+    ]
 ];
 
 window.onload = main;
@@ -148,7 +149,7 @@ function main() {
 
                 } else {
 
-                    scene.children[0] = obj(0, 0, 0, camera.position.toArray());
+                    // scene.children[0] = obj(0, 0, 0, camera.position.toArray());
 
                 }
 

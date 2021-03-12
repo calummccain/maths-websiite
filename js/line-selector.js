@@ -1,4 +1,4 @@
-import { main, addDataToView, addSpheres, removeSpheres, ExportToSVG } from "./main/main-edge-visible.js";
+// import { main, addDataToView, ExportToSVG } from "./main/main-edge-visible.js";
 import { tetrahedronData } from "./data/33n.js";
 import { cubeData } from "./data/43n.js";
 import { octahedronData } from "./data/34n.js";
@@ -16,11 +16,8 @@ var thetax = 0;
 var thetay = 0;
 var thetaz = 0;
 var geom;
-var spheres = false;
 var invisible = false;
 var intersection = true;
-
-main();
 
 window.onload = function () {
     document.getElementById("tetrahedronButton").addEventListener("click", function () {
@@ -58,14 +55,6 @@ window.onload = function () {
     document.getElementById("pqrButton").addEventListener("click", function () {
         geom = (p, q, r) => pqrData(Math.floor(p), Math.floor(q), r);
         geometryDraw(geom, p, q, r, invisible, thetax, thetay, thetaz, intersection);
-    });
-    document.getElementById("spheres").addEventListener("click", function () {
-        spheres = true;
-        addSpheres();
-    });
-    document.getElementById("nospheres").addEventListener("click", function () {
-        spheres = false;
-        removeSpheres();
     });
     document.getElementById("invisibleLines").addEventListener("click", function () {
         invisible = true;
