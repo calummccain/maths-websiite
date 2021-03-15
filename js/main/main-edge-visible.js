@@ -29,7 +29,7 @@ function main() {
     camera.position.set(0, 3, 0);
     camera.up = new THREE.Vector3(0, 0, 1);
 
-    scene.add(camera)
+    scene.add(camera);
 
     var controls = new OrbitControls(camera, canvas);
     controls.enabled = true;
@@ -110,27 +110,27 @@ function main() {
 
     document.getElementById("myRangep").oninput = function () {
         p = this.value / 2;
-    }
+    };
 
     document.getElementById("myRangeq").oninput = function () {
         q = this.value / 2;
-    }
+    };
 
     document.getElementById("myRanger").oninput = function () {
         r = this.value / 2;
-    }
+    };
 
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
-    }
+    };
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 50;
-    }
+    };
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
-    }
+    };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
         invisible = !invisible;
