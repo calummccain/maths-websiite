@@ -121,18 +121,15 @@ function main() {
     }
 
     document.getElementById("myRangex").oninput = function () {
-        thetax = Math.PI * this.value / 10;
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
+        thetax = Math.PI * this.value / 50;
     }
 
     document.getElementById("myRangey").oninput = function () {
-        thetay = Math.PI * this.value / 10;
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
+        thetay = Math.PI * this.value / 50;
     }
 
     document.getElementById("myRangez").oninput = function () {
-        thetaz = Math.PI * this.value / 10;
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
+        thetaz = Math.PI * this.value / 50;
     }
 
     document.getElementById("visibleLines").addEventListener("click", function () {
