@@ -1,5 +1,5 @@
 import * as THREE from "../three-bits/three.module.js";
-import { MapControls } from "../three-bits/orbit-controls.js";
+import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
 import { SVGRenderer } from "../three-bits/SVGRenderer.js";
 
@@ -9,38 +9,33 @@ function main() {
 
     var p = 3, q = 7, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
-    var invisible = true;
-    var intersection = false;
+    var invisible = false;
+    var intersection = true;
     var geom = {};
 
     const canvas = document.getElementById("c");
-
 
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
 
     var renderer = new SVGRenderer();
     renderer.setSize(WIDTH, HEIGHT);
-    renderer.setClearColor(0x000000, 0);
-    canvas.appendChild(renderer.domElement)
-
-    // renderer.setPixelRatio(window.devicePixelRatio);
+    canvas.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xEEEEEE);
 
-    var camera = new THREE.PerspectiveCamera(70, WIDTH, HEIGHT, 0.1, 100);
+    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
     camera.position.set(0, 3, 0);
-    camera.lookAt(0, 0, 0);
+    camera.up = new THREE.Vector3(0, 0, 1);
 
     scene.add(camera)
 
-    var controls = new MapControls(camera, canvas);
+    var controls = new OrbitControls(camera, canvas);
     controls.enabled = true;
     controls.update();
 
     const light = new THREE.HemisphereLight(0xFFFFFF, 0x333333, 1);
-    // light.position.set(0, 2, 0);
     scene.add(light);
 
     var lineGroup = new THREE.Group();
@@ -49,19 +44,16 @@ function main() {
     geom = objectMaker({
         name: "{" + p + "," + q + "," + r + "}",
         model: "uhp",
-        refinement: 1,
+        refinement: 10,
         intersection: intersection,
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0]
     });
-    lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
-    // geom(thetax, thetay, thetaz, camera.position.toArray()).children.forEach((kid) => { console.log(kid.geometry.attributes.position.array) })
-    console.log(lineGroup);
-    // console.log(scene)
+
+    lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
 
     render();
-    //return;
 
     window.addEventListener("resize", onWindowResize, false);
 
@@ -72,13 +64,15 @@ function main() {
 
         renderer.setSize(WIDTH, HEIGHT);
 
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+
     }
 
     function render() {
 
-        requestAnimationFrame(render);
-
         renderer.render(scene, camera);
+        requestAnimationFrame(render);
 
     }
 
@@ -98,53 +92,52 @@ function main() {
         document.body.removeChild(downloadLink);
     }
 
+    window.addEventListener('keydown', (event) => {
+        if (event.key === "Enter") {
+            geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+            lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
+        }
+    });
+
+    window.addEventListener("touchend", () => {
+        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
+    }, false);
+
     document.getElementById("svg").addEventListener("click", function () {
         ExportToSVG("test.svg");
     });
 
     document.getElementById("myRangep").oninput = function () {
         p = this.value / 2;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     }
 
     document.getElementById("myRangeq").oninput = function () {
         q = this.value / 2;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     }
 
     document.getElementById("myRanger").oninput = function () {
         r = this.value / 2;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     }
 
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 10;
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     }
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 10;
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     }
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 10;
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     }
 
     document.getElementById("visibleLines").addEventListener("click", function () {
         invisible = !invisible;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     });
 
     document.getElementById("intersection").addEventListener("click", function () {
         intersection = !intersection;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup = geom(thetax, thetay, thetaz, camera.position.toArray());
     });
 
 }

@@ -105,17 +105,17 @@ function addCellToGroup(params) {
 
 function removeCellFromGroup(cellName, group) {
 
-    var newChilren = [];
+    var newChildren = [];
 
     group.children.forEach(element => {
         if (element.cellName !== cellName) {
 
-            newChilren.push(element);
+            newChildren.push(element);
 
         }
     });
 
-    group.children = newChilren;
+    group.children = newChildren;
 
 }
 
