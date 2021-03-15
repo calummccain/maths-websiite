@@ -109,11 +109,11 @@ function main() {
     });
 
     document.getElementById("myRangep").oninput = function () {
-        p = this.value / 2;
+        p = this.value;
     };
 
     document.getElementById("myRangeq").oninput = function () {
-        q = this.value / 2;
+        q = this.value;
     };
 
     document.getElementById("myRanger").oninput = function () {
