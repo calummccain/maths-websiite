@@ -110,26 +110,38 @@ function main() {
 
     document.getElementById("myRangep").oninput = function () {
         p = this.value;
+        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangeq").oninput = function () {
         q = this.value;
+        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRanger").oninput = function () {
         r = this.value / 2;
+        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
+        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 50;
+        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
+        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
+        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
