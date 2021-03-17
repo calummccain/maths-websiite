@@ -105,7 +105,7 @@ function main() {
     }, false);
 
     document.getElementById("svg").addEventListener("click", function () {
-        ExportToSVG("test.svg");
+        ExportToSVG(p + "-" + q + "-" + r + ".svg");
     });
 
     document.getElementById("myRangep").oninput = function () {
