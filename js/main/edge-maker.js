@@ -9,7 +9,8 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
     const vertices = generateVertices(data, thetax, thetay, thetaz);
     const spheres = generateSpheres(data, vertices);
-    const uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
+    var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
+    // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
 
     return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
@@ -241,10 +242,10 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
 }
 
-function outline(data, number) {
+function outline(data, number, camera, spheres, vertices) {
 
     var lineCoords = [];
-    const camPos = cameraConstants.camera.position.toArray();
+    const camPos = camera;
 
     for (var i = 0; i < data.numFaces; i++) {
 
