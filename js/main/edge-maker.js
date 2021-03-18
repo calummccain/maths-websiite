@@ -10,7 +10,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     const vertices = generateVertices(data, thetax, thetay, thetaz);
     const spheres = generateSpheres(data, vertices);
     var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
-    uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
+    // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
 
     return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
