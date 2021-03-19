@@ -164,7 +164,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
             }
 
-            const numPieces = Math.ceil(Math.min(50 * r, number) * (endAngle - startAngle) / Math.PI);
+            const numPieces = Math.ceil(Math.min(100 * r, number) * (endAngle - startAngle) / Math.PI);
             const subAngle = (endAngle - startAngle) / numPieces;
 
             for (var i = 0; i <= numPieces; i++) {
@@ -216,7 +216,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 }
 
-                const numPieces = Math.ceil(Math.abs(Math.min(50 * r, number) * (endAngle - startAngle) / Math.PI));
+                const numPieces = Math.ceil(Math.abs(Math.min(100 * r, number) * (endAngle - startAngle) / Math.PI));
                 const subAngle = (endAngle - startAngle) / numPieces;
 
                 for (var k = 0; k <= numPieces; k++) {
@@ -363,21 +363,6 @@ function outline(data, number, camera, spheres, vertices) {
         return lineCoords;
 
     }
-
-}
-
-function drawLine(vectors, col) {
-
-    var threeVectors = [];
-
-    vectors.forEach((vect) => {
-        threeVectors.push(new THREE.Vector3().fromArray(vect));
-    });
-
-    var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
-    var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col }));
-
-    return line;
 
 }
 
@@ -725,5 +710,20 @@ function visibilityTest2(point, camera, spheres, vertices, data, exception) {
 
 }
 
+function drawLine(vectors, col) {
 
-export { generateData, drawLine };
+    var threeVectors = [];
+
+    vectors.forEach((vect) => {
+        threeVectors.push(new THREE.Vector3().fromArray(vect));
+    });
+
+    var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
+    var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col }));
+
+    return line;
+
+}
+
+
+export { generateData };
