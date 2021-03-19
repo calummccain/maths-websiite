@@ -216,7 +216,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 }
 
-                const numPieces = Math.ceil(Math.abs(Math.min(10 * r, 50) * number * (endAngle - startAngle) / Math.PI));
+                const numPieces = Math.ceil(Math.abs(Math.min(50 * r, number) * (endAngle - startAngle) / Math.PI));
                 const subAngle = (endAngle - startAngle) / numPieces;
 
                 for (var k = 0; k <= numPieces; k++) {
