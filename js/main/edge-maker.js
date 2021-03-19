@@ -9,57 +9,11 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
     const vertices = generateVertices(data, thetax, thetay, thetaz);
     const spheres = generateSpheres(data, vertices);
-    var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
+    const uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
+    var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
     // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
-
-    return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
-
-}
-
-// generate the spheres that bound the geometry (only for UHP)
-function generateSpheres(data, vertices) {
-
-    var spheres = [];
-
-    for (var i = 0; i < data.numFaces; i++) {
-
-        var v1, v2, v3;
-
-        if (data.metric === "u") {
-
-            var u1, u2, u3;
-
-            u1 = vertices[data.faces[i][0]]["klein"];
-            u2 = vertices[data.faces[i][1]]["klein"];
-            u3 = vertices[data.faces[i][2]]["klein"];
-
-            v1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u1, u2));
-            v2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u1));
-            v3 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u3));
-
-        } else {
-
-            v1 = vertices[data.faces[i][0]]["uhp"];
-            v2 = vertices[data.faces[i][1]]["uhp"];
-            v3 = vertices[data.faces[i][2]]["uhp"];
-
-        }
-
-        var center = HF.uhpCenter(v1, v2, v3);
-
-        var sphereDict = {
-            "hyperboloid": {},
-            "poincare": {},
-            "uhp": {
-                center: center,
-                radius: VF.distance(v1, center)
-            },
-        };
-        spheres.push(sphereDict);
-
-    }
-
-    return spheres;
+    outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
+    return basis;
 
 }
 
@@ -116,6 +70,53 @@ function generateVertices(data, thetax, thetay, thetaz) {
     }
 
     return verts;
+
+}
+
+// generate the spheres that bound the geometry (only for UHP)
+function generateSpheres(data, vertices) {
+
+    var spheres = [];
+
+    for (var i = 0; i < data.numFaces; i++) {
+
+        var v1, v2, v3;
+
+        if (data.metric === "u") {
+
+            var u1, u2, u3;
+
+            u1 = vertices[data.faces[i][0]]["klein"];
+            u2 = vertices[data.faces[i][1]]["klein"];
+            u3 = vertices[data.faces[i][2]]["klein"];
+
+            v1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u1, u2));
+            v2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u1));
+            v3 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u3));
+
+        } else {
+
+            v1 = vertices[data.faces[i][0]]["uhp"];
+            v2 = vertices[data.faces[i][1]]["uhp"];
+            v3 = vertices[data.faces[i][2]]["uhp"];
+
+        }
+
+        var center = HF.uhpCenter(v1, v2, v3);
+
+        var sphereDict = {
+            "hyperboloid": {},
+            "poincare": {},
+            "uhp": {
+                center: center,
+                radius: VF.distance(v1, center)
+            },
+        };
+        spheres.push(sphereDict);
+
+    }
+
+    return spheres;
 
 }
 
@@ -266,8 +267,8 @@ function outline(data, number, camera, spheres, vertices) {
             const theta = Math.PI * k / number;
             curve.push(VF.vectorSum(
                 VF.vectorSum(
-                    VF.vectorScale(perp, (r * 1.01) * Math.cos(theta)),
-                    VF.vectorScale(normal, (r * 1.01) * Math.sin(theta))
+                    VF.vectorScale(perp, r * Math.cos(theta)),
+                    VF.vectorScale(normal, r * Math.sin(theta))
                 ),
                 center
             ));
@@ -300,11 +301,68 @@ function outline(data, number, camera, spheres, vertices) {
             }
         })
 
-        lineCoords.push(newCurve);
+        // lineCoords.push(newCurve);
+
+        // var lineGroup = new THREE.Group();
+
+        newCurve.forEach((points) => {
+
+            if (points.length > 0) {
+
+                var drawVerts = [];
+
+                for (var k = 0; k < points.length; k++) {
+
+                    drawVerts.push([points[k], visibilityTest2(points[k], camPos, spheres, vertices, data, i)]);
+
+                }
+
+                var segments = [[drawVerts[0]]];
+                var segmentsPoints = [[drawVerts[0][0]]];
+                var segNum = 0;
+
+                for (var k = 1; k < points.length; k++) {
+
+                    if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                        segments[segNum].push(drawVerts[k]);
+                        segmentsPoints[segNum].push(drawVerts[k][0]);
+
+                    } else {
+
+                        segNum++;
+                        segments.push([drawVerts[k]]);
+                        segmentsPoints.push([drawVerts[k][0]]);
+
+                    }
+
+                }
+
+                for (var k = 0; k < segments.length; k++) {
+
+                    if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                        lineCoords.push(drawLine(segmentsPoints[k], 0x000000));
+
+                    } else {
+
+                        if (invisibleLines) {
+
+                            lineCoords.push(drawLine(segmentsPoints[k], 0xAAAAAA));
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+        return lineCoords;
 
     }
-
-    return lineCoords;
 
 }
 
@@ -547,6 +605,111 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                     if (pointInPolygon(v2, polygon) && (x2[2] > 0)) {
 
                         return false;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return true;
+
+}
+
+function visibilityTest2(point, camera, spheres, vertices, data, exception) {
+
+    const o = camera, u = VF.vectorDiff(point, camera), uu = VF.vectorDot(u, u);
+
+    for (var i = 0; i < data.numFaces; i++) {
+
+        if (i != exception) {
+
+            var oc = VF.vectorDiff(o, spheres[i]["uhp"].center);
+            var uoc = VF.vectorDot(u, oc);
+            var delta = (uoc ** 2) - uu * (VF.vectorDot(oc, oc) - (spheres[i]["uhp"].radius ** 2));
+
+            if ((delta <= eps) || isNaN(delta)) {
+
+                continue;
+
+            } else {
+
+                var t1 = (-uoc + Math.sqrt(delta)) / uu;
+                var t2 = (-uoc - Math.sqrt(delta)) / uu;
+
+                var polygon = [];
+
+                if (data.metric === "u") {
+
+                    data.faces[i].forEach((j) => {
+                        polygon.push(vertices[j]["klein"]);
+                    });
+
+                } else {
+
+                    data.faces[i].forEach((j) => {
+                        polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]]);
+                    });
+
+                }
+
+                if (data.metric === "u") {
+
+                    if ((t1 > eps) && (t1 < 1 - eps)) {
+
+                        var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
+                        var v1 = HF.upperHalfPlaneToKlein(x1);
+
+                        if (rayPolygonIntersection(v1, polygon) && (x1[2] > 0)) {
+
+                            return false;
+
+                        }
+
+                    }
+
+                    if ((t2 > eps) && (t2 < 1 - eps)) {
+
+                        var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
+                        var v2 = HF.upperHalfPlaneToKlein(x2);
+
+                        if (rayPolygonIntersection(v2, polygon) && (x2[2] > 0)) {
+
+                            return false;
+
+                        }
+
+                    }
+
+                } else {
+
+                    if ((t1 > eps) && (t1 < 1 - eps)) {
+
+                        var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
+                        var v1 = [x1[0], x1[1]];
+
+                        if (pointInPolygon(v1, polygon) && (x1[2] > 0)) {
+
+                            return false;
+
+                        }
+
+                    }
+
+                    if ((t2 > eps) && (t2 < 1 - eps)) {
+
+                        var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
+                        var v2 = [x2[0], x2[1]];
+
+                        if (pointInPolygon(v2, polygon) && (x2[2] > 0)) {
+
+                            return false;
+
+                        }
 
                     }
 
