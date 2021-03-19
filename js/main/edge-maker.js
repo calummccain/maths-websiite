@@ -12,7 +12,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     const uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
     var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
     // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
-    outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
+    // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
     return basis;
 
 }
@@ -164,7 +164,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
             }
 
-            const numPieces = Math.ceil(Math.min(10 * r, 50) * number * (endAngle - startAngle) / Math.PI);
+            const numPieces = Math.ceil(Math.min(50 * r, number) * (endAngle - startAngle) / Math.PI);
             const subAngle = (endAngle - startAngle) / numPieces;
 
             for (var i = 0; i <= numPieces; i++) {
