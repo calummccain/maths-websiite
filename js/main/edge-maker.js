@@ -9,11 +9,12 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
     const vertices = generateVertices(data, thetax, thetay, thetaz);
     const spheres = generateSpheres(data, vertices);
-    const uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
-    var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
+    var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
+    // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
     // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
     // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
-    return basis;
+    //console.log(outline(data, 2 * number, camera, spheres, vertices))
+    return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
 }
 
@@ -301,68 +302,11 @@ function outline(data, number, camera, spheres, vertices) {
             }
         })
 
-        // lineCoords.push(newCurve);
-
-        // var lineGroup = new THREE.Group();
-
-        newCurve.forEach((points) => {
-
-            if (points.length > 0) {
-
-                var drawVerts = [];
-
-                for (var k = 0; k < points.length; k++) {
-
-                    drawVerts.push([points[k], visibilityTest2(points[k], camPos, spheres, vertices, data, i)]);
-
-                }
-
-                var segments = [[drawVerts[0]]];
-                var segmentsPoints = [[drawVerts[0][0]]];
-                var segNum = 0;
-
-                for (var k = 1; k < points.length; k++) {
-
-                    if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
-
-                        segments[segNum].push(drawVerts[k]);
-                        segmentsPoints[segNum].push(drawVerts[k][0]);
-
-                    } else {
-
-                        segNum++;
-                        segments.push([drawVerts[k]]);
-                        segmentsPoints.push([drawVerts[k][0]]);
-
-                    }
-
-                }
-
-                for (var k = 0; k < segments.length; k++) {
-
-                    if ((segments[k].length > 1) && (segments[k][0][1])) {
-
-                        lineCoords.push(drawLine(segmentsPoints[k], 0x000000));
-
-                    } else {
-
-                        if (invisibleLines) {
-
-                            lineCoords.push(drawLine(segmentsPoints[k], 0xAAAAAA));
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        });
-
-        return lineCoords;
+        lineCoords.push(newCurve);
 
     }
+
+    return lineCoords;
 
 }
 
@@ -428,78 +372,6 @@ function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertice
     });
 
     return lineGroup;
-
-}
-
-function pointInPolygon(point, vertices) {
-
-    for (var i = 1; i <= vertices.length - 2; i++) {
-
-        var v = point, v0 = vertices[0], v1 = VF.vectorDiff(vertices[i], vertices[0]), v2 = VF.vectorDiff(vertices[i + 1], vertices[0]);
-        var a = (VF.determinant2([v, v2]) - VF.determinant2([v0, v2])) / VF.determinant2([v1, v2]);
-        var b = - (VF.determinant2([v, v1]) - VF.determinant2([v0, v1])) / VF.determinant2([v1, v2]);
-
-        if ((a > eps) && (b > eps) && (a + b < 1 - eps)) {
-
-            return true;
-
-        }
-
-    }
-
-    return false;
-
-}
-
-//moller thrumbore intersection algorithm
-function rayPolygonIntersection(point, polygon) {
-
-    for (var i = 0; i < polygon.length; i++) {
-
-        var v0 = polygon[i], v1 = polygon[(i + 1) % polygon.length], v2 = polygon[(i + 2) % polygon.length];
-
-        var e1 = VF.vectorDiff(v1, v0);
-        var e2 = VF.vectorDiff(v2, v0);
-
-        var h = VF.vectorCross(point, e2);
-        var a = VF.vectorDot(e1, h);
-
-        if ((a > -eps) && (a < eps)) {
-
-            continue;
-
-        }
-
-        var f = 1 / a;
-        var s = VF.vectorScale(v0, -1);
-        var u = f * VF.vectorDot(s, h);
-
-        if ((u < 0) || (u > 1)) {
-
-            continue;
-
-        }
-
-        var q = VF.vectorCross(s, e1);
-        var v = f * VF.vectorDot(point, q);
-
-        if ((v < 0) || (u + v > 1)) {
-
-            continue;
-
-        }
-
-        var t = f * VF.vectorDot(e2, q);
-
-        if (t > eps) {
-
-            return true;
-
-        }
-
-    }
-
-    return false;
 
 }
 
@@ -602,6 +474,78 @@ function visibilityTest(point, camera, spheres, vertices, data) {
     }
 
     return true;
+
+}
+
+//moller thrumbore intersection algorithm
+function rayPolygonIntersection(point, polygon) {
+
+    for (var i = 0; i < polygon.length; i++) {
+
+        var v0 = polygon[i], v1 = polygon[(i + 1) % polygon.length], v2 = polygon[(i + 2) % polygon.length];
+
+        var e1 = VF.vectorDiff(v1, v0);
+        var e2 = VF.vectorDiff(v2, v0);
+
+        var h = VF.vectorCross(point, e2);
+        var a = VF.vectorDot(e1, h);
+
+        if ((a > -eps) && (a < eps)) {
+
+            continue;
+
+        }
+
+        var f = 1 / a;
+        var s = VF.vectorScale(v0, -1);
+        var u = f * VF.vectorDot(s, h);
+
+        if ((u < 0) || (u > 1)) {
+
+            continue;
+
+        }
+
+        var q = VF.vectorCross(s, e1);
+        var v = f * VF.vectorDot(point, q);
+
+        if ((v < 0) || (u + v > 1)) {
+
+            continue;
+
+        }
+
+        var t = f * VF.vectorDot(e2, q);
+
+        if (t > eps) {
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+
+}
+
+function pointInPolygon(point, vertices) {
+
+    for (var i = 1; i <= vertices.length - 2; i++) {
+
+        var v = point, v0 = vertices[0], v1 = VF.vectorDiff(vertices[i], vertices[0]), v2 = VF.vectorDiff(vertices[i + 1], vertices[0]);
+        var a = (VF.determinant2([v, v2]) - VF.determinant2([v0, v2])) / VF.determinant2([v1, v2]);
+        var b = - (VF.determinant2([v, v1]) - VF.determinant2([v0, v1])) / VF.determinant2([v1, v2]);
+
+        if ((a > eps) && (b > eps) && (a + b < 1 - eps)) {
+
+            return true;
+
+        }
+
+    }
+
+    return false;
 
 }
 
