@@ -11,9 +11,9 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     const spheres = generateSpheres(data, vertices);
     var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
     // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
-    // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
+    uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
     // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
-    //console.log(outline(data, 2 * number, camera, spheres, vertices))
+    // console.log(outline(data, 2 * number, camera, spheres, vertices))
     return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
 }
@@ -295,7 +295,7 @@ function outline(data, number, camera, spheres, vertices) {
         var newCurve = [];
 
         curve.forEach((vert) => {
-            if (pointInPolygon([vert[0], vert[1]], polygon)) {
+            if (true) {
 
                 newCurve.push(vert);
 
