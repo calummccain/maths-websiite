@@ -13,7 +13,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
     if (intersection) {
 
-        uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
+        // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
 
     }
     // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
@@ -263,7 +263,7 @@ function outline(data, number, camera, spheres, vertices) {
 
         const p = VF.norm(proj);
         const cs = VF.norm(diff);
-        
+
         const perp = [-diff[1] * r / p, diff[0] * r / p, 0];
         const v = [-diff[0] * (r ** 2) / (p * cs), -diff[1] * (r ** 2) / (p * cs), r * Math.sqrt(1 - (r / cs) ** 2)];
 
