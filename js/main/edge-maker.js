@@ -13,7 +13,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
     uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
     // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
-    // console.log(outline(data, 2 * number, camera, spheres, vertices))
+    console.log(outline(data, 5 * number, camera, spheres, vertices))
     return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
 }
@@ -249,17 +249,17 @@ function outline(data, number, camera, spheres, vertices) {
     var lineCoords = [];
     const camPos = camera;
 
-    for (var i = 0; i < data.numFaces; i++) {
+    for (var i = 0; i < data.numSides; i++) {
 
-        var center = spheres[i]["uhp"].center;
-        var r = spheres[i]["uhp"].radius;
+        const center = spheres[i]["uhp"].center;
+        const r = spheres[i]["uhp"].radius;
 
-        var diff = VF.vectorDiff(camPos, center);
-        // var proj = [diff[0], diff[1], 0];
-        var perp = [-diff[1], diff[0], 0];
-        var normal = VF.vectorCross(diff, perp);
-        perp = VF.vectorScale(perp, 1 / VF.norm(perp));
-        normal = VF.vectorScale(normal, 1 / VF.norm(normal));
+        const diff = VF.vectorDiff(center, camPos);
+        const proj = [diff[0], diff[1], 0];
+        const p = VF.norm(proj);
+        const cs = VF.norm(diff);
+        const perp = [-diff[1] * r / p, diff[0] * r / p, 0];
+        const v = [-diff[0] * (r ** 2) / (p * cs), -diff[1] * (r ** 2) / (p * cs), r * Math.sqrt(1 - (r / cs) ** 2)];
 
         var curve = [];
 
@@ -268,8 +268,8 @@ function outline(data, number, camera, spheres, vertices) {
             const theta = Math.PI * k / number;
             curve.push(VF.vectorSum(
                 VF.vectorSum(
-                    VF.vectorScale(perp, r * Math.cos(theta)),
-                    VF.vectorScale(normal, r * Math.sin(theta))
+                    VF.vectorScale(perp, Math.cos(theta)),
+                    VF.vectorScale(v, Math.sin(theta))
                 ),
                 center
             ));
@@ -295,7 +295,7 @@ function outline(data, number, camera, spheres, vertices) {
         var newCurve = [];
 
         curve.forEach((vert) => {
-            if (true) {
+            if (pointInPolygon(vert, polygon)) {
 
                 newCurve.push(vert);
 
