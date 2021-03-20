@@ -278,7 +278,7 @@ function outline(data, number, camera, spheres, vertices) {
 
         var polygon = [];
 
-        if (data.metric === "u") {
+        if (data.metric !== "z") {
 
             data.faces[i].forEach((j) => {
                 polygon.push(vertices[j]["klein"]);
