@@ -13,7 +13,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
     uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
     // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
-    console.log(outline(data, 5 * number, camera, spheres, vertices))
+    console.log(outline(data, 10 * number, camera, spheres, vertices))
     return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
 }
@@ -278,7 +278,7 @@ function outline(data, number, camera, spheres, vertices) {
 
         var polygon = [];
 
-        if (data.metric !== "u") {
+        if (data.metric === "u") {
 
             data.faces[i].forEach((j) => {
                 polygon.push(vertices[j]["klein"]);
