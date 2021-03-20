@@ -11,9 +11,13 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     const spheres = generateSpheres(data, vertices);
     var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
     // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
-    uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
+    if (intersection) {
+
+        uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
+
+    }
     // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
-    console.log(outline(data, 10 * number, camera, spheres, vertices))
+    // console.log(outline(data, 10 * number, camera, spheres, vertices))
     return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
 }
@@ -256,8 +260,10 @@ function outline(data, number, camera, spheres, vertices) {
 
         const diff = VF.vectorDiff(center, camPos);
         const proj = [diff[0], diff[1], 0];
+
         const p = VF.norm(proj);
         const cs = VF.norm(diff);
+        
         const perp = [-diff[1] * r / p, diff[0] * r / p, 0];
         const v = [-diff[0] * (r ** 2) / (p * cs), -diff[1] * (r ** 2) / (p * cs), r * Math.sqrt(1 - (r / cs) ** 2)];
 
@@ -267,10 +273,7 @@ function outline(data, number, camera, spheres, vertices) {
 
             const theta = 2 * Math.PI * k / number;
             curve.push(VF.vectorSum(
-                VF.vectorSum(
-                    VF.vectorScale(perp, Math.cos(theta)),
-                    VF.vectorScale(v, Math.sin(theta))
-                ),
+                VF.vectorSum(VF.vectorScale(perp, Math.cos(theta)), VF.vectorScale(v, Math.sin(theta))),
                 center
             ));
 
@@ -278,19 +281,9 @@ function outline(data, number, camera, spheres, vertices) {
 
         var polygon = [];
 
-        if (data.metric !== "z") {
-
-            data.faces[i].forEach((j) => {
-                polygon.push(vertices[j]["klein"]);
-            });
-
-        } else {
-
-            data.faces[i].forEach((j) => {
-                polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]]);
-            });
-
-        }
+        data.faces[i].forEach((j) => {
+            polygon.push(vertices[j]["klein"]);
+        });
 
         var newCurve = [];
 
@@ -400,73 +393,31 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             var polygon = [];
 
-            if (data.metric !== "z") {
+            data.faces[i].forEach((j) => {
+                polygon.push(vertices[j]["klein"]);
+            });
 
-                data.faces[i].forEach((j) => {
-                    polygon.push(vertices[j]["klein"]);
-                });
+            if ((t1 > eps) && (t1 < 1 - eps)) {
 
-            } else {
+                var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
+                var v1 = HF.upperHalfPlaneToKlein(x1);
 
-                data.faces[i].forEach((j) => {
-                    polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]]);
-                });
+                if (rayPolygonIntersection(v1, polygon) && (x1[2] > 0)) {
+
+                    return false;
+
+                }
 
             }
 
-            if (data.metric === "u") {
+            if ((t2 > eps) && (t2 < 1 - eps)) {
 
-                if ((t1 > eps) && (t1 < 1 - eps)) {
+                var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
+                var v2 = HF.upperHalfPlaneToKlein(x2);
 
-                    var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
-                    var v1 = HF.upperHalfPlaneToKlein(x1);
+                if (rayPolygonIntersection(v2, polygon) && (x2[2] > 0)) {
 
-                    if (rayPolygonIntersection(v1, polygon) && (x1[2] > 0)) {
-
-                        return false;
-
-                    }
-
-                }
-
-                if ((t2 > eps) && (t2 < 1 - eps)) {
-
-                    var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
-                    var v2 = HF.upperHalfPlaneToKlein(x2);
-
-                    if (rayPolygonIntersection(v2, polygon) && (x2[2] > 0)) {
-
-                        return false;
-
-                    }
-
-                }
-
-            } else {
-
-                if ((t1 > eps) && (t1 < 1 - eps)) {
-
-                    var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
-                    var v1 = HF.upperHalfPlaneToKlein(x1);
-
-                    if (pointInPolygon(v1, polygon) && (x1[2] > 0)) {
-
-                        return false;
-
-                    }
-
-                }
-
-                if ((t2 > eps) && (t2 < 1 - eps)) {
-
-                    var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
-                    var v2 = HF.upperHalfPlaneToKlein(x2);
-
-                    if (pointInPolygon(v2, polygon) && (x2[2] > 0)) {
-
-                        return false;
-
-                    }
+                    return false;
 
                 }
 
