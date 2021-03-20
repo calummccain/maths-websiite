@@ -265,7 +265,7 @@ function outline(data, number, camera, spheres, vertices) {
 
         for (var k = 0; k <= number; k++) {
 
-            const theta = Math.PI * k / number;
+            const theta = 2 * Math.PI * k / number;
             curve.push(VF.vectorSum(
                 VF.vectorSum(
                     VF.vectorScale(perp, Math.cos(theta)),
@@ -295,7 +295,10 @@ function outline(data, number, camera, spheres, vertices) {
         var newCurve = [];
 
         curve.forEach((vert) => {
-            if (pointInPolygon(vert, polygon)) {
+
+            var v1 = HF.upperHalfPlaneToKlein(vert);
+
+            if (pointInPolygon(v1, polygon) && vert[2] >= 0) {
 
                 newCurve.push(vert);
 
@@ -397,7 +400,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             var polygon = [];
 
-            if (data.metric === "u") {
+            if (data.metric !== "z") {
 
                 data.faces[i].forEach((j) => {
                     polygon.push(vertices[j]["klein"]);
@@ -444,7 +447,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                 if ((t1 > eps) && (t1 < 1 - eps)) {
 
                     var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
-                    var v1 = [x1[0], x1[1]];
+                    var v1 = HF.upperHalfPlaneToKlein(x1);
 
                     if (pointInPolygon(v1, polygon) && (x1[2] > 0)) {
 
@@ -457,7 +460,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                 if ((t2 > eps) && (t2 < 1 - eps)) {
 
                     var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
-                    var v2 = [x2[0], x2[1]];
+                    var v2 = HF.upperHalfPlaneToKlein(x2);
 
                     if (pointInPolygon(v2, polygon) && (x2[2] > 0)) {
 
