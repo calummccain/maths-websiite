@@ -249,7 +249,7 @@ function outline(data, number, camera, spheres, vertices) {
     var lineCoords = [];
     const camPos = camera;
 
-    for (var i = 0; i < data.numSides; i++) {
+    for (var i = 0; i < data.numFaces; i++) {
 
         const center = spheres[i]["uhp"].center;
         const r = spheres[i]["uhp"].radius;
@@ -278,7 +278,7 @@ function outline(data, number, camera, spheres, vertices) {
 
         var polygon = [];
 
-        if (data.metric === "u") {
+        if (data.metric !== "u") {
 
             data.faces[i].forEach((j) => {
                 polygon.push(vertices[j]["klein"]);
