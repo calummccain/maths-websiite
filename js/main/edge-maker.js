@@ -10,14 +10,13 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     const vertices = generateVertices(data, thetax, thetay, thetaz);
     const spheres = generateSpheres(data, vertices);
     var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
-    // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
+
     if (intersection) {
 
         uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
 
     }
-    // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
-    // console.log(outline(data, 10 * number, camera, spheres, vertices))
+
     return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
 }
@@ -426,11 +425,11 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
     const o = camera, u = VF.vectorDiff(point, camera), uu = VF.vectorDot(u, u);
 
-    for (var i = 0; i < data.numFaces; i++) {
+    for (var ii = 0; ii < data.numFaces; ii++) {
 
-        var oc = VF.vectorDiff(o, spheres[i]["uhp"].center);
+        var oc = VF.vectorDiff(o, spheres[ii]["uhp"].center);
         var uoc = VF.vectorDot(u, oc);
-        var delta = (uoc ** 2) - uu * (VF.vectorDot(oc, oc) - (spheres[i]["uhp"].radius ** 2));
+        var delta = (uoc ** 2) - uu * (VF.vectorDot(oc, oc) - (spheres[ii]["uhp"].radius ** 2));
 
         if ((delta <= eps) || isNaN(delta)) {
 
@@ -443,7 +442,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             var polygon = [];
 
-            data.faces[i].forEach((j) => {
+            data.faces[ii].forEach((j) => {
                 polygon.push(vertices[j]["klein"]);
             });
 
@@ -553,111 +552,6 @@ function pointInPolygon(point, vertices) {
 
 }
 
-function visibilityTest2(point, camera, spheres, vertices, data, exception) {
-
-    const o = camera, u = VF.vectorDiff(point, camera), uu = VF.vectorDot(u, u);
-
-    for (var i = 0; i < data.numFaces; i++) {
-
-        if (i != exception) {
-
-            var oc = VF.vectorDiff(o, spheres[i]["uhp"].center);
-            var uoc = VF.vectorDot(u, oc);
-            var delta = (uoc ** 2) - uu * (VF.vectorDot(oc, oc) - (spheres[i]["uhp"].radius ** 2));
-
-            if ((delta <= eps) || isNaN(delta)) {
-
-                continue;
-
-            } else {
-
-                var t1 = (-uoc + Math.sqrt(delta)) / uu;
-                var t2 = (-uoc - Math.sqrt(delta)) / uu;
-
-                var polygon = [];
-
-                if (data.metric === "u") {
-
-                    data.faces[i].forEach((j) => {
-                        polygon.push(vertices[j]["klein"]);
-                    });
-
-                } else {
-
-                    data.faces[i].forEach((j) => {
-                        polygon.push([vertices[j]["uhp"][0], vertices[j]["uhp"][1]]);
-                    });
-
-                }
-
-                if (data.metric === "u") {
-
-                    if ((t1 > eps) && (t1 < 1 - eps)) {
-
-                        var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
-                        var v1 = HF.upperHalfPlaneToKlein(x1);
-
-                        if (rayPolygonIntersection(v1, polygon) && (x1[2] > 0)) {
-
-                            return false;
-
-                        }
-
-                    }
-
-                    if ((t2 > eps) && (t2 < 1 - eps)) {
-
-                        var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
-                        var v2 = HF.upperHalfPlaneToKlein(x2);
-
-                        if (rayPolygonIntersection(v2, polygon) && (x2[2] > 0)) {
-
-                            return false;
-
-                        }
-
-                    }
-
-                } else {
-
-                    if ((t1 > eps) && (t1 < 1 - eps)) {
-
-                        var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
-                        var v1 = [x1[0], x1[1]];
-
-                        if (pointInPolygon(v1, polygon) && (x1[2] > 0)) {
-
-                            return false;
-
-                        }
-
-                    }
-
-                    if ((t2 > eps) && (t2 < 1 - eps)) {
-
-                        var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
-                        var v2 = [x2[0], x2[1]];
-
-                        if (pointInPolygon(v2, polygon) && (x2[2] > 0)) {
-
-                            return false;
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-    return true;
-
-}
-
 function drawLine(vectors, col) {
 
     var threeVectors = [];
@@ -672,6 +566,5 @@ function drawLine(vectors, col) {
     return line;
 
 }
-
 
 export { generateData };
