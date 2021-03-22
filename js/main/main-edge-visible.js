@@ -7,7 +7,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 7, r = 3;
+    var p = 3, q = 6, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
     var invisible = false;
     var intersection = true;
