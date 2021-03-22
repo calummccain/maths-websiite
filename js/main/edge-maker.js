@@ -265,14 +265,26 @@ function outline(data, number, camera, spheres, vertices) {
         const t = Math.sqrt(r ** 2 - h ** 2) / cs;
         const interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
 
-        const perp = [-diff[1] * h / VF.norm([diff[0], diff[1]]), diff[0] * h / VF.norm([diff[0], diff[1]]), 0];
-        const v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / cs));
+        var perp = [1, 0, 0];
+        if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
+
+            perp = [-diff[1] * h / VF.norm([diff[0], diff[1]]), diff[0] * h / VF.norm([diff[0], diff[1]]), 0];
+
+        }
+
+        var v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / cs));
+
+        if (v[2] < 0) {
+
+            v = VF.vectorScale(v, -1);
+
+        }
 
         var curve = [];
 
         for (var k = 0; k <= number; k++) {
 
-            const theta = 2 * Math.PI * k / number;
+            const theta = Math.PI * k / number;
             curve.push(VF.vectorSum(
                 VF.vectorSum(VF.vectorScale(perp, Math.cos(theta)), VF.vectorScale(v, Math.sin(theta))),
                 interp
@@ -286,20 +298,57 @@ function outline(data, number, camera, spheres, vertices) {
             polygon.push(vertices[j]["klein"]);
         });
 
-        var newCurve = [];
+        // var newCurve = [];
+
+        // curve.forEach((vert) => {
+
+        //     var v1 = HF.upperHalfPlaneToKlein(vert);
+
+        //     if (pointInPolygon(v1, polygon) && vert[2] >= 0) {
+
+        //         newCurve.push(vert);
+
+        //     }
+        // })
+
+        var drawVerts = [];
 
         curve.forEach((vert) => {
 
-            var v1 = HF.upperHalfPlaneToKlein(vert);
+            drawVerts.push([vert, (pointInPolygon(HF.upperHalfPlaneToKlein(vert), polygon) && vert[2] >= 0)]);
 
-            if (pointInPolygon(v1, polygon) && vert[2] >= 0) {
+        });
 
-                newCurve.push(vert);
+        var segments = [[drawVerts[0]]];
+        var segmentsPoints = [[drawVerts[0][0]]];
+        var segNum = 0;
+
+        for (var k = 1; k < curve.length; k++) {
+
+            if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                segments[segNum].push(drawVerts[k]);
+                segmentsPoints[segNum].push(drawVerts[k][0]);
+
+            } else {
+
+                segNum++;
+                segments.push([drawVerts[k]]);
+                segmentsPoints.push([drawVerts[k][0]]);
 
             }
-        })
 
-        lineCoords.push(newCurve);
+        }
+
+        for (var k = 0; k < segments.length; k++) {
+
+            if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                lineCoords.push(segmentsPoints[k], 0x000000);
+
+            }
+
+        }
 
     }
 
