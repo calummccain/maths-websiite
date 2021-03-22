@@ -13,7 +13,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
     // var basis = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
     if (intersection) {
 
-        // uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
+        uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
 
     }
     // outline(data, 2 * number, camera, spheres, vertices).forEach((edge) => basis.add(edge));
@@ -259,13 +259,14 @@ function outline(data, number, camera, spheres, vertices) {
         const r = spheres[i]["uhp"].radius;
 
         const diff = VF.vectorDiff(center, camPos);
-        const proj = [diff[0], diff[1], 0];
-
-        const p = VF.norm(proj);
         const cs = VF.norm(diff);
 
-        const perp = [-diff[1] * r / p, diff[0] * r / p, 0];
-        const v = [-diff[0] * (r ** 2) / (p * cs), -diff[1] * (r ** 2) / (p * cs), r * Math.sqrt(1 - (r / cs) ** 2)];
+        const h = r * Math.sqrt(cs ** 2 - r ** 2) / cs;
+        const t = Math.sqrt(r ** 2 - h ** 2) / cs;
+        const interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
+
+        const perp = [-diff[1] * h / VF.norm([diff[0], diff[1]]), diff[0] * h / VF.norm([diff[0], diff[1]]), 0];
+        const v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / cs));
 
         var curve = [];
 
@@ -274,7 +275,7 @@ function outline(data, number, camera, spheres, vertices) {
             const theta = 2 * Math.PI * k / number;
             curve.push(VF.vectorSum(
                 VF.vectorSum(VF.vectorScale(perp, Math.cos(theta)), VF.vectorScale(v, Math.sin(theta))),
-                center
+                interp
             ));
 
         }
