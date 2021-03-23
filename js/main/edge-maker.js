@@ -479,59 +479,6 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
 }
 
-//moller thrumbore intersection algorithm
-function rayPolygonIntersection(point, polygon) {
-
-    for (var i = 0; i < polygon.length; i++) {
-
-        var v0 = polygon[i], v1 = polygon[(i + 1) % polygon.length], v2 = polygon[(i + 2) % polygon.length];
-
-        console.log(v0, v1, v2)
-        var e1 = VF.vectorDiff(v1, v0);
-        var e2 = VF.vectorDiff(v2, v0);
-
-        var h = VF.vectorCross(point, e2);
-        var a = VF.vectorDot(e1, h);
-
-        if ((a > -eps) && (a < eps)) {
-
-            continue;
-
-        }
-
-        var f = 1 / a;
-        var s = VF.vectorScale(v0, -1);
-        var u = f * VF.vectorDot(s, h);
-
-        if ((u < 0) || (u > 1)) {
-
-            continue;
-
-        }
-
-        var q = VF.vectorCross(s, e1);
-        var v = f * VF.vectorDot(point, q);
-
-        if ((v < 0) || (u + v > 1)) {
-
-            continue;
-
-        }
-
-        var t = f * VF.vectorDot(e2, q);
-
-        if (t > eps) {
-
-            return true;
-
-        }
-
-    }
-
-    return false;
-
-}
-
 function pointInPolygon(point, vertices) {
 
     for (var i = 1; i < vertices.length - 1; i++) {
