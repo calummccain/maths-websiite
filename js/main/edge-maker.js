@@ -297,19 +297,6 @@ function outline(data, number, camera, spheres, vertices) {
             polygon.push(vertices[j]["klein"]);
         });
 
-        // var newCurve = [];
-
-        // curve.forEach((vert) => {
-
-        //     var v1 = HF.upperHalfPlaneToKlein(vert);
-
-        //     if (pointInPolygon(v1, polygon) && vert[2] >= 0) {
-
-        //         newCurve.push(vert);
-
-        //     }
-        // })
-
         var drawVerts = [];
 
         curve.forEach((vert) => {
@@ -431,6 +418,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
         var uoc = VF.vectorDot(u, oc);
         var delta = (uoc ** 2) - uu * (VF.vectorDot(oc, oc) - (spheres[ii]["uhp"].radius ** 2));
 
+        console.log(o, u, uu, oc, uoc, delta)
         if ((delta <= eps) || isNaN(delta)) {
 
             continue;
@@ -445,6 +433,8 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             data.faces[ii].forEach((j) => {
                 polygon.push(vertices[j]["klein"]);
             });
+
+            console.log(t1, t2)
 
             if ((t1 > eps) && (t1 < 1 - eps)) {
 
