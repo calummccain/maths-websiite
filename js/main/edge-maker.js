@@ -168,7 +168,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
             }
 
-            const numPieces = Math.ceil(Math.min(100 * r, number) * (endAngle - startAngle) / Math.PI);
+            const numPieces = Math.ceil(Math.max(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI);
             const subAngle = (endAngle - startAngle) / numPieces;
 
             for (var i = 0; i <= numPieces; i++) {
@@ -220,7 +220,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 }
 
-                const numPieces = Math.ceil(Math.abs(Math.min(100 * r, number) * (endAngle - startAngle) / Math.PI));
+                const numPieces = Math.ceil(Math.max(Math.abs(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI));
                 const subAngle = (endAngle - startAngle) / numPieces;
 
                 for (var k = 0; k <= numPieces; k++) {

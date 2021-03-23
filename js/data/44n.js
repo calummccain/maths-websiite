@@ -74,7 +74,7 @@ const squareData = (n) => {
 
     const matrixDict = (letter, v) => GT.matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v);
 
-    const [f, fNames] = GT.makeFaces([(n == 4) ? 1 : den, 0, 0, 0], 100, 4, matrixDict);
+    const [f, fNames] = GT.makeFaces([(n == 4) ? 1 : den, 0, 0, 0], 500, 4, matrixDict);
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
     var faceData = GT.generateFaceData(Math.abs(1 / (1 - 2 * c)), 4, metric, f, v, fmat);
