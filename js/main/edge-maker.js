@@ -410,23 +410,30 @@ function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertice
 // ONLY WORKS FOR UHP
 function visibilityTest(point, camera, spheres, vertices, data) {
 
-    const o = camera, u = VF.vectorDiff(point, camera), uu = VF.vectorDot(u, u);
+    const c = camera;
+    const p = point;
+    const cp = VF.vectorDiff(c, p);
 
     for (var ii = 0; ii < data.numFaces; ii++) {
 
-        var oc = VF.vectorDiff(o, spheres[ii]["uhp"].center);
-        var uoc = VF.vectorDot(u, oc);
-        var delta = (uoc ** 2) - uu * (VF.vectorDot(oc, oc) - (spheres[ii]["uhp"].radius ** 2));
+        const s = spheres[ii]["uhp"].center;
+        const sr = spheres[ii]["uhp"].radius;
+        const cs = VF.vectorDiff(c, s);
 
-        console.log(o, u, uu, oc, uoc, delta)
-        if ((delta <= eps) || isNaN(delta)) {
+        const A = VF.vectorDot(cp, cp);
+        const B = -2 * VF.vectorDot(cp, cs);
+        const C = VF.vectorDot(cs, cs) - sr ** 2;
+
+        var delta = B ** 2 - 4 * A * C;
+
+        if ((delta <= 0) || isNaN(delta)) {
 
             continue;
 
         } else {
 
-            var t1 = (-uoc + Math.sqrt(delta)) / uu;
-            var t2 = (-uoc - Math.sqrt(delta)) / uu;
+            var t1 = (-B + Math.sqrt(delta)) / (2 * A);
+            var t2 = (-B - Math.sqrt(delta)) / (2 * A);
 
             var polygon = [];
 
@@ -434,14 +441,14 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                 polygon.push(vertices[j]["klein"]);
             });
 
-            console.log(t1, t2)
-
             if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                var x1 = VF.vectorSum(o, VF.vectorScale(u, t1));
+                var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
                 var v1 = HF.upperHalfPlaneToKlein(x1);
 
-                if (rayPolygonIntersection(v1, polygon) && (x1[2] > 0)) {
+                console.log("1",x1, v1);
+
+                if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
 
                     return false;
 
@@ -451,10 +458,12 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             if ((t2 > eps) && (t2 < 1 - eps)) {
 
-                var x2 = VF.vectorSum(o, VF.vectorScale(u, t2));
+                var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
                 var v2 = HF.upperHalfPlaneToKlein(x2);
 
-                if (rayPolygonIntersection(v2, polygon) && (x2[2] > 0)) {
+                console.log("2", x2, v2)
+
+                if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
 
                     return false;
 
@@ -477,6 +486,7 @@ function rayPolygonIntersection(point, polygon) {
 
         var v0 = polygon[i], v1 = polygon[(i + 1) % polygon.length], v2 = polygon[(i + 2) % polygon.length];
 
+        console.log(v0, v1, v2)
         var e1 = VF.vectorDiff(v1, v0);
         var e2 = VF.vectorDiff(v2, v0);
 
