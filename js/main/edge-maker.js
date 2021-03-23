@@ -446,7 +446,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                 var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
                 var v1 = HF.upperHalfPlaneToKlein(x1);
 
-                console.log("1",x1, v1);
+                console.log("1", x1, v1);
 
                 if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
 
@@ -534,13 +534,23 @@ function rayPolygonIntersection(point, polygon) {
 
 function pointInPolygon(point, vertices) {
 
-    for (var i = 1; i <= vertices.length - 2; i++) {
+    for (var i = 1; i < vertices.length - 1; i++) {
 
-        var v = point, v0 = vertices[0], v1 = VF.vectorDiff(vertices[i], vertices[0]), v2 = VF.vectorDiff(vertices[i + 1], vertices[0]);
-        var a = (VF.determinant2([v, v2]) - VF.determinant2([v0, v2])) / VF.determinant2([v1, v2]);
-        var b = - (VF.determinant2([v, v1]) - VF.determinant2([v0, v1])) / VF.determinant2([v1, v2]);
+        const v0 = VF.vectorDiff(vertices[i], vertices[0]);
+        const v1 = VF.vectorDiff(vertices[i + 1], vertices[0]);
+        const v2 = VF.vectorDiff(point, vertices[0]);
 
-        if ((a > eps) && (b > eps) && (a + b < 1 - eps)) {
+        const dot00 = VF.vectorDot(v0, v0);
+        const dot01 = VF.vectorDot(v0, v1);
+        const dot02 = VF.vectorDot(v0, v2);
+        const dot11 = VF.vectorDot(v1, v1);
+        const dot12 = VF.vectorDot(v1, v2);
+
+        const a = (dot11 * dot02 - dot01 * dot12) / (dot00 * dot11 - dot01 * dot01);
+        const b = (dot00 * dot12 - dot01 * dot02) / (dot00 * dot11 - dot01 * dot01);
+        const c = 1 - a - b;
+
+        if ((a >= 0) && (b >= 0) && (c >= 0)) {
 
             return true;
 
