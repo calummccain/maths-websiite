@@ -518,7 +518,7 @@ function drawLine(vectors, col) {
     });
 
     var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
-    var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col }));
+    var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col, linewidth: 2 }));
 
     return line;
 
