@@ -446,8 +446,6 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                 var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
                 var v1 = HF.upperHalfPlaneToKlein(x1);
 
-                console.log("1", x1, v1);
-
                 if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
 
                     return false;
@@ -460,8 +458,6 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
                 var v2 = HF.upperHalfPlaneToKlein(x2);
-
-                console.log("2", x2, v2)
 
                 if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
 
