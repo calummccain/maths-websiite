@@ -252,6 +252,17 @@ function outline(data, number, camera, spheres, vertices) {
     var lineCoords = [];
     const camPos = camera;
 
+    var cos = [];
+    var sin = [];
+
+    for (var k = 0; k <= number; k++) {
+
+        const theta = Math.PI * k / number;
+        cos.push(Math.cos(theta));
+        sin.push(Math.sin(theta));
+
+    }
+
     for (var i = 0; i < data.numFaces; i++) {
 
         const center = spheres[i]["uhp"].center;
@@ -263,8 +274,9 @@ function outline(data, number, camera, spheres, vertices) {
         const h = r * Math.sqrt(cs ** 2 - r ** 2) / cs;
         const t = Math.sqrt(r ** 2 - h ** 2) / cs;
         const interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
-
+        
         var perp = [1, 0, 0];
+
         if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
 
             perp = [-diff[1] * h / VF.norm([diff[0], diff[1]]), diff[0] * h / VF.norm([diff[0], diff[1]]), 0];
@@ -283,9 +295,8 @@ function outline(data, number, camera, spheres, vertices) {
 
         for (var k = 0; k <= number; k++) {
 
-            const theta = Math.PI * k / number;
             curve.push(VF.vectorSum(
-                VF.vectorSum(VF.vectorScale(perp, Math.cos(theta)), VF.vectorScale(v, Math.sin(theta))),
+                VF.vectorSum(VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k])),
                 interp
             ));
 
@@ -489,8 +500,9 @@ function pointInPolygon(point, vertices) {
         const dot11 = VF.vectorDot(v1, v1);
         const dot12 = VF.vectorDot(v1, v2);
 
-        const a = (dot11 * dot02 - dot01 * dot12) / (dot00 * dot11 - dot01 * dot01);
-        const b = (dot00 * dot12 - dot01 * dot02) / (dot00 * dot11 - dot01 * dot01);
+        const invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+        const a = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        const b = (dot00 * dot12 - dot01 * dot02) * invDenom;
         const c = 1 - a - b;
 
         if ((a >= 0) && (b >= 0) && (c >= 0)) {
