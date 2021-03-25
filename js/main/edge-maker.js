@@ -385,13 +385,13 @@ function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertice
 
                 if ((segments[k].length > 1) && (segments[k][0][1])) {
 
-                    lineGroup.add(drawLine(segmentsPoints[k], 0x000000));
+                    lineGroup.add(drawLine(segmentsPoints[k], 0x333333, 2));
 
                 } else {
 
                     if (invisibleLines) {
 
-                        lineGroup.add(drawLine(segmentsPoints[k], 0xAAAAAA));
+                        lineGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 1));
 
                     }
 
@@ -505,7 +505,7 @@ function pointInPolygon(point, vertices) {
 
 }
 
-function drawLine(vectors, col) {
+function drawLine(vectors, col, width) {
 
     var threeVectors = [];
 
@@ -514,7 +514,7 @@ function drawLine(vectors, col) {
     });
 
     var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
-    var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col, linewidth: 2 }));
+    var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col, linewidth: width }));
 
     return line;
 
