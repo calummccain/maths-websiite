@@ -94,7 +94,7 @@ function objectMaker(parameters) {
     } else if (parameters.model === "uhp") {
 
         const cameraLines = (rx, ry, rz, camera) => EM.generateData(
-            data, rx, ry, rz, parameters.refinement, parameters.intersection, parameters.invisibleLines, camera
+            data, rx, ry, rz, parameters.refinement, parameters.intersection, parameters.invisibleLines, camera, parameters.cells
         );
 
         return cameraLines;
