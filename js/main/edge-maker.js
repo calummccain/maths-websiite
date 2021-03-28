@@ -5,24 +5,78 @@ import * as RF from "../maths-functions/rotation-functions.js";
 
 const eps = 1e-4;
 
-function generateData(data, thetax, thetay, thetaz, number, intersection, invisibleLines, camera) {
+function generateData(data, thetax, thetay, thetaz, number, intersection, invisibleLines, camera, cells) {
 
-    const vertices = generateVertices(data, thetax, thetay, thetaz);
-    const spheres = generateSpheres(data, vertices);
-    var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
+    var spheres = [];
+    var vertices = [];
+    var uhpVertices = [];
 
-    if (intersection) {
+    var lineGroup = new THREE.Group();
 
-        uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
+    for (var i = 0; i < cells.length; i++) {
+
+        const localVertices = generateVertices(data, thetax, thetay, thetaz, cells[i]);
+        const localSpheres = generateSpheres(data, localVertices);
+
+        vertices = vertices.concat(localVertices);
+        spheres = spheres.concat(localSpheres);
+
+        uhpVertices = uhpVertices.concat(makeTheLines(data, number, localVertices, localSpheres, intersection));
+
+        if (intersection) {
+
+            uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, localSpheres, localVertices));
+
+        }
 
     }
 
-    return cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
+    lineGroup = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
+
+    return lineGroup;
 
 }
 
 // generate the positions of the vertices in several models
-function generateVertices(data, thetax, thetay, thetaz) {
+function generateVertices(data, thetax, thetay, thetaz, cell) {
+
+    // matrix dictionary
+    function matrixDict(letter, vector) {
+
+        if (letter === "a") {
+
+            return data.a(vector)
+
+        } else if (letter === "b") {
+
+            return data.b(vector)
+
+        } else if (letter === "c") {
+
+            return data.c(vector)
+
+        } else if (letter === "d") {
+
+            return data.d(vector)
+
+        } else if (letter === "e") {
+
+            return data.e(vector)
+
+        } else if (letter === "f") {
+
+            return data.f(vector)
+
+        } else {
+
+            throw 'letter needs to be one of a, b, c, d, e, f!';
+
+        }
+
+    }
+
+    // Transform the 'central' cell's vertices to the transformed cell's vertices
+    var newVertices = VF.transformVertices(data.vertices, cell, matrixDict);
 
     var verts = [];
 
@@ -30,7 +84,7 @@ function generateVertices(data, thetax, thetay, thetaz) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            const p = data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz));
+            const p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
 
             verts.push({
                 "hyperboloid": p,
@@ -45,7 +99,7 @@ function generateVertices(data, thetax, thetay, thetaz) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            const p = data.flip(RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz));
+            const p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
 
             verts.push({
                 "hyperboloid": p,
@@ -60,7 +114,7 @@ function generateVertices(data, thetax, thetay, thetaz) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            const p = RF.rxyz(data.f(data.vertices[i]), thetax, thetay, thetaz);
+            const p = RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz);
 
             verts.push({
                 "hyperboloid": p,
@@ -274,7 +328,7 @@ function outline(data, number, camera, spheres, vertices) {
         const h = r * Math.sqrt(cs ** 2 - r ** 2) / cs;
         const t = Math.sqrt(r ** 2 - h ** 2) / cs;
         const interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
-        
+
         var perp = [1, 0, 0];
 
         if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
@@ -425,7 +479,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
     const p = point;
     const cp = VF.vectorDiff(c, p);
 
-    for (var ii = 0; ii < data.numFaces; ii++) {
+    for (var ii = 0; ii < spheres.length; ii++) {
 
         const s = spheres[ii]["uhp"].center;
         const sr = spheres[ii]["uhp"].radius;
@@ -448,8 +502,8 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             var polygon = [];
 
-            data.faces[ii].forEach((j) => {
-                polygon.push(vertices[j]["klein"]);
+            data.faces[ii % data.numFaces].forEach((j) => {
+                polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
             });
 
             if ((t1 > eps) && (t1 < 1 - eps)) {
