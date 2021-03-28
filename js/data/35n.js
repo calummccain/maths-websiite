@@ -94,11 +94,11 @@ const icosahedronData = (n) => {
         f: f,
 
         faceReflections: [
-            '', 'c', 'bcbc', 'bc', 'cbc', 'bacbcabacbc',
-            'cbacbcabacbc', 'bacabacbc', 'bcabacbc',
-            'cbcabacbc', 'abcbc', 'abc', 'acbc',
-            'abacabacbc', 'abcabacbc', 'bacaacbcabacbcbcbaca',
-            'bacbc', 'abacbc', 'acabacbc', 'cabacbc'
+            "", "c", "bcbc", "bc", "cbc", "bacbcabacbc",
+            "cbacbcabacbc", "bacabacbc", "bcabacbc",
+            "cbcabacbc", "abcbc", "abc", "acbc",
+            "abacabacbc", "abcabacbc", "bacaacbcabacbcbcbaca",
+            "bacbc", "abacbc", "acabacbc", "cabacbc"
         ],
 
         outerReflection: "d",

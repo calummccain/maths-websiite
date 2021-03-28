@@ -124,9 +124,9 @@ const dodecahedronData = (n) => {
         f: f,
 
         faceReflections: [
-            '', 'c', 'bc', 'acacbabc', 'cacbabc',
-            'cbabc', 'bacbabc', 'cbabacbabc', 'babacbabc',
-            'abc', 'acbabc', 'abacbabc'
+            "", "c", "bc", "acacbabc", "cacbabc",
+            "cbabc", "bacbabc", "cbabacbabc", "babacbabc",
+            "abc", "acbabc", "abacbabc"
         ],
 
         outerReflection: "d",

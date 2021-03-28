@@ -115,7 +115,7 @@ const tetrahedronData = (n) => {
 
         f: f,
 
-        faceReflections: ['', 'abc', 'bc', 'c'],
+        faceReflections: ["", "abc", "bc", "c"],
 
         outerReflection: "d",
 

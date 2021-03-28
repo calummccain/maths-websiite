@@ -115,7 +115,7 @@ const cubeData = (n) => {
 
         f: f,
 
-        faceReflections: ['bc', 'c', 'cbabc', 'abc', '', 'babc'],
+        faceReflections: ["bc", "c", "cbabc", "abc", "", "babc"],
 
         outerReflection: "d",
 

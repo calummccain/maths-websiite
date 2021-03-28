@@ -102,7 +102,7 @@ const octahedronData = (n) => {
 
         f: f,
 
-        faceReflections: ['', 'c', 'bc', 'cbc', 'abc', 'cabc', 'bcabc', 'cbcabc'],
+        faceReflections: ["", "c", "bc", "cbc", "abc", "cabc", "bcabc", "cbcabc"],
 
         outerReflection: "d",
 
