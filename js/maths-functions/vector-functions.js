@@ -126,6 +126,21 @@ function circumcenter(u, v, w) {
 
 }
 
+function circum4(u, v, w, x) {
+
+    const nu = vectorDot(u, u), nv = vectorDot(v, v), nw = vectorDot(w, w), nx = vectorDot(x, x);
+
+    const a = determinant4([[u[0], u[1], u[2], 1], [v[0], v[1], v[2], 1], [w[0], w[1], w[2], 1], [x[0], x[1], x[2], 1]]);
+    const g = determinant4([[nu, u[0], u[1], u[2]], [nv, v[0], v[1], v[2]], [nw, w[0], w[1], w[2]], [nx, x[0], x[1], x[2]]]);
+
+    const dx = determinant4([[nu, u[1], u[2], 1], [nv, v[1], v[2], 1], [nw, w[1], w[2], 1], [nx, x[1], x[2], 1]]);
+    const dy = -determinant4([[nu, u[0], u[2], 1], [nv, v[0], v[2], 1], [nw, w[0], w[2], 1], [nx, x[0], x[2], 1]]);
+    const dz = determinant4([[nu, u[0], u[1], 1], [nv, v[0], v[1], 1], [nw, w[0], w[1], 1], [nx, x[0], x[1], 1]]);
+
+    return [[dx / (2 * a), dy / (2 * a), dz / (2 * a)], Math.sqrt(((dx ** 2) + (dy ** 2) + (dz ** 2) - 4 * a * g) / (4 * (a ** 2)))];
+
+}
+
 // returns 2x2 determinant
 function determinant2(m) {
 
@@ -137,6 +152,17 @@ function determinant2(m) {
 function determinant3(m) {
 
     return m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+
+}
+
+function determinant4(m) {
+
+    const m1 = [[m[1][1], m[1][2], m[1][3]], [m[2][1], m[2][2], m[2][3]], [m[3][1], m[3][2], m[3][3]]];
+    const m2 = [[m[1][0], m[1][2], m[1][3]], [m[2][0], m[2][2], m[2][3]], [m[3][0], m[3][2], m[3][3]]];
+    const m3 = [[m[1][0], m[1][1], m[1][3]], [m[2][0], m[2][1], m[2][3]], [m[3][0], m[3][1], m[3][3]]];
+    const m4 = [[m[1][0], m[1][1], m[1][2]], [m[2][0], m[2][1], m[2][2]], [m[3][0], m[3][1], m[3][2]]];
+
+    return m[0][0] * determinant3(m1) - m[0][1] * determinant3(m2) + m[0][2] * determinant3(m3) - m[0][3] * determinant3(m4);
 
 }
 
@@ -210,6 +236,8 @@ export {
     circumcenter,
     determinant2,
     determinant3,
+    determinant4,
+    circum4,
     transformVertices,
     isInArray
 }

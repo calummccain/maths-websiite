@@ -1,5 +1,6 @@
 import * as THREE from "../three-bits/three.module.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
+import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 
@@ -9,29 +10,49 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
     var spheres = [];
     var vertices = [];
-    var uhpVertices = [];
+    var drawableVertices = [];
 
     var lineGroup = new THREE.Group();
 
-    for (var i = 0; i < cells.length; i++) {
+    if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-        const localVertices = generateVertices(data, thetax, thetay, thetaz, cells[i]);
-        const localSpheres = generateSpheres(data, localVertices);
+        for (var i = 0; i < cells.length; i++) {
 
-        vertices = vertices.concat(localVertices);
-        spheres = spheres.concat(localSpheres);
+            const localVertices = generateVertices(data, thetax, thetay, thetaz, cells[i]);
+            const localSpheres = generateSpheres(data, localVertices);
 
-        uhpVertices = uhpVertices.concat(makeTheLines(data, number, localVertices, localSpheres, intersection));
+            vertices = vertices.concat(localVertices);
+            spheres = spheres.concat(localSpheres);
 
-        if (intersection) {
+            drawableVertices = drawableVertices.concat(makeTheLines(data, number, localVertices, localSpheres, intersection));
 
-            uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, localSpheres, localVertices));
+            if (intersection) {
+
+                drawableVertices = drawableVertices.concat(outline(data, 2 * number, camera, localSpheres, localVertices));
+
+            }
+
+        }
+
+    } else if (data.metric === "s") {
+
+        for (var i = 0; i < cells.length; i++) {
+
+            const localVertices = generateVertices(data, thetax, thetay, thetaz, cells[i]);
+            const localSpheres = generateSpheres(data, localVertices);
+
+            vertices = vertices.concat(localVertices);
+            spheres = spheres.concat(localSpheres);
+
+            drawableVertices = drawableVertices.concat(makeTheLines(data, number, localVertices, localSpheres, intersection));
+
+            console.log(drawableVertices);
 
         }
 
     }
 
-    lineGroup = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
+    lineGroup = cameraLines(data, drawableVertices, invisibleLines, camera, spheres, vertices);
 
     return lineGroup;
 
@@ -80,47 +101,64 @@ function generateVertices(data, thetax, thetay, thetaz, cell) {
 
     var verts = [];
 
-    if (data.cellType === "euclidean") {
+    if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-        for (var i = 0; i < data.numVertices; i++) {
+        if (data.cellType === "euclidean") {
 
-            const p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
+            for (var i = 0; i < data.numVertices; i++) {
 
-            verts.push({
-                "hyperboloid": p,
-                "poincare": HF.hyperboloidToPoincare(p),
-                "klein": HF.hyperboloidToKlein(p),
-                "uhp": HF.hyperboloidToUpperHalfPlane(p)
-            });
+                const p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
+
+                verts.push({
+                    "hyperboloid": p,
+                    "poincare": HF.hyperboloidToPoincare(p),
+                    "klein": HF.hyperboloidToKlein(p),
+                    "uhp": HF.hyperboloidToUpperHalfPlane(p)
+                });
+
+            }
+
+        } else if (data.cellType === "hyperbolic") {
+
+            for (var i = 0; i < data.numVertices; i++) {
+
+                const p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
+
+                verts.push({
+                    "hyperboloid": p,
+                    "poincare": HF.hyperboloidToPoincare(p),
+                    "klein": HF.hyperboloidToKlein(p),
+                    "uhp": HF.hyperboloidToUpperHalfPlane(p)
+                });
+
+            }
+
+        } else {
+
+            for (var i = 0; i < data.numVertices; i++) {
+
+                const p = RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz);
+
+                verts.push({
+                    "hyperboloid": p,
+                    "poincare": HF.hyperboloidToPoincare(p),
+                    "klein": HF.hyperboloidToKlein(p),
+                    "uhp": HF.hyperboloidToUpperHalfPlane(p)
+                });
+
+            }
 
         }
 
-    } else if (data.cellType === "hyperbolic") {
+    } else if (data.metric === "s") {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            const p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
+            const p = data.f(newVertices[i]);
 
             verts.push({
-                "hyperboloid": p,
-                "poincare": HF.hyperboloidToPoincare(p),
-                "klein": HF.hyperboloidToKlein(p),
-                "uhp": HF.hyperboloidToUpperHalfPlane(p)
-            });
-
-        }
-
-    } else {
-
-        for (var i = 0; i < data.numVertices; i++) {
-
-            const p = RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz);
-
-            verts.push({
-                "hyperboloid": p,
-                "poincare": HF.hyperboloidToPoincare(p),
-                "klein": HF.hyperboloidToKlein(p),
-                "uhp": HF.hyperboloidToUpperHalfPlane(p)
+                "hypersphere": p,
+                "stereo": SF.sphereToPoincare(p, 1)
             });
 
         }
@@ -136,41 +174,80 @@ function generateSpheres(data, vertices) {
 
     var spheres = [];
 
-    for (var i = 0; i < data.numFaces; i++) {
+    if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-        var v1, v2, v3;
+        for (var i = 0; i < data.numFaces; i++) {
 
-        if (data.metric === "u") {
+            var v1, v2, v3;
 
-            var u1, u2, u3;
+            if (data.metric === "u") {
 
-            u1 = vertices[data.faces[i][0]]["klein"];
-            u2 = vertices[data.faces[i][1]]["klein"];
-            u3 = vertices[data.faces[i][2]]["klein"];
+                var u1, u2, u3;
 
-            v1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u1, u2));
-            v2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u1));
-            v3 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u3));
+                u1 = vertices[data.faces[i][0]]["klein"];
+                u2 = vertices[data.faces[i][1]]["klein"];
+                u3 = vertices[data.faces[i][2]]["klein"];
 
-        } else {
+                v1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u1, u2));
+                v2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u1));
+                v3 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u2, u3));
 
-            v1 = vertices[data.faces[i][0]]["uhp"];
-            v2 = vertices[data.faces[i][1]]["uhp"];
-            v3 = vertices[data.faces[i][2]]["uhp"];
+            } else {
+
+                v1 = vertices[data.faces[i][0]]["uhp"];
+                v2 = vertices[data.faces[i][1]]["uhp"];
+                v3 = vertices[data.faces[i][2]]["uhp"];
+
+            }
+
+            var center = HF.uhpCenter(v1, v2, v3);
+
+            var sphereDict = {
+                "hyperboloid": {},
+                "poincare": {},
+                "uhp": {
+                    center: center,
+                    radius: VF.distance(v1, center)
+                }
+            };
+
+            spheres.push(sphereDict);
 
         }
 
-        var center = HF.uhpCenter(v1, v2, v3);
+    } else if (data.metric === "s") {
 
-        var sphereDict = {
-            "hyperboloid": {},
-            "poincare": {},
-            "uhp": {
-                center: center,
-                radius: VF.distance(v1, center)
-            },
-        };
-        spheres.push(sphereDict);
+        for (var i = 0; i < data.numFaces; i++) {
+
+            var u1, u2, u3, triCenter;
+
+            u1 = vertices[data.faces[i][0]]["hypersphere"];
+            u2 = vertices[data.faces[i][1]]["hypersphere"];
+            u3 = vertices[data.faces[i][2]]["hypersphere"];
+
+            triCenter = VF.vectorSum(u1, VF.vectorSum(u2, u3));
+            triCenter = VF.vectorScale(triCenter, 1 / VF.norm(triCenter));
+
+            var v1, v2, v3, triCenterStereo;
+
+            v1 = vertices[data.faces[i][0]]["stereo"];
+            v2 = vertices[data.faces[i][1]]["stereo"];
+            v3 = vertices[data.faces[i][2]]["stereo"];
+
+            triCenterStereo = SF.sphereToPoincare(triCenter, 1);
+
+            const [center, radius] = VF.circum4(v1, v2, v3, triCenterStereo);
+
+            var sphereDict = {
+                "stereo": {
+                    center: center,
+                    radius: radius
+                }
+            };
+
+            spheres.push(sphereDict);
+
+        }
 
     }
 
@@ -183,117 +260,158 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
     var lineCoords = [];
 
-    if (intersection) {
+    if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-        data.edges.forEach((endpoints) => {
+        if (intersection) {
 
-            var uhpVertices = [], e1, e2;
+            data.edges.forEach((endpoints) => {
 
-            if (data.metric === "u") {
+                var uhpVertices = [], e1, e2;
 
-                e1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]));
-                e2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]));
+                if (data.metric === "u") {
 
-            } else {
+                    e1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[0]]["klein"], vertices[endpoints[1]]["klein"]));
+                    e2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(vertices[endpoints[1]]["klein"], vertices[endpoints[0]]["klein"]));
 
-                [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
-                e1 = HF.hyperboloidToUpperHalfPlane(e1);
-                e2 = HF.hyperboloidToUpperHalfPlane(e2);
+                } else {
 
-            }
-
-            const p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
-
-            const radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
-            const center = VF.midpoint(e1, e2);
-            const r = VF.norm(radVect);
-
-            var startAngle, endAngle;
-
-            if (data.metric === "h") {
-
-                startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
-                endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
-
-            } else {
-
-                startAngle = 0;
-                endAngle = Math.PI;
-
-            }
-
-            const numPieces = Math.ceil(Math.max(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI);
-            const subAngle = (endAngle - startAngle) / numPieces;
-
-            for (var i = 0; i <= numPieces; i++) {
-
-                const theta = startAngle + i * subAngle;
-
-                uhpVertices.push([
-                    radVect[0] * Math.cos(theta) + center[0],
-                    radVect[1] * Math.cos(theta) + center[1],
-                    r * Math.sin(theta)
-                ])
-
-            }
-
-            lineCoords.push(uhpVertices);
-
-        });
-
-    }
-
-    // kinda works??
-    if (data.metric === "u") {
-
-        for (var j = 0; j < data.numFaces; j++) {
-
-            const face = data.faces[j];
-
-            for (var i = 0; i < data.numSides; i++) {
-
-                var uhpVertices = [];
-
-                var u = vertices[face[i]]["klein"], v = vertices[face[(i + 1) % data.numSides]]["klein"], w = vertices[face[(i + 2) % data.numSides]]["klein"];
-                var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
-                var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
-
-                var center = spheres[j]["uhp"].center;
-                var r = spheres[j]["uhp"].radius;
-
-                var theta1 = Math.acos(Math.max(-1, Math.min(1, (p1[0] - center[0]) / r))) * ((p1[1] - center[1] > 0) ? 1 : -1);
-                var theta2 = Math.acos(Math.max(-1, Math.min(1, (p2[0] - center[0]) / r))) * ((p2[1] - center[1] > 0) ? 1 : -1);
-
-                var startAngle = Math.min(theta1, theta2);
-                var endAngle = Math.max(theta1, theta2);
-
-                if (endAngle - startAngle > Math.PI) {
-
-                    startAngle += 2 * Math.PI;
-                    [startAngle, endAngle] = [endAngle, startAngle];
+                    [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]]["hyperboloid"], vertices[endpoints[1]]["hyperboloid"]);
+                    e1 = HF.hyperboloidToUpperHalfPlane(e1);
+                    e2 = HF.hyperboloidToUpperHalfPlane(e2);
 
                 }
 
-                const numPieces = Math.ceil(Math.max(Math.abs(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI));
+                const p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+
+                const radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
+                const center = VF.midpoint(e1, e2);
+                const r = VF.norm(radVect);
+
+                var startAngle, endAngle;
+
+                if (data.metric === "h") {
+
+                    startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
+                    endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
+
+                } else {
+
+                    startAngle = 0;
+                    endAngle = Math.PI;
+
+                }
+
+                const numPieces = Math.ceil(Math.max(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI);
                 const subAngle = (endAngle - startAngle) / numPieces;
 
-                for (var k = 0; k <= numPieces; k++) {
+                for (var i = 0; i <= numPieces; i++) {
 
-                    const theta = startAngle + k * subAngle;
+                    const theta = startAngle + i * subAngle;
 
                     uhpVertices.push([
-                        r * Math.cos(theta) + center[0],
-                        r * Math.sin(theta) + center[1],
-                        0
+                        radVect[0] * Math.cos(theta) + center[0],
+                        radVect[1] * Math.cos(theta) + center[1],
+                        r * Math.sin(theta)
                     ])
 
                 }
 
                 lineCoords.push(uhpVertices);
 
+            });
+
+        }
+
+        // kinda works??
+        if (data.metric === "u") {
+
+            for (var j = 0; j < data.numFaces; j++) {
+
+                const face = data.faces[j];
+
+                for (var i = 0; i < data.numSides; i++) {
+
+                    var uhpVertices = [];
+
+                    var u = vertices[face[i]]["klein"], v = vertices[face[(i + 1) % data.numSides]]["klein"], w = vertices[face[(i + 2) % data.numSides]]["klein"];
+                    var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
+                    var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
+
+                    var center = spheres[j]["uhp"].center;
+                    var r = spheres[j]["uhp"].radius;
+
+                    var theta1 = Math.acos(Math.max(-1, Math.min(1, (p1[0] - center[0]) / r))) * ((p1[1] - center[1] > 0) ? 1 : -1);
+                    var theta2 = Math.acos(Math.max(-1, Math.min(1, (p2[0] - center[0]) / r))) * ((p2[1] - center[1] > 0) ? 1 : -1);
+
+                    var startAngle = Math.min(theta1, theta2);
+                    var endAngle = Math.max(theta1, theta2);
+
+                    if (endAngle - startAngle > Math.PI) {
+
+                        startAngle += 2 * Math.PI;
+                        [startAngle, endAngle] = [endAngle, startAngle];
+
+                    }
+
+                    const numPieces = Math.ceil(Math.max(Math.abs(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI));
+                    const subAngle = (endAngle - startAngle) / numPieces;
+
+                    for (var k = 0; k <= numPieces; k++) {
+
+                        const theta = startAngle + k * subAngle;
+
+                        uhpVertices.push([
+                            r * Math.cos(theta) + center[0],
+                            r * Math.sin(theta) + center[1],
+                            0
+                        ])
+
+                    }
+
+                    lineCoords.push(uhpVertices);
+
+                }
+
             }
 
         }
+
+    } else if (data.metric === "s") {
+
+        var ratios = [];
+        const ca = VF.vectorDot(vertices[data.edges[0][0]]["hypersphere"], vertices[data.edges[0][1]]["hypersphere"]);
+        const sa = Math.sqrt(1 - ca ** 2);
+        const a = Math.acos(ca);
+        const denom = 1 / sa;
+        var theta = 0;
+
+        for (var i = 0; i <= number; i++) {
+
+            ratios.push(Math.sin(theta) * denom);
+            theta += a / number;
+
+        }
+
+        data.edges.forEach((endpoints) => {
+            var line = [];
+            const start = vertices[endpoints[0]]["hypersphere"], end = vertices[endpoints[1]]["hypersphere"];
+            
+            for (var i = 0; i <= number; i++) {
+
+                line.push(
+                    SF.sphereToPoincare(
+                        VF.vectorSum(
+                            VF.vectorScale(start, ratios[i]),
+                            VF.vectorScale(end, ratios[number - i])
+                        ), 1
+                    )
+                );
+
+            }
+
+            lineCoords.push(line);
+
+        })
 
     }
 
@@ -317,17 +435,19 @@ function outline(data, number, camera, spheres, vertices) {
 
     }
 
+    var center, r, diff, cs, h, t, interp;
+
     for (var i = 0; i < data.numFaces; i++) {
 
-        const center = spheres[i]["uhp"].center;
-        const r = spheres[i]["uhp"].radius;
+        center = spheres[i]["uhp"].center;
+        r = spheres[i]["uhp"].radius;
 
-        const diff = VF.vectorDiff(center, camPos);
-        const cs = VF.norm(diff);
+        diff = VF.vectorDiff(center, camPos);
+        cs = VF.norm(diff);
 
-        const h = r * Math.sqrt(cs ** 2 - r ** 2) / cs;
-        const t = Math.sqrt(r ** 2 - h ** 2) / cs;
-        const interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
+        h = r * Math.sqrt(cs ** 2 - r ** 2) / cs;
+        t = Math.sqrt(r ** 2 - h ** 2) / cs;
+        interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
 
         var perp = [1, 0, 0];
 
@@ -479,54 +599,119 @@ function visibilityTest(point, camera, spheres, vertices, data) {
     const p = point;
     const cp = VF.vectorDiff(c, p);
 
-    for (var ii = 0; ii < spheres.length; ii++) {
+    if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-        const s = spheres[ii]["uhp"].center;
-        const sr = spheres[ii]["uhp"].radius;
-        const cs = VF.vectorDiff(c, s);
+        for (var ii = 0; ii < spheres.length; ii++) {
 
-        const A = VF.vectorDot(cp, cp);
-        const B = -2 * VF.vectorDot(cp, cs);
-        const C = VF.vectorDot(cs, cs) - sr ** 2;
+            const s = spheres[ii]["uhp"].center;
+            const sr = spheres[ii]["uhp"].radius;
+            const cs = VF.vectorDiff(c, s);
 
-        var delta = B ** 2 - 4 * A * C;
+            const A = VF.vectorDot(cp, cp);
+            const B = -2 * VF.vectorDot(cp, cs);
+            const C = VF.vectorDot(cs, cs) - sr ** 2;
 
-        if ((delta <= 0) || isNaN(delta)) {
+            var delta = B ** 2 - 4 * A * C;
 
-            continue;
+            if ((delta <= 0) || isNaN(delta)) {
 
-        } else {
+                continue;
 
-            var t1 = (-B + Math.sqrt(delta)) / (2 * A);
-            var t2 = (-B - Math.sqrt(delta)) / (2 * A);
+            } else {
 
-            var polygon = [];
+                var t1 = (-B + Math.sqrt(delta)) / (2 * A);
+                var t2 = (-B - Math.sqrt(delta)) / (2 * A);
 
-            data.faces[ii % data.numFaces].forEach((j) => {
-                polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
-            });
+                var polygon = [];
 
-            if ((t1 > eps) && (t1 < 1 - eps)) {
+                data.faces[ii % data.numFaces].forEach((j) => {
+                    polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
+                });
 
-                var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
-                var v1 = HF.upperHalfPlaneToKlein(x1);
+                if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
+                    var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
+                    var v1 = HF.upperHalfPlaneToKlein(x1);
 
-                    return false;
+                    if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
+
+                        return false;
+
+                    }
+
+                }
+
+                if ((t2 > eps) && (t2 < 1 - eps)) {
+
+                    var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
+                    var v2 = HF.upperHalfPlaneToKlein(x2);
+
+                    if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
+
+                        return false;
+
+                    }
 
                 }
 
             }
 
-            if ((t2 > eps) && (t2 < 1 - eps)) {
+        }
 
-                var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
-                var v2 = HF.upperHalfPlaneToKlein(x2);
+    } else if (data.metric === "s") {
 
-                if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
+        for (var ii = 0; ii < spheres.length; ii++) {
 
-                    return false;
+            const s = spheres[ii]["stereo"].center;
+            const sr = spheres[ii]["stereo"].radius;
+            const cs = VF.vectorDiff(c, s);
+
+            const A = VF.vectorDot(cp, cp);
+            const B = -2 * VF.vectorDot(cp, cs);
+            const C = VF.vectorDot(cs, cs) - sr ** 2;
+
+            var delta = B ** 2 - 4 * A * C;
+
+            if ((delta <= 0) || isNaN(delta)) {
+
+                continue;
+
+            } else {
+
+                return true;
+
+                var t1 = (-B + Math.sqrt(delta)) / (2 * A);
+                var t2 = (-B - Math.sqrt(delta)) / (2 * A);
+
+                var polygon = [];
+
+                data.faces[ii % data.numFaces].forEach((j) => {
+                    polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
+                });
+
+                if ((t1 > eps) && (t1 < 1 - eps)) {
+
+                    var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
+                    var v1 = HF.upperHalfPlaneToKlein(x1);
+
+                    if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
+
+                        return false;
+
+                    }
+
+                }
+
+                if ((t2 > eps) && (t2 < 1 - eps)) {
+
+                    var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
+                    var v2 = HF.upperHalfPlaneToKlein(x2);
+
+                    if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
+
+                        return false;
+
+                    }
 
                 }
 
