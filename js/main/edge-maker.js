@@ -33,16 +33,6 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
     lineGroup = cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertices);
 
-    // const vertices = generateVertices(data, thetax, thetay, thetaz);
-    // const spheres = generateSpheres(data, vertices);
-    // var uhpVertices = makeTheLines(data, number, vertices, spheres, intersection);
-
-    // if (intersection) {
-
-    //     uhpVertices = uhpVertices.concat(outline(data, 2 * number, camera, spheres, vertices));
-
-    // }
-
     return lineGroup;
 
 }
@@ -513,7 +503,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             var polygon = [];
 
             data.faces[ii % data.numFaces].forEach((j) => {
-                polygon.push(vertices[j + (ii - (ii % data.numFaces))]["klein"]);
+                polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
             });
 
             if ((t1 > eps) && (t1 < 1 - eps)) {
