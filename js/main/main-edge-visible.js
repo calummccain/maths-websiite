@@ -7,7 +7,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 5, r = 3;
+    var p = 3, q = 6, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
     var invisible = false;
     var intersection = true;
@@ -117,20 +117,14 @@ function main() {
 
     document.getElementById("myRangep").oninput = function () {
         p = this.value;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangeq").oninput = function () {
         q = this.value;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRanger").oninput = function () {
         r = this.value / 2;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangex").oninput = function () {
