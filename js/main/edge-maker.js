@@ -46,7 +46,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
             drawableVertices = drawableVertices.concat(makeTheLines(data, number, localVertices, localSpheres, intersection));
 
-            console.log(drawableVertices);
+            // drawableVertices = drawableVertices.concat(outline(data, 2 * number, camera, localSpheres, localVertices));
 
         }
 

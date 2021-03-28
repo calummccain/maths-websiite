@@ -97,7 +97,7 @@ function main() {
         if (event.key === "Enter") {
             geom = objectMaker({
                 name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0],
-                cells: ["e"]
+                cells: ["e", "d", "cd", "dcd"]
             });
             lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
         }
@@ -106,7 +106,7 @@ function main() {
     window.addEventListener("touchend", () => {
         geom = objectMaker({
             name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0],
-            cells: ["e"]
+            cells: ["e", "d", "cd", "dcd"]
         });
         lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     }, false);
