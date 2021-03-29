@@ -272,9 +272,9 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
         if (intersection) {
 
-            data.edges.forEach((endpoints) => {
+            var uhpVertices = [], e1, e2, p1, p2, radVect, center, r, startAngle, endAngle, numPieces, subAngle, theta;
 
-                var uhpVertices = [], e1, e2;
+            data.edges.forEach((endpoints) => {
 
                 if (data.metric === "u") {
 
@@ -289,13 +289,13 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 }
 
-                const p1 = vertices[endpoints[0]]["uhp"], p2 = vertices[endpoints[1]]["uhp"];
+                p1 = vertices[endpoints[0]]["uhp"];
+                p2 = vertices[endpoints[1]]["uhp"];
 
-                const radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
-                const center = VF.midpoint(e1, e2);
-                const r = VF.norm(radVect);
+                radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
+                center = VF.midpoint(e1, e2);
+                r = VF.norm(radVect);
 
-                var startAngle, endAngle;
 
                 if (data.metric === "h") {
 
@@ -309,12 +309,12 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 }
 
-                const numPieces = Math.ceil(Math.max(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI);
-                const subAngle = (endAngle - startAngle) / numPieces;
+                numPieces = Math.ceil(Math.max(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI);
+                subAngle = (endAngle - startAngle) / numPieces;
 
                 for (var i = 0; i <= numPieces; i++) {
 
-                    const theta = startAngle + i * subAngle;
+                    theta = startAngle + i * subAngle;
 
                     uhpVertices.push([
                         radVect[0] * Math.cos(theta) + center[0],
@@ -333,26 +333,30 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
         // kinda works??
         if (data.metric === "u") {
 
+            var face, uhpVertices, u, v, w, p1, p2, center, r, theta1, theta2, startAngle, endAngle, numPieces, subAngle, theta;
+
             for (var j = 0; j < data.numFaces; j++) {
 
-                const face = data.faces[j];
+                face = data.faces[j];
 
                 for (var i = 0; i < data.numSides; i++) {
 
-                    var uhpVertices = [];
+                    uhpVertices = [];
 
-                    var u = vertices[face[i]]["klein"], v = vertices[face[(i + 1) % data.numSides]]["klein"], w = vertices[face[(i + 2) % data.numSides]]["klein"];
-                    var p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
-                    var p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
+                    u = vertices[face[i]]["klein"];
+                    v = vertices[face[(i + 1) % data.numSides]]["klein"];
+                    w = vertices[face[(i + 2) % data.numSides]]["klein"];
+                    p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
+                    p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
 
-                    var center = spheres[j]["uhp"].center;
-                    var r = spheres[j]["uhp"].radius;
+                    center = spheres[j]["uhp"].center;
+                    r = spheres[j]["uhp"].radius;
 
-                    var theta1 = Math.acos(Math.max(-1, Math.min(1, (p1[0] - center[0]) / r))) * ((p1[1] - center[1] > 0) ? 1 : -1);
-                    var theta2 = Math.acos(Math.max(-1, Math.min(1, (p2[0] - center[0]) / r))) * ((p2[1] - center[1] > 0) ? 1 : -1);
+                    theta1 = Math.acos(Math.max(-1, Math.min(1, (p1[0] - center[0]) / r))) * ((p1[1] - center[1] > 0) ? 1 : -1);
+                    theta2 = Math.acos(Math.max(-1, Math.min(1, (p2[0] - center[0]) / r))) * ((p2[1] - center[1] > 0) ? 1 : -1);
 
-                    var startAngle = Math.min(theta1, theta2);
-                    var endAngle = Math.max(theta1, theta2);
+                    startAngle = Math.min(theta1, theta2);
+                    endAngle = Math.max(theta1, theta2);
 
                     if (endAngle - startAngle > Math.PI) {
 
@@ -361,12 +365,12 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                     }
 
-                    const numPieces = Math.ceil(Math.max(Math.abs(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI));
-                    const subAngle = (endAngle - startAngle) / numPieces;
+                    numPieces = Math.ceil(Math.max(Math.abs(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI));
+                    subAngle = (endAngle - startAngle) / numPieces;
 
                     for (var k = 0; k <= numPieces; k++) {
 
-                        const theta = startAngle + k * subAngle;
+                        theta = startAngle + k * subAngle;
 
                         uhpVertices.push([
                             r * Math.cos(theta) + center[0],
@@ -392,6 +396,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
         const a = Math.acos(ca);
         const denom = 1 / sa;
         var theta = 0;
+        var line, start, end;
 
         for (var i = 0; i <= number; i++) {
 
@@ -401,8 +406,9 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
         }
 
         data.edges.forEach((endpoints) => {
-            var line = [];
-            const start = vertices[endpoints[0]]["hypersphere"], end = vertices[endpoints[1]]["hypersphere"];
+            line = [];
+            start = vertices[endpoints[0]]["hypersphere"];
+            end = vertices[endpoints[1]]["hypersphere"];
 
             for (var i = 0; i <= number; i++) {
 
@@ -541,11 +547,13 @@ function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertice
 
     var lineGroup = new THREE.Group();
 
+    var drawVerts, segments, segmentsPoints, segNum;
+
     uhpVertices.forEach((points) => {
 
         if (points.length > 0) {
 
-            var drawVerts = [];
+            drawVerts = [];
 
             for (var k = 0; k < points.length; k++) {
 
@@ -553,9 +561,9 @@ function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertice
 
             }
 
-            var segments = [[drawVerts[0]]];
-            var segmentsPoints = [[drawVerts[0][0]]];
-            var segNum = 0;
+            segments = [[drawVerts[0]]];
+            segmentsPoints = [[drawVerts[0][0]]];
+            segNum = 0;
 
             for (var k = 1; k < points.length; k++) {
 
@@ -609,7 +617,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
     if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-        var s, sr, cs, A, B, C, delta;
+        var s, sr, cs, A, B, C, delta, t1, t2, polygon, x1, x2, v1, v2;
 
         for (var ii = 0; ii < spheres.length; ii++) {
 
@@ -629,10 +637,10 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             } else {
 
-                var t1 = (-B + Math.sqrt(delta)) / (2 * A);
-                var t2 = (-B - Math.sqrt(delta)) / (2 * A);
+                t1 = (-B + Math.sqrt(delta)) / (2 * A);
+                t2 = (-B - Math.sqrt(delta)) / (2 * A);
 
-                var polygon = [];
+                polygon = [];
 
                 data.faces[ii % data.numFaces].forEach((j) => {
                     polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
@@ -640,8 +648,8 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                    var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
-                    var v1 = HF.upperHalfPlaneToKlein(x1);
+                    x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
+                    v1 = HF.upperHalfPlaneToKlein(x1);
 
                     if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
 
@@ -653,8 +661,8 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t2 > eps) && (t2 < 1 - eps)) {
 
-                    var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
-                    var v2 = HF.upperHalfPlaneToKlein(x2);
+                    x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
+                    v2 = HF.upperHalfPlaneToKlein(x2);
 
                     if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
 
@@ -670,17 +678,19 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
     } else if (data.metric === "s") {
 
+        var s, sr, cs, A, B, C, delta, t1, t2, polygon, x1, x2;
+
         for (var ii = 0; ii < spheres.length; ii++) {
 
-            const s = spheres[ii]["stereo"].center;
-            const sr = spheres[ii]["stereo"].radius;
-            const cs = VF.vectorDiff(c, s);
+            s = spheres[ii]["stereo"].center;
+            sr = spheres[ii]["stereo"].radius;
+            cs = VF.vectorDiff(c, s);
 
-            const A = VF.vectorDot(cp, cp);
-            const B = -2 * VF.vectorDot(cp, cs);
-            const C = VF.vectorDot(cs, cs) - sr ** 2;
+            A = VF.vectorDot(cp, cp);
+            B = -2 * VF.vectorDot(cp, cs);
+            C = VF.vectorDot(cs, cs) - sr ** 2;
 
-            var delta = B ** 2 - 4 * A * C;
+            delta = B ** 2 - 4 * A * C;
 
             if ((delta <= 0) || isNaN(delta)) {
 
@@ -688,10 +698,10 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
             } else {
 
-                var t1 = (-B + Math.sqrt(delta)) / (2 * A);
-                var t2 = (-B - Math.sqrt(delta)) / (2 * A);
+                t1 = (-B + Math.sqrt(delta)) / (2 * A);
+                t2 = (-B - Math.sqrt(delta)) / (2 * A);
 
-                var polygon = [];
+                polygon = [];
 
                 data.faces[ii % data.numFaces].forEach((j) => {
                     polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["stereo"]);
@@ -699,9 +709,8 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                    var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
+                    x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
 
-                    console.log(x1, c, polygon, spheres[ii]["stereo"].normal, spheres[ii]["stereo"].center);
                     if (pointInSphericalPolygon(x1, polygon, spheres[ii]["stereo"].normal, s)) {
 
                         return false;
@@ -712,9 +721,8 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t2 > eps) && (t2 < 1 - eps)) {
 
-                    var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
+                    x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
 
-                    console.log(x2, c, polygon, spheres[ii]["stereo"].normal, spheres[ii]["stereo"].center);
                     if (pointInSphericalPolygon(x2, polygon, spheres[ii]["stereo"].normal, s)) {
 
                         return false;
