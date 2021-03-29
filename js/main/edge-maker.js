@@ -609,17 +609,19 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
     if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
+        var s, sr, cs, A, B, C, delta;
+
         for (var ii = 0; ii < spheres.length; ii++) {
 
-            const s = spheres[ii]["uhp"].center;
-            const sr = spheres[ii]["uhp"].radius;
-            const cs = VF.vectorDiff(c, s);
+            s = spheres[ii]["uhp"].center;
+            sr = spheres[ii]["uhp"].radius;
+            cs = VF.vectorDiff(c, s);
 
-            const A = VF.vectorDot(cp, cp);
-            const B = -2 * VF.vectorDot(cp, cs);
-            const C = VF.vectorDot(cs, cs) - sr ** 2;
+            A = VF.vectorDot(cp, cp);
+            B = -2 * VF.vectorDot(cp, cs);
+            C = VF.vectorDot(cs, cs) - sr ** 2;
 
-            var delta = B ** 2 - 4 * A * C;
+            delta = B ** 2 - 4 * A * C;
 
             if ((delta <= 0) || isNaN(delta)) {
 
@@ -700,7 +702,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                     var x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
 
                     console.log(x1, c, polygon, spheres[ii]["stereo"].normal, spheres[ii]["stereo"].center);
-                    if (pointInSphericalPolygon(x1, c, polygon, spheres[ii]["stereo"].normal, s)) {
+                    if (pointInSphericalPolygon(x1, polygon, spheres[ii]["stereo"].normal, s)) {
 
                         return false;
 
@@ -713,7 +715,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                     var x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
 
                     console.log(x2, c, polygon, spheres[ii]["stereo"].normal, spheres[ii]["stereo"].center);
-                    if (pointInSphericalPolygon(x2, c, polygon, spheres[ii]["stereo"].normal, s)) {
+                    if (pointInSphericalPolygon(x2, polygon, spheres[ii]["stereo"].normal, s)) {
 
                         return false;
 
@@ -765,7 +767,7 @@ function pointInPolygon(point, vertices) {
 }
 
 // https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
-function pointInSphericalPolygon(point, origin, vertices, normal, center) {
+function pointInSphericalPolygon(point, polygon, normal, center) {
 
     const ray = VF.vectorDiff(point, center);
     const normalDotRay = VF.vectorDot(ray, normal);
@@ -777,7 +779,7 @@ function pointInSphericalPolygon(point, origin, vertices, normal, center) {
 
     }
 
-    const d = VF.vectorDot(normal, vertices[0]);
+    const d = VF.vectorDot(normal, polygon[0]);
     const t = (VF.vectorDot(normal, center) + d) / normalDotRay;
 
     if (t < 0) {
@@ -787,40 +789,8 @@ function pointInSphericalPolygon(point, origin, vertices, normal, center) {
     }
 
     const intersection = VF.vectorSum(center, VF.vectorScale(ray, t));
-    var edge0, edge1, edge2, vp0, vp1, vp2;
 
-    for (var i = 1; i < vertices.length - 1; i++) {
-
-        edge0 = VF.vectorDiff(vertices[i], vertices[0]);
-        vp0 = VF.vectorDiff(intersection, vertices[0]);
-        
-        if (VF.determinant3([normal, edge0, vp0]) < 0) {
-
-            return false;
-
-        }
-
-        edge1 = VF.vectorDiff(vertices[i + 1], vertices[i]);
-        vp1 = VF.vectorDiff(intersection, vertices[i]);
-
-        if (VF.determinant3([normal, edge1, vp1]) < 0) {
-
-            return false;
-
-        }
-
-        edge2 = VF.vectorDiff(vertices[0], vertices[i + 1]);
-        vp2 = VF.vectorDiff(intersection, vertices[i + 1]);
-
-        if (VF.determinant3([normal, edge2, vp2]) < 0) {
-
-            return false;
-
-        }
-
-    }
-
-    return true;
+    return pointInPolygon(intersection, polygon)
 
 }
 
