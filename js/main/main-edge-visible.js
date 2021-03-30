@@ -54,6 +54,12 @@ function main() {
 
     lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
 
+    // const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
+    // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
+    // const sphere1 = new THREE.Mesh(geometry, material1);
+    // sphere1.position.set(-1, -1, -1);
+    //scene.add(sphere1);
+
     render();
 
     window.addEventListener("resize", onWindowResize, false);
@@ -96,8 +102,8 @@ function main() {
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = objectMaker({
-                name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0],
-                cells: ["e", "d", "cd", "dcd"]
+                name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0],
+                cells: ["e", "d", "cd"]
             });
             lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
         }
@@ -106,7 +112,7 @@ function main() {
     window.addEventListener("touchend", () => {
         geom = objectMaker({
             name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0],
-            cells: ["e", "d", "cd", "dcd"]
+            cells: ["e", "d", "cd"]
         });
         lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     }, false);
