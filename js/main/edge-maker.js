@@ -4,7 +4,7 @@ import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 
-const eps = 1e-4;
+const eps = 1e-6;
 
 // Works 
 // but
@@ -777,8 +777,7 @@ function pointInPolygon(point, polygon) {
 // https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
 function pointInSphericalPolygon(point, polygon, normal, center) {
 
-    const ray = VF.vectorDiff(point, center);
-    const normalDotRay = VF.vectorDot(ray, normal);
+    const normalDotRay = VF.vectorDot(VF.vectorDiff(point, center), normal);
 
     if (Math.abs(normalDotRay) < eps) {
 
@@ -787,7 +786,7 @@ function pointInSphericalPolygon(point, polygon, normal, center) {
 
     }
 
-    const t = (VF.vectorDot(VF.vectorDiff(polygon[0], center), normal)) / normalDotRay;
+    const t = VF.vectorDot(VF.vectorDiff(polygon[0], center), normal) / normalDotRay;
 
     if (t < 0) {
 
@@ -795,7 +794,9 @@ function pointInSphericalPolygon(point, polygon, normal, center) {
 
     }
 
-    const intersection = VF.vectorSum(center, VF.vectorScale(ray, t));
+    // console.log(t);
+
+    const intersection = VF.vectorSum(VF.vectorScale(point, t), VF.vectorScale(center, 1-t));
 
     return pointInPolygon(intersection, polygon);
 
