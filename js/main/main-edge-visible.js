@@ -7,7 +7,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 3, r = 3;
+    var p = 3, q = 4, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
     var invisible = false;
     var intersection = true;
@@ -149,10 +149,12 @@ function main() {
 
     document.getElementById("visibleLines").addEventListener("click", function () {
         data.invisible = !data.invisible;
+        geom = objectMaker(data);
     });
 
     document.getElementById("intersection").addEventListener("click", function () {
         data.intersection = !data.intersection;
+        geom = objectMaker(data);
     });
 
 }

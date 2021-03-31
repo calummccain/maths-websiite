@@ -613,7 +613,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
     const c = camera;
     const p = point;
-    const cp = VF.vectorDiff(c, p);
+    const pc = VF.vectorDiff(p, c);
 
     if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
@@ -625,9 +625,9 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             sr = spheres[ii]["uhp"].radius;
             cs = VF.vectorDiff(c, s);
 
-            A = VF.vectorDot(cp, cp);
-            B = -2 * VF.vectorDot(cp, cs);
-            C = VF.vectorDot(cs, cs) - sr ** 2;
+            A = VF.vectorDot(pc, pc);
+            B = 2 * VF.vectorDot(pc, cs);
+            C = VF.vectorDot(cs, cs) - sr * sr;
 
             delta = B ** 2 - 4 * A * C;
 
@@ -638,7 +638,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             } else {
 
                 t1 = (-B + Math.sqrt(delta)) / (2 * A);
-                t2 = (-B - Math.sqrt(delta)) / (2 * A);
+                t2 = -B / A - t1;
 
                 polygon = [];
 
@@ -648,7 +648,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                    x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
+                    x1 = VF.vectorSum(c, VF.vectorScale(pc, t1));
                     v1 = HF.upperHalfPlaneToKlein(x1);
 
                     if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
@@ -661,7 +661,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t2 > eps) && (t2 < 1 - eps)) {
 
-                    x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
+                    x2 = VF.vectorSum(c, VF.vectorScale(pc, t2));
                     v2 = HF.upperHalfPlaneToKlein(x2);
 
                     if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
@@ -686,9 +686,9 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             sr = spheres[ii]["stereo"].radius;
             cs = VF.vectorDiff(c, s);
 
-            A = VF.vectorDot(cp, cp);
-            B = -2 * VF.vectorDot(cp, cs);
-            C = VF.vectorDot(cs, cs) - sr ** 2;
+            A = VF.vectorDot(pc, pc);
+            B = 2 * VF.vectorDot(pc, cs);
+            C = VF.vectorDot(cs, cs) - sr * sr;
 
             delta = B * B - 4 * A * C;
 
@@ -699,7 +699,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             } else {
 
                 t1 = (-B + Math.sqrt(delta)) / (2 * A);
-                t2 = (-B - Math.sqrt(delta)) / (2 * A);
+                t2 = -B / A - t1;
 
                 polygon = [];
 
@@ -709,7 +709,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                    x1 = VF.vectorSum(c, VF.vectorScale(cp, -t1));
+                    x1 = VF.vectorSum(c, VF.vectorScale(pc, t1));
 
                     if (pointInSphericalPolygon(x1, polygon, spheres[ii]["stereo"].normal, s)) {
 
@@ -721,7 +721,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t2 > eps) && (t2 < 1 - eps)) {
 
-                    x2 = VF.vectorSum(c, VF.vectorScale(cp, -t2));
+                    x2 = VF.vectorSum(c, VF.vectorScale(pc, t2));
 
                     if (pointInSphericalPolygon(x2, polygon, spheres[ii]["stereo"].normal, s)) {
 
@@ -796,7 +796,7 @@ function pointInSphericalPolygon(point, polygon, normal, center) {
 
     // console.log(t);
 
-    const intersection = VF.vectorSum(VF.vectorScale(point, t), VF.vectorScale(center, 1-t));
+    const intersection = VF.vectorSum(VF.vectorScale(point, t), VF.vectorScale(center, 1 - t));
 
     return pointInPolygon(intersection, polygon);
 
