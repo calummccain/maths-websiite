@@ -166,7 +166,7 @@ function generateVertices(data, thetax, thetay, thetaz, cell) {
 
             verts.push({
                 "hypersphere": p,
-                "stereo": SF.hyperToStereo(p, 1)
+                "stereo": SF.hyperToStereo(p)
             });
 
         }
@@ -238,7 +238,7 @@ function generateSpheres(data, vertices) {
             v2 = vertices[data.faces[i][1]]["stereo"];
             v3 = vertices[data.faces[i][2]]["stereo"];
 
-            triCenterStereo = SF.hyperToStereo(triCenter, 1);
+            triCenterStereo = SF.hyperToStereo(triCenter);
 
             [center, radius] = VF.circum4(v1, v2, v3, triCenterStereo);
 
@@ -418,7 +418,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
                         VF.vectorSum(
                             VF.vectorScale(start, ratios[i]),
                             VF.vectorScale(end, ratios[number - i])
-                        ), 1
+                        )
                     )
                 );
 
