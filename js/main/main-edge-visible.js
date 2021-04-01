@@ -7,7 +7,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 4, r = 3;
+    var p = 5, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
     var invisible = false;
     var intersection = true;
@@ -25,7 +25,7 @@ function main() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xFFFFFF);
 
-    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
+    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 10);
     camera.position.set(0, 3, 0);
     camera.up = new THREE.Vector3(0, 0, 1);
 
