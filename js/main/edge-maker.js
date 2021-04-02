@@ -229,15 +229,11 @@ function generateSpheres(data, vertices) {
 
             center4 = [0, 0, 0, 0];
 
-            for (var j = 0; j < data.numSides; j++){
+            for (var j = 0; j < data.numSides; j++) {
 
                 center4 = VF.vectorSum(center4, vertices[data.faces[i][j]]["hypersphere"]);
 
             }
-
-            // data.vertices.forEach((vert) => {
-            //     center4 = VF.vectorSum(center4, vert);
-            // });
 
             center4 = VF.vectorScale(center4, 1 / VF.norm(center4));
 
@@ -491,8 +487,6 @@ function outline(data, number, camera, spheres, vertices) {
 
     for (var i = 0; i < data.numFaces; i++) {
 
-        console.log(i)
-
         if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
             center = spheres[i]["uhp"].center;
@@ -572,8 +566,6 @@ function outline(data, number, camera, spheres, vertices) {
             });
 
         }
-
-        console.log(drawVerts);
 
         segments = [[drawVerts[0]]];
         segmentsPoints = [[drawVerts[0][0]]];
@@ -772,15 +764,25 @@ function visibilityTest(point, camera, spheres, vertices, data) {
                     t1 = (-B + Math.sqrt(delta)) / (2 * A);
                     t2 = -B / A - t1;
 
-                    if (eps < t1 && t1 < 1 - eps && eps < t2 && t2 < 1 - eps) {
-
-                        intersect = VF.vectorSum(c, VF.vectorScale(pc, Math.min(t1, t2)));
-
-                    } else if (eps < t1 && t1 < 1 - eps) {
+                    if (eps < t1 && t1 < 1 - eps) {
 
                         intersect = VF.vectorSum(c, VF.vectorScale(pc, t1));
 
-                    } else if (eps < t2 && t2 < 1 - eps) {
+                        var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
+
+                        if (isInFace) {
+
+                            return false
+
+                        } else {
+
+                            continue;
+
+                        }
+
+                    }
+
+                    if (eps < t2 && t2 < 1 - eps) {
 
                         intersect = VF.vectorSum(c, VF.vectorScale(pc, t2));
 
@@ -817,25 +819,6 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             } else {
 
                 continue;
-
-            }
-
-            const hypersphereIntersect = SF.stereoToSphere(intersect);
-
-            const cellDist = VF.vectorDot(hypersphereIntersect, spheres[ii].stereo.center4);
-
-            var inFace = true;
-
-            spheres.forEach((dict) => {
-                var newDist = VF.vectorDot(hypersphereIntersect, dict.stereo.center4);
-                if (newDist > cellDist) {
-                    inFace = false;
-                }
-            });
-
-            if (inFace) {
-
-                return false;
 
             }
 
