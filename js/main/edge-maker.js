@@ -222,7 +222,7 @@ function generateSpheres(data, vertices) {
 
     } else if (data.metric === "s") {
 
-        var u1, u2, u3, triCenter, v1, v2, v3, triCenterStereo, center, radius, sphereDict, normal, type, center4;
+        var u1, u2, u3, v1, v2, v3, triCenterStereo, center, radius, sphereDict, normal, type, center4;
 
         for (var i = 0; i < data.numFaces; i++) {
 
