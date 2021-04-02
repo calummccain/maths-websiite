@@ -21,9 +21,9 @@ function hyperToStereo(point) {
 function stereoToSphere(point) {
 
     const r2 = VF.vectorDot(point, point);
-    const denom = 1 / (1 + r2);
+    const denom = 1 / (r2 + 1);
 
-    return [2 * point[0] * denom, 2 * point[0] * denom, 2 * point[0] * denom, (r2 - 1) * denom];
+    return [(r2 - 1) * denom, 2 * point[0] * denom, 2 * point[1] * denom, 2 * point[2] * denom];
 
 }
 

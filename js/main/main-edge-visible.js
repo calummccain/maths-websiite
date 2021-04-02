@@ -7,9 +7,9 @@ window.onload = main;
 
 function main() {
 
-    var p = 5, q = 3, r = 3;
+    var p = 4, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
-    var invisible = false;
+    var invisible = true;
     var intersection = true;
     var geom = {};
 
@@ -25,7 +25,7 @@ function main() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xFFFFFF);
 
-    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 10);
+    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
     camera.position.set(0, 3, 0);
     camera.up = new THREE.Vector3(0, 0, 1);
 
@@ -49,7 +49,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["e"]
+        cells: ["d"]
     }
 
     geom = objectMaker(data);
@@ -103,7 +103,7 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-            geom = objectMaker(data);
+            // geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
         }
     });

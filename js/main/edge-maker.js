@@ -4,7 +4,7 @@ import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 
-const eps = 1e-6;
+const eps = 1e-4;
 
 // Works 
 // but
@@ -51,7 +51,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
             drawableVertices = drawableVertices.concat(makeTheLines(data, number, localVertices, localSpheres, intersection));
 
-            drawableVertices = drawableVertices.concat(outline(data, 2 * number, camera, localSpheres, localVertices));
+            drawableVertices = drawableVertices.concat(outline(data, 4 * number, camera, localSpheres, localVertices));
 
         }
 
@@ -223,17 +223,17 @@ function generateSpheres(data, vertices) {
 
     } else if (data.metric === "s") {
 
-        var u1, u2, u3, triCenter, v1, v2, v3, triCenterStereo, center, radius, sphereDict, normal, type, center;
+        var u1, u2, u3, triCenter, v1, v2, v3, triCenterStereo, center, radius, sphereDict, normal, type, center4;
 
         for (var i = 0; i < data.numFaces; i++) {
 
-            center = [0, 0, 0, 0];
+            center4 = [0, 0, 0, 0];
 
             data.vertices.forEach((vert) => {
-                center = VF.vectorSum(center, vert);
+                center4 = VF.vectorSum(center4, vert);
             });
 
-            center = VF.vectorScale(center, 1 / VF.norm(center));
+            center4 = VF.vectorScale(center4, 1 / VF.norm(center4));
 
             u1 = vertices[data.faces[i][0]]["hypersphere"];
             u2 = vertices[data.faces[i][1]]["hypersphere"];
@@ -248,7 +248,7 @@ function generateSpheres(data, vertices) {
 
             triCenterStereo = SF.hyperToStereo(triCenter);
 
-            if (Math.abs(VF.determinant3([u1, u2, u3])) > eps) {
+            if (Math.abs(VF.determinant3([v1, v2, v3])) > eps) {
 
                 type = "sphere";
                 [center, radius] = VF.circum4(v1, v2, v3, triCenterStereo);
@@ -263,15 +263,13 @@ function generateSpheres(data, vertices) {
 
             }
 
-            // normalVector = VF.vectorCross(VF.vectorDiff(v1, v2), VF.vectorDiff(v3, v2));
-
             sphereDict = {
                 stereo: {
                     type: type,
                     center: center,
                     radius: radius,
                     normal: normal,
-                    center: center
+                    center4: center4
                 }
             };
 
@@ -487,6 +485,8 @@ function outline(data, number, camera, spheres, vertices) {
 
     for (var i = 0; i < data.numFaces; i++) {
 
+        console.log(i)
+
         if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
             center = spheres[i]["uhp"].center;
@@ -499,6 +499,10 @@ function outline(data, number, camera, spheres, vertices) {
                 center = spheres[i].stereo.center;
                 r = spheres[i].stereo.radius;
 
+            } else {
+
+                continue;
+
             }
 
         }
@@ -506,8 +510,8 @@ function outline(data, number, camera, spheres, vertices) {
         diff = VF.vectorDiff(center, camPos);
         cs = VF.norm(diff);
 
-        h = r * Math.sqrt(cs ** 2 - r ** 2) / cs;
-        t = Math.sqrt(r ** 2 - h ** 2) / cs;
+        h = r * Math.sqrt(cs * cs - r * r) / cs;
+        t = Math.sqrt(r * r - h * h) / cs;
         interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
 
         perp = [1, 0, 0];
@@ -537,15 +541,15 @@ function outline(data, number, camera, spheres, vertices) {
 
         }
 
-        polygon = [];
-
-        data.faces[i].forEach((j) => {
-            polygon.push(vertices[j]["klein"]);
-        });
-
         drawVerts = [];
 
         if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
+
+            polygon = [];
+
+            data.faces[i].forEach((j) => {
+                polygon.push(vertices[j]["klein"]);
+            });
 
             curve.forEach((vert) => {
 
@@ -562,6 +566,8 @@ function outline(data, number, camera, spheres, vertices) {
             });
 
         }
+
+        console.log(drawVerts);
 
         segments = [[drawVerts[0]]];
         segmentsPoints = [[drawVerts[0][0]]];
@@ -784,18 +790,38 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 const t = -VF.vectorDot(c, spheres[ii].stereo.normal) / VF.vectorDot(pc, spheres[ii].stereo.normal);
 
-                intersect = VF.vectorSum(c, VF.vectorScale(pc, t));
+                if (eps < t && t < 1 - eps) {
+
+                    intersect = VF.vectorSum(c, VF.vectorScale(pc, t));
+
+                } else {
+
+                    continue;
+
+                }
+
+            }
+
+            var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
+
+            if (isInFace) {
+
+                return false
+
+            } else {
+
+                continue;
 
             }
 
             const hypersphereIntersect = SF.stereoToSphere(intersect);
 
-            const cellDist = VF.vectorDot(hypersphereIntersect, spheres[ii].stereo.center);
+            const cellDist = VF.vectorDot(hypersphereIntersect, spheres[ii].stereo.center4);
 
             var inFace = true;
 
             spheres.forEach((dict) => {
-                var newDist = VF.vectorDot(hypersphereIntersect, dict.stereo.center);
+                var newDist = VF.vectorDot(hypersphereIntersect, dict.stereo.center4);
                 if (newDist > cellDist) {
                     inFace = false;
                 }
@@ -848,20 +874,22 @@ function pointInPolygon(point, polygon) {
 
 }
 
-// https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
 function pointInSphericalPolygon(point, face, spheres) {
 
     const hypersphereIntersect = SF.stereoToSphere(point);
 
-    const cellDist = VF.vectorDot(hypersphereIntersect, spheres[face].stereo.center);
+    // console.log(point, hypersphereIntersect, VF.norm(hypersphereIntersect))
+
+    const cellDist = VF.vectorDot(hypersphereIntersect, spheres[face].stereo.center4);
 
     var inFace = true;
+    var newDist;
 
     for (var i = 0; i < spheres.length; i++) {
 
         if (i != face) {
 
-            var newDist = VF.vectorDot(hypersphereIntersect, spheres[i].stereo.center);
+            newDist = VF.vectorDot(hypersphereIntersect, spheres[i].stereo.center4);
 
             if (newDist > cellDist) {
 
