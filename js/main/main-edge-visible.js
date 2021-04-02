@@ -7,9 +7,9 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 6, r = 3;
+    var p = 3, q = 4, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
-    var invisible = false;
+    var invisible = true;
     var intersection = true;
     var geom = {};
 
@@ -41,19 +41,28 @@ function main() {
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
-    geom = objectMaker({
+    var data = {
         name: "{" + p + "," + q + "," + r + "}",
         model: "uhp",
-        refinement: 10,
+        refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["e", "d"]
-    });
+        cells: ["d", "cd"]
+    }
+
+    geom = objectMaker(data);
 
     lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
 
+    // const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
+    // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
+    // const sphere1 = new THREE.Mesh(geometry, material1);
+    // sphere1.position.set(-1, -1, -1);
+    //scene.add(sphere1);
+
+    console.log(scene)
     render();
 
     window.addEventListener("resize", onWindowResize, false);
@@ -95,19 +104,13 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-            geom = objectMaker({
-                name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0],
-                cells: ["e", "d", "cd"]
-            });
+            // geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
         }
     });
 
     window.addEventListener("touchend", () => {
-        geom = objectMaker({
-            name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 50, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0],
-            cells: ["e", "d"]
-        });
+        geom = objectMaker(data);
         lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     }, false);
 
@@ -146,11 +149,13 @@ function main() {
     };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
-        invisible = !invisible;
+        data.invisible = !data.invisible;
+        geom = objectMaker(data);
     });
 
     document.getElementById("intersection").addEventListener("click", function () {
-        intersection = !intersection;
+        data.intersection = !data.intersection;
+        geom = objectMaker(data);
     });
 
 }
