@@ -236,18 +236,18 @@ function generateSpheres(data, vertices) {
 
             center4 = VF.vectorScale(center4, 1 / VF.norm(center4));
 
-            u1 = vertices[data.faces[i][0]]["hypersphere"];
-            u2 = vertices[data.faces[i][1]]["hypersphere"];
-            u3 = vertices[data.faces[i][2]]["hypersphere"];
+            // u1 = vertices[data.faces[i][0]]["hypersphere"];
+            // u2 = vertices[data.faces[i][1]]["hypersphere"];
+            // u3 = vertices[data.faces[i][2]]["hypersphere"];
 
-            triCenter = VF.vectorSum(u1, VF.vectorSum(u2, u3));
-            triCenter = VF.vectorScale(triCenter, 1 / VF.norm(triCenter));
+            // triCenter = VF.vectorSum(u1, VF.vectorSum(u2, u3));
+            // triCenter = VF.vectorScale(triCenter, 1 / VF.norm(triCenter));
 
             v1 = vertices[data.faces[i][0]]["stereo"];
             v2 = vertices[data.faces[i][1]]["stereo"];
             v3 = vertices[data.faces[i][2]]["stereo"];
 
-            triCenterStereo = SF.hyperToStereo(triCenter);
+            triCenterStereo = SF.hyperToStereo(center4);
 
             if (Math.abs(VF.determinant3([v1, v2, v3])) > eps) {
 
@@ -265,13 +265,11 @@ function generateSpheres(data, vertices) {
             }
 
             sphereDict = {
-                stereo: {
-                    type: type,
-                    center: center,
-                    radius: radius,
-                    normal: normal,
-                    center4: center4
-                }
+                type: type,
+                center: center,
+                radius: radius,
+                normal: normal,
+                center4: center4
             };
 
             spheres.push(sphereDict);
@@ -493,10 +491,10 @@ function outline(data, number, camera, spheres, vertices) {
 
         } else if (data.metric === "s") {
 
-            if (spheres[i].stereo.type === "sphere") {
+            if (spheres[i].type === "sphere") {
 
-                center = spheres[i].stereo.center;
-                r = spheres[i].stereo.radius;
+                center = spheres[i].center;
+                r = spheres[i].radius;
 
             } else {
 
@@ -742,10 +740,10 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
         for (var ii = 0; ii < spheres.length; ii++) {
 
-            if (spheres[ii].stereo.type === "sphere") {
+            if (spheres[ii].type === "sphere") {
 
-                s = spheres[ii].stereo.center;
-                sr = spheres[ii].stereo.radius;
+                s = spheres[ii].center;
+                sr = spheres[ii].radius;
                 cs = VF.vectorDiff(c, s);
 
                 A = VF.vectorDot(pc, pc);
@@ -793,9 +791,9 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 }
 
-            } else if (spheres[ii].stereo.type === "plane") {
+            } else if (spheres[ii].type === "plane") {
 
-                const t = -VF.vectorDot(c, spheres[ii].stereo.normal) / VF.vectorDot(pc, spheres[ii].stereo.normal);
+                const t = -VF.vectorDot(c, spheres[ii].normal) / VF.vectorDot(pc, spheres[ii].normal);
 
                 if (eps < t && t < 1 - eps) {
 
@@ -858,7 +856,7 @@ function pointInSphericalPolygon(point, face, spheres) {
 
     const hypersphereIntersect = SF.stereoToSphere(point);
 
-    const cellDist = VF.vectorDot(hypersphereIntersect, spheres[face].stereo.center4);
+    const cellDist = VF.vectorDot(hypersphereIntersect, spheres[face].center4);
 
     var inFace = true;
     var newDist;
@@ -867,7 +865,7 @@ function pointInSphericalPolygon(point, face, spheres) {
 
         if (i != face) {
 
-            newDist = VF.vectorDot(hypersphereIntersect, spheres[i].stereo.center4);
+            newDist = VF.vectorDot(hypersphereIntersect, spheres[i].center4);
 
             if (newDist > cellDist) {
 

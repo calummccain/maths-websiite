@@ -9,7 +9,7 @@ function main() {
 
     var p = 3, q = 3, r = 5;
     var thetax = 0, thetay = 0, thetaz = 0;
-    var invisible = false;
+    var invisible = true;
     var intersection = true;
     var geom = {};
 
@@ -49,18 +49,18 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["d", "cd"]
+        cells: ["d"]
     }
 
     geom = objectMaker(data);
 
     lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
 
-    // const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
-    // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
-    // const sphere1 = new THREE.Mesh(geometry, material1);
-    // sphere1.position.set(-1, -1, -1);
-    //scene.add(sphere1);
+    const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
+    const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
+    const sphere1 = new THREE.Mesh(geometry, material1);
+    sphere1.position.set(-1,-1,-1);
+    scene.add(sphere1);
 
     console.log(scene)
     render();

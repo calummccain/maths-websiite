@@ -23,10 +23,10 @@ const tetrahedronData = (n) => {
             v[2] / 2,
             v[3] / 2
         ] : (n == 5) ? (v) => [
-            Math.sqrt(7 + 3 * Math.sqrt(3)) * v[0] / 4,
-            Math.sqrt(3 - Math.sqrt(3)) * v[1] / 4,
-            Math.sqrt(3 - Math.sqrt(3)) * v[2] / 4,
-            Math.sqrt(3 - Math.sqrt(3)) * v[3] / 4
+            Math.sqrt(7 + 3 * Math.sqrt(5)) * v[0] / 4,
+            Math.sqrt(3 - Math.sqrt(5)) * v[1] / 4,
+            Math.sqrt(3 - Math.sqrt(5)) * v[2] / 4,
+            Math.sqrt(3 - Math.sqrt(5)) * v[3] / 4
         ] : (n == 6) ? (v) => [
             Math.sqrt(3) * v[0],
             v[1],
