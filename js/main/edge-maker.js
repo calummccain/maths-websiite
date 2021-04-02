@@ -229,9 +229,15 @@ function generateSpheres(data, vertices) {
 
             center4 = [0, 0, 0, 0];
 
-            data.vertices.forEach((vert) => {
-                center4 = VF.vectorSum(center4, vert);
-            });
+            for (var j = 0; j < data.numSides; j++){
+
+                center4 = VF.vectorSum(center4, vertices[data.faces[i][j]]["hypersphere"]);
+
+            }
+
+            // data.vertices.forEach((vert) => {
+            //     center4 = VF.vectorSum(center4, vert);
+            // });
 
             center4 = VF.vectorScale(center4, 1 / VF.norm(center4));
 

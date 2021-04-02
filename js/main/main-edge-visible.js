@@ -7,7 +7,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 4, q = 3, r = 3;
+    var p = 5, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
     var invisible = true;
     var intersection = true;
@@ -49,7 +49,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["d"]
+        cells: ["d", "cd"]
     }
 
     geom = objectMaker(data);
