@@ -11,8 +11,7 @@ const eps = 1e-4;
 // needs tidying
 
 function generateData(data, thetax, thetay, thetaz, number, intersection, invisibleLines, camera, cells) {
-
-    console.log(data.metric);
+    console.log(data)
     var spheres = [];
     var vertices = [];
     var drawableVertices = [];
@@ -772,11 +771,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                         if (isInFace) {
 
-                            return false
-
-                        } else {
-
-                            continue;
+                            return false;
 
                         }
 
@@ -786,9 +781,13 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                         intersect = VF.vectorSum(c, VF.vectorScale(pc, t2));
 
-                    } else {
+                        var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
 
-                        continue;
+                        if (isInFace) {
+
+                            return false;
+
+                        }
 
                     }
 
@@ -802,23 +801,15 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                     intersect = VF.vectorSum(c, VF.vectorScale(pc, t));
 
-                } else {
+                    var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
 
-                    continue;
+                    if (isInFace) {
+
+                        return false;
+
+                    }
 
                 }
-
-            }
-
-            var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
-
-            if (isInFace) {
-
-                return false
-
-            } else {
-
-                continue;
 
             }
 
@@ -867,8 +858,6 @@ function pointInSphericalPolygon(point, face, spheres) {
 
     const hypersphereIntersect = SF.stereoToSphere(point);
 
-    // console.log(point, hypersphereIntersect, VF.norm(hypersphereIntersect))
-
     const cellDist = VF.vectorDot(hypersphereIntersect, spheres[face].stereo.center4);
 
     var inFace = true;
@@ -883,6 +872,7 @@ function pointInSphericalPolygon(point, face, spheres) {
             if (newDist > cellDist) {
 
                 inFace = false;
+                break;
 
             }
 

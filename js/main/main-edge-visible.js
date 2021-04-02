@@ -7,7 +7,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 5, q = 3, r = 3;
+    var p = 3, q = 4, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
     var invisible = true;
     var intersection = true;
@@ -44,7 +44,7 @@ function main() {
     var data = {
         name: "{" + p + "," + q + "," + r + "}",
         model: "uhp",
-        refinement: 20,
+        refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
         transform: "",
@@ -62,6 +62,7 @@ function main() {
     // sphere1.position.set(-1, -1, -1);
     //scene.add(sphere1);
 
+    console.log(scene)
     render();
 
     window.addEventListener("resize", onWindowResize, false);
