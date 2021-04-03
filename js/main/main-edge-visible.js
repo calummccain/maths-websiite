@@ -38,7 +38,6 @@ function main() {
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
-    // DATA DOESN'T HAVE P Q R BUT NAME
     var data = {
         p: p,
         q: q,

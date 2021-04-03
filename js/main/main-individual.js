@@ -1,7 +1,6 @@
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
-import { SVGRenderer } from "../three-bits/SVGRenderer.js";
 
 window.onload = main;
 
@@ -16,7 +15,7 @@ function main() {
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
 
-    var renderer = new SVGRenderer();
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(WIDTH, HEIGHT);
     canvas.appendChild(renderer.domElement);
 
@@ -29,6 +28,10 @@ function main() {
 
     scene.add(camera);
 
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(1, 0, 0);
+    camera.add(directionalLight);
+
     var controls = new OrbitControls(camera, canvas);
     controls.enabled = true;
     controls.update();
@@ -36,15 +39,12 @@ function main() {
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
-    // DATA DOESN'T HAVE P Q R BUT NAME
     var data = {
         p: p,
         q: q,
         r: r,
         model: "poincare",
-        refinement: 50,
-        intersection: intersection,
-        invisibleLines: invisible,
+        refinement: 3,
         transform: "",
         position: [0, 0, 0],
         cells: ["d"]
@@ -52,13 +52,7 @@ function main() {
 
     geom = objectMaker(data);
 
-    lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
-
-    // const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
-    // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
-    // const sphere1 = new THREE.Mesh(geometry, material1);
-    // sphere1.position.set(-1,-1,-1);
-    // scene.add(sphere1);
+    lineGroup.children = [geom];
 
     render();
 
@@ -86,13 +80,13 @@ function main() {
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = objectMaker(data);
-            lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
+            lineGroup.children = [geom];
         }
     });
 
     window.addEventListener("touchend", () => {
         geom = objectMaker(data);
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
+        lineGroup.children = [geom];
     }, false);
 
     document.getElementById("myRangep").oninput = function () {
@@ -118,9 +112,5 @@ function main() {
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
     };
-
-    document.getElementById("visibleLines").addEventListener("click", function () {
-        data.invisibleLines = !data.invisibleLines;
-    });
 
 }
