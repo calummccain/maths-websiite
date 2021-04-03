@@ -26,7 +26,7 @@ function main() {
     scene.background = new THREE.Color(0xFFFFFF);
 
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
-    camera.position.set(0, 3, 0);
+    camera.position.set(0, 10, 0);
     camera.up = new THREE.Vector3(0, 0, 1);
 
     scene.add(camera);
@@ -42,14 +42,16 @@ function main() {
     scene.add(lineGroup);
 
     var data = {
-        name: "{" + p + "," + q + "," + r + "}",
+        p: p,
+        q: q,
+        r: r,
         model: "uhp",
         refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["d", "cd"]
+        cells: ["", "d", "cd"]
     }
 
     geom = objectMaker(data);
@@ -104,7 +106,7 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-            // geom = objectMaker(data);
+            geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
         }
     });
@@ -119,43 +121,35 @@ function main() {
     });
 
     document.getElementById("myRangep").oninput = function () {
-        p = this.value;
+        data.p = this.value;
     };
 
     document.getElementById("myRangeq").oninput = function () {
-        q = this.value;
+        data.q = this.value;
     };
 
     document.getElementById("myRanger").oninput = function () {
-        r = this.value / 2;
+        data.r = this.value / 2;
     };
 
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 50;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
-        data.invisible = !data.invisible;
-        geom = objectMaker(data);
+        data.invisibleLines = !data.invisibleLines;
     });
 
     document.getElementById("intersection").addEventListener("click", function () {
         data.intersection = !data.intersection;
-        geom = objectMaker(data);
     });
 
 }
