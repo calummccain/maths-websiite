@@ -40,7 +40,9 @@ function main() {
 
     // DATA DOESN'T HAVE P Q R BUT NAME
     var data = {
-        name: "{" + p + "," + q + "," + r + "}",
+        p: p,
+        q: q,
+        r: r,
         model: "uhp",
         refinement: 50,
         intersection: intersection,
@@ -101,8 +103,6 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-
-            console.log(data)
             geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
         }
@@ -131,30 +131,22 @@ function main() {
 
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 50;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
-        geom = objectMaker({ name: "{" + p + "," + q + "," + r + "}", model: "uhp", refinement: 10, intersection: intersection, invisibleLines: invisible, transform: "", position: [0, 0, 0] });
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
     };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
-        data.invisible = !data.invisible;
-        geom = objectMaker(data);
+        data.invisibleLines = !data.invisibleLines;
     });
 
     document.getElementById("intersection").addEventListener("click", function () {
         data.intersection = !data.intersection;
-        geom = objectMaker(data);
     });
 
 }

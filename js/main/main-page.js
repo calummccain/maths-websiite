@@ -4,37 +4,38 @@ import { MapControls } from "../three-bits/orbit-controls.js";
 
 const data = [
     [
-        { name: "{3,3,3}", model: "", refinement: 3, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
-        { name: "{3,3,4}", model: "", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
-        { name: "{3,3,5}", model: "", refinement: 3, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
-        { name: "{3,4,3}", model: "", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,3}", model: "", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
-        { name: "{5,3,3}", model: "", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false }
+        { p: 3, q: 3, r: 3, model: "", refinement: 3, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
+        { p: 3, q: 3, r: 4, model: "", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
+        { p: 3, q: 3, r: 5, model: "", refinement: 3, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
+        { p: 3, q: 4, r: 3, model: "", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
+        { p: 4, q: 3, r: 3, model: "", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
+        { p: 5, q: 3, r: 3, model: "", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false }
     ],
     [
-        { name: "{4,3,4}", model: "", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false }
+        { p: 4, q: 3, r: 4, model: "", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false }
     ],
     [
-        { name: "{3,5,3}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 3], transform: "", faceMode: false },
-        { name: "{3,4,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
-        { name: "{5,3,7}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, -3], transform: "", faceMode: false },
-        { name: "{6,3,3}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 3], transform: "", faceMode: false },
-        { name: "{4,4,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false },
-        { name: "{6,3,7}", model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, -3], transform: "", faceMode: false },
-        { name: "{3,7,3}", model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 3], transform: "", faceMode: false },
-        { name: "{4,4,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
-        { name: "{5,5,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, -3], transform: "", faceMode: false },
+        { p: 3, q: 5, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 3], transform: "", faceMode: false },
+        { p: 3, q: 4, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
+        { p: 5, q: 3, r: 7, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, -3], transform: "", faceMode: false },
+        { p: 6, q: 3, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 3], transform: "", faceMode: false },
+        { p: 4, q: 4, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false },
+        { p: 6, q: 3, r: 7, model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, -3], transform: "", faceMode: false },
+        { p: 3, q: 7, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 3], transform: "", faceMode: false },
+        { p: 4, q: 4, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
+        { p: 5, q: 5, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, -3], transform: "", faceMode: false },
     ],
     [
-        { name: "{4,3,3}", model: "poincare", refinement: 3, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,4}", model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,5}", model: "poincare", refinement: 3, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,6}", model: "poincare", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,7}", model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
-        { name: "{4,3,8}", model: "poincare", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false },
+        { p: 4, q: 3, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
+        { p: 4, q: 3, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
+        { p: 4, q: 3, r: 5, model: "poincare", refinement: 3, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
+        { p: 4, q: 3, r: 6, model: "poincare", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
+        { p: 4, q: 3, r: 7, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
+        { p: 4, q: 3, r: 8, model: "poincare", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false },
 
-    ], [
-        { name: "{5,3,7}", model: "uhp", refinement: 15, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false, intersection: true }
+    ],
+    [
+        { p: 5, q: 3, r: 7, model: "uhp", refinement: 15, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false, intersection: true, cells: [""] }
     ]
 ];
 

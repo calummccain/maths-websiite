@@ -25,14 +25,11 @@ const geom = {
 
 function objectMaker(parameters) {
 
-    const name = parameters.name;
     const position = parameters.position;
 
-    const [p, q, r] = [
-        parseInt(name.split(",")[0].replace("{", "")),
-        parseInt(name.split(",")[1]),
-        parseInt(name.split(",")[2].replace("}", ""))
-    ];
+    const [p, q, r] = [parameters.p, parameters.q, parameters.r];
+
+    const name = "{" + p + "," + q + "," + r + "}";
 
     const data = (!("{" + p + "," + q + "}" in geom)) ? pqrData(p, q, r) : geom["{" + p + "," + q + "}"](r);
 
