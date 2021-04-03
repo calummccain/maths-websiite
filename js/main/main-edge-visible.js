@@ -35,12 +35,10 @@ function main() {
     controls.enabled = true;
     controls.update();
 
-    const light = new THREE.HemisphereLight(0xFFFFFF, 0x333333, 1);
-    scene.add(light);
-
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
+    // DATA DOESN'T HAVE P Q R BUT NAME
     var data = {
         p: p,
         q: q,
@@ -51,7 +49,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: [""]
+        cells: ["d"]
     }
 
     geom = objectMaker(data);
@@ -64,7 +62,6 @@ function main() {
     // sphere1.position.set(-1,-1,-1);
     // scene.add(sphere1);
 
-    console.log(scene)
     render();
 
     window.addEventListener("resize", onWindowResize, false);
