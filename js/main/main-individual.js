@@ -65,7 +65,7 @@ function main() {
 
         renderer.setSize(WIDTH, HEIGHT);
 
-        camera.aspect = width / height;
+        camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
 
     }

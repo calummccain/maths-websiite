@@ -9,7 +9,7 @@ function main() {
 
     var p = 5, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
-    var invisible = true;
+    var invisible = false;
     var intersection = true;
     var geom = {};
 
@@ -72,7 +72,7 @@ function main() {
 
         renderer.setSize(WIDTH, HEIGHT);
 
-        camera.aspect = width / height;
+        camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
 
     }
