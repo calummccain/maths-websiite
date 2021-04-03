@@ -4,14 +4,12 @@ import { hyperbolicGeometry } from "./hyperbolic-geometry.js";
 
 function honeycombGeometry(data, transform, refinement, model) {
 
-    const d = 1;
-
     var honeycomb;
 
     if (data.metric == "s") {
 
         refinement += 1;
-        honeycomb = sphericalGeometry(data, transform, refinement, d);
+        honeycomb = sphericalGeometry(data, transform, refinement);
 
     } else if (data.metric == "e") {
 

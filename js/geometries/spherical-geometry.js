@@ -4,7 +4,7 @@ import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 
 
-function sphericalGeometry(data, transform, refinement, d) {
+function sphericalGeometry(data, transform, refinement) {
 
     // matrix dictionary
     function matrixDict(letter, vector) {
@@ -68,7 +68,7 @@ function sphericalGeometry(data, transform, refinement, d) {
         for (var j = 0; j < hypersphereVertices.length; j++) {
 
             var vertex = VF.vectorScale(hypersphereVertices[j], 1 / VF.norm(hypersphereVertices[j]));
-            var vertex2 = SF.sphereToPoincare(vertex, d);
+            var vertex2 = SF.hyperToStereo(vertex);
             faceGeometry.vertices.push(new THREE.Vector3(vertex2[0], vertex2[1], vertex2[2]));
 
         }
