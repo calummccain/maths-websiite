@@ -26,7 +26,7 @@ function main() {
     scene.background = new THREE.Color(0xFFFFFF);
 
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
-    camera.position.set(0, 3, 0);
+    camera.position.set(0, 10, 0);
     camera.up = new THREE.Vector3(0, 0, 1);
 
     scene.add(camera);
@@ -35,12 +35,10 @@ function main() {
     controls.enabled = true;
     controls.update();
 
-    const light = new THREE.HemisphereLight(0xFFFFFF, 0x333333, 1);
-    scene.add(light);
-
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
+    // DATA DOESN'T HAVE P Q R BUT NAME
     var data = {
         name: "{" + p + "," + q + "," + r + "}",
         model: "uhp",
@@ -49,7 +47,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["d", "cd"]
+        cells: ["d"]
     }
 
     geom = objectMaker(data);
@@ -62,7 +60,6 @@ function main() {
     // sphere1.position.set(-1,-1,-1);
     // scene.add(sphere1);
 
-    console.log(scene)
     render();
 
     window.addEventListener("resize", onWindowResize, false);
@@ -104,7 +101,9 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-            // geom = objectMaker(data);
+
+            console.log(data)
+            geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
         }
     });
@@ -119,15 +118,15 @@ function main() {
     });
 
     document.getElementById("myRangep").oninput = function () {
-        p = this.value;
+        data.p = this.value;
     };
 
     document.getElementById("myRangeq").oninput = function () {
-        q = this.value;
+        data.q = this.value;
     };
 
     document.getElementById("myRanger").oninput = function () {
-        r = this.value / 2;
+        data.r = this.value / 2;
     };
 
     document.getElementById("myRangex").oninput = function () {

@@ -11,7 +11,7 @@ const eps = 1e-4;
 // needs tidying
 
 function generateData(data, thetax, thetay, thetaz, number, intersection, invisibleLines, camera, cells) {
-    console.log(data)
+
     var spheres = [];
     var vertices = [];
     var drawableVertices = [];
@@ -53,8 +53,6 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
             drawableVertices = drawableVertices.concat(outline(data, 4 * number, camera, localSpheres, localVertices));
 
         }
-
-        console.log(spheres)
 
     }
 
