@@ -51,7 +51,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["", "d", "cd"]
+        cells: [""]
     }
 
     geom = objectMaker(data);
