@@ -45,9 +45,8 @@ function main() {
         r: r,
         model: "poincare",
         refinement: 3,
-        transform: "",
+        transform: "d",
         position: [0, 0, 0],
-        cells: ["d"]
     }
 
     geom = objectMaker(data);
