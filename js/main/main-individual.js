@@ -46,7 +46,7 @@ function main() {
     scene.add(ghostGroup);
 
     var raycaster = new THREE.Raycaster(), mouseVector = new THREE.Vector2();
-    var newObject, oldObject;
+    var newObject, oldObject, clickObject;
 
     var data = {
         p: p,
@@ -58,6 +58,8 @@ function main() {
         position: [0, 0, 0],
         faceMode: true
     }
+
+    document.getElementById("list").innerHTML = "\"d\",";
 
     var ghostData = {
         p: p,
@@ -77,6 +79,7 @@ function main() {
 
     window.addEventListener("resize", onWindowResize, false);
     window.addEventListener("mousemove", onMouseMove, false);
+    window.addEventListener("click", onMouseClick, false);
 
     function onWindowResize() {
 
@@ -138,6 +141,32 @@ function main() {
                 ghostGroup.children = [];
 
             }
+
+        }
+
+    }
+
+    function onMouseClick(event) {
+
+        event.preventDefault();
+
+        mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
+        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
+        raycaster.setFromCamera(mouseVector, camera);
+
+        var intersects = raycaster.intersectObjects(lineGroup.children);
+
+        if (intersects.length > 0) {
+
+            clickObject = intersects[0].object;
+
+            data.transform = clickObject.cellName + clickObject.faceName + "d";
+
+            lineGroup.children = lineGroup.children.concat(objectMaker(data).children);
+
+            var word = "\"" + data.transform + "\",";
+
+            document.getElementById("list").innerHTML += word;
 
         }
 

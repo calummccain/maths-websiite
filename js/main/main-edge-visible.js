@@ -48,7 +48,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["d"]
+        cells: ["d", "dbcd", "dabacbabcd", "dabacbabcdcbabacbabcd", "dbcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcd", "dbcdcbabacbabcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd", "dbcdcbabacbabcdcbabacbabcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd"]
     }
 
     geom = objectMaker(data);
