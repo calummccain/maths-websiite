@@ -145,11 +145,8 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-            console.log(data)
             k = 0;
-            console.log(lineGroup);
             lineGroup.children = objectMaker(data).children;
-            console.log(lineGroup)
         }
     });
 
