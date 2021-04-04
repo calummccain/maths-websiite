@@ -9,7 +9,7 @@ function main() {
 
     var p = 5, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
-    var invisible = true;
+    var invisible = false;
     var intersection = true;
     var geom = {};
 
@@ -38,7 +38,6 @@ function main() {
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
-    // DATA DOESN'T HAVE P Q R BUT NAME
     var data = {
         p: p,
         q: q,
@@ -49,7 +48,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["d"]
+        cells: ["d", "dbcd", "dabacbabcd", "dabacbabcdcbabacbabcd", "dbcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcd", "dbcdcbabacbabcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd", "dbcdcbabacbabcdcbabacbabcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd"]
     }
 
     geom = objectMaker(data);
@@ -73,7 +72,7 @@ function main() {
 
         renderer.setSize(WIDTH, HEIGHT);
 
-        camera.aspect = width / height;
+        camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
 
     }
