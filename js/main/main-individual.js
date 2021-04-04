@@ -8,9 +8,11 @@ function main() {
 
     var p = 5, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0;
-    var geom = {};
+    var geom;
+    var ghostGeom;
 
     const canvas = document.getElementById("c");
+    var rect = canvas.getBoundingClientRect();
 
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
@@ -39,6 +41,12 @@ function main() {
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
+    var ghostGroup = new THREE.Group();
+    scene.add(ghostGroup);
+
+    var raycaster = new THREE.Raycaster(), mouseVector = new THREE.Vector2();
+    var intersectionObjectName, intersectionObjectId;
+
     var data = {
         p: p,
         q: q,
@@ -47,15 +55,29 @@ function main() {
         refinement: 3,
         transform: "d",
         position: [0, 0, 0],
+        faceMode: true
+    }
+
+    var ghostData = {
+        p: p,
+        q: q,
+        r: r,
+        model: "poincare",
+        refinement: 3,
+        transform: "",
+        position: [0, 0, 0],
+        faceMode: false,
+        opacity: 0.3
     }
 
     geom = objectMaker(data);
 
-    lineGroup.children = [geom];
+    lineGroup.children = geom.children;
 
     render();
 
     window.addEventListener("resize", onWindowResize, false);
+    window.addEventListener("mousemove", onMouseMove, false);
 
     function onWindowResize() {
 
@@ -73,6 +95,63 @@ function main() {
 
         renderer.render(scene, camera);
         requestAnimationFrame(render);
+
+    }
+
+    function onMouseMove(event) {
+
+        event.preventDefault();
+
+        mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
+        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
+        raycaster.setFromCamera(mouseVector, camera);
+
+        var intersects = raycaster.intersectObjects(lineGroup.children);
+
+        if (intersects.length > 0) {
+
+            var selectedObject = intersects[0].object;
+            console.log(selectedObject);
+
+            if (intersectionObjectId != selectedObject.id) {
+
+                intersectionObjectId = selectedObject.id;
+
+                selectedObject.material.emissive.set(0.1, 0.8, 0.1);
+
+                ghostData.transform = selectedObject.cellName + selectedObject.faceName + "d";
+                ghostGeom = objectMaker(ghostData);
+                ghostGroup.children = [ghostGeom];
+
+                // geom.children.forEach((mesh) => {
+
+                //     if (mesh === intersectionObject) {
+
+                //         var colour = new THREE.Color(0.1, 0.8, 0.1);
+
+                //         mesh.material.emissive.setRGB(colour.r, colour.g, colour.b);
+
+                //         ghostData.transform = selectedObject.cellName + selectedObject.faceName + "d";
+                //         ghostGeom = objectMaker(ghostData);
+                //         ghostGroup.children = [ghostGeom];
+
+                //     } else {
+
+                //         mesh.material.emissive.setRGB(0, 0, 0);
+                //         ghostGroup.children = [];
+
+                //     }
+
+                // });
+
+            }
+
+        } else {
+
+            // geom.children.forEach((mesh) => { mesh.material.emissive.setRGB(0, 0, 0); });
+            // intersectionObjectName = null;
+
+        }
 
     }
 

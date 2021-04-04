@@ -31,13 +31,17 @@ function objectMaker(parameters) {
 
     const name = "{" + p + "," + q + "," + r + "}";
 
-    const data = (!("{" + p + "," + q + "}" in geom)) ? pqrData(p, q, r) : geom["{" + p + "," + q + "}"](r);
+    const data = ((p - 2) * (q - 2) > 4) ? pqrData(p, q, r) : geom["{" + p + "," + q + "}"](r);
 
     if (parameters.model === "poincare" || parameters.model === "") {
 
         const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
 
+        const opacity = parameters.opacity || 1;
+
         if (parameters.faceMode) {
+
+            var faceGroup = new THREE.Group();
 
             for (var j = 0; j < data.numFaces; j++) {
 
@@ -45,7 +49,7 @@ function objectMaker(parameters) {
                     shapeGeometry[j],
                     new THREE.MeshLambertMaterial({
                         color: new THREE.Color(parameters.colour),
-                        opacity: 1,
+                        opacity: opacity,
                         transparent: true,
                         side: THREE.DoubleSide
                     }));
@@ -57,9 +61,11 @@ function objectMaker(parameters) {
                 faceMesh.parameters = parameters;
                 faceMesh.geometry.computeVertexNormals();
 
-                // RETURN WHAT???
+                faceGroup.add(faceMesh);
 
             }
+
+            return faceGroup;
 
         } else {
 
@@ -75,7 +81,7 @@ function objectMaker(parameters) {
                 cellGeometry,
                 new THREE.MeshLambertMaterial({
                     color: new THREE.Color(parameters.colour),
-                    opacity: 1,
+                    opacity: opacity,
                     transparent: true,
                     side: THREE.DoubleSide
                 }));
