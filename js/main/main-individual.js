@@ -10,6 +10,7 @@ function main() {
     var thetax = 0, thetay = 0, thetaz = 0;
     var geom;
     var ghostGeom;
+    var k = 0;
 
     const canvas = document.getElementById("c");
     var rect = canvas.getBoundingClientRect();
@@ -45,7 +46,7 @@ function main() {
     scene.add(ghostGroup);
 
     var raycaster = new THREE.Raycaster(), mouseVector = new THREE.Vector2();
-    var intersectionObjectName, intersectionObjectId;
+    var newObject, oldObject;
 
     var data = {
         p: p,
@@ -110,46 +111,32 @@ function main() {
 
         if (intersects.length > 0) {
 
-            var selectedObject = intersects[0].object;
-            console.log(selectedObject);
+            if (k == 0) {
 
-            if (intersectionObjectId != selectedObject.id) {
+                oldObject = intersects[0].object;
+                k++;
 
-                intersectionObjectId = selectedObject.id;
+            }
 
-                selectedObject.material.emissive.set(0.1, 0.8, 0.1);
+            newObject = intersects[0].object;
 
-                ghostData.transform = selectedObject.cellName + selectedObject.faceName + "d";
+            if (newObject.id != oldObject.id) {
+
+                oldObject.material.emissive.setRGB(0, 0, 0);
+                newObject.material.emissive.setRGB(0.1, 0.8, 0.1);
+
+                oldObject = newObject;
+
+                ghostData.transform = newObject.cellName + newObject.faceName + "d";
                 ghostGeom = objectMaker(ghostData);
                 ghostGroup.children = [ghostGeom];
-
-                // geom.children.forEach((mesh) => {
-
-                //     if (mesh === intersectionObject) {
-
-                //         var colour = new THREE.Color(0.1, 0.8, 0.1);
-
-                //         mesh.material.emissive.setRGB(colour.r, colour.g, colour.b);
-
-                //         ghostData.transform = selectedObject.cellName + selectedObject.faceName + "d";
-                //         ghostGeom = objectMaker(ghostData);
-                //         ghostGroup.children = [ghostGeom];
-
-                //     } else {
-
-                //         mesh.material.emissive.setRGB(0, 0, 0);
-                //         ghostGroup.children = [];
-
-                //     }
-
-                // });
 
             }
 
         } else {
 
-            // geom.children.forEach((mesh) => { mesh.material.emissive.setRGB(0, 0, 0); });
-            // intersectionObjectName = null;
+            oldObject.material.emissive.setRGB(0, 0, 0);
+            ghostGroup.children = [];
 
         }
 
