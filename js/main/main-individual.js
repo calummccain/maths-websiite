@@ -71,9 +71,7 @@ function main() {
         opacity: 0.3
     }
 
-    geom = objectMaker(data);
-
-    lineGroup.children = geom.children;
+    lineGroup.children = objectMaker(data).children;
 
     render();
 
@@ -128,15 +126,18 @@ function main() {
                 oldObject = newObject;
 
                 ghostData.transform = newObject.cellName + newObject.faceName + "d";
-                ghostGeom = objectMaker(ghostData);
-                ghostGroup.children = [ghostGeom];
+                ghostGroup.children = [objectMaker(ghostData)];
 
             }
 
         } else {
 
-            oldObject.material.emissive.setRGB(0, 0, 0);
-            ghostGroup.children = [];
+            if (k != 0) {
+
+                oldObject.material.emissive.setRGB(0, 0, 0);
+                ghostGroup.children = [];
+
+            }
 
         }
 
@@ -144,26 +145,31 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-            geom = objectMaker(data);
-            lineGroup.children = [geom];
+            console.log(data)
+            k = 0;
+            console.log(lineGroup);
+            lineGroup.children = objectMaker(data).children;
+            console.log(lineGroup)
         }
     });
 
     window.addEventListener("touchend", () => {
-        geom = objectMaker(data);
-        lineGroup.children = [geom];
+        lineGroup.children = objectMaker(data).children;
     }, false);
 
     document.getElementById("myRangep").oninput = function () {
-        data.p = this.value;
+        data.p = parseInt(this.value);
+        ghostData.p = parseInt(this.value);
     };
 
     document.getElementById("myRangeq").oninput = function () {
-        data.q = this.value;
+        data.q = parseInt(this.value);
+        ghostData.q = parseInt(this.value);
     };
 
     document.getElementById("myRanger").oninput = function () {
-        data.r = this.value / 2;
+        data.r = parseInt(this.value) / 2;
+        ghostData.r = parseInt(this.value) / 2;
     };
 
     document.getElementById("myRangex").oninput = function () {
