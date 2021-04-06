@@ -11,7 +11,7 @@ function hyperboloidInnerProduct(x, y) {
 
 function hyperbolicNorm(x) {
 
-    return x[0] ** 2 - x[1] ** 2 - x[2] ** 2 - x[3] ** 2;
+    return hyperboloidInnerProduct(x, x);
 
 }
 
@@ -45,8 +45,7 @@ function hyperboloidToPoincare(point) {
 // (w, x, y, z) ===> (x / w, y / w, z / w)
 function hyperboloidToKlein(point) {
 
-    var scale = point[0];
-    return [point[1] / scale, point[2] / scale, point[3] / scale];
+    return [point[1] / point[0], point[2] / point[0], point[3] / point[0]];
 
 }
 
@@ -129,9 +128,7 @@ function hyperboloidToUpperHalfPlane(point) {
 
     //return [x * (w + 1) / den, y * (w + 1) / den, 2 * w / den];
 
-    var poincare = hyperboloidToPoincare(point);
-
-    return poincareToUpperHalfPlane(poincare);
+    return poincareToUpperHalfPlane(hyperboloidToPoincare(point));
 }
 
 function kleinToUpperHalfPlane(point) {
@@ -165,7 +162,7 @@ function uhpCenter(p1, p2, p3) {
     var d12 = VF.vectorDot(p12, n12);
     var d13 = VF.vectorDot(p13, n13);
 
-    var p0 = [0, 0, 0];
+    // var p0 = [0, 0, 0];
     var n0 = [0, 0, 1];
 
     var A = [n0[0], n12[0], n13[0]];

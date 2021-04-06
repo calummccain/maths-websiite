@@ -48,7 +48,27 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: ["d", "dbcd", "dabacbabcd", "dabacbabcdcbabacbabcd", "dbcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcd", "dbcdcbabacbabcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd", "dbcdcbabacbabcdcbabacbabcdcbabacbabcd", "dabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd"]
+        cells: [
+            "d",
+            "dcbabacbabcd",
+            "dcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd",
+            "dcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdabacbabcdacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcdcbabacbabcd"
+        ]
     }
 
     geom = objectMaker(data);
