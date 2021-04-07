@@ -1,7 +1,6 @@
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
-import { SVGRenderer } from "../three-bits/SVGRenderer.js";
 
 window.onload = main;
 
@@ -18,7 +17,7 @@ function main() {
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
 
-    var renderer = new SVGRenderer();
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(WIDTH, HEIGHT);
     canvas.appendChild(renderer.domElement);
 
