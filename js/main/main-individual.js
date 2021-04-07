@@ -11,6 +11,8 @@ function main() {
     var geom;
     var ghostGeom;
     var k = 0;
+    const initialCell = "d";
+    var mode = "add";
 
     const canvas = document.getElementById("c");
     var rect = canvas.getBoundingClientRect();
@@ -54,12 +56,12 @@ function main() {
         r: r,
         model: "poincare",
         refinement: 3,
-        transform: "d",
+        transform: initialCell,
         position: [0, 0, 0],
         faceMode: true
     }
 
-    document.getElementById("list").innerHTML = "\"d\",";
+    var list = ["\"" + initialCell + "\""];
 
     var ghostData = {
         p: p,
@@ -110,35 +112,69 @@ function main() {
 
         var intersects = raycaster.intersectObjects(lineGroup.children);
 
-        if (intersects.length > 0) {
+        if (mode === "add") {
 
-            if (k == 0) {
+            if (intersects.length > 0) {
 
-                oldObject = intersects[0].object;
-                k++;
+                if (k == 0) {
+
+                    oldObject = intersects[0].object;
+                    k++;
+
+                }
+
+                newObject = intersects[0].object;
+
+                if (newObject.id != oldObject.id) {
+
+                    oldObject.material.emissive.setRGB(0, 0, 0);
+                    newObject.material.emissive.setRGB(0.1, 0.8, 0.1);
+
+                    oldObject = newObject;
+
+                    ghostData.transform = newObject.cellName + newObject.faceName + "d";
+                    ghostGroup.children = [objectMaker(ghostData)];
+
+                }
+
+            } else {
+
+                if (k != 0) {
+
+                    oldObject.material.emissive.setRGB(0, 0, 0);
+                    ghostGroup.children = [];
+
+                }
 
             }
 
-            newObject = intersects[0].object;
+        } else if (mode === "remove") {
 
-            if (newObject.id != oldObject.id) {
+            if (intersects.length > 0) {
 
-                oldObject.material.emissive.setRGB(0, 0, 0);
-                newObject.material.emissive.setRGB(0.1, 0.8, 0.1);
+                var removeCell = intersects[0].object.cellName;
 
-                oldObject = newObject;
+                lineGroup.children.forEach((mesh) => {
 
-                ghostData.transform = newObject.cellName + newObject.faceName + "d";
-                ghostGroup.children = [objectMaker(ghostData)];
+                    if (mesh.cellName === removeCell) {
 
-            }
+                        mesh.material.emissive.setRGB(0.8, 0.1, 0.1);
 
-        } else {
+                    } else {
 
-            if (k != 0) {
+                        mesh.material.emissive.setRGB(0, 0, 0);
 
-                oldObject.material.emissive.setRGB(0, 0, 0);
-                ghostGroup.children = [];
+                    }
+
+                })
+
+            } else {
+
+                lineGroup.children.forEach((mesh) => {
+
+                    mesh.material.emissive.setRGB(0, 0, 0);
+
+                })
 
             }
 
@@ -154,19 +190,40 @@ function main() {
         mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
         raycaster.setFromCamera(mouseVector, camera);
 
-        var intersects = raycaster.intersectObjects(lineGroup.children);
+        var intersects2 = raycaster.intersectObjects(lineGroup.children);
 
-        if (intersects.length > 0) {
+        console.log(lineGroup.children)
 
-            clickObject = intersects[0].object;
+        if (intersects2.length > 0) {
 
-            data.transform = clickObject.cellName + clickObject.faceName + "d";
+            clickObject = intersects2[0].object;
 
-            lineGroup.children = lineGroup.children.concat(objectMaker(data).children);
+            if (mode === "add") {
 
-            var word = "\"" + data.transform + "\",";
+                data.transform = clickObject.cellName + clickObject.faceName + "d";
 
-            document.getElementById("list").innerHTML += word;
+                lineGroup.children = lineGroup.children.concat(objectMaker(data).children);
+
+                list.push("\"" + data.transform + "\"");
+
+            } else if (mode === "remove") {
+
+                const removeCell = clickObject.cellName ;
+                var newChildren = [];
+
+                lineGroup.children.forEach((mesh) => {
+
+                    if (mesh.cellName !== removeCell) {
+
+                        newChildren.push(mesh);
+
+                    }
+
+                })
+
+                lineGroup.children = newChildren;
+
+            }
 
         }
 
@@ -177,6 +234,20 @@ function main() {
             k = 0;
             lineGroup.children = objectMaker(data).children;
         }
+    });
+
+    document.getElementById("list").addEventListener("click", function () {
+        alert(list);
+    });
+
+    document.getElementById("add").addEventListener("click", function () {
+        mode = "add";
+        ghostGroup.children = [];
+    });
+
+    document.getElementById("remove").addEventListener("click", function () {
+        mode = "remove";
+        ghostGroup.children = [];
     });
 
     window.addEventListener("touchend", () => {
