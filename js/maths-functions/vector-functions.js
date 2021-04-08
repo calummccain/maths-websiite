@@ -110,6 +110,12 @@ function norm(x) {
 
 }
 
+function norm2(x) {
+
+    return vectorDot(x, x);
+
+}
+
 // returns distance between two points
 function distance(x, y) {
 
@@ -128,7 +134,7 @@ function circumradius(a, b, c) {
 function circumcenter(u, v, w) {
 
     const a = determinant([[u[0], u[1], 1], [v[0], v[1], 1], [w[0], w[1], 1]]);
-    const ru = u[0] ** 2 + u[1] ** 2, rv = v[0] ** 2 + v[1] ** 2, rw = w[0] ** 2 + w[1] ** 2;
+    const ru = u[0] * u[0] + u[1] * u[1], rv = v[0] * v[0] + v[1] * v[1], rw = w[0] * w[0] + w[1] * w[1];
     const bx = -determinant([[ru, u[1], 1], [rv, v[1], 1], [rw, w[1], 1]]);
     const by = determinant([[ru, u[0], 1], [rv, v[0], 1], [rw, w[0], 1]]);
 
@@ -147,7 +153,7 @@ function circum4(u, v, w, x) {
     const dy = -determinant4([[nu, u[0], u[2], 1], [nv, v[0], v[2], 1], [nw, w[0], w[2], 1], [nx, x[0], x[2], 1]]);
     const dz = determinant4([[nu, u[0], u[1], 1], [nv, v[0], v[1], 1], [nw, w[0], w[1], 1], [nx, x[0], x[1], 1]]);
 
-    return [[dx / (2 * a), dy / (2 * a), dz / (2 * a)], Math.sqrt(((dx ** 2) + (dy ** 2) + (dz ** 2) - 4 * a * g) / (4 * (a ** 2)))];
+    return [[dx / (2 * a), dy / (2 * a), dz / (2 * a)], Math.sqrt((dx * dx + dy * dy + dz * dz - 4 * a * g) / (4 * a * a))];
 
 }
 
@@ -195,10 +201,12 @@ function transformVertices(baseVertices, transformation, dictionary) {
 
     }
 
+    var oldVertex, newVertex;
+
     for (var j = 0; j < baseVertices.length; j++) {
 
-        var oldVertex = baseVertices[j];
-        var newVertex = vectorSum([
+        oldVertex = baseVertices[j];
+        newVertex = vectorSum([
             vectorScale(e1, oldVertex[0]),
             vectorScale(e2, oldVertex[1]),
             vectorScale(e3, oldVertex[2]),
@@ -237,6 +245,7 @@ export {
     vectorDot,
     midpoint,
     norm,
+    norm2,
     distance,
     lineSphereIntersection,
     circumradius,
