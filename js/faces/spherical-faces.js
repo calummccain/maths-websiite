@@ -14,13 +14,13 @@ function sphericalFace(vertices, refinement) {
     } else if (sideNumber == 4) {
 
         faces = faces.concat([[0, 1, 4], [1, 2, 4], [2, 3, 4], [3, 0, 4]]);
-        var center = VF.vectorScale(VF.vectorSum(coords[0], VF.vectorSum(coords[1], VF.vectorSum(coords[2], coords[3]))), 0.25);
+        var center = VF.vectorScale(VF.vectorSum([coords[0], coords[1], coords[2], coords[3]]), 0.25);
         coords.push(center);
 
     } else if (sideNumber == 5) {
 
         faces = faces.concat([[0, 1, 5], [1, 2, 5], [2, 3, 5], [3, 4, 5], [4, 0, 5]]);
-        var center = VF.vectorScale(VF.vectorSum(VF.vectorSum(coords[0], VF.vectorSum(coords[1], VF.vectorSum(coords[2], coords[3]))), coords[4]), 0.2);
+        var center = VF.vectorScale(VF.vectorSum([coords[0], coords[1], coords[2], coords[3], coords[4]]), 0.2);
         coords.push(center);
 
     }

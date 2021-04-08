@@ -23,7 +23,7 @@ function hyperbolicFace(vertices, refinement, metric) {
         for (var i = 0; i < sideNumber; i++) {
 
             faces.push([i, (i + 1) % sideNumber, sideNumber]);
-            center = VF.vectorSum(center, vertices[i]);
+            center = VF.vectorSum([center, vertices[i]]);
 
         }
 

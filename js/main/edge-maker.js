@@ -228,7 +228,7 @@ function generateSpheres(data, vertices) {
 
             for (var j = 0; j < data.numSides; j++) {
 
-                center4 = VF.vectorSum(center4, vertices[data.faces[i][j]]["hypersphere"]);
+                center4 = VF.vectorSum([center4, vertices[data.faces[i][j]]["hypersphere"]]);
 
             }
 
@@ -433,10 +433,10 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 line.push(
                     SF.hyperToStereo(
-                        VF.vectorSum(
+                        VF.vectorSum([
                             VF.vectorScale(start, ratios[i]),
                             VF.vectorScale(end, ratios[number - i])
-                        )
+                        ])
                     )
                 );
 
@@ -507,7 +507,7 @@ function outline(data, number, camera, spheres, vertices) {
 
         h = r * Math.sqrt(cs * cs - r * r) / cs;
         t = Math.sqrt(r * r - h * h) / cs;
-        interp = VF.vectorSum(VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t));
+        interp = VF.vectorSum([VF.vectorScale(center, 1 - t), VF.vectorScale(camPos, t)]);
 
         perp = [1, 0, 0];
 
@@ -529,10 +529,7 @@ function outline(data, number, camera, spheres, vertices) {
 
         for (var k = 0; k <= number; k++) {
 
-            curve.push(VF.vectorSum(
-                VF.vectorSum(VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k])),
-                interp
-            ));
+            curve.push(VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]));
 
         }
 
@@ -704,7 +701,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t1 > eps) && (t1 < 1 - eps)) {
 
-                    x1 = VF.vectorSum(c, VF.vectorScale(pc, t1));
+                    x1 = VF.vectorSum([c, VF.vectorScale(pc, t1)]);
                     v1 = HF.upperHalfPlaneToKlein(x1);
 
                     if (pointInPolygon(v1, polygon) && (x1[2] >= 0)) {
@@ -717,7 +714,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if ((t2 > eps) && (t2 < 1 - eps)) {
 
-                    x2 = VF.vectorSum(c, VF.vectorScale(pc, t2));
+                    x2 = VF.vectorSum([c, VF.vectorScale(pc, t2)]);
                     v2 = HF.upperHalfPlaneToKlein(x2);
 
                     if (pointInPolygon(v2, polygon) && (x2[2] >= 0)) {
@@ -761,7 +758,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                     if (eps < t1 && t1 < 1 - eps) {
 
-                        intersect = VF.vectorSum(c, VF.vectorScale(pc, t1));
+                        intersect = VF.vectorSum([c, VF.vectorScale(pc, t1)]);
 
                         var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
 
@@ -775,7 +772,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                     if (eps < t2 && t2 < 1 - eps) {
 
-                        intersect = VF.vectorSum(c, VF.vectorScale(pc, t2));
+                        intersect = VF.vectorSum([c, VF.vectorScale(pc, t2)]);
 
                         var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
 
@@ -795,7 +792,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
 
                 if (eps < t && t < 1 - eps) {
 
-                    intersect = VF.vectorSum(c, VF.vectorScale(pc, t));
+                    intersect = VF.vectorSum([c, VF.vectorScale(pc, t)]);
 
                     var isInFace = pointInSphericalPolygon(intersect, ii, spheres);
 

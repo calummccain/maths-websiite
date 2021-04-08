@@ -1,13 +1,23 @@
 const eps = 1e-4;
 
 //returns sum of two vectors
-function vectorSum(x, y) {
+function vectorSum(array) {
 
     var vSum = [];
 
-    for (var i = 0; i < x.length; i++) {
+    var smallSum;
 
-        vSum.push(x[i] + y[i]);
+    for (var i = 0; i < array[0].length; i++) {
+
+        smallSum = 0;
+
+        for (var j = 0; j < array.length; j++) {
+
+            smallSum += array[j][i];
+
+        }
+
+        vSum.push(smallSum);
 
     }
 
@@ -82,14 +92,14 @@ function lineSphereIntersection(a, b) {
     var l2 = (-B - Math.sqrt(B ** 2 - 4 * A * C)) / (2 * A);
 
     var l = Math.min(l1, l2);
-    return vectorSum(vectorScale(a, l), vectorScale(b, 1 - l));
+    return vectorSum([vectorScale(a, l), vectorScale(b, 1 - l)]);
 
 }
 
 // midpoint of a line
 function midpoint(a, b) {
 
-    return vectorScale(vectorSum(a, b), 0.5);
+    return vectorScale(vectorSum([a, b]), 0.5);
 
 }
 
@@ -188,16 +198,13 @@ function transformVertices(baseVertices, transformation, dictionary) {
     for (var j = 0; j < baseVertices.length; j++) {
 
         var oldVertex = baseVertices[j];
-        var newVertex = vectorSum(
-            vectorSum(
-                vectorScale(e1, oldVertex[0]),
-                vectorScale(e2, oldVertex[1])
-            ),
-            vectorSum(
-                vectorScale(e3, oldVertex[2]),
-                vectorScale(e4, oldVertex[3])
-            )
-        );
+        var newVertex = vectorSum([
+            vectorScale(e1, oldVertex[0]),
+            vectorScale(e2, oldVertex[1]),
+            vectorScale(e3, oldVertex[2]),
+            vectorScale(e4, oldVertex[3])
+        ]);
+
 
         newVertices.push(newVertex);
 
