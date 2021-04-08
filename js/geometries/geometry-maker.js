@@ -6,16 +6,16 @@ function honeycombGeometry(data, transform, refinement, model) {
 
     var honeycomb;
 
-    if (data.metric == "s") {
+    if (data.metric === "s") {
 
         refinement += 1;
         honeycomb = sphericalGeometry(data, transform, refinement);
 
-    } else if (data.metric == "e") {
+    } else if (data.metric === "e") {
 
         honeycomb = euclideanGeometry(data, transform);
 
-    } else if (data.metric == "h" || data.metric == "p" || data.metric == "u") {
+    } else if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
         if ((data.cellType === "euclidean" || data.cellType === "hyperbolic") && model === "uhp") {
 
