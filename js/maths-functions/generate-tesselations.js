@@ -9,9 +9,11 @@ function makeVertices(initialVerts, matrixDict, fNames) {
 
     var newVerts = [];
 
+    var testVertices;
+
     for (var i = 0; i < fNames.length; i++) {
 
-        var testVertices = VF.transformVertices(verts, fNames[i], matrixDict);
+        testVertices = VF.transformVertices(verts, fNames[i], matrixDict);
 
         testVertices.forEach((vector) => {
             if (!(VF.isInArray(vector, verts) || VF.isInArray(vector, newVerts))) {
@@ -35,9 +37,11 @@ function makeEdges(initialEdges, matrixDict, fNames) {
 
     var newEdges = [];
 
+    var testEdges;
+
     for (var i = 0; i < fNames.length; i++) {
 
-        var testEdges = VF.transformVertices(edges, fNames[i], matrixDict);
+        testEdges = VF.transformVertices(edges, fNames[i], matrixDict);
 
         testEdges.forEach((vector) => {
             if (!(VF.isInArray(vector, edges) || VF.isInArray(vector, newEdges))) {
@@ -96,16 +100,18 @@ function makeFaces(face, maxNumber, numEdges, matrixDict) {
     const maxFaces = maxNumber;
     var i = 1;
 
+    var j, append, newFaces, newNames, testCenters;
+
     while (i < maxFaces) {
 
-        var j = 0
-        var append = "c";
-        var newFaces = [];
-        var newNames = [];
+        j = 0
+        append = "c";
+        newFaces = [];
+        newNames = [];
 
         while (j < numEdges) {
 
-            const testCenters = VF.transformVertices(faces, append, matrixDict);
+            testCenters = VF.transformVertices(faces, append, matrixDict);
 
             for (var k = 0; k < testCenters.length; k++) {
 
@@ -137,10 +143,12 @@ function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
     var faceData = [];
     var fv = (metric !== "p") ? fvDist : 1;
 
+    var nearestPoints, j;
+
     f.forEach((face) => {
 
-        var nearestPoints = [];
-        var j = 0;
+        nearestPoints = [];
+        j = 0;
 
         for (var i = 0; i < v.length; i++) {
 
@@ -172,10 +180,12 @@ function generateEdgeData(evDist, metric, e, v, fmat) {
     var edgeData = [];
     var ev = (metric !== "p") ? evDist : HF.hyperboloidInnerProduct(fmat(v[0]), fmat(e[0])) ** 2;
 
+    var nearestPoints, j;
+
     e.forEach((edge) => {
 
-        var nearestPoints = [];
-        var j = 0;
+        nearestPoints = [];
+        j = 0;
 
         for (var i = 0; i < v.length; i++) {
 
@@ -206,10 +216,12 @@ function orderFaces(numEdges, faceData, edgeData) {
 
     var newFaceData = [];
 
+    var newFace, k;
+
     faceData.forEach((face) => {
 
-        var newFace = [face[0]];
-        var k = 1;
+        newFace = [face[0]];
+        k = 1;
 
         while (k < numEdges) {
 
@@ -235,7 +247,7 @@ function orderFaces(numEdges, faceData, edgeData) {
 }
 
 export {
-    makeVertices, 
+    makeVertices,
     makeEdges,
     matrixDict,
     makeFaces,
