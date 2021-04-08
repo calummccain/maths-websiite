@@ -2,50 +2,18 @@ import * as THREE from "../three-bits/three.module.js";
 import { hyperbolicFace } from "../faces/hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
+import { matrixDict } from "../data/matrix-dictionary.js";
 
 function hyperbolicGeometry(data, transform, refinement, model) {
 
-    // matrix dictionary
-    function matrixDict(letter, vector) {
-    
-        if (letter === "a") {
-    
-            return data.a(vector)
-    
-        } else if (letter === "b") {
-
-            return data.b(vector)
-
-        } else if (letter === "c") {
-
-            return data.c(vector)
-
-        } else if (letter === "d") {
-
-            return data.d(vector)
-
-        } else if (letter === "e") {
-
-            return data.e(vector)
-
-        } else if (letter === "f") {
-
-            return data.f(vector)
-
-        } else {
-
-            throw 'letter needs to be one of a, b, c, d, e, f!';
-
-        }
-
-    }
+    var matrix = matrixDict(data);
 
     // Transform the 'central' cell's vertices to the transformed cell's vertices
-    var newVertices = VF.transformVertices(data.vertices, transform, matrixDict);
+    var newVertices = VF.transformVertices(data.vertices, transform, matrix);
 
     // Project the transformed cell's vertices to the Klein Model
     var kleinVertices = [];
-    
+
     for (var i = 0; i < newVertices.length; i++) {
 
         kleinVertices[i] = HF.hyperboloidToKlein(data.f(newVertices[i]));
@@ -54,27 +22,24 @@ function hyperbolicGeometry(data, transform, refinement, model) {
 
     // For each face make a geometry for it and add it to the cellGeometry array
     var cellGeometry = [];
+    var subdividedFaces, subdividedVertices, initial, faceGeometry, faceVertices, vertex;
 
     for (var i = 0; i < data.numFaces; i++) {
 
-        var subdividedFaces, subdividedVertices;
-        var initial = 0;
-        var faceGeometry = new THREE.Geometry();
-        var faceVertices = Array(data.numSides).fill().map(() => initial++);
+        subdividedFaces, subdividedVertices;
+        initial = 0;
+        faceGeometry = new THREE.Geometry();
+        faceVertices = Array(data.numSides).fill().map(() => initial++);
         faceVertices = faceVertices.map((x) => kleinVertices[data.faces[i][x]]);
 
         // kleinFace subdivides the face automatically and returns the vertices and the face indices
-        [subdividedFaces, subdividedVertices] = hyperbolicFace(
-            faceVertices,
-            refinement,
-            data.metric
-        );
+        [subdividedFaces, subdividedVertices] = hyperbolicFace(faceVertices, refinement, data.metric);
 
         // Transform the vertices from the Klein Model to the Poincare Model
         // Then add these to the faceGeometry (as THREE.Vector3)
         for (var j = 0; j < subdividedVertices.length; j++) {
 
-            var vertex = [0, 0, 0];
+            vertex = [0, 0, 0];
 
             if (model === "klein") {
 
