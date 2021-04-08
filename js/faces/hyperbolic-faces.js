@@ -33,17 +33,18 @@ function hyperbolicFace(vertices, refinement, metric) {
     }
 
     var j = 0;
+    var newCoords, newFaces, u, v, w, sixi;
 
     while (j < refinement) {
 
-        var newCoords = [];
-        var newFaces = [];
+        newCoords = [];
+        newFaces = [];
 
         for (var i = 0; i < faces.length; i++) {
 
-            var u = VF.midpoint(coords[faces[i][0]], coords[faces[i][1]]);
-            var v = VF.midpoint(coords[faces[i][1]], coords[faces[i][2]]);
-            var w = VF.midpoint(coords[faces[i][2]], coords[faces[i][0]]);
+            u = VF.midpoint(coords[faces[i][0]], coords[faces[i][1]]);
+            v = VF.midpoint(coords[faces[i][1]], coords[faces[i][2]]);
+            w = VF.midpoint(coords[faces[i][2]], coords[faces[i][0]]);
 
             newCoords = newCoords.concat([
                 coords[faces[i][0]],
@@ -54,11 +55,13 @@ function hyperbolicFace(vertices, refinement, metric) {
                 w
             ]);
 
+            sixi = 6 * i;
+
             newFaces = newFaces.concat([
-                [6 * i, 6 * i + 3, 6 * i + 5],
-                [6 * i + 3, 6 * i + 1, 6 * i + 4],
-                [6 * i + 5, 6 * i + 4, 6 * i + 2],
-                [6 * i + 3, 6 * i + 4, 6 * i + 5]
+                [sixi, sixi + 3, sixi + 5],
+                [sixi + 3, sixi + 1, sixi + 4],
+                [sixi + 5, sixi + 4, sixi + 2],
+                [sixi + 3, sixi + 4, sixi + 5]
             ]);
         }
 
@@ -84,11 +87,13 @@ function hyperbolicFace(vertices, refinement, metric) {
 
         }
 
+        var faceBadNumber, faceBadVertices, faceGoodVertices, bv, p1, p2, bv1, bv2, dbv;
+
         faces.forEach((face) => {
 
-            var faceBadNumber = 0;
-            var faceBadVertices = [];
-            var faceGoodVertices = [];
+            faceBadNumber = 0;
+            faceBadVertices = [];
+            faceGoodVertices = [];
 
             for (var i = 0; i < 3; i++) {
 
@@ -111,10 +116,10 @@ function hyperbolicFace(vertices, refinement, metric) {
 
             } else if (faceBadNumber == 1) {
 
-                const bv = faceBadVertices[0];
+                bv = faceBadVertices[0];
 
-                var p1 = VF.lineSphereIntersection(coords[face[(bv + 1) % 3]], coords[face[bv]]);
-                var p2 = VF.lineSphereIntersection(coords[face[(bv + 2) % 3]], coords[face[bv]]);
+                p1 = VF.lineSphereIntersection(coords[face[(bv + 1) % 3]], coords[face[bv]]);
+                p2 = VF.lineSphereIntersection(coords[face[(bv + 2) % 3]], coords[face[bv]]);
 
                 coords.push(p1);
                 coords.push(p2);
@@ -126,10 +131,10 @@ function hyperbolicFace(vertices, refinement, metric) {
 
             } else if (faceBadNumber == 2) {
 
-                var bv1 = faceBadVertices[0];
-                var bv2 = faceBadVertices[1];
+                bv1 = faceBadVertices[0];
+                bv2 = faceBadVertices[1];
 
-                const dbv = bv1 - bv2;
+                dbv = bv1 - bv2;
 
                 if (dbv == 1 || dbv == -2) {
 
@@ -137,8 +142,8 @@ function hyperbolicFace(vertices, refinement, metric) {
 
                 }
 
-                var p1 = VF.lineSphereIntersection(coords[face[3 - bv1 - bv2]], coords[face[bv1]]);
-                var p2 = VF.lineSphereIntersection(coords[face[3 - bv1 - bv2]], coords[face[bv2]]);
+                p1 = VF.lineSphereIntersection(coords[face[3 - bv1 - bv2]], coords[face[bv1]]);
+                p2 = VF.lineSphereIntersection(coords[face[3 - bv1 - bv2]], coords[face[bv2]]);
 
                 coords.push(p1);
                 coords.push(p2);
