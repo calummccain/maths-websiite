@@ -28,7 +28,7 @@ function main() {
     scene.background = new THREE.Color(0xFFFFFF);
 
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
-    camera.position.set(0, 10, 0);
+    camera.position.set(5, 5, 0);
     camera.up = new THREE.Vector3(0, 0, 1);
 
     scene.add(camera);
@@ -61,7 +61,7 @@ function main() {
         faceMode: true
     }
 
-    var list = ["\"" + initialCell + "\""];
+    var list = [initialCell];
 
     var ghostData = {
         p: p,
@@ -192,8 +192,6 @@ function main() {
 
         var intersects2 = raycaster.intersectObjects(lineGroup.children);
 
-        console.log(lineGroup.children)
-
         if (intersects2.length > 0) {
 
             clickObject = intersects2[0].object;
@@ -204,11 +202,11 @@ function main() {
 
                 lineGroup.children = lineGroup.children.concat(objectMaker(data).children);
 
-                list.push("\"" + data.transform + "\"");
+                list.push(data.transform);
 
             } else if (mode === "remove") {
 
-                const removeCell = clickObject.cellName ;
+                const removeCell = clickObject.cellName;
                 var newChildren = [];
 
                 lineGroup.children.forEach((mesh) => {
@@ -221,9 +219,26 @@ function main() {
 
                 })
 
+                var newList = [];
+
+                list.forEach((elem) => {
+
+                    if (elem !== removeCell) {
+
+                        newList.push(elem);
+
+                    }
+
+                })
+
                 lineGroup.children = newChildren;
+                list = newList;
 
             }
+
+        } else if (lineGroup.children.length == 0 && mode === "add") {
+
+            lineGroup.children = lineGroup.children.concat(objectMaker(data).children);
 
         }
 
@@ -231,6 +246,8 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
+            data.transform = initialCell;
+            list = [initialCell];
             k = 0;
             lineGroup.children = objectMaker(data).children;
         }
@@ -265,8 +282,8 @@ function main() {
     };
 
     document.getElementById("myRanger").oninput = function () {
-        data.r = parseInt(this.value) / 2;
-        ghostData.r = parseInt(this.value) / 2;
+        data.r = parseInt(this.value);
+        ghostData.r = parseInt(this.value);
     };
 
     document.getElementById("myRangex").oninput = function () {
