@@ -22,13 +22,13 @@ function hyperboloidToPoincare(point) {
 
     if (Math.abs(hyperbolicNorm(point)) < tol) {
 
-        const scale = point[0];
-        return [point[1] / scale, point[2] / scale, point[3] / scale];
+        const scale = 1 / point[0];
+        return [point[1] * scale, point[2] * scale, point[3] * scale];
 
     } else if (hyperbolicNorm(point) > tol) {
 
-        const scale = 1 + point[0];
-        return [point[1] / scale, point[2] / scale, point[3] / scale];
+        const scale = 1 / (1 + point[0]);
+        return [point[1] * scale, point[2] * scale, point[3] * scale];
 
     } else {
 
@@ -56,7 +56,7 @@ function hyperboloidToKlein(point) {
 function poincareToUpperHalfPlane(point) {
 
     var x = point[0], y = point[1], z = point[2];
-    var s = (x ** 2) + (y ** 2) + (1 - z) ** 2;
+    var s = 1 / (x * x + y * y + 1 - 2 * z + z * z);
 
     if (s < tol) {
 
@@ -64,11 +64,11 @@ function poincareToUpperHalfPlane(point) {
 
     } else if (VF.norm([x, y, z]) > 1 - tol) {
 
-        return [2 * x / s, 2 * y / s, 0];
+        return [2 * x * s, 2 * y * s, 0];
 
     } else {
 
-        return [2 * x / s, 2 * y / s, (1 - (x ** 2) - (y ** 2) - (z ** 2)) / s];
+        return [2 * x * s, 2 * y * s, (1 - x * x - y * y - z * z) * s];
 
     }
 
@@ -76,19 +76,20 @@ function poincareToUpperHalfPlane(point) {
 
 function upperHalfPlaneToPoincare(point) {
 
-    var x = point[0], y = point[1], z = point[2];
-    var s = (x ** 2) + (y ** 2) + (1 + z) ** 2;
+    const x = point[0], y = point[1], z = point[2];
+    const s = 1 / (x * x + y * y + 1 + 2 * z + z * z);
 
-    return [2 * x / s, 2 * y / s, ((x ** 2) + (y ** 2) + (z ** 2) - 1) / s];
+    return [2 * x * s, 2 * y * s, (x * x + y * y + z * z - 1) * s];
 
 }
 
 // TODO what if point is ideal ie r = 1 - tol
 function poincareToHyperboloid(point) {
 
-    const r = VF.norm(point) ** 2;
+    const r = VF.norm2(point);
+    const denom = 1 / (1 - r);
 
-    return [(1 + r) / (1 - r), 2 * point[0] / (1 - r), 2 * point[1] / (1 - r), 2 * point[2] / (1 - r)];
+    return [(1 + r) * denom, 2 * point[0] * denom, 2 * point[1] * denom, 2 * point[2] * denom];
 
 }
 
@@ -110,8 +111,8 @@ function poincareToHyperboloid(point) {
 // TODO ideal point again
 function kleinToPoincare(point) {
 
-    var dist = VF.norm(point);
-    var hyperbolicDist = (dist < 1 - tol) ? 1 / (1 + Math.sqrt(Math.abs(1 - (dist ** 2)))) : 1;
+    var dist = VF.norm2(point);
+    var hyperbolicDist = (dist < 1 - tol) ? 1 / (1 + Math.sqrt(Math.abs(1 - dist))) : 1;
 
     return VF.vectorScale(point, hyperbolicDist);
 
@@ -145,9 +146,10 @@ function upperHalfPlaneToKlein(point) {
 
 function poincareToKlein(point) {
 
-    var x = point[0], y = point[1], z = point[2];
-    var s = 1 + x ** 2 + y ** 2 + z ** 2;
-    return [2 * x / s, 2 * y / s, 2 * z / s];
+    const x = point[0], y = point[1], z = point[2];
+    const s = 2 / (1 + x * x + y * y + z * z);
+
+    return [x * s, y * s, z * s];
 
 }
 
@@ -170,12 +172,12 @@ function uhpCenter(p1, p2, p3) {
     var C = [n0[2], n12[2], n13[2]];
     var D = [0, d12, d13];
 
-    var ABC = VF.determinant3([A, B, C]);
+    var ABC = 1 / VF.determinant3([A, B, C]);
 
     return [
-        VF.determinant3([D, B, C]) / ABC,
-        VF.determinant3([A, D, C]) / ABC,
-        VF.determinant3([A, B, D]) / ABC
+        VF.determinant3([D, B, C]) * ABC,
+        VF.determinant3([A, D, C]) * ABC,
+        VF.determinant3([A, B, D]) * ABC
     ];
 
 }
@@ -183,15 +185,15 @@ function uhpCenter(p1, p2, p3) {
 
 function geodesicEndpoints(a, b) {
 
-    if ((Math.abs(hyperbolicNorm(a)) < tol) && (Math.abs(hyperbolicNorm(a)) < tol)) {
+    if ((Math.abs(hyperbolicNorm(a)) < tol) && (Math.abs(hyperbolicNorm(b)) < tol)) {
 
         return [a, b];
 
     }
 
     var inner = hyperboloidInnerProduct(a, b);
-    var eAlpha = inner + Math.sqrt(inner ** 2 - 1);
-    return [VF.vectorDiff(VF.vectorScale(a, 1 / eAlpha), b), VF.vectorDiff(VF.vectorScale(b, 1 / eAlpha), a)];
+    var eAlpha = 1 / (inner + Math.sqrt(inner * inner - 1));
+    return [VF.vectorDiff(VF.vectorScale(a, eAlpha), b), VF.vectorDiff(VF.vectorScale(b, eAlpha), a)];
 
 }
 
