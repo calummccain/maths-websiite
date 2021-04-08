@@ -3,6 +3,7 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
+import { matrixDict } from "../data/matrix-dictionary.js";
 
 const eps = 1e-4;
 
@@ -66,42 +67,10 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 function generateVertices(data, thetax, thetay, thetaz, cell) {
 
     // matrix dictionary
-    function matrixDict(letter, vector) {
-
-        if (letter === "a") {
-
-            return data.a(vector)
-
-        } else if (letter === "b") {
-
-            return data.b(vector)
-
-        } else if (letter === "c") {
-
-            return data.c(vector)
-
-        } else if (letter === "d") {
-
-            return data.d(vector)
-
-        } else if (letter === "e") {
-
-            return data.e(vector)
-
-        } else if (letter === "f") {
-
-            return data.f(vector)
-
-        } else {
-
-            throw 'letter needs to be one of a, b, c, d, e, f!';
-
-        }
-
-    }
+    const matrix = matrixDict(data);
 
     // Transform the 'central' cell's vertices to the transformed cell's vertices
-    var newVertices = VF.transformVertices(data.vertices, cell, matrixDict);
+    var newVertices = VF.transformVertices(data.vertices, cell, matrix);
 
     var verts = [];
     var p;
@@ -318,8 +287,8 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 if (data.metric === "h") {
 
-                    startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r ** 2));
-                    endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r ** 2));
+                    startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r * r));
+                    endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r * r));
 
                 } else {
 
@@ -411,7 +380,7 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
         var ratios = [];
         const ca = VF.vectorDot(vertices[data.edges[0][0]]["hypersphere"], vertices[data.edges[0][1]]["hypersphere"]);
-        const sa = Math.sqrt(1 - ca ** 2);
+        const sa = Math.sqrt(1 - ca * ca);
         const a = Math.acos(ca);
         const denom = 1 / sa;
         var theta = 0;
@@ -682,7 +651,7 @@ function visibilityTest(point, camera, spheres, vertices, data) {
             B = 2 * VF.vectorDot(pc, cs);
             C = VF.vectorDot(cs, cs) - sr * sr;
 
-            delta = B ** 2 - 4 * A * C;
+            delta = B * B - 4 * A * C;
 
             if ((delta <= 0) || isNaN(delta)) {
 
