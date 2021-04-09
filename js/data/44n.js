@@ -8,8 +8,8 @@ import * as GT from "../maths-functions/generate-tesselations.js";
 const squareData = (n) => {
 
     const metric = boundaries(n, 2, 4);
-    const c = Math.cos(Math.PI / n) ** 2;
-    const den = Math.sqrt(Math.abs(1 - 2 * c));
+    const cos = Math.cos(Math.PI / n) ** 2;
+    const den = Math.sqrt(Math.abs(1 - 2 * cos));
 
     const V = [1, 0, 1, 0];
     const E = [2, 0, 1, 1];
@@ -33,10 +33,10 @@ const squareData = (n) => {
             v[0] - v[1] / 2 - v[3],
             v[0] - v[1] / 2 - v[2]
         ] : (v) => [
-            (1 + 2 * c) * v[0] - 2 * (c ** 2) * v[1] - 2 * c * v[2] - 2 * c * v[3],
-            2 * v[0] + (1 - 2 * c) * v[1] - 2 * v[2] - 2 * v[3],
-            v[0] - c * v[1] - v[3],
-            v[0] - c * v[1] - v[2]
+            (1 + 2 * cos) * v[0] - 2 * (cos * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
+            2 * v[0] + (1 - 2 * cos) * v[1] - 2 * v[2] - 2 * v[3],
+            v[0] - cos * v[1] - v[3],
+            v[0] - cos * v[1] - v[2]
         ];
 
     // FEV
@@ -53,9 +53,9 @@ const squareData = (n) => {
             v[3]
         ] : (v) => [
             v[0] / den,
-            c * v[1] / den,
-            Math.sqrt(2 * c) * v[2] / den,
-            Math.sqrt(2 * c) * v[3] / den
+            cos * v[1] / den,
+            Math.sqrt(2 * cos) * v[2] / den,
+            Math.sqrt(2 * cos) * v[3] / den
         ];
 
     const initialVerts = [
@@ -77,8 +77,8 @@ const squareData = (n) => {
     const [f, fNames] = GT.makeFaces([(n == 4) ? 1 : den, 0, 0, 0], 500, 4, matrixDict);
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
-    var faceData = GT.generateFaceData(Math.abs(1 / (1 - 2 * c)), 4, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(Math.abs((1 - c) / (1 - 2 * c)), metric, e, v, fmat);
+    var faceData = GT.generateFaceData(Math.abs(1 / (1 - 2 * cos)), 4, metric, f, v, fmat);
+    const edgeData = GT.generateEdgeData(Math.abs((1 - cos) / (1 - 2 * cos)), metric, e, v, fmat);
 
     faceData = GT.orderFaces(4, faceData, edgeData);
 

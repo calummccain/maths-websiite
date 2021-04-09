@@ -1,6 +1,6 @@
 // Order n cubic
 
-import { p } from "./constants.js";
+import { rt2, rt3, p, p2, p_1 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
 const cubeData = (n) => {
@@ -21,8 +21,8 @@ const cubeData = (n) => {
             v[2],
             v[3]
         ] : (n == 5) ? (v) => [
-            p * v[0] - v[1] / p,
-            (p ** 2) * v[0] - p * v[1],
+            p * v[0] - p_1*v[1],
+            p2 * v[0] - p * v[1],
             v[2],
             v[3]
         ] : (n == 6) ? (v) => [
@@ -50,12 +50,12 @@ const cubeData = (n) => {
             v[2] / 2,
             v[3] / 2
         ] : (n == 5) ? (v) => [
-            (p ** 2) / Math.sqrt(2) * v[0],
+            p2 * v[0] / rt2,
             Math.sqrt(p / 2) * v[1],
             Math.sqrt(p / 2) * v[2],
             Math.sqrt(p / 2) * v[3]
         ] : (n == 6) ? (v) => [
-            Math.sqrt(3) * v[0],
+            rt3 * v[0],
             v[1],
             v[2],
             v[3]

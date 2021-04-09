@@ -1,12 +1,12 @@
 // Order n octahedral
 
 import { boundaries } from "./geometry-decider.js";
+import { rt2 } from "./constants.js";
 
 const octahedronData = (n) => {
 
-    const tan = Math.tan(Math.PI / n) ** 2;
     const cos = Math.cos(Math.PI / n) ** 2;
-    const rt = Math.sqrt(2);
+    const tan = 1 / cos - 1;
     const cot = 1 / tan;
     const cot2 = Math.sqrt(Math.abs(1 - 2 * cot));
     const cot3 = Math.sqrt(Math.abs(1 - cot));
@@ -33,10 +33,10 @@ const octahedronData = (n) => {
 
     const f =
         (n == 3) ? (v) => [
-            v[0] / rt,
-            v[1] / rt,
-            v[2] / rt,
-            v[3] / rt
+            v[0] / rt2,
+            v[1] / rt2,
+            v[2] / rt2,
+            v[3] / rt2
         ] : (n == 4) ? (v) => [
             v[0],
             v[1],

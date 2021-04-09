@@ -1,39 +1,39 @@
 // order n icosahedral
 
-import { p } from "./constants.js";
+import { p, p2, p3, p4, p5, p_1, p_3 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
 const icosahedronData = (n) => {
 
-    const metric = boundaries(n, Math.PI / Math.atan(p ** 2), 10 / 3);
+    const metric = boundaries(n, Math.PI / Math.atan(p2), 10 / 3);
 
     const cos = Math.cos(Math.PI / n) ** 2;
-    const cot = 1 / (Math.tan(Math.PI / n) ** 2);
+    const cot = cos / (1 - cos);
 
     const d =
         (n == 3) ? (v) => [
-            ((p ** 4 - 1) * v[0] - ((p ** 4) - 3) / p * v[2] - ((p ** 4) - 3) / (p ** 3) * v[3]) / 2,
+            ((p4 - 1) * v[0] - (p3 - 3 * p_1) * v[2] - (p - 3 * p_3) * v[3]) / 2,
             v[1],
-            ((p ** 5) * v[0] + (2 - (p ** 4)) * v[2] - p ** 2 * v[3]) / 2,
-            ((p ** 3) * v[0] - (p ** 2) * v[2] + v[3]) / 2
+            (p5 * v[0] + (2 - p4) * v[2] - p2 * v[3]) / 2,
+            (p3 * v[0] - p2 * v[2] + v[3]) / 2
         ] : (v) => [
-            (6 * (p ** 2) * cos - 1) * v[0] + (2 / p - 6 * p * cos) * v[2] + (2 / (p ** 3) - 6 * cos / p) * v[3],
+            (6 * p2 * cos - 1) * v[0] + (2 * p_1 - 6 * p * cos) * v[2] + (2 * p_3 - 6 * cos * p_1) * v[3],
             v[1],
-            2 * (p ** 5) * cos * v[0] + (1 - 2 * (p ** 4) * cos) * v[2] - 2 * (p ** 2) * cos * v[3],
-            2 * (p ** 3) * cos * v[0] - 2 * (p ** 2) * cos * v[2] + (1 - 2 * cos) * v[3]
+            2 * p5 * cos * v[0] + (1 - 2 * p4 * cos) * v[2] - 2 * p2 * cos * v[3],
+            2 * p3 * cos * v[0] - 2 * p2 * cos * v[2] + (1 - 2 * cos) * v[3]
         ];
 
     const f =
         (n == 3) ? (v) => [
-            ((p ** 3) / 2) * v[0],
+            (p3 / 2) * v[0],
             (Math.sqrt(3 * p - 1) / 2) * v[1],
             (Math.sqrt(3 * p - 1) / 2) * v[2],
             (Math.sqrt(3 * p - 1) / 2) * v[3]
         ] : (v) => [
-            (p ** 3) * Math.sqrt(cot / ((p ** 4) * cot - 1 - (p ** 2))) * v[0],
-            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[1],
-            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[2],
-            Math.sqrt(((p ** 4) * cot - 1) / ((p ** 4) * cot - 1 - (p ** 2))) * v[3]
+            p3 * Math.sqrt(cot / (p4 * cot - 1 - p2)) * v[0],
+            Math.sqrt((p4 * cot - 1) / (p4 * cot - 1 - p2)) * v[1],
+            Math.sqrt((p4 * cot - 1) / (p4 * cot - 1 - p2)) * v[2],
+            Math.sqrt((p4 * cot - 1) / (p4 * cot - 1 - p2)) * v[3]
         ];
 
     return {
@@ -78,7 +78,7 @@ const icosahedronData = (n) => {
 
         // CFV
         // (0, p, -1, 1 / p)
-        b: (v) => [v[0], (v[1] + v[2] / p - p * v[3]) / 2, (v[1] / p + p * v[2] + v[3]) / 2, (-p * v[1] + v[2] - v[3] / p) / 2],
+        b: (v) => [v[0], (v[1] + v[2] * p_1 - p * v[3]) / 2, (v[1] * p_1 + p * v[2] + v[3]) / 2, (-p * v[1] + v[2] - v[3] * p_1) / 2],
 
         // CEV
         // (0, 0, 0, 1)
@@ -110,7 +110,7 @@ const icosahedronData = (n) => {
         E: [1, 0, p, 0],
 
         // (3, 0, p ** 3, p)
-        F: [3, 0, p ** 3, p],
+        F: [3, 0, p3, p],
 
         // (1, 0, 0, 0)
         C: [1, 0, 0, 0],

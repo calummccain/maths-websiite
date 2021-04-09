@@ -1,34 +1,34 @@
 // Order n tetrahedral
 
 import { boundaries } from "./geometry-decider.js";
+import { rt2, rt3, rt5, p2, p_1 } from "./constants.js";
 
 const tetrahedronData = (n) => {
 
-    const metric = boundaries(n, Math.PI / Math.atan(1 / Math.sqrt(2)), 6);
+    const metric = boundaries(n, Math.PI / Math.atan(1 / rt2), 6);
     const cos = Math.cos(Math.PI / n) ** 2;
-    const sin = Math.sin(Math.PI / n) ** 2;
-    const cot = cos / sin;
-    const cos5 = (3 + Math.sqrt(5)) / 8;
-    const sin5 = (5 - Math.sqrt(5)) / 8;
+    const cot = cos / (1 - cos);
+    const cos5 = p2 / 4;
+    const sin5 = (5 - rt5) / 8;
 
     const f =
         (n == 3) ? (v) => [
             v[0] / 4,
-            Math.sqrt(5) * v[1] / 4,
-            Math.sqrt(5) * v[2] / 4,
-            Math.sqrt(5) * v[3] / 4
+            rt5 * v[1] / 4,
+            rt5 * v[2] / 4,
+            rt5 * v[3] / 4
         ] : (n == 4) ? (v) => [
             v[0] / 2,
             v[1] / 2,
             v[2] / 2,
             v[3] / 2
         ] : (n == 5) ? (v) => [
-            Math.sqrt(7 + 3 * Math.sqrt(5)) * v[0] / 4,
-            Math.sqrt(3 - Math.sqrt(5)) * v[1] / 4,
-            Math.sqrt(3 - Math.sqrt(5)) * v[2] / 4,
-            Math.sqrt(3 - Math.sqrt(5)) * v[3] / 4
+            rt2 * cos5 * v[0],
+            rt2 * p_1 * v[1] / 4,
+            rt2 * p_1 * v[2] / 4,
+            rt2 * p_1 * v[3] / 4
         ] : (n == 6) ? (v) => [
-            Math.sqrt(3) * v[0],
+            rt3 * v[0],
             v[1],
             v[2],
             v[3]
@@ -61,10 +61,10 @@ const tetrahedronData = (n) => {
             (3 * v[0] - 3 * v[1] + v[2] + 3 * v[3]) / 4,
             (-3 * v[0] + 3 * v[1] + 3 * v[2] + v[3]) / 4
         ] : (v) => [
-            (2 - 3 * sin) * v[0] + (3 * sin - 1) * v[1] + (3 * sin - 1) * v[2] + (1 - 3 * sin) * v[3],
-            cos * v[0] + sin * v[1] - cos * v[2] + cos * v[3],
-            cos * v[0] - cos * v[1] + sin * v[2] + cos * v[3],
-            -cos * v[0] + cos * v[1] + cos * v[2] + sin * v[3]
+            (3 * cos - 1) * v[0] + (3 - 2 * cos) * v[1] + (3 - 2 * cos) * v[2] + (3 * cos - 2) * v[3],
+            cos * v[0] + (1 - cos) * v[1] - cos * v[2] + cos * v[3],
+            cos * v[0] - cos * v[1] + (1 - cos) * v[2] + cos * v[3],
+            -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]
         ];
 
     return {
