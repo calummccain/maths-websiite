@@ -11,7 +11,7 @@ const octahedronData = (n) => {
     const cot2 = Math.sqrt(Math.abs(1 - 2 * cot));
     const cot3 = Math.sqrt(Math.abs(1 - cot));
 
-    const metric = boundaries(n, Math.PI / Math.atan(rt), 4);
+    const metric = boundaries(n, Math.PI / Math.atan(rt2), 4);
 
     const d =
         (n == 3) ? (v) => [
