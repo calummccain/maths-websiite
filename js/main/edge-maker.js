@@ -128,7 +128,7 @@ function generateVertices(data, thetax, thetay, thetaz, cell) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            p = data.f(newVertices[i]);
+            p = RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz);
 
             verts.push({
                 "hypersphere": p,

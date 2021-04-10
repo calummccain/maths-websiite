@@ -47,28 +47,7 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: [
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcdabacbabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdbabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdabacbabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdbacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdabacbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcdabacbabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdabacbabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdcbabcdabacbabcdabacbabcd"
-        ]
+        cells: [""]
     }
 
     geom = objectMaker(data);
