@@ -11,7 +11,7 @@ const eps = 1e-4;
 // but
 // needs tidying
 
-function generateData(data, thetax, thetay, thetaz, number, intersection, invisibleLines, camera, cells) {
+function generateData(data, thetax, thetay, thetaz, thetau, thetav, thetaw, number, intersection, invisibleLines, camera, cells) {
 
     var spheres = [];
     var vertices = [];
@@ -23,7 +23,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
         for (var i = 0; i < cells.length; i++) {
 
-            localVertices = generateVertices(data, thetax, thetay, thetaz, cells[i]);
+            localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
             localSpheres = generateSpheres(data, localVertices);
 
             vertices = vertices.concat(localVertices);
@@ -43,7 +43,8 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 
         for (var i = 0; i < cells.length; i++) {
 
-            localVertices = generateVertices(data, thetax, thetay, thetaz, cells[i]);
+            console.log(thetax, thetay, thetaz, thetau, thetav, thetaw)
+            localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
             localSpheres = generateSpheres(data, localVertices);
 
             vertices = vertices.concat(localVertices);
@@ -64,7 +65,7 @@ function generateData(data, thetax, thetay, thetaz, number, intersection, invisi
 }
 
 // generate the positions of the vertices in several models
-function generateVertices(data, thetax, thetay, thetaz, cell) {
+function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cell) {
 
     // matrix dictionary
     const matrix = matrixDict(data);
@@ -81,7 +82,7 @@ function generateVertices(data, thetax, thetay, thetaz, cell) {
 
             for (var i = 0; i < data.numVertices; i++) {
 
-                p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
+                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
 
                 verts.push({
                     "hyperboloid": p,
@@ -96,7 +97,7 @@ function generateVertices(data, thetax, thetay, thetaz, cell) {
 
             for (var i = 0; i < data.numVertices; i++) {
 
-                p = data.flip(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz));
+                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
 
                 verts.push({
                     "hyperboloid": p,
@@ -111,7 +112,7 @@ function generateVertices(data, thetax, thetay, thetaz, cell) {
 
             for (var i = 0; i < data.numVertices; i++) {
 
-                p = RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz);
+                p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
 
                 verts.push({
                     "hyperboloid": p,
@@ -128,7 +129,9 @@ function generateVertices(data, thetax, thetay, thetaz, cell) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            p = RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz);
+            console.log(thetax, thetay, thetaz, thetau, thetav, thetaw)
+
+            p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
 
             verts.push({
                 "hypersphere": p,

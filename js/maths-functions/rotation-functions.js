@@ -105,7 +105,7 @@ function rxyz(v, x, y, z) {
 
 function ruvw(vector, u, v, w, metric) {
 
-    return rx(ry(rz(vector, w, metric), v, metric), u, metric);
+    return ru(rv(rw(vector, w, metric), v, metric), u, metric);
 
 }
 
