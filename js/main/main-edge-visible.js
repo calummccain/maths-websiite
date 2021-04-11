@@ -151,12 +151,15 @@ function main() {
         (metric === "h" || metric === "p" || metric === "u") ? thetav = this.value / 30 :
             (metric === "e") ? thetav = this.value / 10 :
                 (metric === "s") ? thetav = Math.PI * this.value / 50 : this.value;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+
     };
 
     document.getElementById("myRangew").oninput = function () {
         (metric === "h" || metric === "p" || metric === "u") ? thetaw = this.value / 30 :
             (metric === "e") ? thetaw = this.value / 10 :
                 (metric === "s") ? thetaw = Math.PI * this.value / 50 : this.value;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
