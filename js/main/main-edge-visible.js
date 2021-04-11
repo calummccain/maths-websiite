@@ -84,22 +84,6 @@ function main() {
 
     }
 
-    function ExportToSVG(filename) {
-        var XMLS = new XMLSerializer();
-        var svgfile = XMLS.serializeToString(renderer.domElement);
-
-        var svgData = svgfile;
-        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-        var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = filename;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    }
-
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = objectMaker(data);
@@ -111,10 +95,6 @@ function main() {
         geom = objectMaker(data);
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, theta, camera.position.toArray())];
     }, false);
-
-    document.getElementById("svg").addEventListener("click", function () {
-        ExportToSVG(p + "-" + q + "-" + r + ".svg");
-    });
 
     document.getElementById("myRangep").oninput = function () {
         data.p = this.value;
