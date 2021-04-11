@@ -7,7 +7,8 @@ window.onload = main;
 function main() {
 
     var p = 5, q = 3, r = 3;
-    var thetax = 0, thetay = 0, thetaz = 0;
+    var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
+    var metric = "s";
     var invisible = false;
     var intersection = true;
     var geom = {};
@@ -47,33 +48,12 @@ function main() {
         invisibleLines: invisible,
         transform: "",
         position: [0, 0, 0],
-        cells: [
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcdabacbabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdbabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdabacbabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdcbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbabacbabcdbacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdabacbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdcbabcdabacbabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdacacbabcdabcdabacbabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdcbabcdabacbabcd",
-            "dbcdbabacbabcdcbabacbabcdcbabacbabcdbcdbcdabacbabcdcbabcdabacbabcdabacbabcd"
-        ]
+        cells: [""]
     }
 
     geom = objectMaker(data);
 
-    lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
+    lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
     // const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
     // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
@@ -104,37 +84,17 @@ function main() {
 
     }
 
-    function ExportToSVG(filename) {
-        var XMLS = new XMLSerializer();
-        var svgfile = XMLS.serializeToString(renderer.domElement);
-
-        var svgData = svgfile;
-        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-        var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = filename;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    }
-
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = objectMaker(data);
-            lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
+            lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }
     });
 
     window.addEventListener("touchend", () => {
         geom = objectMaker(data);
-        lineGroup.children = [geom(thetax, thetay, thetaz, camera.position.toArray())];
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, theta, camera.position.toArray())];
     }, false);
-
-    document.getElementById("svg").addEventListener("click", function () {
-        ExportToSVG(p + "-" + q + "-" + r + ".svg");
-    });
 
     document.getElementById("myRangep").oninput = function () {
         data.p = this.value;
@@ -158,6 +118,28 @@ function main() {
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
+    };
+
+    document.getElementById("myRangeu").oninput = function () {
+        (metric === "h" || metric === "p" || metric === "u") ? thetau = this.value / 30 :
+            (metric === "e") ? thetau = this.value / 10 :
+                (metric === "s") ? thetau = Math.PI * this.value / 50 : this.value;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+    };
+
+    document.getElementById("myRangev").oninput = function () {
+        (metric === "h" || metric === "p" || metric === "u") ? thetav = this.value / 30 :
+            (metric === "e") ? thetav = this.value / 10 :
+                (metric === "s") ? thetav = Math.PI * this.value / 50 : this.value;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+
+    };
+
+    document.getElementById("myRangew").oninput = function () {
+        (metric === "h" || metric === "p" || metric === "u") ? thetaw = this.value / 30 :
+            (metric === "e") ? thetaw = this.value / 10 :
+                (metric === "s") ? thetaw = Math.PI * this.value / 50 : this.value;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
