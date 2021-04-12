@@ -43,7 +43,6 @@ function generateData(data, thetax, thetay, thetaz, thetau, thetav, thetaw, numb
 
         for (var i = 0; i < cells.length; i++) {
 
-            console.log(thetax, thetay, thetaz, thetau, thetav, thetaw)
             localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
             localSpheres = generateSpheres(data, localVertices);
 
@@ -128,8 +127,6 @@ function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, 
     } else if (data.metric === "s") {
 
         for (var i = 0; i < data.numVertices; i++) {
-
-            console.log(thetax, thetay, thetaz, thetau, thetav, thetaw)
 
             p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
 
