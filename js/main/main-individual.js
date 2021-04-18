@@ -58,7 +58,8 @@ function main() {
         refinement: 3,
         transform: initialCell,
         position: [0, 0, 0],
-        faceMode: true
+        faceMode: true,
+        numFaces: 200
     }
 
     var list = [initialCell];
@@ -72,7 +73,8 @@ function main() {
         transform: "",
         position: [0, 0, 0],
         faceMode: false,
-        opacity: 0.3
+        opacity: 0.3,
+        numFaces: 200
     }
 
     lineGroup.children = objectMaker(data).children;
