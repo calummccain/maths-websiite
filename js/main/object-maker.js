@@ -40,6 +40,42 @@ function objectMaker(parameters) {
 
         const opacity = parameters.opacity || 1;
 
+        var material;
+
+        if (parameters.shader === "toon") {
+
+            const colors = new Uint8Array(parameters.slices);
+
+            for (let c = 0; c <= colors.length; c++) {
+
+                colors[c] = 128 * (c / colors.length) + 128;
+
+            }
+
+            const gradientMap = new THREE.DataTexture(colors, colors.length, 1, THREE.LuminanceFormat);
+            gradientMap.minFilter = THREE.NearestFilter;
+            gradientMap.magFilter = THREE.NearestFilter;
+            gradientMap.generateMipmaps = false;
+
+            material = new THREE.MeshToonMaterial({
+                color: new THREE.Color(parameters.colour),
+                // opacity: opacity,
+                // transparent: true,
+                side: THREE.DoubleSide,
+                gradientMap: gradientMap
+            })
+
+        } else {
+
+            material = new THREE.MeshLambertMaterial({
+                color: new THREE.Color(parameters.colour),
+                opacity: opacity,
+                transparent: true,
+                side: THREE.DoubleSide
+            })
+
+        }
+
         if (parameters.faceMode) {
 
             var faceGroup = new THREE.Group();
@@ -47,14 +83,7 @@ function objectMaker(parameters) {
 
             for (var j = 0; j < data.numFaces; j++) {
 
-                faceMesh = new THREE.Mesh(
-                    shapeGeometry[j],
-                    new THREE.MeshLambertMaterial({
-                        color: new THREE.Color(parameters.colour),
-                        opacity: opacity,
-                        transparent: true,
-                        side: THREE.DoubleSide
-                    }));
+                faceMesh = new THREE.Mesh(shapeGeometry[j], material);
 
                 faceMesh.position.set(position[0], position[1], position[2]);
                 faceMesh.cellName = parameters.transform;
@@ -79,14 +108,7 @@ function objectMaker(parameters) {
 
             }
 
-            var cellMesh = new THREE.Mesh(
-                cellGeometry,
-                new THREE.MeshLambertMaterial({
-                    color: new THREE.Color(parameters.colour),
-                    opacity: opacity,
-                    transparent: true,
-                    side: THREE.DoubleSide
-                }));
+            var cellMesh = new THREE.Mesh(cellGeometry, material);
 
             cellMesh.position.set(position[0], position[1], position[2]);
             cellMesh.name = name;

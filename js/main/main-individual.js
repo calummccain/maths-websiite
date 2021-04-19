@@ -22,6 +22,7 @@ function main() {
 
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(WIDTH, HEIGHT);
+    renderer.shadowMap.enabled = true;
     canvas.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -33,9 +34,14 @@ function main() {
 
     scene.add(camera);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 0, 0);
-    camera.add(directionalLight);
+    // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    // directionalLight.position.set(10, 0, 0);
+    // scene.add(directionalLight);
+
+    const pointlight = new THREE.PointLight(0xffffff, 1, 100);
+    pointlight.position.set(10, 0, 0);
+    pointlight.castShadow = true;
+    camera.add(pointlight);
 
     var controls = new OrbitControls(camera, canvas);
     controls.enabled = true;
@@ -59,7 +65,9 @@ function main() {
         transform: initialCell,
         position: [0, 0, 0],
         faceMode: true,
-        numFaces: 200
+        numFaces: 200,
+        shader: "toon",
+        slices: 10
     }
 
     var list = [initialCell];
@@ -74,16 +82,18 @@ function main() {
         position: [0, 0, 0],
         faceMode: false,
         opacity: 0.3,
-        numFaces: 200
+        numFaces: 200,
+        shader: "toon",
+        slices: 10
     }
 
     lineGroup.children = objectMaker(data).children;
 
-    render();
-
     window.addEventListener("resize", onWindowResize, false);
     window.addEventListener("mousemove", onMouseMove, false);
     window.addEventListener("click", onMouseClick, false);
+
+    render();
 
     function onWindowResize() {
 
