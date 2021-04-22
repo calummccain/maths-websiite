@@ -195,7 +195,7 @@ function generateSpheres(data, vertices) {
 
             center4 = [0, 0, 0, 0];
 
-            for (var j = 0; j < data.numSides; j++) {
+            for (var j = 0; j < data.faces[i].length; j++) {
 
                 center4 = VF.vectorSum([center4, vertices[data.faces[i][j]]["hypersphere"]]);
 
@@ -327,13 +327,13 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 face = data.faces[j];
 
-                for (var i = 0; i < data.numSides; i++) {
+                for (var i = 0; i < face.length; i++) {
 
                     uhpVertices = [];
 
                     u = vertices[face[i]]["klein"];
-                    v = vertices[face[(i + 1) % data.numSides]]["klein"];
-                    w = vertices[face[(i + 2) % data.numSides]]["klein"];
+                    v = vertices[face[(i + 1) % face.length]]["klein"];
+                    w = vertices[face[(i + 2) % face.length]]["klein"];
                     p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
                     p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
 

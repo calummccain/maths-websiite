@@ -61,7 +61,7 @@ const cubeDataTrunc = (n) => {
 
         // FEV
         // (cot ** 2 - 1, 2 cot ** 2, 0, 0)
-        d: d,
+        d: (v) => v,
 
         // Identity matrix
         e: (v) => v,
