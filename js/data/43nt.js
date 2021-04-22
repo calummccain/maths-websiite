@@ -6,36 +6,7 @@ import { boundaries } from "./geometry-decider.js";
 const cubeDataTrunc = (n) => {
 
     const metric = boundaries(n, 4, Infinity);
-    const cos = Math.cos(2 * Math.PI / n);
     const cot = 1 / (Math.tan(Math.PI / n) ** 2);
-
-    const d =
-        (n == 3) ? (v) => [
-            v[1],
-            v[0],
-            v[2],
-            v[3]
-        ] : (n == 4) ? (v) => [
-            v[0],
-            2 * v[0] - 1 * v[1],
-            v[2],
-            v[3]
-        ] : (n == 5) ? (v) => [
-            p * v[0] - p_1 * v[1],
-            p2 * v[0] - p * v[1],
-            v[2],
-            v[3]
-        ] : (n == 6) ? (v) => [
-            2 * v[0] - v[1],
-            3 * v[0] - 2 * v[1],
-            v[2],
-            v[3]
-        ] : (v) => [
-            (1 + 2 * cos) * v[0] - 2 * cos * v[1],
-            2 * (1 + cos) * v[0] - (1 + 2 * cos) * v[1],
-            v[2],
-            v[3]
-        ];
 
     // for n = 4: factor of 1/2 is arbitrary but scales shapes nicely
     const f = (v) => [
@@ -97,7 +68,7 @@ const cubeDataTrunc = (n) => {
 
         f: f,
 
-        faceReflections: ["",],
+        faceReflections: [""],
 
         outerReflection: "d",
 
