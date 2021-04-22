@@ -2,13 +2,13 @@ import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
 import * as EM from "./edge-maker.js";
-import { cubeDataTruncTrunc } from "../data/43nt.js";
+import { cubeDataTrunc } from "../data/43nt.js";
 
 window.onload = main;
 
 function main() {
 
-    var p = 5, q = 3, r = 3;
+    var r = 7;
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var metric = "s";
     var invisible = false;
@@ -41,8 +41,8 @@ function main() {
     scene.add(lineGroup);
 
     var data = {
-        p: p,
-        q: q,
+        p: 3,
+        q: 3,
         r: r,
         model: "uhp",
         refinement: 50,
@@ -54,8 +54,10 @@ function main() {
         numFaces: 200
     }
 
+    console.log(cubeDataTrunc(r))
+
     geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-        cubeDataTrunc(5), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+        cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
     );
 
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
@@ -92,7 +94,7 @@ function main() {
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-                cubeDataTrunc(5), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+                cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
             );
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }
@@ -100,33 +102,33 @@ function main() {
 
     window.addEventListener("touchend", () => {
         geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-            cubeDataTrunc(5), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+            cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
         );
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, theta, camera.position.toArray())];
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     }, false);
 
-    document.getElementById("myRangep").oninput = function () {
-        data.p = this.value;
-    };
-
-    document.getElementById("myRangeq").oninput = function () {
-        data.q = this.value;
-    };
-
     document.getElementById("myRanger").oninput = function () {
-        data.r = this.value / 2;
+        r = this.value / 2;
+        geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
+            cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+        );
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+
     };
 
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 50;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangeu").oninput = function () {
