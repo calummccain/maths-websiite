@@ -62,10 +62,10 @@ function main() {
 
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
-    // const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
+    // const geometry = new THREE.SphereBufferGeometry(1.41, 64, 64);
     // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
     // const sphere1 = new THREE.Mesh(geometry, material1);
-    // sphere1.position.set(-1,-1,-1);
+    // sphere1.position.set(0, 1, 0);
     // scene.add(sphere1);
 
     render();
@@ -134,14 +134,14 @@ function main() {
     document.getElementById("myRangeu").oninput = function () {
         (metric === "h" || metric === "p" || metric === "u") ? thetau = (this.value / 20) - 2.5 :
             (metric === "e") ? thetau = (this.value / 10) - 5 :
-                (metric === "s") ? thetau = Math.PI * this.value / 50 : this.value;
+                (metric === "s") ? thetau = Math.PI * this.value / 50 - Math.PI : this.value;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangev").oninput = function () {
         (metric === "h" || metric === "p" || metric === "u") ? thetav = (this.value / 20) - 2.5 :
             (metric === "e") ? thetav = (this.value / 10) - 5 :
-                (metric === "s") ? thetav = Math.PI * this.value / 50 : this.value;
+                (metric === "s") ? thetav = Math.PI * this.value / 50 - Math.PI : this.value;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
     };
@@ -149,7 +149,7 @@ function main() {
     document.getElementById("myRangew").oninput = function () {
         (metric === "h" || metric === "p" || metric === "u") ? thetaw = (this.value / 20) - 2.5 :
             (metric === "e") ? thetaw = (this.value / 10) - 5 :
-                (metric === "s") ? thetaw = Math.PI * this.value / 50 : this.value;
+                (metric === "s") ? thetaw = Math.PI * this.value / 50 - Math.PI : this.value;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 

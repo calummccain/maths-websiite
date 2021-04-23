@@ -68,7 +68,7 @@ const cubeDataTrunc = (n) => {
 
         f: f,
 
-        faceReflections: [""],
+        faceReflections: ["", "", ""],
 
         outerReflection: "d",
 

@@ -8,7 +8,6 @@ function main() {
 
     var p = 5, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
-    var metric = "s";
     var invisible = false;
     var intersection = true;
     var geom = {};
@@ -53,14 +52,9 @@ function main() {
     }
 
     geom = objectMaker(data);
+    var metric = data.metric;
 
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-
-    // const geometry = new THREE.SphereBufferGeometry(2, 64, 64);
-    // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
-    // const sphere1 = new THREE.Mesh(geometry, material1);
-    // sphere1.position.set(-1,-1,-1);
-    // scene.add(sphere1);
 
     render();
 

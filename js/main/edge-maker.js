@@ -5,7 +5,7 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 import { matrixDict } from "../data/matrix-dictionary.js";
 
-const eps = 1e-4;
+const eps = 1e-5;
 
 // Works 
 // but
@@ -56,6 +56,8 @@ function generateData(data, thetax, thetay, thetaz, thetau, thetav, thetaw, numb
         }
 
     }
+
+    console.log(spheres)
 
     var lineGroup = cameraLines(data, drawableVertices, invisibleLines, camera, spheres, vertices);
 
@@ -428,22 +430,15 @@ function outline(data, number, camera, spheres, vertices) {
 
     var cos = [];
     var sin = [];
-    var theta;
+    var theta = 0;
+    const change = (data.metric === "s") ? 2 * Math.PI / number : Math.PI / number;
 
     for (var k = 0; k <= number; k++) {
 
-        if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
-
-            theta = Math.PI * k / number;
-
-        } else if (data.metric === "s") {
-
-            theta = 2 * Math.PI * k / number;
-
-        }
-
         cos.push(Math.cos(theta));
         sin.push(Math.sin(theta));
+
+        theta += change;
 
     }
 
