@@ -88,25 +88,32 @@ function main() {
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = objectMaker(data);
+            metric = geom.metric;
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }
     });
 
     window.addEventListener("touchend", () => {
         geom = objectMaker(data);
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, theta, camera.position.toArray())];
+        metric = geom.metric;
     }, false);
 
     document.getElementById("myRangep").oninput = function () {
         data.p = this.value;
+        geom = objectMaker(data);
+        metric = geom.metric;
     };
 
     document.getElementById("myRangeq").oninput = function () {
         data.q = this.value;
+        geom = objectMaker(data);
+        metric = geom.metric;
     };
 
     document.getElementById("myRanger").oninput = function () {
         data.r = this.value / 2;
+        geom = objectMaker(data);
+        metric = geom.metric;
     };
 
     document.getElementById("myRangex").oninput = function () {

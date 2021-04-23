@@ -82,7 +82,7 @@ function main() {
         position: [0, 0, 0],
         faceMode: false,
         opacity: 0.3,
-        numFaces: 200,
+        numFaces: 50,
         shader: "toon",
         slices: 10
     }
