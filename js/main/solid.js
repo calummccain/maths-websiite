@@ -279,6 +279,11 @@ function main() {
         ghostGroup.children = [];
     });
 
+    document.getElementById("move").addEventListener("click", function () {
+        mode = "move";
+        // ghostGroup.children = [];
+    });
+
     window.addEventListener("touchend", () => {
         lineGroup.children = objectMaker(data).children;
     }, false);

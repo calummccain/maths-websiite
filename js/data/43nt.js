@@ -6,6 +6,7 @@ import { boundaries } from "./geometry-decider.js";
 const cubeDataTrunc = (n) => {
 
     const metric = boundaries(n, 4, Infinity);
+    const cos = Math.cos(2 * Math.PI / n);
     const cot = 1 / (Math.tan(Math.PI / n) ** 2);
 
     const d =
