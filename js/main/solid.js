@@ -7,9 +7,6 @@ window.onload = main;
 function main() {
 
     var p = 5, q = 3, r = 3;
-    var thetax = 0, thetay = 0, thetaz = 0;
-    var geom;
-    var ghostGeom;
     var k = 0;
     const initialCell = "d";
     var mode = "add";

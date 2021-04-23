@@ -2,7 +2,7 @@ import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
 import * as EM from "./edge-maker.js";
-import { cubeDataTrunc } from "../data/43nt.js";
+import { cubeTruncData } from "../data/43nt.js";
 
 window.onload = main;
 
@@ -54,10 +54,8 @@ function main() {
         numFaces: 200
     }
 
-    console.log(cubeDataTrunc(r))
-
     geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-        cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+        cubeTruncData(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
     );
 
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
@@ -94,7 +92,7 @@ function main() {
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-                cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+                cubeTruncData(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
             );
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }
@@ -102,7 +100,7 @@ function main() {
 
     window.addEventListener("touchend", () => {
         geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-            cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+            cubeTruncData(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
         );
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     }, false);
@@ -110,7 +108,7 @@ function main() {
     document.getElementById("myRanger").oninput = function () {
         r = this.value;
         geom = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-            cubeDataTrunc(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
+            cubeTruncData(r), rx, ry, rz, ru, rv, rw, data.refinement, data.intersection, data.invisibleLines, camera, data.cells
         );
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
