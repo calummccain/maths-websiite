@@ -27,11 +27,8 @@ function objectMaker(parameters) {
     };
 
     const position = parameters.position;
-
     const [p, q, r] = [parameters.p, parameters.q, parameters.r];
-
     const name = "{" + p + "," + q + "," + r + "}";
-
     const data = ((p - 2) * (q - 2) > 4) ? pqrData(p, q, r, parameters.numFaces) : geom["{" + p + "," + q + "}"](r);
 
     if (parameters.model === "poincare" || parameters.model === "") {

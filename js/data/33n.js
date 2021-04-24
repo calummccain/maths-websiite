@@ -61,7 +61,7 @@ const tetrahedronData = (n) => {
             (3 * v[0] - 3 * v[1] + v[2] + 3 * v[3]) / 4,
             (-3 * v[0] + 3 * v[1] + 3 * v[2] + v[3]) / 4
         ] : (v) => [
-            (3 * cos - 1) * v[0] + (3 - 2 * cos) * v[1] + (3 - 2 * cos) * v[2] + (3 * cos - 2) * v[3],
+            (3 * cos - 1) * v[0] + (2 - 3 * cos) * v[1] + (2 - 3 * cos) * v[2] + (3 * cos - 2) * v[3],
             cos * v[0] + (1 - cos) * v[1] - cos * v[2] + cos * v[3],
             cos * v[0] - cos * v[1] + (1 - cos) * v[2] + cos * v[3],
             -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]

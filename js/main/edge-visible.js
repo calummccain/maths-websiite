@@ -45,9 +45,8 @@ function main() {
         refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
-        transform: "",
         position: [0, 0, 0],
-        cells: [""],
+        cells: ["d"],
         numFaces: 200
     }
 
@@ -129,6 +128,7 @@ function main() {
         (metric === "h" || metric === "p" || metric === "u") ? thetau = (this.value / 20) - 2.5 :
             (metric === "e") ? thetau = (this.value / 10) - 5 :
                 (metric === "s") ? thetau = Math.PI * this.value / 50 - Math.PI : this.value;
+
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
@@ -136,14 +136,15 @@ function main() {
         (metric === "h" || metric === "p" || metric === "u") ? thetav = (this.value / 20) - 2.5 :
             (metric === "e") ? thetav = (this.value / 10) - 5 :
                 (metric === "s") ? thetav = Math.PI * this.value / 50 - Math.PI : this.value;
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangew").oninput = function () {
         (metric === "h" || metric === "p" || metric === "u") ? thetaw = (this.value / 20) - 2.5 :
             (metric === "e") ? thetaw = (this.value / 10) - 5 :
                 (metric === "s") ? thetaw = Math.PI * this.value / 50 - Math.PI : this.value;
+
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
