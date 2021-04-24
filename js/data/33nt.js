@@ -11,13 +11,6 @@ const tetrahedronTruncData = (n) => {
     const cos5 = p2 / 4;
     const sin5 = (5 - rt5) / 8;
 
-    const f = (v) => [
-        Math.sqrt(Math.abs(cot / 2)) * v[0],
-        Math.sqrt(Math.abs((cot - 2) / 2)) * v[1],
-        Math.sqrt(Math.abs((cot - 2) / 2)) * v[2],
-        Math.sqrt(Math.abs((cot - 2) / 2)) * v[3]
-    ];
-
     const d =
         (n == 3) ? (v) => [
             (-v[0] + 5 * v[1] + 5 * v[2] - 5 * v[3]) / 4,
@@ -45,6 +38,13 @@ const tetrahedronTruncData = (n) => {
             cos * v[0] - cos * v[1] + (1 - cos) * v[2] + cos * v[3],
             -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]
         ];
+
+    const f = (v) => [
+        Math.sqrt(Math.abs(cot / 2)) * v[0],
+        Math.sqrt(Math.abs((cot - 2) / 2)) * v[1],
+        Math.sqrt(Math.abs((cot - 2) / 2)) * v[2],
+        Math.sqrt(Math.abs((cot - 2) / 2)) * v[3]
+    ];
 
     return {
 

@@ -11,34 +11,6 @@ const tetrahedronData = (n) => {
     const cos5 = p2 / 4;
     const sin5 = (5 - rt5) / 8;
 
-    const f =
-        (n == 3) ? (v) => [
-            v[0] / 4,
-            rt5 * v[1] / 4,
-            rt5 * v[2] / 4,
-            rt5 * v[3] / 4
-        ] : (n == 4) ? (v) => [
-            v[0] / 2,
-            v[1] / 2,
-            v[2] / 2,
-            v[3] / 2
-        ] : (n == 5) ? (v) => [
-            rt2 * cos5 * v[0],
-            rt2 * p_1 * v[1] / 4,
-            rt2 * p_1 * v[2] / 4,
-            rt2 * p_1 * v[3] / 4
-        ] : (n == 6) ? (v) => [
-            rt3 * v[0],
-            v[1],
-            v[2],
-            v[3]
-        ] : (v) => [
-            Math.sqrt(Math.abs(cot / (2 * (3 - cot)))) * v[0],
-            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[1],
-            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[2],
-            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[3]
-        ];
-
     const d =
         (n == 3) ? (v) => [
             (-v[0] + 5 * v[1] + 5 * v[2] - 5 * v[3]) / 4,
@@ -65,6 +37,34 @@ const tetrahedronData = (n) => {
             cos * v[0] + (1 - cos) * v[1] - cos * v[2] + cos * v[3],
             cos * v[0] - cos * v[1] + (1 - cos) * v[2] + cos * v[3],
             -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]
+        ];
+
+    const f =
+        (n == 3) ? (v) => [
+            v[0] / 4,
+            rt5 * v[1] / 4,
+            rt5 * v[2] / 4,
+            rt5 * v[3] / 4
+        ] : (n == 4) ? (v) => [
+            v[0] / 2,
+            v[1] / 2,
+            v[2] / 2,
+            v[3] / 2
+        ] : (n == 5) ? (v) => [
+            rt2 * cos5 * v[0],
+            rt2 * p_1 * v[1] / 4,
+            rt2 * p_1 * v[2] / 4,
+            rt2 * p_1 * v[3] / 4
+        ] : (n == 6) ? (v) => [
+            rt3 * v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            Math.sqrt(Math.abs(cot / (2 * (3 - cot)))) * v[0],
+            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[1],
+            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[2],
+            Math.sqrt(Math.abs((cot - 2) / (2 * (3 - cot)))) * v[3]
         ];
 
     return {
