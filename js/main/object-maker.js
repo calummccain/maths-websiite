@@ -13,6 +13,7 @@ import { triangleData } from "../data/36n.js";
 import { pqrData } from "../data/pqr.js";
 
 import { tetrahedronTruncData } from "../data/33nt.js";
+import { octahedronTruncData } from "../data/34nt.js";
 import { cubeTruncData } from "../data/43nt.js";
 
 
@@ -31,6 +32,7 @@ function objectMaker(parameters) {
 
     const geomTrunc = {
         "{3,3}": tetrahedronTruncData,
+        "{3,4}": octahedronTruncData,
         "{4,3}": cubeTruncData
     }
 

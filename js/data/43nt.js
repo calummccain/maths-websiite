@@ -1,4 +1,4 @@
-// Order n cubic
+// Order n cubic truncated
 
 import { p, p2, p_1 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
@@ -73,8 +73,6 @@ const cubeTruncData = (n) => {
         numEdges: 24,
 
         numFaces: 14,
-
-        numSides: 3,
 
         // CFE
         // (0, 0, 0, 1)

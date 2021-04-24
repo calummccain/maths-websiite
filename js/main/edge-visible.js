@@ -46,7 +46,7 @@ function main() {
         refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
-        cells: ["d"],
+        cells: [""],
         numFaces: 200
     }
 
