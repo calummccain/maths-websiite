@@ -14,6 +14,7 @@ import { pqrData } from "../data/pqr.js";
 
 import { tetrahedronTruncData } from "../data/33nt.js";
 import { octahedronTruncData } from "../data/34nt.js";
+import { icosahedronTruncData } from "../data/35nt.js";
 import { cubeTruncData } from "../data/43nt.js";
 
 
@@ -33,6 +34,7 @@ function objectMaker(parameters) {
     const geomTrunc = {
         "{3,3}": tetrahedronTruncData,
         "{3,4}": octahedronTruncData,
+        "{3,5}": icosahedronTruncData,
         "{4,3}": cubeTruncData
     }
 
@@ -48,6 +50,7 @@ function objectMaker(parameters) {
     } else {
 
         data = geomTrunc["{" + p + "," + q + "}"](r);
+        console.log(data)
 
     }
 
