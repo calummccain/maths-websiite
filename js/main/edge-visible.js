@@ -6,7 +6,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 5, q = 3, r = 3;
+    var p = 3, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var invisible = false;
     var intersection = true;
@@ -105,7 +105,7 @@ function main() {
     };
 
     document.getElementById("myRanger").oninput = function () {
-        data.r = this.value / 2;
+        data.r = this.value;
         geom = objectMaker(data);
         metric = geom.metric;
     };
