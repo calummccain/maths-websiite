@@ -51,8 +51,6 @@ function main() {
     }
 
     geom = objectMaker(data);
-    var metric = data.metric;
-
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
     render();
@@ -81,32 +79,27 @@ function main() {
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
             geom = objectMaker(data);
-            metric = geom.metric;
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }
     });
 
     window.addEventListener("touchend", () => {
         geom = objectMaker(data);
-        metric = geom.metric;
     }, false);
 
     document.getElementById("myRangep").oninput = function () {
         data.p = this.value;
         geom = objectMaker(data);
-        metric = geom.metric;
     };
 
     document.getElementById("myRangeq").oninput = function () {
         data.q = this.value;
         geom = objectMaker(data);
-        metric = geom.metric;
     };
 
     document.getElementById("myRanger").oninput = function () {
         data.r = this.value;
         geom = objectMaker(data);
-        metric = geom.metric;
     };
 
     document.getElementById("myRangex").oninput = function () {
@@ -125,26 +118,17 @@ function main() {
     };
 
     document.getElementById("myRangeu").oninput = function () {
-        (metric === "h" || metric === "p" || metric === "u") ? thetau = (this.value / 20) - 2.5 :
-            (metric === "e") ? thetau = (this.value / 10) - 5 :
-                (metric === "s") ? thetau = Math.PI * this.value / 50 - Math.PI : this.value;
-
+        thetau = Math.PI * this.value / 50 - Math.PI;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangev").oninput = function () {
-        (metric === "h" || metric === "p" || metric === "u") ? thetav = (this.value / 20) - 2.5 :
-            (metric === "e") ? thetav = (this.value / 10) - 5 :
-                (metric === "s") ? thetav = Math.PI * this.value / 50 - Math.PI : this.value;
-
+        thetav = Math.PI * this.value / 50 - Math.PI;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangew").oninput = function () {
-        (metric === "h" || metric === "p" || metric === "u") ? thetaw = (this.value / 20) - 2.5 :
-            (metric === "e") ? thetaw = (this.value / 10) - 5 :
-                (metric === "s") ? thetaw = Math.PI * this.value / 50 - Math.PI : this.value;
-
+        thetaw = Math.PI * this.value / 50 - Math.PI;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 

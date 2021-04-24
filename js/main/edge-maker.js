@@ -57,8 +57,6 @@ function generateData(data, thetax, thetay, thetaz, thetau, thetav, thetaw, numb
 
     }
 
-    console.log(spheres)
-
     var lineGroup = cameraLines(data, drawableVertices, invisibleLines, camera, spheres, vertices);
 
     return lineGroup;
