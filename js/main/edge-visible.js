@@ -41,11 +41,11 @@ function main() {
         p: p,
         q: q,
         r: r,
+        truncated: false,
         model: "uhp",
         refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
-        position: [0, 0, 0],
         cells: ["d"],
         numFaces: 200
     }
@@ -154,6 +154,10 @@ function main() {
 
     document.getElementById("intersection").addEventListener("click", function () {
         data.intersection = !data.intersection;
+    });
+
+    document.getElementById("truncated").addEventListener("click", function () {
+        data.truncated = !data.truncated;
     });
 
 }
