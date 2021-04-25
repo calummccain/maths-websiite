@@ -88,8 +88,6 @@ const triangleData = (r, n) => {
 
         numFaces: faceData.length,
 
-        numSides: 3,
-
         a: amat,
 
         b: bmat,

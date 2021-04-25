@@ -79,8 +79,6 @@ const octahedronData = (n) => {
 
         numFaces: 8,
 
-        numSides: 3,
-
         // CFE
         // (0, 1, -1, 0)
         a: (v) => [v[0], v[2], v[1], v[3]],

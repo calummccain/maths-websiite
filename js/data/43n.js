@@ -92,8 +92,6 @@ const cubeData = (n) => {
 
         numFaces: 6,
 
-        numSides: 4,
-
         // CFE
         // (0, 0, 0, 1)
         a: (v) => [v[0], v[1], v[2], -v[3]],

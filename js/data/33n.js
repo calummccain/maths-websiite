@@ -92,8 +92,6 @@ const tetrahedronData = (n) => {
 
         numFaces: 4,
 
-        numSides: 3,
-
         // CFE
         // (0, 0, 1, 1) 
         a: (v) => [v[0], v[1], -v[3], -v[2]],
