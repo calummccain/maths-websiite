@@ -7,9 +7,6 @@ window.onload = main;
 function main() {
 
     var p = 5, q = 3, r = 3;
-    var thetax = 0, thetay = 0, thetaz = 0;
-    var geom;
-    var ghostGeom;
     var k = 0;
     const initialCell = "d";
     var mode = "add";
@@ -82,7 +79,7 @@ function main() {
         position: [0, 0, 0],
         faceMode: false,
         opacity: 0.3,
-        numFaces: 200,
+        numFaces: 50,
         shader: "toon",
         slices: 10
     }
@@ -277,6 +274,11 @@ function main() {
     document.getElementById("remove").addEventListener("click", function () {
         mode = "remove";
         ghostGroup.children = [];
+    });
+
+    document.getElementById("move").addEventListener("click", function () {
+        mode = "move";
+        // ghostGroup.children = [];
     });
 
     window.addEventListener("touchend", () => {

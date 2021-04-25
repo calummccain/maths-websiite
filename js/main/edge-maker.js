@@ -5,7 +5,7 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 import { matrixDict } from "../data/matrix-dictionary.js";
 
-const eps = 1e-4;
+const eps = 1e-5;
 
 // Works 
 // but
@@ -195,7 +195,7 @@ function generateSpheres(data, vertices) {
 
             center4 = [0, 0, 0, 0];
 
-            for (var j = 0; j < data.numSides; j++) {
+            for (var j = 0; j < data.faces[i].length; j++) {
 
                 center4 = VF.vectorSum([center4, vertices[data.faces[i][j]]["hypersphere"]]);
 
@@ -327,13 +327,13 @@ function makeTheLines(data, number, vertices, spheres, intersection) {
 
                 face = data.faces[j];
 
-                for (var i = 0; i < data.numSides; i++) {
+                for (var i = 0; i < face.length; i++) {
 
                     uhpVertices = [];
 
                     u = vertices[face[i]]["klein"];
-                    v = vertices[face[(i + 1) % data.numSides]]["klein"];
-                    w = vertices[face[(i + 2) % data.numSides]]["klein"];
+                    v = vertices[face[(i + 1) % face.length]]["klein"];
+                    w = vertices[face[(i + 2) % face.length]]["klein"];
                     p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
                     p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
 
@@ -428,22 +428,15 @@ function outline(data, number, camera, spheres, vertices) {
 
     var cos = [];
     var sin = [];
-    var theta;
+    var theta = 0;
+    const change = (data.metric === "s") ? 2 * Math.PI / number : Math.PI / number;
 
     for (var k = 0; k <= number; k++) {
 
-        if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
-
-            theta = Math.PI * k / number;
-
-        } else if (data.metric === "s") {
-
-            theta = 2 * Math.PI * k / number;
-
-        }
-
         cos.push(Math.cos(theta));
         sin.push(Math.sin(theta));
+
+        theta += change;
 
     }
 

@@ -12,6 +12,12 @@ import { squareData } from "../data/44n.js";
 import { triangleData } from "../data/36n.js";
 import { pqrData } from "../data/pqr.js";
 
+import { tetrahedronTruncData } from "../data/33nt.js";
+import { octahedronTruncData } from "../data/34nt.js";
+import { icosahedronTruncData } from "../data/35nt.js";
+import { cubeTruncData } from "../data/43nt.js";
+import { dodecahedronTruncData } from "../data/53nt.js";
+
 
 function objectMaker(parameters) {
 
@@ -26,13 +32,29 @@ function objectMaker(parameters) {
         "{6,3}": (r) => hexagonData(r, parameters.numFaces),
     };
 
+    const geomTrunc = {
+        "{3,3}": tetrahedronTruncData,
+        "{3,4}": octahedronTruncData,
+        "{3,5}": icosahedronTruncData,
+        "{4,3}": cubeTruncData,
+        "{5,3}": dodecahedronTruncData
+    }
+
     const position = parameters.position;
-
     const [p, q, r] = [parameters.p, parameters.q, parameters.r];
-
     const name = "{" + p + "," + q + "," + r + "}";
+    var data;
 
-    const data = ((p - 2) * (q - 2) > 4) ? pqrData(p, q, r, parameters.numFaces) : geom["{" + p + "," + q + "}"](r);
+    if (!parameters.truncated) {
+
+        data = ((p - 2) * (q - 2) > 4) ? pqrData(p, q, r, parameters.numFaces) : geom["{" + p + "," + q + "}"](r);
+
+    } else {
+
+        data = geomTrunc["{" + p + "," + q + "}"](r);
+        console.log(data)
+
+    }
 
     if (parameters.model === "poincare" || parameters.model === "") {
 
