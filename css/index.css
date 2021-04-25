@@ -1,0 +1,16 @@
+html, body {
+    margin: 5%;
+    background-color: #EEEEEE;
+}
+
+.h1 {
+    text-align: center;
+}
+
+.row {
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+}
