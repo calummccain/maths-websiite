@@ -1,6 +1,6 @@
 html, body {
     margin: 5%;
-    background-color: #DDDDDD;
+    background-color: #E5E5E5;
     font-family: Arial, Helvetica, sans-serif;
     color: #252525;
     font-weight: 900;
@@ -59,6 +59,10 @@ h3 {
     margin: auto;
     color: #666666;
     max-width: 200px;
+}
+
+img{
+    margin: auto;
 }
 
 @media screen and (max-width: 800px) {
