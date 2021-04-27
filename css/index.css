@@ -46,6 +46,13 @@ h3 {
 .column2{
     width: 50%;
     float: left;
+    text-align: center;
+}
+
+.blurb{
+    margin: auto;
+    color: #666666;
+    max-width: 200px;
 }
 
 @media screen and (max-width: 800px) {
@@ -54,7 +61,7 @@ h3 {
     }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 1000px) {
     .column2 {
         width: 100%;
     }
