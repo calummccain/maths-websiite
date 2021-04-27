@@ -3,14 +3,36 @@ html, body {
     background-color: #EEEEEE;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 .h1 {
     text-align: center;
 }
 
 .row {
-    display: flex;
+    max-width: 100%;
 }
 
-.column {
-    flex: 50%;
+.column1{
+    width: 50%;
+    float: left;
 }
+
+.column2{
+    width: 50%;
+    float: left;
+}
+
+@media screen and (max-width: 600px) {
+    .column1 {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 200px) {
+    .colu2 {
+      width: 100%;
+    }
+  }
