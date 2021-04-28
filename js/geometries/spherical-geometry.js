@@ -26,7 +26,7 @@ function sphericalGeometry(data, transform, refinement) {
 
         faceGeometry = new THREE.Geometry();
         initial = 0;
-        faceVertices = Array(data.numSides).fill().map(() => initial++);
+        faceVertices = Array(data.faces[i].length).fill().map(() => initial++);
         faceVertices = faceVertices.map((x) => properVertices[data.faces[i][x]]);
         faceData = sphericalFace(faceVertices, refinement);
 
