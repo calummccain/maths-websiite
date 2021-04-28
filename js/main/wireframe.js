@@ -12,7 +12,7 @@ function main() {
     var intersection = true;
     var geom = {};
 
-    const canvas = document.getElementById("c");
+    const canvas = document.getElementById("canvas");
 
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
