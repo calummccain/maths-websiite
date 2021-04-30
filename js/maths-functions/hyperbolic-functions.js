@@ -159,6 +159,7 @@ function upperHalfPlaneToPoincare(point) {
 //=========================================================
 
 // TODO what if point is ideal ie r = 1 - tol
+
 function poincareToHyperboloid(x) {
 
     const r = x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
@@ -183,7 +184,7 @@ function poincareToHyperboloid(x) {
 
 // }
 
-// TODO ideal point again
+//TODO ideal point again
 function kleinToPoincare(point) {
 
     var dist = VF.norm2(point);
