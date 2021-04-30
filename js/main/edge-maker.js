@@ -85,7 +85,7 @@ function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, 
 
                 verts.push({
                     "hyperboloid": p,
-                    "poincare": HF.hyperboloidToPoincare(p),
+                    // "poincare": HF.hyperboloidToPoincare(p),
                     "klein": HF.hyperboloidToKlein(p),
                     "uhp": HF.hyperboloidToUpperHalfPlane(p)
                 });
@@ -100,7 +100,7 @@ function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, 
 
                 verts.push({
                     "hyperboloid": p,
-                    "poincare": HF.hyperboloidToPoincare(p),
+                    // "poincare": HF.hyperboloidToPoincare(p),
                     "klein": HF.hyperboloidToKlein(p),
                     "uhp": HF.hyperboloidToUpperHalfPlane(p)
                 });
@@ -115,7 +115,7 @@ function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, 
 
                 verts.push({
                     "hyperboloid": p,
-                    "poincare": HF.hyperboloidToPoincare(p),
+                    // "poincare": HF.hyperboloidToPoincare(p),
                     "klein": HF.hyperboloidToKlein(p),
                     "uhp": HF.hyperboloidToUpperHalfPlane(p)
                 });
