@@ -607,7 +607,7 @@ function cameraLines(data, uhpVertices, invisibleLines, camera, spheres, vertice
 
                     if (invisibleLines) {
 
-                        lineGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 1));
+                        lineGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
 
                     }
 
