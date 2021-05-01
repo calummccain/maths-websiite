@@ -11,7 +11,7 @@ function main() {
     const initialCell = "d";
     var mode = "add";
 
-    const canvas = document.getElementById("c");
+    const canvas = document.getElementById("canvas");
     var rect = canvas.getBoundingClientRect();
 
     var WIDTH = canvas.clientWidth;
