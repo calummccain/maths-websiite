@@ -157,6 +157,14 @@ function main() {
 
     });
 
+    const cellTypeColours = {
+        "s": "#FFB3BA",
+        "e": "#FFDFBA",
+        "h": "#FFFFBA",
+        "p": "#BAFFC9",
+        "u": "#BAE1FF"
+    }
+
     function updateCellSelector(p) {
 
         for (var q = 3; q <= 8; q++) {
@@ -166,13 +174,7 @@ function main() {
                 cellType = typeOfCell(p, q, r);
 
                 document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
-                document.getElementById(q + "-" + r).style.backgroundColor =
-                    (cellType === "s") ? "#FFB3BA" :
-                        (cellType === "e") ? "#FFDFBA" :
-                            (cellType === "h") ? "#FFFFBA" :
-                                (cellType === "p") ? "#BAFFC9" :
-                                    (cellType === "u") ? "#BAE1FF" :
-                                        "#000000";
+                document.getElementById(q + "-" + r).style.backgroundColor = cellTypeColours[cellType];
 
             }
 
