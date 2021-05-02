@@ -11,6 +11,7 @@ function main() {
     var invisible = false;
     var intersection = true;
     var geom = {};
+    var cellType;
 
     const canvas = document.getElementById("canvas");
 
@@ -87,21 +88,6 @@ function main() {
         geom = objectMaker(data);
     }, false);
 
-    document.getElementById("myRangep").oninput = function () {
-        data.p = this.value;
-        geom = objectMaker(data);
-    };
-
-    document.getElementById("myRangeq").oninput = function () {
-        data.q = this.value;
-        geom = objectMaker(data);
-    };
-
-    document.getElementById("myRanger").oninput = function () {
-        data.r = this.value;
-        geom = objectMaker(data);
-    };
-
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
@@ -143,5 +129,91 @@ function main() {
     document.getElementById("truncated").addEventListener("click", function () {
         data.truncated = !data.truncated;
     });
+
+    $(document).ready(function () {
+
+        updateCellSelector(data.p);
+
+        $("#pqr").click(function () {
+            $("#pqrselector").toggle();
+        });
+
+        $("#rightarrow").click(function () {
+            data.p = Math.min(data.p + 1, 8);
+            updateCellSelector(data.p);
+        });
+
+        $("#leftarrow").click(function () {
+            data.p = Math.max(data.p - 1, 3);
+            updateCellSelector(data.p);
+        });
+
+        $(".cellselector").click(function () {
+            [q, r] = $(this).attr("id").split("-");
+            data.q = Number(q), data.r = Number(r);
+            geom = objectMaker(data);
+            lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        })
+
+    });
+
+    const cellTypeColours = {
+        "s": "#FFB3BA",
+        "e": "#FFDFBA",
+        "h": "#FFFFBA",
+        "p": "#BAFFC9",
+        "u": "#BAE1FF"
+    }
+
+    function updateCellSelector(p) {
+
+        for (var q = 3; q <= 8; q++) {
+
+            for (var r = 3; r <= 8; r++) {
+
+                cellType = typeOfCell(p, q, r);
+
+                document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
+                document.getElementById(q + "-" + r).style.backgroundColor = cellTypeColours[cellType];
+
+            }
+
+        }
+
+    }
+
+    function typeOfCell(p, q, r) {
+
+        const name = p + "-" + q + "-" + r;
+
+        if (["3-3-3", "3-3-4", "3-3-5", "3-4-3", "4-3-3", "5-3-3"].includes(name)) {
+
+            return "s";
+
+        } else if (name === "4-3-4") {
+
+            return "e";
+
+        } else {
+
+            const qr = (q - 2) * (r - 2);
+
+            if (qr < 4) {
+
+                return "h"
+
+            } else if (qr == 4) {
+
+                return "p"
+
+            } else {
+
+                return "u"
+
+            }
+
+        }
+
+    }
 
 }
