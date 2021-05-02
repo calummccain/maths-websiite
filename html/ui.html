@@ -13,6 +13,7 @@
         <script>
 
             var p = 3;
+            var q, r;
 
             $(document).ready(function () {
 
@@ -32,11 +33,19 @@
                     updateCellSelector(p);
                 });
 
+                $(".cellselector").click(function () {
+                    [q, r] = $(this).attr("id").split("-");
+                    q = Number(q), r = Number(r);
+                    console.log(p, q, r);
+                })
+
             });
 
         </script>
 
         <script>
+
+            var cellType;
 
             function updateCellSelector(p) {
 
@@ -44,7 +53,16 @@
 
                     for (var r = 3; r <= 8; r++) {
 
+                        cellType = typeOfCell(p, q, r);
+
                         document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
+                        document.getElementById(q + "-" + r).style.backgroundColor =
+                            (cellType === "s") ? "#FFB3BA" :
+                                (cellType === "e") ? "#FFDFBA" :
+                                    (cellType === "h") ? "#FFFFBA" :
+                                        (cellType === "p") ? "#BAFFC9" :
+                                            (cellType === "u") ? "#BAE1FF" :
+                                                "#000000";
 
                     }
 
@@ -58,7 +76,7 @@
 
             function typeOfCell(p, q, r) {
 
-                const name = p + "-" + q + "-" + "r";
+                const name = p + "-" + q + "-" + r;
 
                 if (["3-3-3", "3-3-4", "3-3-5", "3-4-3", "4-3-3", "5-3-3"].includes(name)) {
 
@@ -76,7 +94,7 @@
 
                         return "h"
 
-                    } else if (qr < 4) {
+                    } else if (qr == 4) {
 
                         return "p"
 
