@@ -50,14 +50,18 @@ body {
 }
 
 #pqrselector {
-    width: 100px;
-    height: 150px;
+    display: none;
     transition: all 0.5s ease-out;
-    background-color: #252525;
-}
-
-#pqrselector.active {
-    width: 200px;
+    width: 420px;
     height: 300px;
     background-color: coral;
+}
+
+.cellselector {
+    width: 60px;
+    height: 30px;
+    margin: 5px;
+    float: left;
+    background-color: #290384;
+    color: #FFFFFF;
 }
