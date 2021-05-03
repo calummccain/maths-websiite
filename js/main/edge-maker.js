@@ -33,7 +33,7 @@ function generateData(data, thetax, thetay, thetaz, thetau, thetav, thetaw, numb
 
             if (intersection) {
 
-                drawableVertices = drawableVertices.concat(outline(data, 2 * number, camera, localSpheres, localVertices));
+                drawableVertices = drawableVertices.concat(outline(data, 4 * number, camera, localSpheres, localVertices));
 
             }
 
