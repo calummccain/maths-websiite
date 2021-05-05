@@ -1,6 +1,10 @@
 import * as VF from "./vector-functions.js";
-
-const tol = 1e-4;
+import {
+    hyperboloidToPoincareEps,
+    poincareToUpperHalfPlaneEps,
+    kleinToPoincareEps,
+    geodesicEndpointsEps
+} from "../eps.js";
 
 // ========================================================
 // Hyperboloid model inner product
@@ -48,12 +52,12 @@ function hyperbolicNorm(x) {
 
 function hyperboloidToPoincare(x) {
 
-    if (Math.abs(hyperbolicNorm(x)) < tol) {
+    if (Math.abs(hyperbolicNorm(x)) < hyperboloidToPoincareEps) {
 
         const scale = 1 / x[0];
         return [x[1] * scale, x[2] * scale, x[3] * scale];
 
-    } else if (hyperbolicNorm(x) >= tol) {
+    } else if (hyperbolicNorm(x) >= hyperboloidToPoincareEps) {
 
         const scale = 1 / (1 + x[0]);
         return [x[1] * scale, x[2] * scale, x[3] * scale];
@@ -105,11 +109,11 @@ function poincareToUpperHalfPlane(point) {
     var x = point[0], y = point[1], z = point[2];
     var s = 1 / (x * x + y * y + 1 - 2 * z + z * z);
 
-    if (s < tol) {
+    if (s < poincareToUpperHalfPlaneEps) {
 
         return [x, y, Infinity];
 
-    } else if (VF.norm([x, y, z]) > 1 - tol) {
+    } else if (VF.norm2([x, y, z]) > 1 - poincareToUpperHalfPlaneEps) {
 
         return [2 * x * s, 2 * y * s, 0];
 
@@ -160,7 +164,7 @@ function poincareToHyperboloid(x) {
 
     const r = x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
 
-    if (Math.abs(r - 1) < eps) {
+    if (Math.abs(r - 1) < poincareToHyperboloidEps) {
 
         const denom = 1 / (1 - r);
 
@@ -186,7 +190,7 @@ function poincareToHyperboloid(x) {
 function kleinToPoincare(x) {
 
     var dist = VF.norm2(x);
-    var hyperbolicDist = (dist < 1 - tol) ? 1 / (1 + Math.sqrt(Math.abs(1 - dist))) : 1;
+    var hyperbolicDist = (dist < 1 - kleinToPoincareEps) ? 1 / (1 + Math.sqrt(Math.abs(1 - dist))) : 1;
 
     return VF.vectorScale(x, hyperbolicDist);
 
@@ -311,7 +315,7 @@ function uhpCenter(p1, p2, p3) {
 
 function geodesicEndpoints(a, b) {
 
-    if ((Math.abs(hyperbolicNorm(a)) < tol) && (Math.abs(hyperbolicNorm(b)) < tol)) {
+    if ((Math.abs(hyperbolicNorm(a)) < geodesicEndpointsEps) && (Math.abs(hyperbolicNorm(b)) < geodesicEndpointsEps)) {
 
         return [a, b];
 
