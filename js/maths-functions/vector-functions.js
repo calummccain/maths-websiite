@@ -16,7 +16,7 @@ function vectorSum(array) {
 
     var smallSum;
 
-    for (var i = 0; m = i < array[0].length; i++) {
+    for (var i = 0; i < array[0].length; i++) {
 
         smallSum = 0;
 
