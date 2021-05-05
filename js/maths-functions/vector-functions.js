@@ -1,4 +1,4 @@
-const eps = 1e-4;
+import { isInArrayEps } from "../eps.js";
 
 // ========================================================
 // Returns the component-wise sum of several arrays
@@ -397,7 +397,7 @@ function isInArray(testVector, groupVectors) {
 
     for (var i = 0; i < groupVectors.length; i++) {
 
-        if (distance2(groupVectors[i], testVector) < eps) {
+        if (distance2(groupVectors[i], testVector) < isInArrayEps) {
 
             return true;
 
