@@ -1,13 +1,22 @@
 const eps = 1e-4;
 
-//returns sum of two vectors
+// ========================================================
+// Returns the component-wise sum of several arrays
+//
+// Inputs: [p1, p2, ...]
+// Output: [*, *, ...]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function vectorSum(array) {
 
     var vSum = [];
 
     var smallSum;
 
-    for (var i = 0; i < array[0].length; i++) {
+    for (var i = 0; m = i < array[0].length; i++) {
 
         smallSum = 0;
 
@@ -25,6 +34,16 @@ function vectorSum(array) {
 
 }
 
+// ========================================================
+// Returns the component-wise difference of two arrays
+//
+// Inputs: x, y
+// Output: vector of length x
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function vectorDiff(x, y) {
 
     var vDiff = [];
@@ -39,7 +58,18 @@ function vectorDiff(x, y) {
 
 }
 
-// scales a vector by 's'
+// ========================================================
+// Returns the component-wise scaling of a vector by a 
+// constant
+//
+// Inputs: x, s
+// Output: vector of length x
+//         s * x
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function vectorScale(x, s) {
 
     var vScale = [];
@@ -54,7 +84,16 @@ function vectorScale(x, s) {
 
 }
 
-// returns 3D cross product of two vectors
+// ========================================================
+// Returns the cross product of two 3d vectors
+//
+// Inputs: a, b
+// Output: a x b
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function vectorCross(a, b) {
 
     return [
@@ -65,7 +104,16 @@ function vectorCross(a, b) {
 
 }
 
-// returns nD dot product
+// ========================================================
+// Returns the nD dot product of two vectors
+// Inputs: a, b
+// Output: vector of length a
+//         a.b
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function vectorDot(a, b) {
 
     var dot = 0;
@@ -96,19 +144,47 @@ function lineSphereIntersection(a, b) {
 
 }
 
-// midpoint of a line
+// ========================================================
+// Returns the midpoint of the interval between two points
+//
+// Inputs: a, b
+// Output: (a+b)/2
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function midpoint(a, b) {
 
     return vectorScale(vectorSum([a, b]), 0.5);
 
 }
 
-// returns nD euclidean norm of a vector
+// ========================================================
+// Returns the nD norm of a vector
+//
+// Inputs: x
+// Output: sqrt(x.x)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function norm(x) {
 
     return Math.sqrt(vectorDot(x, x));
 
 }
+
+// ========================================================
+// Returns nD norm of a vector squared 
+//
+// Inputs: x
+// Output: x.x
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function norm2(x) {
 
@@ -116,29 +192,72 @@ function norm2(x) {
 
 }
 
-// returns distance between two points
+// ========================================================
+// Returns the nD distance between two points
+// Inputs: x, y
+// Output: sqrt((x-y).(x-y))
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function distance(x, y) {
 
     return norm(vectorDiff(x, y));
 
 }
 
-// returns circumradius of a triangle with sides of length a, b, c
+// ========================================================
+// Returns the nD distance squared between two points
+// Inputs: x, y
+// Output: (x-y).(x-y)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
+function distance2(x, y) {
+
+    return norm2(vectorDiff(x, y));
+
+}
+
+// ========================================================
+// Returns the circumradius of a triangle given its side 
+// lengths
+//
+// Inputs: a, b, c
+// Output: C
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function circumradius(a, b, c) {
 
     return (a * b * c) / Math.sqrt(Math.abs((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c)));
 
 }
 
-// returns circumcenter of a triangle with vertces u, v, w
+// ========================================================
+// Returns the circumcenter of a triangle in 2D given its 
+// vertices
+//
+// Inputs: u, v, w
+// Output: C
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function circumcenter(u, v, w) {
 
-    const a = determinant([[u[0], u[1], 1], [v[0], v[1], 1], [w[0], w[1], 1]]);
+    const a = -1 / (2 * determinant([[u[0], u[1], 1], [v[0], v[1], 1], [w[0], w[1], 1]]));
     const ru = u[0] * u[0] + u[1] * u[1], rv = v[0] * v[0] + v[1] * v[1], rw = w[0] * w[0] + w[1] * w[1];
     const bx = -determinant([[ru, u[1], 1], [rv, v[1], 1], [rw, w[1], 1]]);
     const by = determinant([[ru, u[0], 1], [rv, v[0], 1], [rw, w[0], 1]]);
 
-    return [-bx / (2 * a), -by / (2 * a)]
+    return [bx * a, by * a]
 
 }
 
@@ -157,19 +276,47 @@ function circum4(u, v, w, x) {
 
 }
 
-// returns 2x2 determinant
+// ========================================================
+// Returns the determinant of a 2x2 matrix
+//
+// Inputs: m
+// Output: det(m)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function determinant2(m) {
 
     return m[0][0] * m[1][1] - m[0][1] * m[1][0];
 
 }
 
-// returns 3x3 determinat
+// ========================================================
+// Returns the determinant of a 3x3 matrix
+//
+// Inputs: m
+// Output: det(m)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function determinant3(m) {
 
     return m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
 
 }
+
+// ========================================================
+// Returns the determinant of a 4x4 matrix
+//
+// Inputs: m
+// Output: det(m)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function determinant4(m) {
 
@@ -181,6 +328,19 @@ function determinant4(m) {
     return m[0][0] * determinant3(m1) - m[0][1] * determinant3(m2) + m[0][2] * determinant3(m3) - m[0][3] * determinant3(m4);
 
 }
+
+// ========================================================
+// Transforms the set of vertices 'baseVertices' with the 
+// word 'transformation' using the dictionary 'dictionary'
+//
+// Inputs: baseVertives
+//         transformation
+//         dictionary
+// Output: newVertoces
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 // transforms the baseVertices with the word 'transformation' using the dictionary
 function transformVertices(baseVertices, transformation, dictionary) {
@@ -222,11 +382,22 @@ function transformVertices(baseVertices, transformation, dictionary) {
 
 }
 
+// ========================================================
+// Tests to see if a given vector is in an array
+//
+// Inputs: testVector
+//         groupVectors
+// Output: boolean
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function isInArray(testVector, groupVectors) {
 
     for (var i = 0; i < groupVectors.length; i++) {
 
-        if (distance(groupVectors[i], testVector) < eps) {
+        if (distance2(groupVectors[i], testVector) < eps) {
 
             return true;
 

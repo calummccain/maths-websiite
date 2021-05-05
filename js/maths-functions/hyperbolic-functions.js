@@ -303,7 +303,7 @@ function uhpCenter(p1, p2, p3) {
 // (endpoints lie on the plane at infinity)
 //
 // Inputs: a, b
-// Output: center = [p1, p2]
+// Output: [p1, p2]
 //
 // Change history:
 //     ??/??/?? Initial commit
@@ -319,7 +319,7 @@ function geodesicEndpoints(a, b) {
 
     var inner = hyperboloidInnerProduct(a, b);
     var eAlpha = 1 / (inner + Math.sqrt(inner * inner - 1));
-    
+
     return [VF.vectorDiff(VF.vectorScale(a, eAlpha), b), VF.vectorDiff(VF.vectorScale(b, eAlpha), a)];
 
 }
