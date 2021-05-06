@@ -4,7 +4,7 @@ import { isInArrayEps } from "../eps.js";
 // Returns the component-wise sum of several arrays
 //
 // Inputs: [p1, p2, ...]
-// Output: [*, *, ...]
+// Output: vector of length p1
 //
 // Change history:
 //     ??/??/?? Initial commit
@@ -194,6 +194,7 @@ function norm2(x) {
 
 // ========================================================
 // Returns the nD distance between two points
+//
 // Inputs: x, y
 // Output: sqrt((x-y).(x-y))
 //
@@ -209,6 +210,7 @@ function distance(x, y) {
 
 // ========================================================
 // Returns the nD distance squared between two points
+//
 // Inputs: x, y
 // Output: (x-y).(x-y)
 //

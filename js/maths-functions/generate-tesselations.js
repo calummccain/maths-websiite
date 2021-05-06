@@ -3,6 +3,19 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 
 const eps = 1e-4;
 
+// ========================================================
+// Reflects the vertices 'initialVerts' according to the
+// reflections in 'fNames'. Only returns unique vertices 
+// 
+// Inputs: initialVerts
+//         matrixDict
+//         fNames
+// Output: array of vertices
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function makeVertices(initialVerts, matrixDict, fNames) {
 
     var verts = initialVerts;
@@ -31,6 +44,19 @@ function makeVertices(initialVerts, matrixDict, fNames) {
 
 }
 
+// ========================================================
+// Reflects the edges 'initialEdges' according to the
+// reflections in 'fNames'. Only returns unique edges 
+// 
+// Inputs: initialEdgess
+//         matrixDict
+//         fNames
+// Output: array of edges
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function makeEdges(initialEdges, matrixDict, fNames) {
 
     var edges = initialEdges;
@@ -58,6 +84,24 @@ function makeEdges(initialEdges, matrixDict, fNames) {
     return edges;
 
 }
+
+// ========================================================
+// Transforms the vertex according to the matrix (function)
+// given
+// 
+// Inputs: letter
+//         amat
+//         bmat
+//         cmat
+//         dmat
+//         emat
+//         fmat
+//         v
+// Output: vertex
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v) {
 
