@@ -1,3 +1,13 @@
+// ========================================================
+// Rotation about the yz plane
+// 
+// Inputs: v, theta
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function rx(v, theta) {
 
     const c = Math.cos(theta);
@@ -6,6 +16,16 @@ function rx(v, theta) {
     return [v[0], v[1], c * v[2] - s * v[3], s * v[2] + c * v[3]];
 
 }
+
+// ========================================================
+// Rotation about the xz plane
+// 
+// Inputs: v, theta
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function ry(v, theta) {
 
@@ -16,6 +36,16 @@ function ry(v, theta) {
 
 }
 
+// ========================================================
+// Rotation about the xy plane
+// 
+// Inputs: v, theta
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function rz(v, theta) {
 
     const c = Math.cos(theta);
@@ -24,6 +54,16 @@ function rz(v, theta) {
     return [v[0], c * v[1] - s * v[2], s * v[1] + c * v[2], v[3]];
 
 }
+
+// ========================================================
+// Rotation about the wx plane
+// 
+// Inputs: v, theta, metric
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function ru(v, theta, metric) {
 
@@ -49,6 +89,16 @@ function ru(v, theta, metric) {
 
 }
 
+// ========================================================
+// Rotation about the wy plane
+// 
+// Inputs: v, theta, metric
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function rv(v, theta, metric) {
 
     if (metric === "s") {
@@ -72,6 +122,16 @@ function rv(v, theta, metric) {
     }
 
 }
+
+// ========================================================
+// Rotation about the wz plane
+// 
+// Inputs: v, theta, metric
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function rw(v, theta, metric) {
 
@@ -97,11 +157,31 @@ function rw(v, theta, metric) {
 
 }
 
+// ========================================================
+// 
+// 
+// Inputs:
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function rxyz(v, x, y, z) {
 
     return rx(ry(rz(v, z), y), x);
 
 }
+
+// ========================================================
+// 
+// 
+// Inputs: 
+// Output: 
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function ruvw(vector, u, v, w, metric) {
 

@@ -1,3 +1,14 @@
+// ========================================================
+// Triangulates a spherical face
+// 
+// Inputs: vertices = vertex positions of face
+//         refinement = number of subdivision passes
+// Output: [mini triangle data, coordinates of mini triangles]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as VF from "../maths-functions/vector-functions.js";
 
 function sphericalFace(vertices, refinement) {

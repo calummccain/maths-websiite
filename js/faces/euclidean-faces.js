@@ -1,3 +1,13 @@
+// ========================================================
+// Triangulates a Euclidean face
+// 
+// Inputs: vertices = vertex positions of face
+// Output: [mini triangle data, coordinates of mini triangles]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as VF from "../maths-functions/vector-functions.js";
 
 function euclideanFace(vertices) {

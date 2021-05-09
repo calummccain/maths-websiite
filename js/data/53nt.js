@@ -1,4 +1,12 @@
-// Order n dodecahedral truncated
+// ========================================================
+// Order n dodecahderal truncated t{5,3,n}
+// 
+// Inputs: n
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { p, p2, p_2 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";

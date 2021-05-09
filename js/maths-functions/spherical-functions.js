@@ -1,11 +1,19 @@
 import * as VF from "./vector-functions.js";
+import { hyperToStereoEps } from "../eps.js";
 
-//performs the stereographic projection
+// ========================================================
+// Stereographic projection from the hypersphere
+// 
+// Inputs: point
+// Output: (x1/(1-x0), x2/(1-x0), x3/(1-x0))
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function hyperToStereo(point) {
 
-    const tol = 1e-4;
-
-    if (Math.abs(point[0] - 1) < tol) {
+    if (Math.abs(point[0] - 1) < hyperToStereoEps) {
 
         return [point[1], point[2], point[3]];
 
@@ -18,6 +26,16 @@ function hyperToStereo(point) {
 
 }
 
+// ========================================================
+// Converts from stereographic projection to hypersphere
+// 
+// Inputs: point
+// Output: ((r-1)/(r+1), 2 x1/(r+1), 2 x2/(r+1), 2 x3/(r+1))
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function stereoToSphere(point) {
 
     const r2 = VF.vectorDot(point, point);
@@ -26,6 +44,16 @@ function stereoToSphere(point) {
     return [(r2 - 1) * denom, 2 * point[0] * denom, 2 * point[1] * denom, 2 * point[2] * denom];
 
 }
+
+// ========================================================
+// Converts from hypersphere projection to klein
+// 
+// Inputs: point
+// Output: (x1/x0, x2/x0, x3/x0)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function hyperToKlein(point) {
 

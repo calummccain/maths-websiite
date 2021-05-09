@@ -1,6 +1,10 @@
 import * as VF from "./vector-functions.js";
-
-const tol = 1e-4;
+import {
+    hyperboloidToPoincareEps,
+    poincareToUpperHalfPlaneEps,
+    kleinToPoincareEps,
+    geodesicEndpointsEps
+} from "../eps.js";
 
 // ========================================================
 // Hyperboloid model inner product
@@ -48,12 +52,12 @@ function hyperbolicNorm(x) {
 
 function hyperboloidToPoincare(x) {
 
-    if (Math.abs(hyperbolicNorm(x)) < tol) {
+    if (Math.abs(hyperbolicNorm(x)) < hyperboloidToPoincareEps) {
 
         const scale = 1 / x[0];
         return [x[1] * scale, x[2] * scale, x[3] * scale];
 
-    } else if (hyperbolicNorm(x) >= tol) {
+    } else if (hyperbolicNorm(x) >= hyperboloidToPoincareEps) {
 
         const scale = 1 / (1 + x[0]);
         return [x[1] * scale, x[2] * scale, x[3] * scale];
@@ -105,11 +109,11 @@ function poincareToUpperHalfPlane(point) {
     var x = point[0], y = point[1], z = point[2];
     var s = 1 / (x * x + y * y + 1 - 2 * z + z * z);
 
-    if (s < tol) {
+    if (s < poincareToUpperHalfPlaneEps) {
 
         return [x, y, Infinity];
 
-    } else if (VF.norm([x, y, z]) > 1 - tol) {
+    } else if (VF.norm2([x, y, z]) > 1 - poincareToUpperHalfPlaneEps) {
 
         return [2 * x * s, 2 * y * s, 0];
 
@@ -149,64 +153,74 @@ function upperHalfPlaneToPoincare(point) {
 // half plane model
 //
 // Inputs: x
-// Output: (2 * x / (x ** 2 + y ** 2 + (1 - z) ** 2), 
-//          2 * y / (x ** 2 + y ** 2 + (1 - z) ** 2), 
-//          (1 - x ** 2 - y ** 2 - z ** 2) / 
-//                        (x ** 2 + y ** 2 + (1 - z) ** 2))
+// Output: ((1+r)/(1-r), 2 x0 / (1-r), 2 x1 / (1-r), 2 x2 / (1-r))
+//         or (1, x0, x1, x2) if on light cone
 //
 // Change history:
 //     ??/??/?? Initial commit
 //=========================================================
 
-// TODO what if point is ideal ie r = 1 - tol
-
 function poincareToHyperboloid(x) {
 
     const r = x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
-    const denom = 1 / (1 - r);
 
-    return [(1 + r) * denom, 2 * x[0] * denom, 2 * x[1] * denom, 2 * x[2] * denom];
+    if (Math.abs(r - 1) < poincareToHyperboloidEps) {
+
+        const denom = 1 / (1 - r);
+
+        return [(1 + r) * denom, 2 * x[0] * denom, 2 * x[1] * denom, 2 * x[2] * denom];
+
+    } else {
+
+        return [1, x[0], x[1], x[2]];
+    }
+
+}
+
+// ========================================================
+// Transform from klein model to poincare model
+//
+// Inputs: x
+// Output: x / (1+sqrt(1-r^2))
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
+function kleinToPoincare(x) {
+
+    var dist = VF.norm2(x);
+    var hyperbolicDist = (dist < 1 - kleinToPoincareEps) ? 1 / (1 + Math.sqrt(Math.abs(1 - dist))) : 1;
+
+    return VF.vectorScale(x, hyperbolicDist);
 
 }
 
-// 'Cayley transform' from poincare to UHP
-// (w, x, y, z) ===> (x / (w - z), 
-//                    y / (w - z), 
-//                    (z ** 2) / (2 * w * (w - z)))
-// function lightConeToUpperHalfPlane(point) {
-
-//     var w = point[0];
-//     var x = point[1];
-//     var y = point[2];
-//     var z = point[3];
-//     var s = x ** 2 + y ** 2 + (w - z) ** 2;
-//     return [2 * x / s, 2 * y / s, (1 - x ** 2 - y ** 2) / s];
-
-// }
-
-//TODO ideal point again
-function kleinToPoincare(point) {
-
-    var dist = VF.norm2(point);
-    var hyperbolicDist = (dist < 1 - tol) ? 1 / (1 + Math.sqrt(Math.abs(1 - dist))) : 1;
-
-    return VF.vectorScale(point, hyperbolicDist);
-
-}
+// ========================================================
+// Transform from hyperboloid model to uhp model
+//
+// Inputs: x
+// Output: ?
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function hyperboloidToUpperHalfPlane(point) {
 
-    // var w = point[0];
-    // var x = point[1];
-    // var y = point[2];
-    // var z = point[3];
-
-    // var den = (w ** 2) + 1 - z * (w + 1);
-
-    //return [x * (w + 1) / den, y * (w + 1) / den, 2 * w / den];
-
     return poincareToUpperHalfPlane(hyperboloidToPoincare(point));
+
 }
+
+// ========================================================
+// Transform from klein model to uhp model
+//
+// Inputs: x
+// Output: ?
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function kleinToUpperHalfPlane(point) {
 
@@ -214,22 +228,52 @@ function kleinToUpperHalfPlane(point) {
 
 }
 
+// ========================================================
+// Transform from uhp model to klein model
+//
+// Inputs: x
+// Output: ?
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function upperHalfPlaneToKlein(point) {
 
     return poincareToKlein(upperHalfPlaneToPoincare(point));
 
 }
 
-function poincareToKlein(point) {
+// ========================================================
+// Transform from poincare model to klein model
+//
+// Inputs: x
+// Output: ?
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
-    const x = point[0], y = point[1], z = point[2];
-    const s = 2 / (1 + x * x + y * y + z * z);
+function poincareToKlein(x) {
 
-    return [x * s, y * s, z * s];
+    const s = 2 / (1 + VF.norm2(x));
+
+    return VF.vectorScale(x, s);
 
 }
 
-// finds center of a crcle knowing two points and that it lies on z = 0
+// ========================================================
+// Find the center of a sphere knowing three points lying
+// on it's surface and that the center lies on the plane
+// z = 0
+//
+// Inputs: p1, p2, p3 
+// Output: center = [*, *, *]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function uhpCenter(p1, p2, p3) {
 
     var p12 = VF.midpoint(p1, p2);
@@ -240,7 +284,6 @@ function uhpCenter(p1, p2, p3) {
     var d12 = VF.vectorDot(p12, n12);
     var d13 = VF.vectorDot(p13, n13);
 
-    // var p0 = [0, 0, 0];
     var n0 = [0, 0, 1];
 
     var A = [n0[0], n12[0], n13[0]];
@@ -258,10 +301,21 @@ function uhpCenter(p1, p2, p3) {
 
 }
 
+// ========================================================
+// Given two points in the hyperboloid model calculates the
+// endpoints of the geodesic that passes through them
+// (endpoints lie on the plane at infinity)
+//
+// Inputs: a, b
+// Output: [p1, p2]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function geodesicEndpoints(a, b) {
 
-    if ((Math.abs(hyperbolicNorm(a)) < tol) && (Math.abs(hyperbolicNorm(b)) < tol)) {
+    if ((Math.abs(hyperbolicNorm(a)) < geodesicEndpointsEps) && (Math.abs(hyperbolicNorm(b)) < geodesicEndpointsEps)) {
 
         return [a, b];
 
@@ -269,6 +323,7 @@ function geodesicEndpoints(a, b) {
 
     var inner = hyperboloidInnerProduct(a, b);
     var eAlpha = 1 / (inner + Math.sqrt(inner * inner - 1));
+
     return [VF.vectorDiff(VF.vectorScale(a, eAlpha), b), VF.vectorDiff(VF.vectorScale(b, eAlpha), a)];
 
 }

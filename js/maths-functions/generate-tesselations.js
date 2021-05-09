@@ -3,6 +3,19 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 
 const eps = 1e-4;
 
+// ========================================================
+// Reflects the vertices 'initialVerts' according to the
+// reflections in 'fNames'. Only returns unique vertices 
+// 
+// Inputs: initialVerts
+//         matrixDict
+//         fNames
+// Output: array of vertices
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function makeVertices(initialVerts, matrixDict, fNames) {
 
     var verts = initialVerts;
@@ -31,6 +44,19 @@ function makeVertices(initialVerts, matrixDict, fNames) {
 
 }
 
+// ========================================================
+// Reflects the edges 'initialEdges' according to the
+// reflections in 'fNames'. Only returns unique edges 
+// 
+// Inputs: initialEdgess
+//         matrixDict
+//         fNames
+// Output: array of edges
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function makeEdges(initialEdges, matrixDict, fNames) {
 
     var edges = initialEdges;
@@ -58,6 +84,24 @@ function makeEdges(initialEdges, matrixDict, fNames) {
     return edges;
 
 }
+
+// ========================================================
+// Transforms the vertex according to the matrix (function)
+// given
+// 
+// Inputs: letter
+//         amat
+//         bmat
+//         cmat
+//         dmat
+//         emat
+//         fmat
+//         v
+// Output: vertex
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v) {
 
@@ -92,6 +136,19 @@ function matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v) {
     }
 
 }
+
+// ========================================================
+// Generates unique faces and their names
+// 
+// Inputs: face
+//         maxNumber
+//         numEdges
+//         matrixDict
+// Output: [array of face vectors, array of face names]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function makeFaces(face, maxNumber, numEdges, matrixDict) {
 
@@ -138,6 +195,21 @@ function makeFaces(face, maxNumber, numEdges, matrixDict) {
 
 }
 
+// ========================================================
+// Finds which vertices surround each face
+// 
+// Inputs: fvDist
+//         numEdges
+//         metric
+//         f
+//         v
+//         fmat
+// Output: array of [p1, p2, p3, ...]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
 
     var faceData = [];
@@ -175,6 +247,20 @@ function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
 
 }
 
+// ========================================================
+// Finds which vertices surround each edge
+//
+// Inputs: evDist
+//         metric
+//         e
+//         v
+//         fmat
+// Output: array of [p1, p2]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function generateEdgeData(evDist, metric, e, v, fmat) {
 
     var edgeData = [];
@@ -211,6 +297,19 @@ function generateEdgeData(evDist, metric, e, v, fmat) {
     return edgeData;
 
 }
+
+// ========================================================
+// Orders the face-vertex lists so that when drawn in 
+// sequence the vertices produce the face cyclically
+// 
+// Inputs: numEdges
+//         faceData
+//         edgeData
+// Output: array of [p1, p2, p3, ...]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function orderFaces(numEdges, faceData, edgeData) {
 

@@ -3,7 +3,7 @@ import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
-import { matrixDict } from "../data/matrix-dictionary.js";
+import { matrixDict } from "../maths-functions/generate-tesselations.js";
 
 const eps = 1e-5;
 
@@ -67,7 +67,7 @@ function generateData(data, thetax, thetay, thetaz, thetau, thetav, thetaw, numb
 function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cell) {
 
     // matrix dictionary
-    const matrix = matrixDict(data);
+    const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
 
     // Transform the 'central' cell's vertices to the transformed cell's vertices
     var newVertices = VF.transformVertices(data.vertices, cell, matrix);

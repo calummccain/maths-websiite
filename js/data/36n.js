@@ -1,4 +1,13 @@
-// Order n triangular
+// ========================================================
+// Order r triangular {3,6,r}
+// 
+// Inputs: r
+//         n = number of faces
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { boundaries } from "./geometry-decider.js";
 import * as VF from "../maths-functions/vector-functions.js";
