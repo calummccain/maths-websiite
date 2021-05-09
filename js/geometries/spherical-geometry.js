@@ -2,11 +2,11 @@ import * as THREE from "../three-bits/three.module.js";
 import { sphericalFace } from "../faces/spherical-faces.js";
 import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
-import { matrixDict } from "../data/matrix-dictionary.js";
+import { matrixDict } from "../maths-functions/generate-tesselations.js";
 
 function sphericalGeometry(data, transform, refinement) {
 
-    var matrix = matrixDict(data);
+    const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
 
     // Transform the 'central' cell's vertices to the transformed cell's vertices
     var newVertices = VF.transformVertices(data.vertices, transform, matrix);

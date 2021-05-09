@@ -1,3 +1,10 @@
+// ========================================================
+// Constants
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 const rt2 = Math.sqrt(2);
 const rt3 = Math.sqrt(3);
 const rt5 = Math.sqrt(5);
