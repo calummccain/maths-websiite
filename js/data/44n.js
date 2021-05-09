@@ -1,4 +1,13 @@
-// Order r square
+// ========================================================
+// Order r square {4,4,r}
+// 
+// Inputs: r
+//         n = number of faces
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { boundaries } from "./geometry-decider.js";
 import * as VF from "../maths-functions/vector-functions.js";

@@ -1,4 +1,12 @@
-// Order n tetrahedral
+// ========================================================
+// Order n tetrahedral {3,3,n}
+// 
+// Inputs: n
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { boundaries } from "./geometry-decider.js";
 import { rt2, rt3, rt5, p2, p_1 } from "./constants.js";

@@ -1,4 +1,12 @@
-// Order n cubic
+// ========================================================
+// Order n cubic {4,3,n}
+// 
+// Inputs: n
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { rt2, rt3, p, p2, p_1 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";

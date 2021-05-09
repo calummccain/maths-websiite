@@ -1,4 +1,12 @@
-// Order n cubic truncated
+// ========================================================
+// Order n cubic truncated? t{4,3,n}
+// 
+// Inputs: n
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { p, p2, p_1 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";

@@ -1,4 +1,12 @@
-// Order n dodecahedral
+// ========================================================
+// Order n dodecahedral {5,3,n}
+// 
+// Inputs: n
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { p } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";

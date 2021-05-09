@@ -1,4 +1,15 @@
-// {p,q,r} data
+// ========================================================
+// {p,q,r}
+// 
+// Inputs: p
+//         q
+//         r
+//         n = number of faces
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
@@ -10,7 +21,7 @@ const pqrData = (p, q, r, n) => {
     const sr = (i) => Math.sin(Math.PI * i / r);
 
     const cq = (i) => Math.cos(Math.PI * i / q);
-    const sq = (i) => Math.sin(Math.PI * i / q);
+    // const sq = (i) => Math.sin(Math.PI * i / q);
 
     const cp = (i) => Math.cos(Math.PI * i / p);
     const sp = (i) => Math.sin(Math.PI * i / p);

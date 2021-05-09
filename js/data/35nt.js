@@ -1,4 +1,12 @@
-// order n icosahedral truncated
+// ========================================================
+// Order n icosahedral tuncated? t{3,5,n}
+// 
+// Inputs: n
+// Output: data
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_2, p_3 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
