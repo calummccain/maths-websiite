@@ -137,6 +137,19 @@ function matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v) {
 
 }
 
+// ========================================================
+// Generates unique faces and their names
+// 
+// Inputs: face
+//         maxNumber
+//         numEdges
+//         matrixDict
+// Output: [array of face vectors, array of face names]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function makeFaces(face, maxNumber, numEdges, matrixDict) {
 
     var faces = [face];
@@ -182,6 +195,21 @@ function makeFaces(face, maxNumber, numEdges, matrixDict) {
 
 }
 
+// ========================================================
+// Finds which vertices surround each face
+// 
+// Inputs: fvDist
+//         numEdges
+//         metric
+//         f
+//         v
+//         fmat
+// Output: array of [p1, p2, p3, ...]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
 
     var faceData = [];
@@ -219,6 +247,20 @@ function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
 
 }
 
+// ========================================================
+// Finds which vertices surround each edge
+//
+// Inputs: evDist
+//         metric
+//         e
+//         v
+//         fmat
+// Output: array of [p1, p2]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 function generateEdgeData(evDist, metric, e, v, fmat) {
 
     var edgeData = [];
@@ -255,6 +297,19 @@ function generateEdgeData(evDist, metric, e, v, fmat) {
     return edgeData;
 
 }
+
+// ========================================================
+// Orders the face-vertex lists so that when drawn in 
+// sequence the vertices produce the face cyclically
+// 
+// Inputs: numEdges
+//         faceData
+//         edgeData
+// Output: array of [p1, p2, p3, ...]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
 
 function orderFaces(numEdges, faceData, edgeData) {
 
