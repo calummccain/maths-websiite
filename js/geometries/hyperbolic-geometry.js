@@ -1,3 +1,16 @@
+// ========================================================
+// Generates the geometric data for the cell in question
+//
+// Inputs: data
+//         transform
+//         refinement
+//         model
+// Output: [array of geometries for each face]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as THREE from "../three-bits/three.module.js";
 import { hyperbolicFace } from "../faces/hyperbolic-faces.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";

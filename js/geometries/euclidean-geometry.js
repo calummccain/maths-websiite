@@ -1,3 +1,14 @@
+// ========================================================
+// Generates the geometric data for the cell in question
+//
+// Inputs: data
+//         transform
+// Output: [array of geometries for each face]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as THREE from "../three-bits/three.module.js";
 import { euclideanFace } from "../faces/euclidean-faces.js";
 import * as VF from "../maths-functions/vector-functions.js";

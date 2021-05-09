@@ -1,3 +1,15 @@
+// ========================================================
+// Generates the geometric data for the cell in question
+//
+// Inputs: data
+//         transform
+//         refinement
+// Output: [array of geometries for each face]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as THREE from "../three-bits/three.module.js";
 import { sphericalFace } from "../faces/spherical-faces.js";
 import * as SF from "../maths-functions/spherical-functions.js";
