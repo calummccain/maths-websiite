@@ -1,3 +1,15 @@
+// ========================================================
+// Triangulates a hyperbolic face
+// 
+// Inputs: vertices = vertex positions of face
+//         refinement = number of subdivision passes
+//         metric
+// Output: [mini triangle data, coordinates of mini triangles]
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as VF from "../maths-functions/vector-functions.js";
 
 function hyperbolicFace(vertices, refinement, metric) {
