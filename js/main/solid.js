@@ -17,6 +17,7 @@ function main() {
 
     //
     const initialCell = "d";
+    var list = [initialCell];
 
     // Determines current mode of clicking: add, remove, move
     var mode = "add";
@@ -67,17 +68,20 @@ function main() {
     var raycaster = new THREE.Raycaster();
     var mouseVector = new THREE.Vector2();
 
-    // newObject: 
-    // oldObject: 
-    // clickObject: 
-    var newObject, oldObject, clickObject;
+    // intersects: what the raycaster hits (if anything)
+    // newObject: What the raycaster is currently selecting
+    // oldObject: what the raycaster selected just before
+    // clickObject: what the user has clicked on
+    // removeObject: highlighted removable object
+    var intersects, newObject, oldObject, clickObject, removeObject;
 
+    // data is the dictionary of parameters for the geometries
     var data = {
         p: p,
         q: q,
         r: r,
         model: "poincare",
-        refinement: 3,
+        refinement: 4,
         transform: initialCell,
         position: [0, 0, 0],
         faceMode: true,
@@ -87,8 +91,7 @@ function main() {
         truncated: false
     }
 
-    var list = [initialCell];
-
+    // ghostData is the dictionary of parameters for the ghost geometries
     var ghostData = {
         p: p,
         q: q,
@@ -104,30 +107,34 @@ function main() {
         slices: 10
     }
 
-    lineGroup.children = objectMaker(data).children;
+    // Using the data dictionary make a geometry using objectMaker and add to the visibleGroup
+    visibleGroup.children = objectMaker(data).children;
 
-    window.addEventListener("resize", onWindowResize, false);
+    // Add some event listeners to the page
+    window.addEventListener("resize", onResize, false);
+
     window.addEventListener("mousemove", onMouseMove, false);
-    window.addEventListener("click", onMouseClick, false);
+
+    window.addEventListener("click", onClick, false);
+
+    // window.addEventListener("touchend", () => { visibleGroup.children = objectMaker(data).children; }, false);
+
+    window.addEventListener('keydown', onKeyDown, false);
 
     render();
 
-    function onWindowResize() {
+    function onResize() {
 
+        // Redefine the width, height
         WIDTH = canvas.clientWidth;
         HEIGHT = canvas.clientHeight;
 
+        // Update the renderer size
         renderer.setSize(WIDTH, HEIGHT);
 
+        // Update the camera aspect ratio
         camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
-
-    }
-
-    function render() {
-
-        renderer.render(scene, camera);
-        requestAnimationFrame(render);
 
     }
 
@@ -135,16 +142,20 @@ function main() {
 
         event.preventDefault();
 
+        // Get mouse position relative to canvas
         mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
         mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
-        raycaster.setFromCamera(mouseVector, camera);
 
-        var intersects = raycaster.intersectObjects(lineGroup.children);
+        // See what the ray intersects
+        raycaster.setFromCamera(mouseVector, camera);
+        intersects = raycaster.intersectObjects(visibleGroup.children);
 
         if (mode === "add") {
 
+            // If the ray intersects something
             if (intersects.length > 0) {
 
+                // If nothing selected before i.e. new geometry
                 if (k == 0) {
 
                     oldObject = intersects[0].object;
@@ -152,8 +163,10 @@ function main() {
 
                 }
 
+                // Updates the newObject
                 newObject = intersects[0].object;
 
+                // If the newObject is different from the oldObject change their colours, update oldObject and ghostData
                 if (newObject.id != oldObject.id) {
 
                     oldObject.material.emissive.setRGB(0, 0, 0);
@@ -168,6 +181,7 @@ function main() {
 
             } else {
 
+                // If nothing selected (empty space) reset oldObject and empty the ghostGroup
                 if (k != 0) {
 
                     oldObject.material.emissive.setRGB(0, 0, 0);
@@ -179,13 +193,16 @@ function main() {
 
         } else if (mode === "remove") {
 
+            // If ray hits something
             if (intersects.length > 0) {
 
-                var removeCell = intersects[0].object.cellName;
+                // Get the name of the object to be removed
+                removeObject = intersects[0].object.cellName;
 
-                lineGroup.children.forEach((mesh) => {
+                // aHighlight all faces with the removeObjects name
+                visibleGroup.children.forEach((mesh) => {
 
-                    if (mesh.cellName === removeCell) {
+                    if (mesh.cellName === removeObject) {
 
                         mesh.material.emissive.setRGB(0.8, 0.1, 0.1);
 
@@ -199,7 +216,8 @@ function main() {
 
             } else {
 
-                lineGroup.children.forEach((mesh) => {
+                // Otherwise reset emmisivity of all faces
+                visibleGroup.children.forEach((mesh) => {
 
                     mesh.material.emissive.setRGB(0, 0, 0);
 
@@ -211,25 +229,29 @@ function main() {
 
     }
 
-    function onMouseClick(event) {
+    function onClick(event) {
 
         event.preventDefault();
 
+        // Get the relative position of the mouse to the canvas
         mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
         mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
+
+        // Find what the raycaster hits
         raycaster.setFromCamera(mouseVector, camera);
+        intersects = raycaster.intersectObjects(visibleGroup.children);
 
-        var intersects2 = raycaster.intersectObjects(lineGroup.children);
+        if (intersects.length > 0) {
 
-        if (intersects2.length > 0) {
+            clickObject = intersects[0].object;
 
-            clickObject = intersects2[0].object;
-
+            // If mode is 'add' then add the cell from the face
+            // If mode is 'rmeove' then remove the cell 
             if (mode === "add") {
 
                 data.transform = clickObject.cellName + clickObject.faceName + "d";
 
-                lineGroup.children = lineGroup.children.concat(objectMaker(data).children);
+                visibleGroup.children = visibleGroup.children.concat(objectMaker(data).children);
 
                 list.push(data.transform);
 
@@ -238,7 +260,7 @@ function main() {
                 const removeCell = clickObject.cellName;
                 var newChildren = [];
 
-                lineGroup.children.forEach((mesh) => {
+                visibleGroup.children.forEach((mesh) => {
 
                     if (mesh.cellName !== removeCell) {
 
@@ -260,28 +282,42 @@ function main() {
 
                 })
 
-                lineGroup.children = newChildren;
+                visibleGroup.children = newChildren;
                 list = newList;
 
             }
 
-        } else if (lineGroup.children.length == 0 && mode === "add") {
+        } else if (visibleGroup.children.length == 0 && mode === "add") {
 
-            lineGroup.children = lineGroup.children.concat(objectMaker(data).children);
+            visibleGroup.children = visibleGroup.children.concat(objectMaker(data).children);
 
         }
 
     }
 
-    window.addEventListener('keydown', (event) => {
+    function onKeyDown(event) {
+
+        // If 'enter' pressed, redraw the scene with the initial cell
         if (event.key === "Enter") {
+
             data.transform = initialCell;
             list = [initialCell];
             k = 0;
-            lineGroup.children = objectMaker(data).children;
-        }
-    });
+            visibleGroup.children = objectMaker(data).children;
 
+        }
+
+    }
+
+    // render the scene...
+    function render() {
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+
+    }
+
+    // Add functionality to the menu
     document.getElementById("list").addEventListener("click", function () {
         alert(list);
     });
@@ -296,43 +332,46 @@ function main() {
         ghostGroup.children = [];
     });
 
+    document.getElementById("draw").addEventListener("click", function () {
+        data.transform = initialCell;
+        list = [initialCell];
+        k = 0;
+        visibleGroup.children = objectMaker(data).children;
+    });
+
     document.getElementById("move").addEventListener("click", function () {
         mode = "move";
         // ghostGroup.children = [];
     });
 
-    window.addEventListener("touchend", () => {
-        lineGroup.children = objectMaker(data).children;
-    }, false);
-
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 50;
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangeu").oninput = function () {
         thetau = Math.PI * this.value / 50 - Math.PI;
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangev").oninput = function () {
         thetav = Math.PI * this.value / 50 - Math.PI;
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangew").oninput = function () {
         thetaw = Math.PI * this.value / 50 - Math.PI;
-        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("truncated").addEventListener("click", function () {
@@ -360,7 +399,7 @@ function main() {
         $(".cellselector").click(function () {
             [q, r] = $(this).attr("id").split("-");
             data.q = Number(q), data.r = Number(r);
-            lineGroup.children = objectMaker(data).children;
+            visibleGroup.children = objectMaker(data).children;
         })
 
     });
