@@ -1,6 +1,17 @@
+// ========================================================
+// main for the solid viewer
+// 
+// Inputs: 
+// Output:
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
+import { typeOfCell } from "../data/geometry-decider.js";
 
 window.onload = main;
 
@@ -341,38 +352,8 @@ function main() {
 
     document.getElementById("move").addEventListener("click", function () {
         mode = "move";
-        // ghostGroup.children = [];
+        ghostGroup.children = [];
     });
-
-    document.getElementById("myRangex").oninput = function () {
-        thetax = Math.PI * this.value / 50;
-        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-    };
-
-    document.getElementById("myRangey").oninput = function () {
-        thetay = Math.PI * this.value / 50;
-        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-    };
-
-    document.getElementById("myRangez").oninput = function () {
-        thetaz = Math.PI * this.value / 50;
-        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-    };
-
-    document.getElementById("myRangeu").oninput = function () {
-        thetau = Math.PI * this.value / 50 - Math.PI;
-        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-    };
-
-    document.getElementById("myRangev").oninput = function () {
-        thetav = Math.PI * this.value / 50 - Math.PI;
-        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-    };
-
-    document.getElementById("myRangew").oninput = function () {
-        thetaw = Math.PI * this.value / 50 - Math.PI;
-        visibleGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-    };
 
     document.getElementById("truncated").addEventListener("click", function () {
         data.truncated = !data.truncated;
@@ -388,17 +369,20 @@ function main() {
 
         $("#rightarrow").click(function () {
             data.p = Math.min(data.p + 1, 8);
+            ghostData.p = Math.min(data.p + 1, 8);
             updateCellSelector(data.p);
         });
 
         $("#leftarrow").click(function () {
             data.p = Math.max(data.p - 1, 3);
+            ghostData.p = Math.max(data.p - 1, 3);
             updateCellSelector(data.p);
         });
 
         $(".cellselector").click(function () {
             [q, r] = $(this).attr("id").split("-");
             data.q = Number(q), data.r = Number(r);
+            ghostData.q = Number(q), ghostData.r = Number(r);
             visibleGroup.children = objectMaker(data).children;
         })
 
@@ -428,40 +412,5 @@ function main() {
         }
 
     }
-
-    function typeOfCell(p, q, r) {
-
-        const name = p + "-" + q + "-" + r;
-
-        if (["3-3-3", "3-3-4", "3-3-5", "3-4-3", "4-3-3", "5-3-3"].includes(name)) {
-
-            return "s";
-
-        } else if (name === "4-3-4") {
-
-            return "e";
-
-        } else {
-
-            const qr = (q - 2) * (r - 2);
-
-            if (qr < 4) {
-
-                return "h"
-
-            } else if (qr == 4) {
-
-                return "p"
-
-            } else {
-
-                return "u"
-
-            }
-
-        }
-
-    }
-
 
 }
