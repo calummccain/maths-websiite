@@ -1,6 +1,7 @@
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
+import { typeOfCell } from "../data/geometry-decider.js";
 
 window.onload = main;
 
@@ -175,40 +176,6 @@ function main() {
 
                 document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
                 document.getElementById(q + "-" + r).style.backgroundColor = cellTypeColours[cellType];
-
-            }
-
-        }
-
-    }
-
-    function typeOfCell(p, q, r) {
-
-        const name = p + "-" + q + "-" + r;
-
-        if (["3-3-3", "3-3-4", "3-3-5", "3-4-3", "4-3-3", "5-3-3"].includes(name)) {
-
-            return "s";
-
-        } else if (name === "4-3-4") {
-
-            return "e";
-
-        } else {
-
-            const qr = (q - 2) * (r - 2);
-
-            if (qr < 4) {
-
-                return "h"
-
-            } else if (qr == 4) {
-
-                return "p"
-
-            } else {
-
-                return "u"
 
             }
 
