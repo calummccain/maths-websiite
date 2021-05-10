@@ -7,6 +7,7 @@ window.onload = main;
 function main() {
 
     var p = 3, q = 3, r = 3;
+    var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var k = 0;
     const initialCell = "d";
     var mode = "add";
@@ -289,14 +290,32 @@ function main() {
 
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangey").oninput = function () {
         thetay = Math.PI * this.value / 50;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+    };
+
+    document.getElementById("myRangeu").oninput = function () {
+        thetau = Math.PI * this.value / 50 - Math.PI;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+    };
+
+    document.getElementById("myRangev").oninput = function () {
+        thetav = Math.PI * this.value / 50 - Math.PI;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+    };
+
+    document.getElementById("myRangew").oninput = function () {
+        thetaw = Math.PI * this.value / 50 - Math.PI;
+        lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
     };
 
     document.getElementById("truncated").addEventListener("click", function () {
