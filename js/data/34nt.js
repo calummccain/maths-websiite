@@ -41,9 +41,9 @@ const octahedronTruncData = (n) => {
 
     const f = (v) => [
         Math.sqrt(Math.abs(2 * cot)) * v[0],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[1],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[2],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[3],
+        Math.sqrt(Math.abs(4 * cot - 2)) * v[1],
+        Math.sqrt(Math.abs(4 * cot - 2)) * v[2],
+        Math.sqrt(Math.abs(4 * cot - 2)) * v[3],
     ];
 
     return {
