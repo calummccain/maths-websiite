@@ -6,53 +6,70 @@ window.onload = main;
 
 function main() {
 
+    // Initial values for p, q, r
     var p = 3, q = 3, r = 3;
+
+    // Initial values for the rotation values
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
+
+    // Flag to determine if the geometry has just changed or not: k = 0 => new geometry
     var k = 0;
+
+    //
     const initialCell = "d";
+
+    // Determines current mode of clicking: add, remove, move
     var mode = "add";
+
+    //
     var cellType;
 
+    // Setup canvas and get dimensions
     const canvas = document.getElementById("canvas");
-    var rect = canvas.getBoundingClientRect();
-
+    const rect = canvas.getBoundingClientRect();
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
 
+    // Setup and add renderer to canvas
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(WIDTH, HEIGHT);
     renderer.shadowMap.enabled = true;
     canvas.appendChild(renderer.domElement);
 
+    // Make scene and set background colour
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xFFFFFF);
 
+    // Setup camera, position
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
     camera.position.set(5, 5, 0);
-    camera.up = new THREE.Vector3(0, 0, 1);
-
     scene.add(camera);
 
-    // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    // directionalLight.position.set(10, 0, 0);
-    // scene.add(directionalLight);
-
+    // Setup and add lighting
     const pointlight = new THREE.PointLight(0xffffff, 1, 100);
     pointlight.position.set(10, 0, 0);
     pointlight.castShadow = true;
     camera.add(pointlight);
 
+    // Setup controls and add to camera
     var controls = new OrbitControls(camera, canvas);
-    controls.enabled = true;
     controls.update();
 
-    var lineGroup = new THREE.Group();
-    scene.add(lineGroup);
+    // visibleGroup is the set of objects visible to the camera
+    var visibleGroup = new THREE.Group();
+    scene.add(visibleGroup);
 
+    // ghostGroup is the object under the mouse when adding objects
     var ghostGroup = new THREE.Group();
     scene.add(ghostGroup);
 
-    var raycaster = new THREE.Raycaster(), mouseVector = new THREE.Vector2();
+    // Make raycaster and mouse vector
+    var raycaster = new THREE.Raycaster();
+    var mouseVector = new THREE.Vector2();
+
+    // newObject: 
+    // oldObject: 
+    // clickObject: 
     var newObject, oldObject, clickObject;
 
     var data = {
