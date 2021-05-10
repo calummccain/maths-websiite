@@ -6,10 +6,11 @@ window.onload = main;
 
 function main() {
 
-    var p = 5, q = 3, r = 3;
+    var p = 3, q = 3, r = 3;
     var k = 0;
     const initialCell = "d";
     var mode = "add";
+    var cellType;
 
     const canvas = document.getElementById("canvas");
     var rect = canvas.getBoundingClientRect();
@@ -64,7 +65,8 @@ function main() {
         faceMode: true,
         numFaces: 200,
         shader: "toon",
-        slices: 10
+        slices: 10,
+        truncated: false
     }
 
     var list = [initialCell];
@@ -285,21 +287,6 @@ function main() {
         lineGroup.children = objectMaker(data).children;
     }, false);
 
-    document.getElementById("myRangep").oninput = function () {
-        data.p = parseInt(this.value);
-        ghostData.p = parseInt(this.value);
-    };
-
-    document.getElementById("myRangeq").oninput = function () {
-        data.q = parseInt(this.value);
-        ghostData.q = parseInt(this.value);
-    };
-
-    document.getElementById("myRanger").oninput = function () {
-        data.r = parseInt(this.value);
-        ghostData.r = parseInt(this.value);
-    };
-
     document.getElementById("myRangex").oninput = function () {
         thetax = Math.PI * this.value / 50;
     };
@@ -311,5 +298,95 @@ function main() {
     document.getElementById("myRangez").oninput = function () {
         thetaz = Math.PI * this.value / 50;
     };
+
+    document.getElementById("truncated").addEventListener("click", function () {
+        data.truncated = !data.truncated;
+    });
+
+    $(document).ready(function () {
+
+        updateCellSelector(data.p);
+
+        $("#pqr").click(function () {
+            $("#pqrselector").toggle();
+        });
+
+        $("#rightarrow").click(function () {
+            data.p = Math.min(data.p + 1, 8);
+            updateCellSelector(data.p);
+        });
+
+        $("#leftarrow").click(function () {
+            data.p = Math.max(data.p - 1, 3);
+            updateCellSelector(data.p);
+        });
+
+        $(".cellselector").click(function () {
+            [q, r] = $(this).attr("id").split("-");
+            data.q = Number(q), data.r = Number(r);
+            lineGroup.children = objectMaker(data).children;
+        })
+
+    });
+
+    const cellTypeColours = {
+        "s": "#FFB3BA",
+        "e": "#FFDFBA",
+        "h": "#FFFFBA",
+        "p": "#BAFFC9",
+        "u": "#BAE1FF"
+    }
+
+    function updateCellSelector(p) {
+
+        for (var q = 3; q <= 8; q++) {
+
+            for (var r = 3; r <= 8; r++) {
+
+                cellType = typeOfCell(p, q, r);
+
+                document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
+                document.getElementById(q + "-" + r).style.backgroundColor = cellTypeColours[cellType];
+
+            }
+
+        }
+
+    }
+
+    function typeOfCell(p, q, r) {
+
+        const name = p + "-" + q + "-" + r;
+
+        if (["3-3-3", "3-3-4", "3-3-5", "3-4-3", "4-3-3", "5-3-3"].includes(name)) {
+
+            return "s";
+
+        } else if (name === "4-3-4") {
+
+            return "e";
+
+        } else {
+
+            const qr = (q - 2) * (r - 2);
+
+            if (qr < 4) {
+
+                return "h"
+
+            } else if (qr == 4) {
+
+                return "p"
+
+            } else {
+
+                return "u"
+
+            }
+
+        }
+
+    }
+
 
 }
