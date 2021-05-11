@@ -16,8 +16,6 @@ const octahedronData = (n) => {
     const cos = Math.cos(Math.PI / n) ** 2;
     const tan = 1 / cos - 1;
     const cot = 1 / tan;
-    const cot2 = Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot)));
-    const cot3 = Math.sqrt(Math.abs(1 - cot));
 
     const metric = boundaries(n, Math.PI / Math.atan(rt2), 4);
 

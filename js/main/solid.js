@@ -27,7 +27,7 @@ function main() {
     var k = 0;
 
     //
-    const initialCell = "d";
+    const initialCell = "";
     var list = [initialCell];
 
     // Determines current mode of clicking: add, remove, move
@@ -357,6 +357,10 @@ function main() {
 
     document.getElementById("truncated").addEventListener("click", function () {
         data.truncated = !data.truncated;
+        data.transform = initialCell;
+        list = [initialCell];
+        k = 0;
+        visibleGroup.children = objectMaker(data).children;
     });
 
     $(document).ready(function () {

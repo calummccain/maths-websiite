@@ -16,34 +16,16 @@ const octahedronTruncData = (n) => {
     const cos = Math.cos(Math.PI / n) ** 2;
     const tan = 1 / cos - 1;
     const cot = 1 / tan;
-    const cot2 = Math.sqrt(Math.abs(1 - 2 * cot));
-    const cot3 = Math.sqrt(Math.abs(1 - cot));
 
     const metric = boundaries(n, Math.PI / Math.atan(rt2), Infinity);
 
-    const d =
-        (n == 3) ? (v) => [
-            (v[0] + v[1] + v[2] + v[3]) / 2,
-            (v[0] + v[1] - v[2] - v[3]) / 2,
-            (v[0] - v[1] + v[2] - v[3]) / 2,
-            (v[0] - v[1] - v[2] + v[3]) / 2
-        ] : (n == 4) ? (v) => [
-            2 * v[0] - v[1] - v[2] - v[3],
-            v[0] - v[2] - v[3],
-            v[0] - v[1] - v[3],
-            v[0] - v[1] - v[2]
-        ] : (v) => [
-            (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
-            2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
-            2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
-            2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
-        ];
+    const d = (v) => v;
 
     const f = (v) => [
         Math.sqrt(Math.abs(2 * cot)) * v[0],
-        Math.sqrt(Math.abs(4 * cot - 2)) * v[1],
-        Math.sqrt(Math.abs(4 * cot - 2)) * v[2],
-        Math.sqrt(Math.abs(4 * cot - 2)) * v[3],
+        Math.sqrt(Math.abs(cot - 1 / 2)) * v[1],
+        Math.sqrt(Math.abs(cot - 1 / 2)) * v[2],
+        Math.sqrt(Math.abs(cot - 1 / 2)) * v[3],
     ];
 
     return {
@@ -63,8 +45,8 @@ const octahedronTruncData = (n) => {
         ],
 
         faces: [
-            [0, 1, 2], [0, 5, 7], [3, 7, 11], [1, 3, 8],
-            [4, 8, 9], [2, 4, 6], [5, 6, 10], [9, 10, 11],
+            // [0, 1, 2], [0, 5, 7], [3, 7, 11], [1, 3, 8],
+            // [4, 8, 9], [2, 4, 6], [5, 6, 10], [9, 10, 11],
             [0, 5, 6, 2], [1, 2, 4, 8], [0, 1, 3, 7],
             [3, 8, 9, 11], [5, 7, 11, 10], [4, 6, 10, 9]
         ],
@@ -73,7 +55,7 @@ const octahedronTruncData = (n) => {
 
         numEdges: 24,
 
-        numFaces: 14,
+        numFaces: 6,
 
         // CFE
         // (0, 1, -1, 0)
