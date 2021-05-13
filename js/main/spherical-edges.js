@@ -104,11 +104,11 @@ function sphericalEdges(data, parameters) {
                 faces.push({
                     type: "sphere",
                     radius: radius,
-                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1));,
+                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
                     sphereCenter: sphereCenter,
                     center3: center3,
                     center4: center4,
-                    d: VF.vectorDot(normal, v1);
+                    d: VF.vectorDot(normal, v1)
                 });
 
             } else {
@@ -116,7 +116,7 @@ function sphericalEdges(data, parameters) {
                 faces.push({
                     type: "plane",
                     radius: 0,
-                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1));,
+                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
                     sphereCenter: [0, 0, 0],
                     center3: center3,
                     center4: center4,
@@ -349,8 +349,7 @@ function sphericalEdges(data, parameters) {
 
     function visibilityTest(point) {
 
-        const p = point;
-        const pc = VF.vectorDiff(p, c);
+        const pc = VF.vectorDiff(point, camera);
 
         var s, sr, cs, A, B, C, delta, t1, t2, polygon, intersect;
 
@@ -358,13 +357,11 @@ function sphericalEdges(data, parameters) {
 
             if (spheres[i].type === "sphere") {
 
-                s = spheres[i].center;
-                sr = spheres[i].radius;
-                cs = VF.vectorDiff(camera, s);
+                cs = VF.vectorDiff(camera, spheres[i].center);
 
                 A = VF.vectorDot(pc, pc);
                 B = 2 * VF.vectorDot(pc, cs);
-                C = VF.vectorDot(cs, cs) - sr * sr;
+                C = VF.vectorDot(cs, cs) - spheres[i].radius * spheres[i].radius;
 
                 delta = B * B - 4 * A * C;
 
@@ -377,17 +374,11 @@ function sphericalEdges(data, parameters) {
                     t1 = (-B + Math.sqrt(delta)) / (2 * A);
                     t2 = -B / A - t1;
 
-                    polygon = [];
-
-                    data.faces[ii % data.numFaces].forEach((j) => {
-                        polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
-                    });
-
                     if (eps < t1 && t1 < 1 - eps) {
 
-                        intersect = VF.vectorSum([c, VF.vectorScale(pc, t1)]);
+                        intersect = VF.vectorSum([camera, VF.vectorScale(pc, t1)]);
 
-                        var isInFace = pointInSphericalPolygon(SF.hyperToKlein(SF.stereoToHyper(intersect)), polygon);
+                        var isInFace = inSphericalFace(intersect, i);
 
                         if (isInFace) {
 
@@ -399,9 +390,9 @@ function sphericalEdges(data, parameters) {
 
                     if (eps < t2 && t2 < 1 - eps) {
 
-                        intersect = VF.vectorSum([c, VF.vectorScale(pc, t2)]);
+                        intersect = VF.vectorSum([camera, VF.vectorScale(pc, t2)]);
 
-                        var isInFace = pointInSphericalPolygon(SF.hyperToKlein(SF.stereoToHyper(intersect)), polygon);
+                        var isInFace = inSphericalFace(intersect, i);
 
                         if (isInFace) {
 
@@ -1273,7 +1264,7 @@ function pointInPolygon(point, polygon) {
 function pointInSphericalPolygon(point, spheres) {
 
     for (var i = 0; i < spheres.length; i++) {
-        const p = VF.vectorScale(SF.hyperToKlein(SF.stereoToHyper(point)), spheres[i].d / 
+        const p = VF.vectorScale(SF.hyperToKlein(SF.stereoToHyper(point)), spheres[i].d / 4)
     }
 
     var v0, v1, v2, dot00, dot01, dot02, dot11, dot12, invDenom, a, b, c;
