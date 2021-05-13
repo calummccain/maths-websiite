@@ -7,9 +7,107 @@ import { matrixDict } from "../maths-functions/generate-tesselations.js";
 
 const eps = 1e-5;
 
-// Works 
-// but
-// needs tidying
+function sphericalEdges(data, parameters) {
+
+    // Parameter checks
+    const cells = parameters.cells || [""];
+    const [thetax, thetay, thetaz, thetau, thetav, thetaw] = parameters.angles || [0, 0, 0, 0, 0, 0];
+
+    // matrix dictionary
+    const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
+
+    // Variable definitions
+    var vertices = [];
+    var faces = [];
+
+    // Step 1: Generate the vertex positions and sphere positions and sizes from data
+    for (var i = 0; i < parameters.cells.length; i++) {
+
+        localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
+        vertices = vertices.concat(localVertices);
+
+        localFaces = generateFaces(localVertices);
+        faces = faces.concat(localFaces);
+
+    }
+
+    // generate the positions of the vertices in several models
+    function generateVertices(cell) {
+
+        var newVertices = VF.transformVertices(data.vertices, cell, matrix);
+        var verts = [];
+        var p;
+
+        for (var i = 0; i < data.numVertices; i++) {
+
+            p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
+
+            verts.push({
+                hypersphere: p,
+                stereo: SF.hyperToStereo(p)
+            });
+
+        }
+
+        return verts;
+
+    }
+
+    // generate the faces that bound the geometry
+    function generateFaces(localVertices) {
+
+        var polygon, center4, center3, v1, v2, v3, sphereCenter, radius;
+
+        for (var i = 0; i < data.numFaces; i++) {
+
+            for (var j = 0; j < data.faces[i].length; j++) {
+
+                polygon.push(localVertices[data.faces[i][j]].hypersphere);
+
+            }
+
+            center4 = VF.vectorScale(VF.vectorSum(polygon), 1 / VF.norm(center4));
+            center3 = SF.hyperToStereo(center4);
+
+            v1 = localVertices[data.faces[i][0]].stereo;
+            v2 = localVertices[data.faces[i][1]].stereo;
+            v3 = localVertices[data.faces[i][2]].stereo;
+
+            if (Math.abs(VF.determinant3([v1, v2, v3])) > eps) {
+
+                [sphereCenter, radius] = VF.circum4(v1, v2, v3, center3);
+
+                faces.push({
+                    type: "sphere",
+                    radius: radius,
+                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1));,
+                    sphereCenter: sphereCenter,
+                    center3: center3,
+                    center4: center4,
+                    d: VF.vectorDot(normal, v1);
+                });
+
+            } else {
+
+                faces.push({
+                    type: "plane",
+                    radius: 0,
+                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1));,
+                    sphereCenter: [0, 0, 0],
+                    center3: center3,
+                    center4: center4,
+                    d: 0
+                });
+
+            }
+
+        }
+
+        return faces;
+
+    }
+
+}
 
 function generateData(data, thetax, thetay, thetaz, thetau, thetav, thetaw, number, intersection, invisibleLines, camera, cells) {
 
@@ -834,7 +932,7 @@ function pointInPolygon(point, polygon) {
 
 function pointInSphericalPolygon(point, spheres) {
 
-    for (var i = 0; i < spheres.length; i++ ){
+    for (var i = 0; i < spheres.length; i++) {
         const p = VF.vectorScale(SF.hyperToKlein(SF.stereoToHyper(point)), spheres[i].d / 
     }
 
