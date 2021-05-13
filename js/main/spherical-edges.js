@@ -12,15 +12,33 @@ function sphericalEdges(data, parameters) {
     // Parameter checks
     const cells = parameters.cells || [""];
     const [thetax, thetay, thetaz, thetau, thetav, thetaw] = parameters.angles || [0, 0, 0, 0, 0, 0];
+    const number = parameters.number || 1;
+    const camera = parameters.camera || [10, 0, 0];
 
     // matrix dictionary
     const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
 
+    // calculate sin and cos vectors for efficiency
+    var sin = [];
+    var cos = [];
+    var theta = 0;
+    const change = Math.PI / (4 * number);
+
+    for (var k = 0; k <= number; k++) {
+
+        cos.push(Math.cos(theta));
+        sin.push(Math.sin(theta));
+
+        theta += change;
+
+    }
+
     // Variable definitions
     var vertices = [];
+    var edges = [];
     var faces = [];
 
-    // Step 1: Generate the vertex positions and sphere positions and sizes from data
+    // Step 1: Generate the vertex, edge and face data
     for (var i = 0; i < parameters.cells.length; i++) {
 
         localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
@@ -29,7 +47,13 @@ function sphericalEdges(data, parameters) {
         localFaces = generateFaces(localVertices);
         faces = faces.concat(localFaces);
 
+        edges = edges.concat(generateEdges(number, localVertices));
+
     }
+
+    edges = edges.concat(outline(4 * number));
+
+    var edgeGroup = visibleEdges()
 
     // generate the positions of the vertices in several models
     function generateVertices(cell) {
@@ -106,6 +130,322 @@ function sphericalEdges(data, parameters) {
         return faces;
 
     }
+
+    // find the coordinates of the edges
+    function generateEdges(resolution, localVertices) {
+
+        var edgeCoords = [];
+
+        var ratios = [];
+        const ca = VF.vectorDot(localVertices[data.edges[0][0]].hypersphere, localVertices[data.edges[0][1]].hyperssphere);
+        const sa = Math.sqrt(1 - ca * ca);
+        const a = Math.acos(ca);
+        const denom = 1 / sa;
+        var theta = 0;
+        var edge, start, end;
+
+        for (var i = 0; i <= resolution; i++) {
+
+            ratios.push(Math.sin(theta) * denom);
+            theta += a / resolution;
+
+        }
+
+        data.edges.forEach((endpoints) => {
+
+            edge = [];
+            start = localVertices[endpoints[0]].hypersphere;
+            end = localVertices[endpoints[1]].hypersphere;
+
+            for (var i = 0; i <= resolution; i++) {
+
+                edge.push(
+                    SF.hyperToStereo(
+                        VF.vectorSum([VF.vectorScale(start, ratios[i]), VF.vectorScale(end, ratios[resolution - i])])
+                    )
+                );
+
+            }
+
+            edgeCoords.push(edge);
+
+        })
+
+        return edgeCoords;
+
+    }
+
+    function outline(number) {
+
+        var outlineCoords = [];
+
+        var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
+
+        for (var i = 0; i < data.numFaces; i++) {
+
+            if (spheres[i].type === "sphere") {
+
+                center = spheres[i].center;
+                r = spheres[i].radius;
+
+            } else {
+
+                continue;
+
+            }
+
+            diff = VF.vectorDiff(center, camera);
+            cs = VF.norm(diff);
+
+            h = r * Math.sqrt(cs * cs - r * r) / cs;
+            t = Math.sqrt(r * r - h * h) / cs;
+            interp = VF.vectorSum([VF.vectorScale(center, 1 - t), VF.vectorScale(camera, t)]);
+
+            perp = [1, 0, 0];
+
+            if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
+
+                perp = [-diff[1] * h / VF.norm([diff[0], diff[1]]), diff[0] * h / VF.norm([diff[0], diff[1]]), 0];
+
+            }
+
+            v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / cs));
+
+            if (v[2] < 0) {
+
+                v = VF.vectorScale(v, -1);
+
+            }
+
+            outline = [];
+
+            for (var k = 0; k <= number; k++) {
+
+                testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
+
+                if (inSphericalFace(testCoord, i)) {
+
+                    outline.push(testCoord);
+
+                }
+
+            }
+
+            outlineCoords.push(outline)
+
+        }
+
+        return outlineCoords;
+
+    }
+
+    // check with plane faces
+    function inSphericalFace(point, face) {
+
+        var d = faces[face].d / VF.vectorDot(point, faces[face].normal);
+        var flatPoint = VF.vectorScale(point, d);
+
+        return pointInPolygon(flatPoint, faces[face].polygon);
+
+    }
+
+    function pointInPolygon(point, polygon) {
+
+        var v0, v1, v2, dot00, dot01, dot02, dot11, dot12, invDenom, a, b, c;
+
+        for (var i = 1; i < polygon.length - 1; i++) {
+
+            v0 = VF.vectorDiff(polygon[i], polygon[0]);
+            v1 = VF.vectorDiff(polygon[i + 1], polygon[0]);
+            v2 = VF.vectorDiff(point, polygon[0]);
+
+            dot00 = VF.vectorDot(v0, v0);
+            dot01 = VF.vectorDot(v0, v1);
+            dot02 = VF.vectorDot(v0, v2);
+            dot11 = VF.vectorDot(v1, v1);
+            dot12 = VF.vectorDot(v1, v2);
+
+            invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+            a = (dot11 * dot02 - dot01 * dot12) * invDenom;
+            b = (dot00 * dot12 - dot01 * dot02) * invDenom;
+            c = 1 - a - b;
+
+            if ((a >= 0) && (b >= 0) && (c >= 0)) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+    function visibleEdges(invisibleLines, camera, spheres, vertices) {
+
+        var edgeGroup = new THREE.Group();
+
+        var drawVerts, segments, segmentsPoints, segNum;
+
+        edges.forEach((points) => {
+
+            if (points.length > 0) {
+
+                drawVerts = [];
+
+                for (var k = 0; k < points.length; k++) {
+
+                    drawVerts.push([points[k], visibilityTest(points[k], camera, spheres, vertices, data)]);
+
+                }
+
+                segments = [[drawVerts[0]]];
+                segmentsPoints = [[drawVerts[0][0]]];
+                segNum = 0;
+
+                for (var k = 1; k < points.length; k++) {
+
+                    if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                        segments[segNum].push(drawVerts[k]);
+                        segmentsPoints[segNum].push(drawVerts[k][0]);
+
+                    } else {
+
+                        segNum++;
+                        segments.push([drawVerts[k]]);
+                        segmentsPoints.push([drawVerts[k][0]]);
+
+                    }
+
+                }
+
+                for (var k = 0; k < segments.length; k++) {
+
+                    if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                        lineGroup.add(drawLine(segmentsPoints[k], 0x333333, 2));
+
+                    } else {
+
+                        if (invisibleLines) {
+
+                            lineGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+        return lineGroup;
+
+    }
+
+    function visibilityTest(point) {
+
+        const p = point;
+        const pc = VF.vectorDiff(p, c);
+
+        var s, sr, cs, A, B, C, delta, t1, t2, polygon, intersect;
+
+        for (var i = 0; i < spheres.length; i++) {
+
+            if (spheres[i].type === "sphere") {
+
+                s = spheres[i].center;
+                sr = spheres[i].radius;
+                cs = VF.vectorDiff(camera, s);
+
+                A = VF.vectorDot(pc, pc);
+                B = 2 * VF.vectorDot(pc, cs);
+                C = VF.vectorDot(cs, cs) - sr * sr;
+
+                delta = B * B - 4 * A * C;
+
+                if ((delta <= 0) || isNaN(delta)) {
+
+                    continue;
+
+                } else {
+
+                    t1 = (-B + Math.sqrt(delta)) / (2 * A);
+                    t2 = -B / A - t1;
+
+                    polygon = [];
+
+                    data.faces[ii % data.numFaces].forEach((j) => {
+                        polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
+                    });
+
+                    if (eps < t1 && t1 < 1 - eps) {
+
+                        intersect = VF.vectorSum([c, VF.vectorScale(pc, t1)]);
+
+                        var isInFace = pointInSphericalPolygon(SF.hyperToKlein(SF.stereoToHyper(intersect)), polygon);
+
+                        if (isInFace) {
+
+                            return false;
+
+                        }
+
+                    }
+
+                    if (eps < t2 && t2 < 1 - eps) {
+
+                        intersect = VF.vectorSum([c, VF.vectorScale(pc, t2)]);
+
+                        var isInFace = pointInSphericalPolygon(SF.hyperToKlein(SF.stereoToHyper(intersect)), polygon);
+
+                        if (isInFace) {
+
+                            return false;
+
+                        }
+
+                    }
+
+                }
+
+            } else if (spheres[ii].type === "plane") {
+
+                const t = -VF.vectorDot(c, spheres[ii].normal) / VF.vectorDot(pc, spheres[ii].normal);
+
+                if (eps < t && t < 1 - eps) {
+
+                    polygon = [];
+
+                    data.faces[ii % data.numFaces].forEach((j) => {
+                        polygon.push(vertices[j + (ii - (ii % data.numFaces)) * data.numVertices / data.numFaces]["klein"]);
+                    });
+
+                    intersect = VF.vectorSum([c, VF.vectorScale(pc, t)]);
+
+                    var isInFace = pointInSphericalPolygon(SF.hyperToKlein(SF.stereoToHyper(intersect)), polygon);
+
+                    if (isInFace) {
+
+                        return false;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+    return lineCoords;
 
 }
 
