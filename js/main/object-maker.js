@@ -2,7 +2,7 @@ import * as THREE from "../three-bits/three.module.js";
 import * as GM from "../geometries/geometry-maker.js";
 // import * as EM from "../main/edge-maker.js";
 
-import * as SE from "./spherical-edges.js";
+import * as SE from "../wireframes/spherical-wireframe.js";
 
 import { tetrahedronData } from "../data/33n.js";
 import { octahedronData } from "../data/34n.js";
