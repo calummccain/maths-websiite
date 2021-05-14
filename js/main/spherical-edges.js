@@ -250,6 +250,8 @@ function sphericalEdges(data, parameters) {
 
     function inSphericalFace(point, face) {
 
+        if (VF.vectorDot(SF.stereoToHyper(point), faces[face].center4) > 0)
+
         var d = faces[face].d / VF.vectorDot(point, faces[face].normal);
         var flatPoint = VF.vectorScale(point, d);
 
@@ -401,7 +403,7 @@ function sphericalEdges(data, parameters) {
 
             } else if (faces[i].type === "plane") {
 
-                t1 = -VF.vectorDot(camera, spheres[i].normal) / VF.vectorDot(pc, faces[i].normal);
+                t1 = -VF.vectorDot(camera, faces[i].normal) / VF.vectorDot(pc, faces[i].normal);
 
                 if (eps < t1 && t1 < 1 - eps) {
 
