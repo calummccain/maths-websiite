@@ -234,7 +234,14 @@ function sphericalEdges(data, parameters) {
 
                     outline.push(testCoord);
 
+                } else {
+
+                    edges.push(outline);
+                    outline = [];
+                    
                 }
+
+                k++
 
             }
 
@@ -248,7 +255,7 @@ function sphericalEdges(data, parameters) {
 
         if (VF.vectorDot(SF.stereoToHyper(point), faces[face].center4) > 0)
 
-        var d = faces[face].d / VF.vectorDot(point, faces[face].normal);
+            var d = faces[face].d / VF.vectorDot(point, faces[face].normal);
         var flatPoint = VF.vectorScale(point, d);
 
         return pointInPolygon(flatPoint, faces[face].polygon3);
