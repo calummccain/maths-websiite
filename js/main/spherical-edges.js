@@ -16,6 +16,8 @@ function sphericalEdges(data, parameters) {
     const width = parameters.width || 1;
     const invisibleLines = parameters.invisibleLines || false;
 
+    const outlineRes = 4;
+
     // matrix dictionary
     const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
 
@@ -23,9 +25,9 @@ function sphericalEdges(data, parameters) {
     var sin = [];
     var cos = [];
     var theta = 0;
-    const change = Math.PI / (2 * number);
+    const change = 2 * Math.PI / (outlineRes * number);
 
-    for (var k = 0; k <= 4 * number; k++) {
+    for (var k = 0; k <= outlineRes * number; k++) {
 
         cos.push(Math.cos(theta));
         sin.push(Math.sin(theta));
@@ -225,7 +227,7 @@ function sphericalEdges(data, parameters) {
 
             outline = [];
 
-            for (var k = 0; k <= 4 * number; k++) {
+            for (var k = 0; k <= outlineRes * number; k++) {
 
                 testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
 
