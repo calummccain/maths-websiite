@@ -53,7 +53,7 @@ function sphericalEdges(data, parameters) {
 
     }
 
-    edges = edges.concat(outline());
+    outline();
 
     var edgeGroup = visibleEdges()
 
@@ -186,8 +186,6 @@ function sphericalEdges(data, parameters) {
 
     function outline() {
 
-        var outlineCoords = [];
-
         var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
 
         for (var i = 0; i < data.numFaces; i++) {
@@ -240,11 +238,9 @@ function sphericalEdges(data, parameters) {
 
             }
 
-            outlineCoords.push(outline)
+            edges.push(outline)
 
         }
-
-        return outlineCoords;
 
     }
 
