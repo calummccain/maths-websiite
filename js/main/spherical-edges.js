@@ -49,11 +49,11 @@ function sphericalEdges(data, parameters) {
 
         generateFaces(localVertices);
 
-        edges = edges.concat(generateEdges(number, localVertices));
+        edges = edges.concat(generateEdges(localVertices));
 
     }
 
-    edges = edges.concat(outline(4 * number));
+    edges = edges.concat(outline());
 
     var edgeGroup = visibleEdges()
 
@@ -141,7 +141,7 @@ function sphericalEdges(data, parameters) {
     }
 
     // find the coordinates of the edges
-    function generateEdges(resolution, localVertices) {
+    function generateEdges(localVertices) {
 
         var edgeCoords = [];
 
@@ -153,10 +153,10 @@ function sphericalEdges(data, parameters) {
         var theta = 0;
         var edge, start, end;
 
-        for (var i = 0; i <= resolution; i++) {
+        for (var i = 0; i <= number; i++) {
 
             ratios.push(Math.sin(theta) * denom);
-            theta += a / resolution;
+            theta += a / number;
 
         }
 
@@ -166,11 +166,11 @@ function sphericalEdges(data, parameters) {
             start = localVertices[endpoints[0]].hypersphere;
             end = localVertices[endpoints[1]].hypersphere;
 
-            for (var i = 0; i <= resolution; i++) {
+            for (var i = 0; i <= number; i++) {
 
                 edge.push(
                     SF.hyperToStereo(
-                        VF.vectorSum([VF.vectorScale(start, ratios[i]), VF.vectorScale(end, ratios[resolution - i])])
+                        VF.vectorSum([VF.vectorScale(start, ratios[i]), VF.vectorScale(end, ratios[number - i])])
                     )
                 );
 
@@ -184,7 +184,7 @@ function sphericalEdges(data, parameters) {
 
     }
 
-    function outline(number) {
+    function outline() {
 
         var outlineCoords = [];
 
@@ -228,7 +228,7 @@ function sphericalEdges(data, parameters) {
 
             outline = [];
 
-            for (var k = 0; k <= number; k++) {
+            for (var k = 0; k <= 4 * number; k++) {
 
                 testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
 
@@ -237,8 +237,6 @@ function sphericalEdges(data, parameters) {
                     outline.push(testCoord);
 
                 }
-
-                // outline.push(testCoord);
 
             }
 
@@ -274,8 +272,6 @@ function sphericalEdges(data, parameters) {
             dot20 = VF.vectorDot(v2, v0);
             dot11 = VF.vectorDot(v1, v1);
             dot22 = VF.vectorDot(v2, v2);
-
-            console.log(v0, v1, v2)
 
             if ((dot12 * dot20 > dot22 * dot01) && (dot01 * dot12 > dot11 * dot20)) {
 
@@ -358,7 +354,7 @@ function sphericalEdges(data, parameters) {
 
         const pc = VF.vectorDiff(point, camera);
 
-        var cs, A, B, C, delta, t1, t2, intersect;
+        var cs, A, B, C, delta, t1, t2;
 
         for (var i = 0; i < data.numFaces; i++) {
 
@@ -383,11 +379,7 @@ function sphericalEdges(data, parameters) {
 
                     if (eps < t1 && t1 < 1 - eps) {
 
-                        intersect = VF.vectorSum([camera, VF.vectorScale(pc, t1)]);
-
-                        var isInFace = inSphericalFace(intersect, i);
-
-                        if (isInFace) {
+                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t1)]), i)) {
 
                             return false;
 
@@ -397,11 +389,7 @@ function sphericalEdges(data, parameters) {
 
                     if (eps < t2 && t2 < 1 - eps) {
 
-                        intersect = VF.vectorSum([camera, VF.vectorScale(pc, t2)]);
-
-                        var isInFace = inSphericalFace(intersect, i);
-
-                        if (isInFace) {
+                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t2)]), i)) {
 
                             return false;
 
