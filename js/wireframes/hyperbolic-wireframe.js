@@ -1,5 +1,5 @@
 // ========================================================
-// Generates the edge and outline data for a spherical
+// Generates the edge and outline data for a hyperbolic
 // cell
 //
 // Inputs: data
