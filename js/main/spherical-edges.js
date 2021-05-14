@@ -1,5 +1,4 @@
 import * as THREE from "../three-bits/three.module.js";
-import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
