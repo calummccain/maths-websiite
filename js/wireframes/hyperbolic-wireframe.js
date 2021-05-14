@@ -11,14 +11,14 @@
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
-import * as SF from "../maths-functions/spherical-functions.js";
+import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 import { matrixDict } from "../maths-functions/generate-tesselations.js";
 
 const eps = 1e-5;
 
-function sphericalEdges(data, parameters) {
+function hyperbolicEdges(data, parameters) {
 
     // Parameter checks
     const cells = parameters.cells || [""];
@@ -79,11 +79,36 @@ function sphericalEdges(data, parameters) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
+            if (data.cellType === "euclidean") {
+
+                for (var i = 0; i < data.numVertices; i++) {
+
+                    p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
+
+                }
+
+            } else if (data.cellType === "hyperbolic") {
+
+                for (var i = 0; i < data.numVertices; i++) {
+
+                    p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
+
+                }
+
+            } else {
+
+                for (var i = 0; i < data.numVertices; i++) {
+
+                    p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
+
+                }
+
+            }
 
             verts.push({
-                hypersphere: p,
-                stereo: SF.hyperToStereo(p)
+                hyperboloid: p,
+                klein: HF.hyperboloidToKlein(p),
+                uhp: HF.hyperboloidToUpperHalfPlane(p)
             });
 
         }
@@ -95,42 +120,73 @@ function sphericalEdges(data, parameters) {
     // generate the faces that bound the geometry
     function generateFaces(localVertices) {
 
-        var polygon3, polygon4, center4, center3, v1, v2, v3, sphereCenter, radius;
+        var polygonKlein, polygonHyperboloid, polygonUhp, centerHyperboloid, v1, v2, v3, centerModel, normal, d, sphereCenter, radius;
 
         for (var i = 0; i < data.numFaces; i++) {
 
-            polygon3 = [];
-            polygon4 = [];
+            polygonKlein = [];
+            polygonHyperboloid = [];
+            // polygonUhp = [];
 
             for (var j = 0; j < data.faces[i].length; j++) {
 
-                polygon3.push(localVertices[data.faces[i][j]].stereo);
-                polygon4.push(localVertices[data.faces[i][j]].hypersphere);
+                polygonKlein.push(localVertices[data.faces[i][j]].klein);
+                polygonHyperboloid.push(localVertices[data.faces[i][j]].hyperboloid);
+                // polygonUhp.push(localVertices[data.faces[i][j]].uhp);
 
             }
 
-            center4 = VF.vectorSum(polygon4);
-            center4 = VF.vectorScale(center4, 1 / VF.norm(center4));
-            center3 = SF.hyperToStereo(center4);
+            centerHyperboloid = VF.vectorSum(polygon4Hyperboloid);
+            centerHyperboloid = VF.vectorScale(centerHyperboloid, 1 / HF.hyperbolicNorm(centerHyperboloid));
 
-            v1 = localVertices[data.faces[i][0]].stereo;
-            v2 = localVertices[data.faces[i][1]].stereo;
-            v3 = localVertices[data.faces[i][2]].stereo;
+            if (data.metric === "u") {
+
+                v1 = VF.lineSphereIntersection(vertices[data.faces[i][0]].klein, vertices[data.faces[i][1]].klein);
+                v2 = VF.lineSphereIntersection(vertices[data.faces[i][1]].klein, vertices[data.faces[i][0]].klein);
+                v3 = VF.lineSphereIntersection(vertices[data.faces[i][1]].klein, vertices[data.faces[i][2]].klein);
+
+            } else {
+
+                v1 = vertices[data.faces[i][0]].klein;
+                v2 = vertices[data.faces[i][1]].klein;
+                v3 = vertices[data.faces[i][2]].klein;
+
+            }
+
+            normal = VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1));
+            d = F.determinant3([v1, v2, v3]);
+
+            if (parameters.model === "uhp") {
+
+                v1 = HF.kleinToUpperHalfPlane(v1);
+                v2 = HF.kleinToUpperHalfPlane(v2);
+                v3 = HF.kleinToUpperHalfPlane(v3);
+                centerModel = HF.hyperboloidToUpperHalfPlane(centerHyperboloid);
+
+
+            } else {
+
+                v1 = HF.kleinToPoincare(v1);
+                v2 = HF.kleinToPoincare(v2);
+                v3 = HF.kleinToPoincare(v3);
+                centerModel = HF.hyperboloidToPoincare(centerHyperboloid);
+
+            }
 
             if (Math.abs(VF.determinant3([v1, v2, v3])) > eps) {
 
-                [sphereCenter, radius] = VF.circum4(v1, v2, v3, center3);
+                [sphereCenter, radius] = VF.circum4(v1, v2, v3, center);
 
                 faces.push({
                     type: "sphere",
                     radius: radius,
-                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
+                    normal: normal,
                     sphereCenter: sphereCenter,
-                    center3: center3,
-                    center4: center4,
-                    d: VF.determinant3([v1, v2, v3]),
-                    polygon3: polygon3,
-                    polygon4: polygon4
+                    centerHyperboloid: centerHyperboloid,
+                    centerModel: centerModel,
+                    d: d,
+                    polygonHyperboloid: polygonHyperboloid,
+                    polygonKlein: polygonKlein
                 });
 
             } else {
@@ -138,13 +194,13 @@ function sphericalEdges(data, parameters) {
                 faces.push({
                     type: "plane",
                     radius: 0,
-                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
+                    normal: normal,
                     sphereCenter: [0, 0, 0],
-                    center3: center3,
-                    center4: center4,
+                    centerHyperboloid: centerHyperboloid,
+                    centerModel: centerModel,
                     d: 0,
-                    polygon3: polygon3,
-                    polygon4: polygon4
+                    polygonHyperboloid: polygonHyperboloid,
+                    polygonKlein: polygonKlein
                 });
 
             }
@@ -154,44 +210,139 @@ function sphericalEdges(data, parameters) {
     }
 
     // find the coordinates of the edges
+
+    / / 
+    / / USE HYPERBOLIC GEODESIC?
+    / / 
     function generateEdges(localVertices) {
+
+        var modelVertices, e1, e2, p1, p2, radVect, center, r, startAngle, endAngle, numPieces, subAngle, theta;
 
         var edgeCoords = [];
 
-        var ratios = [];
-        const ca = VF.vectorDot(localVertices[data.edges[0][0]].hypersphere, localVertices[data.edges[0][1]].hypersphere);
-        const sa = Math.sqrt(1 - ca * ca);
-        const a = Math.acos(ca);
-        const denom = 1 / sa;
-        var theta = 0;
-        var edge, start, end;
-
-        for (var i = 0; i <= number; i++) {
-
-            ratios.push(Math.sin(theta) * denom);
-            theta += a / number;
-
-        }
-
         data.edges.forEach((endpoints) => {
 
-            edge = [];
-            start = localVertices[endpoints[0]].hypersphere;
-            end = localVertices[endpoints[1]].hypersphere;
+            modelVertices = [];
 
-            for (var i = 0; i <= number; i++) {
+            if (data.metric === "u") {
 
-                edge.push(
-                    SF.hyperToStereo(
-                        VF.vectorSum([VF.vectorScale(start, ratios[i]), VF.vectorScale(end, ratios[number - i])])
-                    )
-                );
+                e1 = VF.lineSphereIntersection(localVertices[endpoints[0]].klein, localVertices[endpoints[1]].klein);
+                e2 = VF.lineSphereIntersection(localVertices[endpoints[1]].klein, localVertices[endpoints[0]].klein);
+
+            } else {
+
+                [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]].hyperboloid, vertices[endpoints[1]].hyperboloid);
 
             }
 
-            edgeCoords.push(edge);
+            if (parameters.model === "uhp") {
 
-        })
+                e1 = HF.hyperboloidToUpperHalfPlane(e1);
+                e2 = HF.hyperboloidToUpperHalfPlane(e2);
+
+            } else {
+
+                e1 = HF.hyperboloidToPoincare(e1);
+                e2 = HF.hyperboloidToPoincare(e2);
+
+            }
+
+            p1 = localVertices[endpoints[0]]["uhp"];
+            p2 = localVertices[endpoints[1]]["uhp"];
+
+            radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
+            center = VF.midpoint(e1, e2);
+            r = VF.norm(radVect);
+
+
+            if (data.metric === "h") {
+
+                startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r * r));
+                endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r * r));
+
+            } else {
+
+                startAngle = 0;
+                endAngle = Math.PI;
+
+            }
+
+            numPieces = Math.ceil(Math.max(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI);
+            subAngle = (endAngle - startAngle) / numPieces;
+
+            for (var i = 0; i <= numPieces; i++) {
+
+                theta = startAngle + i * subAngle;
+
+                modelVertices.push([
+                    radVect[0] * Math.cos(theta) + center[0],
+                    radVect[1] * Math.cos(theta) + center[1],
+                    r * Math.sin(theta)
+                ])
+
+            }
+
+            edgeCoords.push(modelVertices);
+
+        });
+
+        // kinda works??
+        if (data.metric === "u") {
+
+            var face, uhpVertices, u, v, w, p1, p2, center, r, theta1, theta2, startAngle, endAngle, numPieces, subAngle, theta;
+
+            for (var j = 0; j < data.numFaces; j++) {
+
+                face = data.faces[j];
+
+                for (var i = 0; i < face.length; i++) {
+
+                    uhpVertices = [];
+
+                    u = vertices[face[i]]["klein"];
+                    v = vertices[face[(i + 1) % face.length]]["klein"];
+                    w = vertices[face[(i + 2) % face.length]]["klein"];
+                    p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
+                    p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
+
+                    center = spheres[j]["uhp"].center;
+                    r = spheres[j]["uhp"].radius;
+
+                    theta1 = Math.acos(Math.max(-1, Math.min(1, (p1[0] - center[0]) / r))) * ((p1[1] - center[1] > 0) ? 1 : -1);
+                    theta2 = Math.acos(Math.max(-1, Math.min(1, (p2[0] - center[0]) / r))) * ((p2[1] - center[1] > 0) ? 1 : -1);
+
+                    startAngle = Math.min(theta1, theta2);
+                    endAngle = Math.max(theta1, theta2);
+
+                    if (endAngle - startAngle > Math.PI) {
+
+                        startAngle += 2 * Math.PI;
+                        [startAngle, endAngle] = [endAngle, startAngle];
+
+                    }
+
+                    numPieces = Math.ceil(Math.max(Math.abs(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI));
+                    subAngle = (endAngle - startAngle) / numPieces;
+
+                    for (var k = 0; k <= numPieces; k++) {
+
+                        theta = startAngle + k * subAngle;
+
+                        uhpVertices.push([
+                            r * Math.cos(theta) + center[0],
+                            r * Math.sin(theta) + center[1],
+                            0
+                        ])
+
+                    }
+
+                    edgeCoords.push(uhpVertices);
+
+                }
+
+            }
+
+        }
 
         return edgeCoords;
 
@@ -251,7 +402,7 @@ function sphericalEdges(data, parameters) {
 
                     edges.push(outline);
                     outline = [];
-                    
+
                 }
 
                 k++
