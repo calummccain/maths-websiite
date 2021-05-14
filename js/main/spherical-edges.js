@@ -238,6 +238,8 @@ function sphericalEdges(data, parameters) {
 
                 }
 
+                // outline.push(testCoord);
+
             }
 
             outlineCoords.push(outline)

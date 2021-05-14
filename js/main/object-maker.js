@@ -147,7 +147,7 @@ function objectMaker(parameters) {
         //     data, rx, ry, rz, ru, rv, rw, parameters.refinement, parameters.intersection, parameters.invisibleLines, camera, parameters.cells
         // );
 
-        const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => SE.sphericalEdges(data, { cells: [""], angles: [rx, ry, rz, ru, rv, rw], number: 50, camera: camera, width: 2 });
+        const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => SE.sphericalEdges(data, { cells: [""], angles: [rx, ry, rz, ru, rv, rw], number: 50, camera: camera, width: 2, invisibleLines: parameters.invisibleLines });
 
 
         return cameraLines;
