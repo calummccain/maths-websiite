@@ -67,6 +67,8 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
+    console.log(faces)
+
     outline();
 
     var edgeGroup = visibleEdges()
@@ -102,8 +104,6 @@ function hyperbolicEdges(data, parameters) {
 
         }
 
-        console.log(verts)
-
         return verts;
 
     }
@@ -111,30 +111,28 @@ function hyperbolicEdges(data, parameters) {
     // generate the faces that bound the geometry
     function generateFaces(localVertices) {
 
-        var polygonKlein, polygonHyperboloid, polygonUhp, centerHyperboloid, v1, v2, v3, centerModel, normal, d, sphereCenter, radius;
+        var polygonKlein, polygonHyperboloid, centerHyperboloid, v1, v2, v3, centerModel, normal, d, sphereCenter, radius;
 
         for (var i = 0; i < data.numFaces; i++) {
 
             polygonKlein = [];
             polygonHyperboloid = [];
-            // polygonUhp = [];
 
             for (var j = 0; j < data.faces[i].length; j++) {
 
                 polygonKlein.push(localVertices[data.faces[i][j]].klein);
                 polygonHyperboloid.push(localVertices[data.faces[i][j]].hyperboloid);
-                // polygonUhp.push(localVertices[data.faces[i][j]].uhp);
 
             }
 
             centerHyperboloid = VF.vectorSum(polygonHyperboloid);
-            centerHyperboloid = VF.vectorScale(centerHyperboloid, 1 / HF.hyperbolicNorm(centerHyperboloid));
+            centerHyperboloid = VF.vectorScale(centerHyperboloid, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(centerHyperboloid))));
 
             if (data.metric === "u") {
 
                 v1 = VF.lineSphereIntersection(vertices[data.faces[i][0]].klein, vertices[data.faces[i][1]].klein);
-                v2 = VF.lineSphereIntersection(vertices[data.faces[i][1]].klein, vertices[data.faces[i][0]].klein);
-                v3 = VF.lineSphereIntersection(vertices[data.faces[i][1]].klein, vertices[data.faces[i][2]].klein);
+                v2 = VF.lineSphereIntersection(vertices[data.faces[i][1]].klein, vertices[data.faces[i][2]].klein);
+                v3 = VF.lineSphereIntersection(vertices[data.faces[i][2]].klein, vertices[data.faces[i][0]].klein);
 
             } else {
 
@@ -143,9 +141,6 @@ function hyperbolicEdges(data, parameters) {
                 v3 = vertices[data.faces[i][2]].klein;
 
             }
-
-            normal = VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1));
-            d = VF.determinant3([v1, v2, v3]);
 
             if (model === "uhp") {
 
@@ -164,18 +159,21 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
-            if (Math.abs(VF.determinant3([v1, v2, v3])) > eps) {
+            if (Math.abs(VF.determinant3([
+                VF.vectorDiff(v1, centerModel),
+                VF.vectorDiff(v2, centerModel),
+                VF.vectorDiff(v3, centerModel)
+            ])) > eps) {
 
                 [sphereCenter, radius] = VF.circum4(v1, v2, v3, centerModel);
 
                 faces.push({
                     type: "sphere",
                     radius: radius,
-                    normal: normal,
+                    normal: [0, 0, 0],
                     sphereCenter: sphereCenter,
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
-                    d: d,
                     polygonHyperboloid: polygonHyperboloid,
                     polygonKlein: polygonKlein
                 });
@@ -185,7 +183,7 @@ function hyperbolicEdges(data, parameters) {
                 faces.push({
                     type: "plane",
                     radius: 0,
-                    normal: normal,
+                    normal: normal = VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
                     sphereCenter: [0, 0, 0],
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
@@ -301,22 +299,7 @@ function hyperbolicEdges(data, parameters) {
 
                 testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
 
-
-                if (model === "uhp") {
-
-                    testCoord = HF.upperHalfPlaneToKlein(VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]));
-
-                } else {
-
-                    testCoord = HF.hyperboloidToKlein(HF.poincareToHyperboloid(VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp])));
-
-                }
-
-                if (model === "uhp" && inHyperbolicFace(testCoord, i) && testCoord[2] > 0) {
-
-                    outline.push(testCoord);
-
-                } else if (model === "poincare" && inHyperbolicFace(testCoord, i) && VF.norm2(testCoord[2]) < 1) {
+                if (inHyperbolicFace(testCoord, i)) {
 
                     outline.push(testCoord);
 
@@ -341,9 +324,21 @@ function hyperbolicEdges(data, parameters) {
 
         if (model === "uhp") {
 
+            if (point[2] < 0) {
+
+                return false;
+
+            }
+
             kleinPoint = HF.upperHalfPlaneToKlein(point);
 
         } else {
+
+            if (VF.norm2(point) > 1) {
+
+                return false;
+
+            }
 
             kleinPoint = HF.hyperboloidToKlein(HF.poincareToHyperboloid(point));
 
