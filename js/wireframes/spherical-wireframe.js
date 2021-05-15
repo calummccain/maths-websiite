@@ -254,8 +254,6 @@ function sphericalEdges(data, parameters) {
 
                 }
 
-                k++
-
             }
 
             edges.push(outline)
