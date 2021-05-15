@@ -2,7 +2,7 @@ import * as THREE from "../three-bits/three.module.js";
 import * as GM from "../geometries/geometry-maker.js";
 // import * as EM from "../main/edge-maker.js";
 
-import * as SE from "../wireframes/spherical-wireframe.js";
+import * as SE from "../wireframes/hyperbolic-wireframe.js";
 
 import { tetrahedronData } from "../data/33n.js";
 import { octahedronData } from "../data/34n.js";
@@ -147,7 +147,7 @@ function objectMaker(parameters) {
         //     data, rx, ry, rz, ru, rv, rw, parameters.refinement, parameters.intersection, parameters.invisibleLines, camera, parameters.cells
         // );
 
-        const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => SE.sphericalEdges(data, { cells: [""], angles: [rx, ry, rz, ru, rv, rw], number: 50, camera: camera, width: 2, invisibleLines: parameters.invisibleLines });
+        const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => SE.hyperbolicEdges(data, { cells: [""], angles: [rx, ry, rz, ru, rv, rw], number: 50, camera: camera, width: 2, invisibleLines: parameters.invisibleLines, model: "uhp" });
 
 
         return cameraLines;
