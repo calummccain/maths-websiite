@@ -2,6 +2,7 @@ import * as VF from "./vector-functions.js";
 import {
     hyperboloidToPoincareEps,
     poincareToUpperHalfPlaneEps,
+    poincareToHyperboloidEps,
     kleinToPoincareEps,
     geodesicEndpointsEps
 } from "../eps.js";

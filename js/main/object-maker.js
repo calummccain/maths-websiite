@@ -57,7 +57,7 @@ function objectMaker(parameters) {
 
     }
 
-    if (parameters.model === "poincare" || parameters.model === "") {
+    if (parameters.model === "poincareSolid" || parameters.model === "") {
 
         const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
 
@@ -141,13 +141,13 @@ function objectMaker(parameters) {
 
         }
 
-    } else if (parameters.model === "uhp") {
+    } else if (parameters.model === "uhp" || parameters.model === "poincare") {
 
         // const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
         //     data, rx, ry, rz, ru, rv, rw, parameters.refinement, parameters.intersection, parameters.invisibleLines, camera, parameters.cells
         // );
 
-        const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => SE.hyperbolicEdges(data, { cells: [""], angles: [rx, ry, rz, ru, rv, rw], number: 50, camera: camera, width: 2, invisibleLines: parameters.invisibleLines, model: "uhp" });
+        const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => SE.hyperbolicEdges(data, { cells: [""], angles: [rx, ry, rz, ru, rv, rw], number: 50, camera: camera, width: 2, invisibleLines: parameters.invisibleLines, model: "poincare" });
 
 
         return cameraLines;

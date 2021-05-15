@@ -44,7 +44,7 @@ function main() {
         q: q,
         r: r,
         truncated: false,
-        model: "uhp",
+        model: "poincare",
         refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
