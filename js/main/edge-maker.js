@@ -835,7 +835,7 @@ function pointInPolygon(point, polygon) {
 function pointInSphericalPolygon(point, spheres) {
 
     for (var i = 0; i < spheres.length; i++ ){
-        const p = VF.vectorScale(SF.hyperToKlein(SF.stereoToHyper(point)), spheres[i].d / 
+        const p = VF.vectorScale(SF.hyperToKlein(SF.stereoToHyper(point)), spheres[i].d / 1)
     }
 
     var v0, v1, v2, dot00, dot01, dot02, dot11, dot12, invDenom, a, b, c;
