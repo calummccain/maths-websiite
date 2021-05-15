@@ -27,6 +27,7 @@ function hyperbolicEdges(data, parameters) {
     const camera = parameters.camera || [10, 0, 0];
     const width = parameters.width || 1;
     const invisibleLines = parameters.invisibleLines || false;
+    const model = parameters.model || "uhp";
 
     const outlineRes = 4;
 
@@ -81,27 +82,15 @@ function hyperbolicEdges(data, parameters) {
 
             if (data.cellType === "euclidean") {
 
-                for (var i = 0; i < data.numVertices; i++) {
-
-                    p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
-
-                }
+                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
 
             } else if (data.cellType === "hyperbolic") {
 
-                for (var i = 0; i < data.numVertices; i++) {
-
-                    p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
-
-                }
+                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
 
             } else {
 
-                for (var i = 0; i < data.numVertices; i++) {
-
-                    p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
-
-                }
+                p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
 
             }
 
@@ -136,7 +125,7 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
-            centerHyperboloid = VF.vectorSum(polygon4Hyperboloid);
+            centerHyperboloid = VF.vectorSum(polygonHyperboloid);
             centerHyperboloid = VF.vectorScale(centerHyperboloid, 1 / HF.hyperbolicNorm(centerHyperboloid));
 
             if (data.metric === "u") {
@@ -154,9 +143,9 @@ function hyperbolicEdges(data, parameters) {
             }
 
             normal = VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1));
-            d = F.determinant3([v1, v2, v3]);
+            d = VF.determinant3([v1, v2, v3]);
 
-            if (parameters.model === "uhp") {
+            if (model === "uhp") {
 
                 v1 = HF.kleinToUpperHalfPlane(v1);
                 v2 = HF.kleinToUpperHalfPlane(v2);
@@ -175,7 +164,7 @@ function hyperbolicEdges(data, parameters) {
 
             if (Math.abs(VF.determinant3([v1, v2, v3])) > eps) {
 
-                [sphereCenter, radius] = VF.circum4(v1, v2, v3, center);
+                [sphereCenter, radius] = VF.circum4(v1, v2, v3, centerModel);
 
                 faces.push({
                     type: "sphere",
@@ -209,140 +198,56 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
-    // find the coordinates of the edges
-
-    / / 
-    / / USE HYPERBOLIC GEODESIC?
-    / / 
+    // find the coordinates of the edges ONLY FOR COMPACT
     function generateEdges(localVertices) {
-
-        var modelVertices, e1, e2, p1, p2, radVect, center, r, startAngle, endAngle, numPieces, subAngle, theta;
 
         var edgeCoords = [];
 
+        const ca = VF.vectorDot(vertices[data.edges[0][0]].hyperboloid, vertices[data.edges[0][1]].hyperboloid);
+        const sa = Math.sqrt(ca * ca - 1);
+        const a = Math.acosh(ca);
+        const denom = 1 / sa;
+        var theta = 0;
+        var ratios = [];
+
+        for (var i = 0; i <= number; i++) {
+
+            ratios.push(Math.sinh(theta) * denom);
+            theta += a / number;
+
+        }
+
+        var edge, start, end;
+
         data.edges.forEach((endpoints) => {
 
-            modelVertices = [];
+            edge = [];
+            start = localVertices[endpoints[0]].hyperboloid;
+            end = localVertices[endpoints[1]].hyperboloid;
 
-            if (data.metric === "u") {
+            if (model === "uhp") {
 
-                e1 = VF.lineSphereIntersection(localVertices[endpoints[0]].klein, localVertices[endpoints[1]].klein);
-                e2 = VF.lineSphereIntersection(localVertices[endpoints[1]].klein, localVertices[endpoints[0]].klein);
+                for (var i = 0; i <= number; i++) {
 
-            } else {
-
-                [e1, e2] = HF.geodesicEndpoints(vertices[endpoints[0]].hyperboloid, vertices[endpoints[1]].hyperboloid);
-
-            }
-
-            if (parameters.model === "uhp") {
-
-                e1 = HF.hyperboloidToUpperHalfPlane(e1);
-                e2 = HF.hyperboloidToUpperHalfPlane(e2);
-
-            } else {
-
-                e1 = HF.hyperboloidToPoincare(e1);
-                e2 = HF.hyperboloidToPoincare(e2);
-
-            }
-
-            p1 = localVertices[endpoints[0]]["uhp"];
-            p2 = localVertices[endpoints[1]]["uhp"];
-
-            radVect = VF.vectorScale(VF.vectorDiff(e2, e1), 0.5);
-            center = VF.midpoint(e1, e2);
-            r = VF.norm(radVect);
-
-
-            if (data.metric === "h") {
-
-                startAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p1, center), radVect) / (r * r));
-                endAngle = Math.acos(VF.vectorDot(VF.vectorDiff(p2, center), radVect) / (r * r));
-
-            } else {
-
-                startAngle = 0;
-                endAngle = Math.PI;
-
-            }
-
-            numPieces = Math.ceil(Math.max(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI);
-            subAngle = (endAngle - startAngle) / numPieces;
-
-            for (var i = 0; i <= numPieces; i++) {
-
-                theta = startAngle + i * subAngle;
-
-                modelVertices.push([
-                    radVect[0] * Math.cos(theta) + center[0],
-                    radVect[1] * Math.cos(theta) + center[1],
-                    r * Math.sin(theta)
-                ])
-
-            }
-
-            edgeCoords.push(modelVertices);
-
-        });
-
-        // kinda works??
-        if (data.metric === "u") {
-
-            var face, uhpVertices, u, v, w, p1, p2, center, r, theta1, theta2, startAngle, endAngle, numPieces, subAngle, theta;
-
-            for (var j = 0; j < data.numFaces; j++) {
-
-                face = data.faces[j];
-
-                for (var i = 0; i < face.length; i++) {
-
-                    uhpVertices = [];
-
-                    u = vertices[face[i]]["klein"];
-                    v = vertices[face[(i + 1) % face.length]]["klein"];
-                    w = vertices[face[(i + 2) % face.length]]["klein"];
-                    p1 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(u, v));
-                    p2 = HF.kleinToUpperHalfPlane(VF.lineSphereIntersection(w, v))
-
-                    center = spheres[j]["uhp"].center;
-                    r = spheres[j]["uhp"].radius;
-
-                    theta1 = Math.acos(Math.max(-1, Math.min(1, (p1[0] - center[0]) / r))) * ((p1[1] - center[1] > 0) ? 1 : -1);
-                    theta2 = Math.acos(Math.max(-1, Math.min(1, (p2[0] - center[0]) / r))) * ((p2[1] - center[1] > 0) ? 1 : -1);
-
-                    startAngle = Math.min(theta1, theta2);
-                    endAngle = Math.max(theta1, theta2);
-
-                    if (endAngle - startAngle > Math.PI) {
-
-                        startAngle += 2 * Math.PI;
-                        [startAngle, endAngle] = [endAngle, startAngle];
-
-                    }
-
-                    numPieces = Math.ceil(Math.max(Math.abs(Math.min(100 * r, number), 10) * (endAngle - startAngle) / Math.PI));
-                    subAngle = (endAngle - startAngle) / numPieces;
-
-                    for (var k = 0; k <= numPieces; k++) {
-
-                        theta = startAngle + k * subAngle;
-
-                        uhpVertices.push([
-                            r * Math.cos(theta) + center[0],
-                            r * Math.sin(theta) + center[1],
-                            0
-                        ])
-
-                    }
-
-                    edgeCoords.push(uhpVertices);
+                    edge.push(HF.hyperboloidToUpperHalfPlane(VF.vectorSum([VF.vectorScale(start, ratios[i]), VF.vectorScale(end, ratios[number - i])])));
 
                 }
 
+                edgeCoords.push(edge);
+
+            } else {
+
+                for (var i = 0; i <= number; i++) {
+
+                    edge.push(HF.hyperboloidToPoincare(VF.vectorSum([VF.vectorScale(start, ratios[i]), VF.vectorScale(end, ratios[number - i])])));
+
+                }
+
+                edgeCoords.push(edge);
+
             }
 
-        }
+        });
 
         return edgeCoords;
 
@@ -392,9 +297,17 @@ function hyperbolicEdges(data, parameters) {
 
             for (var k = 0; k <= outlineRes * number; k++) {
 
-                testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
+                if (model === "uhp") {
 
-                if (inSphericalFace(testCoord, i)) {
+                    testCoord = HF.upperHalfPlaneToKlein(VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]));
+
+                } else {
+
+                    testCoord = HF.hyperboloidToKlein(HF.poincareToHyperboloid(VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp])));
+
+                }
+
+                if (inHyperbolicFace(testCoord, i)) {
 
                     outline.push(testCoord);
 
@@ -415,14 +328,9 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
-    function inSphericalFace(point, face) {
+    function inHyperbolicFace(kleinPoint, face) {
 
-        if (VF.vectorDot(SF.stereoToHyper(point), faces[face].center4) > 0)
-
-            var d = faces[face].d / VF.vectorDot(point, faces[face].normal);
-        var flatPoint = VF.vectorScale(point, d);
-
-        return pointInPolygon(flatPoint, faces[face].polygon3);
+        return pointInPolygon(kleinPoint, faces[face].polygonKlein);
 
     }
 
@@ -548,7 +456,7 @@ function hyperbolicEdges(data, parameters) {
 
                     if (eps < t1 && t1 < 1 - eps) {
 
-                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t1)]), i)) {
+                        if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t1)]), i)) {
 
                             return false;
 
@@ -558,7 +466,7 @@ function hyperbolicEdges(data, parameters) {
 
                     if (eps < t2 && t2 < 1 - eps) {
 
-                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t2)]), i)) {
+                        if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t2)]), i)) {
 
                             return false;
 
@@ -605,4 +513,4 @@ function hyperbolicEdges(data, parameters) {
 
 }
 
-export { sphericalEdges };
+export { hyperbolicEdges };
