@@ -66,9 +66,7 @@ function hyperbolicEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
-
-    console.log(faces)
-
+    
     outline();
 
     var edgeGroup = visibleEdges()
