@@ -7,7 +7,7 @@
 // Output: a three.js group of lines
 //
 // Change history:
-//     ??/??/?? Initial commit
+//     14/05/21 Initial commit
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
@@ -101,6 +101,8 @@ function hyperbolicEdges(data, parameters) {
             });
 
         }
+
+        console.log(verts)
 
         return verts;
 
@@ -203,7 +205,7 @@ function hyperbolicEdges(data, parameters) {
 
         var edgeCoords = [];
 
-        const ca = VF.vectorDot(vertices[data.edges[0][0]].hyperboloid, vertices[data.edges[0][1]].hyperboloid);
+        const ca = HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
         const sa = Math.sqrt(ca * ca - 1);
         const a = Math.acosh(ca);
         const denom = 1 / sa;
@@ -297,6 +299,9 @@ function hyperbolicEdges(data, parameters) {
 
             for (var k = 0; k <= outlineRes * number; k++) {
 
+                testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
+
+
                 if (model === "uhp") {
 
                     testCoord = HF.upperHalfPlaneToKlein(VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]));
@@ -307,7 +312,11 @@ function hyperbolicEdges(data, parameters) {
 
                 }
 
-                if (inHyperbolicFace(testCoord, i)) {
+                if (model === "uhp" && inHyperbolicFace(testCoord, i) && testCoord[2] > 0) {
+
+                    outline.push(testCoord);
+
+                } else if (model === "poincare" && inHyperbolicFace(testCoord, i) && VF.norm2(testCoord[2]) < 1) {
 
                     outline.push(testCoord);
 
@@ -318,8 +327,6 @@ function hyperbolicEdges(data, parameters) {
 
                 }
 
-                k++
-
             }
 
             edges.push(outline)
@@ -328,7 +335,19 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
-    function inHyperbolicFace(kleinPoint, face) {
+    function inHyperbolicFace(point, face) {
+
+        var kleinPoint;
+
+        if (model === "uhp") {
+
+            kleinPoint = HF.upperHalfPlaneToKlein(point);
+
+        } else {
+
+            kleinPoint = HF.hyperboloidToKlein(HF.poincareToHyperboloid(point));
+
+        }
 
         return pointInPolygon(kleinPoint, faces[face].polygonKlein);
 
