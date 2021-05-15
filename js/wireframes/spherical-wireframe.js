@@ -191,7 +191,7 @@ function sphericalEdges(data, parameters) {
 
             edgeCoords.push(edge);
 
-        })
+        });
 
         return edgeCoords;
 
@@ -251,7 +251,7 @@ function sphericalEdges(data, parameters) {
 
                     edges.push(outline);
                     outline = [];
-                    
+
                 }
 
                 k++
@@ -266,12 +266,16 @@ function sphericalEdges(data, parameters) {
 
     function inSphericalFace(point, face) {
 
-        if (VF.vectorDot(SF.stereoToHyper(point), faces[face].center4) > 0)
+        if (VF.vectorDot(SF.stereoToHyper(point), faces[face].center4) > 0) {
 
             var d = faces[face].d / VF.vectorDot(point, faces[face].normal);
-        var flatPoint = VF.vectorScale(point, d);
+            var flatPoint = VF.vectorScale(point, d);
 
-        return pointInPolygon(flatPoint, faces[face].polygon3);
+            return pointInPolygon(flatPoint, faces[face].polygon3);
+
+        }
+
+        return false;
 
     }
 
