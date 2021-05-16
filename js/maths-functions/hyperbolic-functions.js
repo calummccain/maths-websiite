@@ -52,7 +52,7 @@ function hyperbolicNorm(x) {
 
 function hyperboloidToKlein(x) {
 
-    return [x[1] / x[0], x[2] / x[0], x[3] / x[0]];
+    return VF.vectorScale([x[1], x[2], x[3]], 1 / x[0]);
 
 }
 
@@ -103,9 +103,7 @@ function hyperboloidToPoincare(x) {
 
 function hyperboloidToUpperHalfPlane(point) {
 
-    const denom = 1 / (point[0] - point[3]);
-
-    return [point[1] * denom, point[2] * denom, denom];
+    return VF.vectorScale([point[1], point[2], 1], 1 / (point[0] - point[3]));
 
 }
 
@@ -122,9 +120,7 @@ function hyperboloidToUpperHalfPlane(point) {
 
 function kleinToHyperboloid(x) {
 
-    const w = 1 / Math.sqrt(1 - x[0] * x[0] - x[1] * x[1] - x[2] * x[2]);
-
-    return [w, x[0] * w, x[1] * w, x[2] * w];
+    return VF.vectorScale([1, x[0], x[1], x[2]], 1 / Math.sqrt(1 - VF.norm2(x)));
 
 }
 
@@ -132,7 +128,7 @@ function kleinToHyperboloid(x) {
 // Transform from klein model to poincare model
 //
 // Inputs: x
-// Output: x / (1+sqrt(1-r^2))
+// Output: x / (1 + sqrt(1 - r^2))
 //
 // Change history:
 //     ??/??/?? Initial commit
@@ -161,7 +157,7 @@ function kleinToPoincare(x) {
 
 function kleinToUpperHalfPlane(point) {
 
-    return VF.vectorScale(point[0], point[1], Math.sqrt(1 - VF.norm2(point)), 1 / (1 - point[2]));
+    return VF.vectorScale([point[0], point[1], Math.sqrt(1 - VF.norm2(point))], 1 / (1 - point[2]));
 
 }
 
@@ -183,9 +179,7 @@ function poincareToHyperboloid(x) {
 
     if (Math.abs(r - 1) < poincareToHyperboloidEps) {
 
-        const denom = 1 / (1 - r);
-
-        return [(1 + r) * denom, 2 * x[0] * denom, 2 * x[1] * denom, 2 * x[2] * denom];
+        return VF.vectorScale([(1 + r), 2 * x[0], 2 * x[1], 2 * x[2]], 1 / (1 - r));
 
     } else {
 
@@ -223,24 +217,24 @@ function poincareToKlein(x) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     16/05/21 Removed excess constants
 //=========================================================
 
 function poincareToUpperHalfPlane(point) {
 
-    var x = point[0], y = point[1], z = point[2];
-    var s = 1 / (x * x + y * y + (1 - z) * (1 - z));
+    const s = 1 / (point[0] * point[0] + point[1] * point[1] + (1 - point[2]) * (1 - point[2]));
 
     if (s < poincareToUpperHalfPlaneEps) {
 
-        return [x, y, Infinity];
+        return [point[0], point[1], Infinity];
 
-    } else if (VF.norm2([x, y, z]) > 1 - poincareToUpperHalfPlaneEps) {
+    } else if (VF.norm2(point) > 1 - poincareToUpperHalfPlaneEps) {
 
-        return [2 * x * s, 2 * y * s, 0];
+        return VF.vectorScale([point[0], point[1], 0], 2 * s);
 
     } else {
 
-        return [2 * x * s, 2 * y * s, (1 - x * x - y * y - z * z) * s];
+        return VF.vectorScale([2 * point[0], 2 * point[1], 1 - VF.norm2(point)], s);
 
     }
 
@@ -258,10 +252,7 @@ function poincareToUpperHalfPlane(point) {
 
 function upperHalfPlaneToHyperboloid(point) {
 
-    const r2 = VF.norm2(point);
-    const denom = 1 / (point[2]);
-
-    return [(r2 + 1) * 0.5 * denom, point[0] * denom, point[1] * denom, (r2 - 1) * 0.5 * denom];
+    return VF.vectorScale([(VF.norm2(point) + 1) * 0.5, point[0], point[1], (VF.norm2(point) - 1) * 0.5], 1 / point[2]);
 
 }
 
@@ -299,10 +290,7 @@ function upperHalfPlaneToKlein(point) {
 
 function upperHalfPlaneToPoincare(point) {
 
-    const x = point[0], y = point[1], z = point[2];
-    const s = 1 / (x * x + y * y + (1 + z) * (1 + z));
-
-    return [2 * x * s, 2 * y * s, (x * x + y * y + z * z - 1) * s];
+    return VF.vectorScale([2 * point[0], 2 * point[1], VF.norm2(point) - 1], 1 / (point[0] * point[0] + point[1] * point[1] + (1 + point[2]) * (1 + point[2])));
 
 }
 
@@ -376,22 +364,18 @@ function geodesicEndpoints(a, b) {
 export {
     hyperboloidInnerProduct,
     hyperbolicNorm,
-
     hyperboloidToKlein,
     hyperboloidToPoincare,
     hyperboloidToUpperHalfPlane,
-
     kleinToHyperboloid,
     kleinToPoincare,
     kleinToUpperHalfPlane,
-
     poincareToHyperboloid,
+    poincareToKlein,
     poincareToUpperHalfPlane,
-
     upperHalfPlaneToHyperboloid,
     upperHalfPlaneToKlein,
     upperHalfPlaneToPoincare,
-
     uhpCenter,
     geodesicEndpoints
 };
