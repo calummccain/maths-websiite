@@ -157,6 +157,8 @@ function kleinToPoincare(x) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     16/05/21 Much more efficient - actually did the 
+//              calculation
 //=========================================================
 
 function kleinToUpperHalfPlane(point) {
@@ -268,16 +270,18 @@ function upperHalfPlaneToHyperboloid(point) {
 // ========================================================
 // Transform from uhp model to klein model
 //
-// Inputs: x
-// Output: ?
+// Inputs: (x, y, z)
+// Output: (2x, 2y, r^2 - 1) / (r^2 + 1)
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     16/05/21 Much more efficient - actually did the 
+//              calculation
 //=========================================================
 
 function upperHalfPlaneToKlein(point) {
 
-    return poincareToKlein(upperHalfPlaneToPoincare(point));
+    return VF.vectorScale([2 * point[0], 2 * point[1], VF.norm2(point) - 1], 1 / (VF.norm2(point) + 1));
 
 }
 
