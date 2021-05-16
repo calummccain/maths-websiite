@@ -216,7 +216,21 @@ function hyperbolicEdges(data, parameters) {
 
         } else if (data.metric === "p") {
 
-            const denom = 1 / Math.sqrt(2 * HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid));
+            const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid)));
+            const a = 10 / number;
+            var theta = -5;
+
+            for (var i = 0; i <= number; i++) {
+
+                ratios.push(Math.exp(theta) * denom);
+                theta += a;
+
+            }
+
+        } else if (data.metric === "u") {
+
+            var [e1, e2] = HF.geodesicEndpoints(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
+            const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(e1, e2)));
             const a = 10 / number;
             var theta = -5;
 
@@ -234,8 +248,17 @@ function hyperbolicEdges(data, parameters) {
         data.edges.forEach((endpoints) => {
 
             edge = [];
-            start = localVertices[endpoints[0]].hyperboloid;
-            end = localVertices[endpoints[1]].hyperboloid;
+
+            if (data.metric === "u") {
+
+                [start, end] = HF.geodesicEndpoints(localVertices[endpoints[0]].hyperboloid, localVertices[endpoints[1]].hyperboloid);
+
+            } else {
+
+                start = localVertices[endpoints[0]].hyperboloid;
+                end = localVertices[endpoints[1]].hyperboloid;
+
+            }
 
             if (model === "uhp") {
 

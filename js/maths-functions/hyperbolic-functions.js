@@ -353,10 +353,13 @@ function geodesicEndpoints(a, b) {
 
     }
 
-    var inner = hyperboloidInnerProduct(a, b);
-    var eAlpha = 1 / (inner + Math.sqrt(inner * inner - 1));
+    const cosh = -hyperboloidInnerProduct(a, b);
+    const sinh = Math.sqrt(cosh * cosh - 1);
 
-    return [VF.vectorDiff(VF.vectorScale(a, eAlpha), b), VF.vectorDiff(VF.vectorScale(b, eAlpha), a)];
+    const p1 = VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]);
+    const p2 = VF.vectorDiff(VF.vectorScale(a, sinh + cosh), b)
+
+    return [VF.vectorScale(p1, 1 / p1[0]), VF.vectorScale(p2, 1 / p2[0])];
 
 }
 
