@@ -109,7 +109,7 @@ function hyperboloidToUpperHalfPlane(point) {
 
     } else if (hyperbolicNorm(point) < poincareToUpperHalfPlaneEps) {
 
-        return VF.vectorScale([point[1], point[2], 0], 2 * point[0] / (point[1] * point[1] + point[2] * point[2] + (point[0] - point[3]) * (point[0] - point[3])));
+        return VF.vectorScale([point[1], point[2], 0], 1 / (point[0] - point[3]));
 
     } else {
 
