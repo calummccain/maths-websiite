@@ -272,13 +272,12 @@ function upperHalfPlaneToKlein(point) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     16/05/21 Removed extra constant
 //=========================================================
 
 function poincareToKlein(x) {
 
-    const s = 2 / (1 + VF.norm2(x));
-
-    return VF.vectorScale(x, s);
+    return VF.vectorScale(x, 2 / (1 + VF.norm2(x)));
 
 }
 
