@@ -67,8 +67,6 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
-    console.log(faces)
-
     outline();
 
     var edgeGroup = visibleEdges()
@@ -142,8 +140,6 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
-            console.log(v1, v2, v3)
-
             if (model === "uhp") {
 
                 v1 = HF.hyperboloidToUpperHalfPlane(v1);
@@ -159,8 +155,6 @@ function hyperbolicEdges(data, parameters) {
                 centerModel = HF.hyperboloidToPoincare(centerHyperboloid);
 
             }
-
-            console.log(v1, v2, v3, centerModel)
 
             if (Math.abs(VF.determinant3([
                 VF.vectorDiff(v1, centerModel),
@@ -289,6 +283,57 @@ function hyperbolicEdges(data, parameters) {
             }
 
         });
+
+        if (data.metric === "u") {
+
+            const newNumber = Math.round(number / 4);
+
+            var e1, e2, ca, a, denom, theta, edge, start, end, ratios, e3, e4;
+
+            for (var i = 0; i < data.numFaces; i++) {
+
+                e1 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid)[0];
+                e2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid)[0];
+                e1.shift();
+                e2.shift();
+
+                ca = VF.vectorDot(e1, e2);
+                a = Math.acos(ca);
+                denom = 1 / Math.sqrt(1 - ca * ca);
+                theta = 0;
+                ratios = [];
+
+                for (var k = 0; k <= newNumber; k++) {
+
+                    ratios.push(Math.sin(theta) * denom);
+                    theta += a / newNumber;
+
+                }
+
+                for (var j = 0; j < data.faces[i].length; j++) {
+
+                    edge = [];
+
+                    e3 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j - 1 + data.faces[i].length) % data.faces[i].length]].hyperboloid)[0];
+                    e4 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j + 1) % data.faces[i].length]].hyperboloid)[0];
+                    e3.shift();
+                    e4.shift();
+
+                    for (var l = 0; l <= newNumber; l++) {
+
+                        edge.push(
+                            HF.hyperboloidToPoincare([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[l]), VF.vectorScale(e4, ratios[newNumber - l])])))
+                        );
+
+                    }
+
+                    edgeCoords.push(edge);
+
+                }
+
+            }
+
+        }
 
         return edgeCoords;
 
