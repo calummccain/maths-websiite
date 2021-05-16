@@ -67,6 +67,8 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
+    console.log(faces)
+
     outline();
 
     var edgeGroup = visibleEdges()
@@ -140,6 +142,8 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
+            console.log(v1, v2, v3)
+
             if (model === "uhp") {
 
                 v1 = HF.hyperboloidToUpperHalfPlane(v1);
@@ -155,6 +159,8 @@ function hyperbolicEdges(data, parameters) {
                 centerModel = HF.hyperboloidToPoincare(centerHyperboloid);
 
             }
+
+            console.log(v1, v2, v3, centerModel)
 
             if (Math.abs(VF.determinant3([
                 VF.vectorDiff(v1, centerModel),

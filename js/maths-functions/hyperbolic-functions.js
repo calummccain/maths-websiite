@@ -103,7 +103,19 @@ function hyperboloidToPoincare(x) {
 
 function hyperboloidToUpperHalfPlane(point) {
 
-    return VF.vectorScale([point[1], point[2], 1], 1 / (point[0] - point[3]));
+    if (Math.abs(point[0] - point[3]) < poincareToUpperHalfPlaneEps) {
+
+        return [point[1] / point[0], point[2] / point[0], Infinity];
+
+    } else if (hyperbolicNorm(point) < poincareToUpperHalfPlaneEps) {
+
+        return VF.vectorScale([point[1], point[2], 0], 2 * point[0] / (point[1] * point[1] + point[2] * point[2] + (point[0] - point[3]) * (point[0] - point[3])));
+
+    } else {
+
+        return VF.vectorScale([point[1], point[2], 1], 1 / (point[0] - point[3]));
+
+    }
 
 }
 
