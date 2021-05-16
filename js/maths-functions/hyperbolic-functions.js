@@ -219,11 +219,13 @@ function kleinToPoincare(x) {
 // ========================================================
 // Transform from hyperboloid model to uhp model
 //
-// Inputs: x
-// Output: ?
+// Inputs: (w, x, y, z)
+// Output: (x, y, 1) / (w - z)
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     16/05/21 Much more efficient - actually did the 
+//              calculation
 //=========================================================
 
 function hyperboloidToUpperHalfPlane(point) {
@@ -231,6 +233,25 @@ function hyperboloidToUpperHalfPlane(point) {
     const denom = 1 / (point[0] - point[3]);
 
     return [point[1] * denom, point[2] * denom, denom];
+
+}
+
+// ========================================================
+// Transform from uhp model to hyperboloid model
+//
+// Inputs: (x, y, z)
+// Output: ((r^2 + 1) / 2, x, y, (r^2 - 1) / 2) / z
+//
+// Change history:
+//     16/05/21 Initial commit
+//=========================================================
+
+function upperHalfPlaneToHyperboloid(point) {
+
+    const r2 = VF.norm2(point);
+    const denom = 1 / (point[2]);
+
+    return [(r2 + 1) * 0.5 * denom, point[0] * denom, point[1] * denom, (r2 - 1) * 0.5 * denom];
 
 }
 
@@ -351,18 +372,24 @@ function geodesicEndpoints(a, b) {
 
 
 export {
-    poincareToHyperboloid,
     hyperboloidInnerProduct,
-    poincareToUpperHalfPlane,
+    hyperbolicNorm,
+
     hyperboloidToKlein,
     hyperboloidToPoincare,
-    hyperbolicNorm,
-    kleinToPoincare,
     hyperboloidToUpperHalfPlane,
-    kleinToUpperHalfPlane,
+
+    poincareToHyperboloid,
+    poincareToUpperHalfPlane,
+
     kleinToHyperboloid,
-    upperHalfPlaneToPoincare,
+    kleinToPoincare,
+    kleinToUpperHalfPlane,
+
+    upperHalfPlaneToHyperboloid,
     upperHalfPlaneToKlein,
+    upperHalfPlaneToPoincare,
+
     uhpCenter,
     geodesicEndpoints
 };
