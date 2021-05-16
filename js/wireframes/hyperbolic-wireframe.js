@@ -29,7 +29,7 @@ function hyperbolicEdges(data, parameters) {
     const invisibleLines = parameters.invisibleLines || false;
     const model = parameters.model || "uhp";
 
-    const outlineRes = 4;
+    const outlineRes = 8;
 
     // matrix dictionary
     const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
@@ -96,8 +96,7 @@ function hyperbolicEdges(data, parameters) {
 
             verts.push({
                 hyperboloid: p,
-                klein: HF.hyperboloidToKlein(p),
-                uhp: HF.hyperboloidToUpperHalfPlane(p)
+                klein: HF.hyperboloidToKlein(p)
             });
 
         }
@@ -540,10 +539,10 @@ function hyperbolicEdges(data, parameters) {
                 cs = VF.vectorDiff(camera, faces[i].sphereCenter);
 
                 A = VF.vectorDot(pc, pc);
-                B = 2 * VF.vectorDot(pc, cs);
+                B = VF.vectorDot(pc, cs);
                 C = VF.vectorDot(cs, cs) - faces[i].radius * faces[i].radius;
 
-                delta = B * B - 4 * A * C;
+                delta = B * B - A * C;
 
                 if ((delta <= 0) || isNaN(delta)) {
 
@@ -551,8 +550,8 @@ function hyperbolicEdges(data, parameters) {
 
                 } else {
 
-                    t1 = (-B + Math.sqrt(delta)) / (2 * A);
-                    t2 = -B / A - t1;
+                    t1 = (-B + Math.sqrt(delta)) / A;
+                    t2 = -2 * B / A - t1;
 
                     if (eps < t1 && t1 < 1 - eps) {
 
