@@ -123,12 +123,12 @@ function main() {
         data.invisibleLines = !data.invisibleLines;
     });
 
-    document.getElementById("intersection").addEventListener("click", function () {
-        data.intersection = !data.intersection;
-    });
-
     document.getElementById("truncated").addEventListener("click", function () {
         data.truncated = !data.truncated;
+    });
+
+    document.getElementById("model").addEventListener("click", function () {
+        data.model = (data.model === "uhp") ? "poincare" : "uhp";
     });
 
     $(document).ready(function () {

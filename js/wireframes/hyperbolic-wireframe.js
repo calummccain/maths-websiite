@@ -318,11 +318,21 @@ function hyperbolicEdges(data, parameters) {
                     e3.shift();
                     e4.shift();
 
-                    for (var l = 0; l <= newNumber; l++) {
+                    for (var k = 0; k <= newNumber; k++) {
 
-                        edge.push(
-                            HF.hyperboloidToPoincare([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[l]), VF.vectorScale(e4, ratios[newNumber - l])])))
-                        );
+                        if (model === "uhp") {
+
+                            edge.push(
+                                HF.hyperboloidToUpperHalfPlane([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[k]), VF.vectorScale(e4, ratios[newNumber - k])])))
+                            );
+
+                        } else {
+
+                            edge.push(
+                                HF.hyperboloidToPoincare([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[k]), VF.vectorScale(e4, ratios[newNumber - k])])))
+                            );
+
+                        }
 
                     }
 

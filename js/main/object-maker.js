@@ -1,8 +1,8 @@
 import * as THREE from "../three-bits/three.module.js";
 import * as GM from "../geometries/geometry-maker.js";
 
-import * as SE from "../wireframes/spherical-wireframe.js";
-import * as HE from "../wireframes/hyperbolic-wireframe.js";
+import * as SW from "../wireframes/spherical-wireframe.js";
+import * as HW from "../wireframes/hyperbolic-wireframe.js";
 
 import { tetrahedronData } from "../data/33n.js";
 import { octahedronData } from "../data/34n.js";
@@ -145,26 +145,24 @@ function objectMaker(parameters) {
 
         if (data.metric === "s") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => SE.sphericalEdges(data, {
+            return (rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
                 cells: [""],
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,
                 camera: camera,
                 width: 2,
-                invisibleLines: parameters.invisibleLines,
-                model: "poincare"
             });
 
         } else if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => HE.hyperbolicEdges(data, {
+            return (rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
                 cells: [""],
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,
                 camera: camera,
                 width: 2,
                 invisibleLines: parameters.invisibleLines,
-                model: "poincare"
+                model: data.model
             });
 
         }
