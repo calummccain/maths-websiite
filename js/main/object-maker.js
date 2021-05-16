@@ -57,7 +57,7 @@ function objectMaker(parameters) {
 
     }
 
-    if (parameters.model === "poincareSolid" || parameters.model === "") {
+    if (parameters.model === "solid") {
 
         const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
 
