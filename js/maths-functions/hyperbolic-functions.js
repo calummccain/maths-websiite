@@ -228,7 +228,9 @@ function kleinToPoincare(x) {
 
 function hyperboloidToUpperHalfPlane(point) {
 
-    return poincareToUpperHalfPlane(hyperboloidToPoincare(point));
+    const denom = 1 / (point[0] - point[3]);
+
+    return [point[1] * denom, point[2] * denom, denom];
 
 }
 
