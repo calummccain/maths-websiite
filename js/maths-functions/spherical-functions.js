@@ -36,7 +36,7 @@ function hyperToStereo(point) {
 //     ??/??/?? Initial commit
 //=========================================================
 
-function stereoToSphere(point) {
+function stereoToHyper(point) {
 
     const r2 = VF.vectorDot(point, point);
     const denom = 1 / (r2 + 1);
@@ -63,4 +63,4 @@ function hyperToKlein(point) {
 
 }
 
-export { hyperToStereo, stereoToSphere, hyperToKlein };
+export { hyperToStereo, stereoToHyper, hyperToKlein };

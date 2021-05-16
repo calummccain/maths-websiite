@@ -1,12 +1,13 @@
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
+import { typeOfCell } from "../data/geometry-decider.js";
 
 window.onload = main;
 
 function main() {
 
-    var p = 3, q = 3, r = 3;
+    var p = 4, q = 3, r = 7;
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var invisible = false;
     var intersection = true;
@@ -43,7 +44,7 @@ function main() {
         q: q,
         r: r,
         truncated: false,
-        model: "uhp",
+        model: "poincare",
         refinement: 50,
         intersection: intersection,
         invisibleLines: invisible,
@@ -122,12 +123,12 @@ function main() {
         data.invisibleLines = !data.invisibleLines;
     });
 
-    document.getElementById("intersection").addEventListener("click", function () {
-        data.intersection = !data.intersection;
-    });
-
     document.getElementById("truncated").addEventListener("click", function () {
         data.truncated = !data.truncated;
+    });
+
+    document.getElementById("model").addEventListener("click", function () {
+        data.model = (data.model === "uhp") ? "poincare" : "uhp";
     });
 
     $(document).ready(function () {
@@ -175,40 +176,6 @@ function main() {
 
                 document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
                 document.getElementById(q + "-" + r).style.backgroundColor = cellTypeColours[cellType];
-
-            }
-
-        }
-
-    }
-
-    function typeOfCell(p, q, r) {
-
-        const name = p + "-" + q + "-" + r;
-
-        if (["3-3-3", "3-3-4", "3-3-5", "3-4-3", "4-3-3", "5-3-3"].includes(name)) {
-
-            return "s";
-
-        } else if (name === "4-3-4") {
-
-            return "e";
-
-        } else {
-
-            const qr = (q - 2) * (r - 2);
-
-            if (qr < 4) {
-
-                return "h"
-
-            } else if (qr == 4) {
-
-                return "p"
-
-            } else {
-
-                return "u"
 
             }
 

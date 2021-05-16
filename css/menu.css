@@ -1,0 +1,33 @@
+#menu {
+    position: fixed;
+    height: 50%;
+    width: 20%;
+    z-index: 10;
+    bottom: 0;
+    background-color: #A5A5A5;
+}
+
+#pqrselector {
+    display: none;
+    transition: all 0.5s ease-out;
+    width: 420px;
+    height: 300px;
+    background-color: #666666;
+}
+
+.cellselector {
+    width: 60px;
+    height: 30px;
+    margin: 5px;
+    float: left;
+    color: #252525;
+    outline: none;
+}
+
+#leftarrow {
+    float: left;
+}
+
+#rightarrow {
+    float: right;
+}

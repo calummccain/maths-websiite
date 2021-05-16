@@ -1,6 +1,8 @@
 import * as THREE from "../three-bits/three.module.js";
 import * as GM from "../geometries/geometry-maker.js";
-import * as EM from "../main/edge-maker.js";
+
+import * as SW from "../wireframes/spherical-wireframe.js";
+import * as HW from "../wireframes/hyperbolic-wireframe.js";
 
 import { tetrahedronData } from "../data/33n.js";
 import { octahedronData } from "../data/34n.js";
@@ -55,7 +57,7 @@ function objectMaker(parameters) {
 
     }
 
-    if (parameters.model === "poincare" || parameters.model === "") {
+    if (parameters.model === "solid") {
 
         const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
 
@@ -139,13 +141,31 @@ function objectMaker(parameters) {
 
         }
 
-    } else if (parameters.model === "uhp") {
+    } else if (parameters.model === "uhp" || parameters.model === "poincare") {
 
-        const cameraLines = (rx, ry, rz, ru, rv, rw, camera) => EM.generateData(
-            data, rx, ry, rz, ru, rv, rw, parameters.refinement, parameters.intersection, parameters.invisibleLines, camera, parameters.cells
-        );
+        if (data.metric === "s") {
 
-        return cameraLines;
+            return (rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
+                cells: parameters.cells,
+                angles: [rx, ry, rz, ru, rv, rw],
+                number: 50,
+                camera: camera,
+                width: 2,
+            });
+
+        } else if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
+
+            return (rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
+                cells: parameters.cells,
+                angles: [rx, ry, rz, ru, rv, rw],
+                number: 50,
+                camera: camera,
+                width: 2,
+                invisibleLines: parameters.invisibleLines,
+                model: parameters.model
+            });
+
+        }
 
     }
 
