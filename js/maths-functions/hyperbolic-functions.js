@@ -66,26 +66,24 @@ function hyperboloidToKlein(x) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     16/05/21 Tidy up
 //=========================================================
 
 function hyperboloidToPoincare(x) {
 
     if (Math.abs(hyperbolicNorm(x)) < hyperboloidToPoincareEps) {
 
-        const scale = 1 / x[0];
-        return [x[1] * scale, x[2] * scale, x[3] * scale];
+        return VF.vectorScale([x[1], x[2], x[3]], 1 / x[0]);
 
     } else if (hyperbolicNorm(x) >= hyperboloidToPoincareEps) {
 
-        const scale = 1 / (1 + x[0]);
-        return [x[1] * scale, x[2] * scale, x[3] * scale];
+        return VF.vectorScale([x[1], x[2], x[3]], 1 / (1 + x[0]));
 
     } else {
 
         const initialVect = [x[1], x[2], x[3]];
-        const l = VF.norm(initialVect);
 
-        return VF.vectorScale(initialVect, 1 / l);
+        return VF.vectorScale(initialVect, 1 / VF.norm(initialVect));
 
     }
 
