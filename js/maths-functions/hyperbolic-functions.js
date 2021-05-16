@@ -205,12 +205,13 @@ function poincareToHyperboloid(x) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     16/05/21 Changed var to const
 //=========================================================
 
 function kleinToPoincare(x) {
 
-    var dist = VF.norm2(x);
-    var hyperbolicDist = (dist < 1 - kleinToPoincareEps) ? 1 / (1 + Math.sqrt(Math.abs(1 - dist))) : 1;
+    const dist = VF.norm2(x);
+    const hyperbolicDist = (dist < 1 - kleinToPoincareEps) ? 1 / (1 + Math.sqrt(Math.abs(1 - dist))) : 1;
 
     return VF.vectorScale(x, hyperbolicDist);
 
