@@ -66,7 +66,7 @@ function hyperbolicEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
-    
+
     outline();
 
     var edgeGroup = visibleEdges()
@@ -146,7 +146,6 @@ function hyperbolicEdges(data, parameters) {
                 v2 = HF.kleinToUpperHalfPlane(v2);
                 v3 = HF.kleinToUpperHalfPlane(v3);
                 centerModel = HF.hyperboloidToUpperHalfPlane(centerHyperboloid);
-
 
             } else {
 
@@ -338,7 +337,7 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
-            kleinPoint = HF.hyperboloidToKlein(HF.poincareToHyperboloid(point));
+            kleinPoint = HF.poincareToKlein(point);
 
         }
 
