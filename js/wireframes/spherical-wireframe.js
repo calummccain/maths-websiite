@@ -160,9 +160,8 @@ function sphericalEdges(data, parameters) {
 
         var ratios = [];
         const ca = VF.vectorDot(localVertices[data.edges[0][0]].hypersphere, localVertices[data.edges[0][1]].hypersphere);
-        const sa = Math.sqrt(1 - ca * ca);
         const a = Math.acos(ca);
-        const denom = 1 / sa;
+        const denom = 1 / Math.sqrt(1 - ca * ca);
         var theta = 0;
         var edge, start, end;
 
