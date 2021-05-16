@@ -41,6 +41,23 @@ function hyperbolicNorm(x) {
 
 // ========================================================
 // Stereographic projection from hyperboloid model to
+// the klein model
+//
+// Inputs: x
+// Output: (x1/x0, x2/x0, x3/x0)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
+function hyperboloidToKlein(x) {
+
+    return [x[1] / x[0], x[2] / x[0], x[3] / x[0]];
+
+}
+
+// ========================================================
+// Stereographic projection from hyperboloid model to
 // the poincare model
 //
 // Inputs: x
@@ -75,6 +92,26 @@ function hyperboloidToPoincare(x) {
 }
 
 // ========================================================
+// Transform from hyperboloid model to uhp model
+//
+// Inputs: (w, x, y, z)
+// Output: (x, y, 1) / (w - z)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//     16/05/21 Much more efficient - actually did the 
+//              calculation
+//=========================================================
+
+function hyperboloidToUpperHalfPlane(point) {
+
+    const denom = 1 / (point[0] - point[3]);
+
+    return [point[1] * denom, point[2] * denom, denom];
+
+}
+
+// ========================================================
 // Stereographic projection from klein model to
 // the hyperboloid model
 //
@@ -94,19 +131,83 @@ function kleinToHyperboloid(x) {
 }
 
 // ========================================================
-// Stereographic projection from hyperboloid model to
-// the klein model
+// Transform from klein model to poincare model
 //
 // Inputs: x
-// Output: (x1/x0, x2/x0, x3/x0)
+// Output: x / (1+sqrt(1-r^2))
+//
+// Change history:
+//     ??/??/?? Initial commit
+//     16/05/21 Changed var to const and removed dist
+//=========================================================
+
+function kleinToPoincare(x) {
+
+    const hyperbolicDist = (VF.norm2(x) < 1 - kleinToPoincareEps) ? 1 / (1 + Math.sqrt(Math.abs(1 - VF.norm2(x)))) : 1;
+
+    return VF.vectorScale(x, hyperbolicDist);
+
+}
+
+// ========================================================
+// Transform from klein model to uhp model
+//
+// Inputs: point
+// Output: (x, y, sqrt(1 - r^2)) / (1 - z)
 //
 // Change history:
 //     ??/??/?? Initial commit
 //=========================================================
 
-function hyperboloidToKlein(x) {
+function kleinToUpperHalfPlane(point) {
 
-    return [x[1] / x[0], x[2] / x[0], x[3] / x[0]];
+    return VF.vectorScale(point[0], point[1], Math.sqrt(1 - VF.norm2(point)), 1 / (1 - point[2]));
+
+}
+
+// ========================================================
+// Cayley transform from the poincare model to the upper
+// half plane model
+//
+// Inputs: x
+// Output: ((1+r)/(1-r), 2 x0 / (1-r), 2 x1 / (1-r), 2 x2 / (1-r))
+//         or (1, x0, x1, x2) if on light cone
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
+function poincareToHyperboloid(x) {
+
+    const r = x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
+
+    if (Math.abs(r - 1) < poincareToHyperboloidEps) {
+
+        const denom = 1 / (1 - r);
+
+        return [(1 + r) * denom, 2 * x[0] * denom, 2 * x[1] * denom, 2 * x[2] * denom];
+
+    } else {
+
+        return [1, x[0], x[1], x[2]];
+    }
+
+}
+
+// ========================================================
+// Transform from poincare model to klein model
+//
+// Inputs: x
+// Output: x * 2 / (1 + r^2)
+//
+// Change history:
+//     ??/??/?? Initial commit
+//     16/05/21 Removed extra constant
+//=========================================================
+
+function poincareToKlein(x) {
+
+    return VF.vectorScale(x, 2 / (1 + VF.norm2(x)));
 
 }
 
@@ -146,97 +247,6 @@ function poincareToUpperHalfPlane(point) {
 }
 
 // ========================================================
-// Cayley transform from the upper half plane model to the
-// poincare model
-//
-// Inputs: point = (x,y,z)
-// Output: (2 * x / (x ** 2 + y ** 2 + (1 + z) ** 2), 
-//          2 * y / (x ** 2 + y ** 2 + (1 + z) ** 2), 
-//          (x ** 2 + y ** 2 + z ** 2 - 1) / 
-//                        (x ** 2 + y ** 2 + (1 + z) ** 2))
-//
-// Change history:
-//     ??/??/?? Initial commit
-//=========================================================
-
-function upperHalfPlaneToPoincare(point) {
-
-    const x = point[0], y = point[1], z = point[2];
-    const s = 1 / (x * x + y * y + (1 + z) * (1 + z));
-
-    return [2 * x * s, 2 * y * s, (x * x + y * y + z * z - 1) * s];
-
-}
-
-// ========================================================
-// Cayley transform from the poincare model to the upper
-// half plane model
-//
-// Inputs: x
-// Output: ((1+r)/(1-r), 2 x0 / (1-r), 2 x1 / (1-r), 2 x2 / (1-r))
-//         or (1, x0, x1, x2) if on light cone
-//
-// Change history:
-//     ??/??/?? Initial commit
-//=========================================================
-
-function poincareToHyperboloid(x) {
-
-    const r = x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
-
-    if (Math.abs(r - 1) < poincareToHyperboloidEps) {
-
-        const denom = 1 / (1 - r);
-
-        return [(1 + r) * denom, 2 * x[0] * denom, 2 * x[1] * denom, 2 * x[2] * denom];
-
-    } else {
-
-        return [1, x[0], x[1], x[2]];
-    }
-
-}
-
-// ========================================================
-// Transform from klein model to poincare model
-//
-// Inputs: x
-// Output: x / (1+sqrt(1-r^2))
-//
-// Change history:
-//     ??/??/?? Initial commit
-//     16/05/21 Changed var to const and removed dist
-//=========================================================
-
-function kleinToPoincare(x) {
-
-    const hyperbolicDist = (VF.norm2(x) < 1 - kleinToPoincareEps) ? 1 / (1 + Math.sqrt(Math.abs(1 - VF.norm2(x)))) : 1;
-
-    return VF.vectorScale(x, hyperbolicDist);
-
-}
-
-// ========================================================
-// Transform from hyperboloid model to uhp model
-//
-// Inputs: (w, x, y, z)
-// Output: (x, y, 1) / (w - z)
-//
-// Change history:
-//     ??/??/?? Initial commit
-//     16/05/21 Much more efficient - actually did the 
-//              calculation
-//=========================================================
-
-function hyperboloidToUpperHalfPlane(point) {
-
-    const denom = 1 / (point[0] - point[3]);
-
-    return [point[1] * denom, point[2] * denom, denom];
-
-}
-
-// ========================================================
 // Transform from uhp model to hyperboloid model
 //
 // Inputs: (x, y, z)
@@ -252,22 +262,6 @@ function upperHalfPlaneToHyperboloid(point) {
     const denom = 1 / (point[2]);
 
     return [(r2 + 1) * 0.5 * denom, point[0] * denom, point[1] * denom, (r2 - 1) * 0.5 * denom];
-
-}
-
-// ========================================================
-// Transform from klein model to uhp model
-//
-// Inputs: x
-// Output: ?
-//
-// Change history:
-//     ??/??/?? Initial commit
-//=========================================================
-
-function kleinToUpperHalfPlane(point) {
-
-    return poincareToUpperHalfPlane(kleinToPoincare(point));
 
 }
 
@@ -288,19 +282,25 @@ function upperHalfPlaneToKlein(point) {
 }
 
 // ========================================================
-// Transform from poincare model to klein model
+// Cayley transform from the upper half plane model to the
+// poincare model
 //
-// Inputs: x
-// Output: ?
+// Inputs: point = (x,y,z)
+// Output: (2 * x / (x ** 2 + y ** 2 + (1 + z) ** 2), 
+//          2 * y / (x ** 2 + y ** 2 + (1 + z) ** 2), 
+//          (x ** 2 + y ** 2 + z ** 2 - 1) / 
+//                        (x ** 2 + y ** 2 + (1 + z) ** 2))
 //
 // Change history:
 //     ??/??/?? Initial commit
-//     16/05/21 Removed extra constant
 //=========================================================
 
-function poincareToKlein(x) {
+function upperHalfPlaneToPoincare(point) {
 
-    return VF.vectorScale(x, 2 / (1 + VF.norm2(x)));
+    const x = point[0], y = point[1], z = point[2];
+    const s = 1 / (x * x + y * y + (1 + z) * (1 + z));
+
+    return [2 * x * s, 2 * y * s, (x * x + y * y + z * z - 1) * s];
 
 }
 
@@ -379,12 +379,12 @@ export {
     hyperboloidToPoincare,
     hyperboloidToUpperHalfPlane,
 
-    poincareToHyperboloid,
-    poincareToUpperHalfPlane,
-
     kleinToHyperboloid,
     kleinToPoincare,
     kleinToUpperHalfPlane,
+
+    poincareToHyperboloid,
+    poincareToUpperHalfPlane,
 
     upperHalfPlaneToHyperboloid,
     upperHalfPlaneToKlein,
