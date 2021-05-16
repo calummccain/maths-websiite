@@ -146,7 +146,7 @@ function objectMaker(parameters) {
         if (data.metric === "s") {
 
             return (rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
-                cells: [""],
+                cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,
                 camera: camera,
@@ -156,13 +156,13 @@ function objectMaker(parameters) {
         } else if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
             return (rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
-                cells: [""],
+                cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,
                 camera: camera,
                 width: 2,
                 invisibleLines: parameters.invisibleLines,
-                model: data.model
+                model: parameters.model
             });
 
         }
