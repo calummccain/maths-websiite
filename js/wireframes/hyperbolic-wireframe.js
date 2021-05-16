@@ -109,7 +109,7 @@ function hyperbolicEdges(data, parameters) {
     // generate the faces that bound the geometry
     function generateFaces(localVertices) {
 
-        var polygonKlein, polygonHyperboloid, centerHyperboloid, v1, v2, v3, centerModel, normal, d, sphereCenter, radius;
+        var polygonKlein, polygonHyperboloid, centerHyperboloid, v1, v2, v3, centerModel, normal, sphereCenter, radius;
 
         for (var i = 0; i < data.numFaces; i++) {
 
@@ -184,7 +184,6 @@ function hyperbolicEdges(data, parameters) {
                     sphereCenter: [0, 0, 0],
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
-                    d: 0,
                     polygonHyperboloid: polygonHyperboloid,
                     polygonKlein: polygonKlein
                 });
@@ -195,7 +194,7 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
-    // find the coordinates of the edges ONLY FOR COMPACT
+    // find the coordinates of the edges
     function generateEdges(localVertices) {
 
         var edgeCoords = [];
