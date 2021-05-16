@@ -128,30 +128,30 @@ function hyperbolicEdges(data, parameters) {
 
             if (data.metric === "u") {
 
-                v1 = VF.lineSphereIntersection(vertices[data.faces[i][0]].klein, vertices[data.faces[i][1]].klein);
-                v2 = VF.lineSphereIntersection(vertices[data.faces[i][1]].klein, vertices[data.faces[i][2]].klein);
-                v3 = VF.lineSphereIntersection(vertices[data.faces[i][2]].klein, vertices[data.faces[i][0]].klein);
+                v1 = HF.geodesicEndpoints(vertices[data.faces[i][0]].hyperboloid, vertices[data.faces[i][1]].hyperboloid)[0];
+                v2 = HF.geodesicEndpoints(vertices[data.faces[i][1]].hyperboloid, vertices[data.faces[i][2]].hyperboloid)[0];
+                v3 = HF.geodesicEndpoints(vertices[data.faces[i][2]].hyperboloid, vertices[data.faces[i][0]].hyperboloid)[0];
 
             } else {
 
-                v1 = vertices[data.faces[i][0]].klein;
-                v2 = vertices[data.faces[i][1]].klein;
-                v3 = vertices[data.faces[i][2]].klein;
+                v1 = vertices[data.faces[i][0]].hyperboloid;
+                v2 = vertices[data.faces[i][1]].hyperboloid;
+                v3 = vertices[data.faces[i][2]].hyperboloid;
 
             }
 
             if (model === "uhp") {
 
-                v1 = HF.kleinToUpperHalfPlane(v1);
-                v2 = HF.kleinToUpperHalfPlane(v2);
-                v3 = HF.kleinToUpperHalfPlane(v3);
+                v1 = HF.hyperboloidToUpperHalfPlane(v1);
+                v2 = HF.hyperboloidToUpperHalfPlane(v2);
+                v3 = HF.hyperboloidToUpperHalfPlane(v3);
                 centerModel = HF.hyperboloidToUpperHalfPlane(centerHyperboloid);
 
             } else {
 
-                v1 = HF.kleinToPoincare(v1);
-                v2 = HF.kleinToPoincare(v2);
-                v3 = HF.kleinToPoincare(v3);
+                v1 = HF.hyperboloidToPoincare(v1);
+                v2 = HF.hyperboloidToPoincare(v2);
+                v3 = HF.hyperboloidToPoincare(v3);
                 centerModel = HF.hyperboloidToPoincare(centerHyperboloid);
 
             }
