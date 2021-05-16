@@ -75,14 +75,14 @@ function hyperboloidToPoincare(x) {
 }
 
 // ========================================================
-// Stereographic projection from hyperboloid model to
-// the klein model
+// Stereographic projection from klein model to
+// the hyperboloid model
 //
 // Inputs: x
 // Output: (1, x0, x1, x2) / sqrt(1-r^2)
 //
 // Change history:
-//     ??/??/?? Initial commit
+//     15/05/21 Initial commit
 //=========================================================
 
 function kleinToHyperboloid(x) {
@@ -94,14 +94,14 @@ function kleinToHyperboloid(x) {
 }
 
 // ========================================================
-// Stereographic projection from klein model to
-// the hyperboloid model
+// Stereographic projection from hyperboloid model to
+// the klein model
 //
 // Inputs: x
-// Output: ()
+// Output: (x1/x0, x2/x0, x3/x0)
 //
 // Change history:
-//     15/05/21 Initial commit
+//     ??/??/?? Initial commit
 //=========================================================
 
 function hyperboloidToKlein(x) {
@@ -127,7 +127,7 @@ function hyperboloidToKlein(x) {
 function poincareToUpperHalfPlane(point) {
 
     var x = point[0], y = point[1], z = point[2];
-    var s = 1 / (x * x + y * y + 1 - 2 * z + z * z);
+    var s = 1 / (x * x + y * y + (1 - z) * (1 - z));
 
     if (s < poincareToUpperHalfPlaneEps) {
 
