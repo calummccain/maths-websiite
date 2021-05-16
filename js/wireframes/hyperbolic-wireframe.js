@@ -199,18 +199,34 @@ function hyperbolicEdges(data, parameters) {
     function generateEdges(localVertices) {
 
         var edgeCoords = [];
-
-        const ca = HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
-        const sa = Math.sqrt(ca * ca - 1);
-        const a = Math.acosh(ca);
-        const denom = 1 / sa;
-        var theta = 0;
         var ratios = [];
 
-        for (var i = 0; i <= number; i++) {
+        if (data.metric === "h") {
 
-            ratios.push(Math.sinh(theta) * denom);
-            theta += a / number;
+            const ca = HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
+            const an = Math.acosh(ca) / number;
+            const denom = 1 / Math.sqrt(ca * ca - 1);
+            var theta = 0;
+
+            for (var i = 0; i <= number; i++) {
+
+                ratios.push(Math.sinh(theta) * denom);
+                theta += an;
+
+            }
+
+        } else if (data.metric === "p") {
+
+            const denom = 1 / Math.sqrt(2 * HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid));
+            const a = 10 / number;
+            var theta = -5;
+
+            for (var i = 0; i <= number; i++) {
+
+                ratios.push(Math.exp(theta) * denom);
+                theta += a;
+
+            }
 
         }
 
