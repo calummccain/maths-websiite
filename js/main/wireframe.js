@@ -7,10 +7,9 @@ window.onload = main;
 
 function main() {
 
-    var p = 4, q = 3, r = 7;
+    var p = 3, q = 3, r = 3;
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var invisible = false;
-    var intersection = true;
     var geom = {};
     var cellType;
 
@@ -44,9 +43,8 @@ function main() {
         q: q,
         r: r,
         truncated: false,
-        model: "poincare",
+        model: "uhp",
         refinement: 50,
-        intersection: intersection,
         invisibleLines: invisible,
         cells: [""],
         numFaces: 200
