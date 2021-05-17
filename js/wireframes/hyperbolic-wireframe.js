@@ -66,7 +66,7 @@ function hyperbolicEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
-
+    console.log(faces)
     outline();
 
     var edgeGroup = visibleEdges()
@@ -166,8 +166,9 @@ function hyperbolicEdges(data, parameters) {
                 faces.push({
                     type: "sphere",
                     radius: radius,
-                    normal: [0, 0, 0],
                     sphereCenter: sphereCenter,
+                    d: 0,
+                    normal: [0, 0, 0],
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
                     polygonHyperboloid: polygonHyperboloid,
@@ -176,11 +177,26 @@ function hyperbolicEdges(data, parameters) {
 
             } else {
 
+                if (v1[2] === Infinity) {
+
+                    v1 = centerModel;
+
+                } else if (v2[2] === Infinity) {
+
+                    v2 = centerModel;
+
+                } else if (v3[2] === Infinity) {
+
+                    v3 = centerModel;
+
+                }
+
                 faces.push({
                     type: "plane",
                     radius: 0,
-                    normal: normal = VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
                     sphereCenter: [0, 0, 0],
+                    d: VF.determinant3([v1, v2, v3]),
+                    normal: normal = VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
                     polygonHyperboloid: polygonHyperboloid,
@@ -540,7 +556,7 @@ function hyperbolicEdges(data, parameters) {
 
         const pc = VF.vectorDiff(point, camera);
 
-        var cs, A, B, C, delta, t1, t2;
+        var cs, A, B, C, delta, t;
 
         for (var i = 0; i < data.numFaces; i++) {
 
@@ -560,12 +576,11 @@ function hyperbolicEdges(data, parameters) {
 
                 } else {
 
-                    t1 = (-B + Math.sqrt(delta)) / A;
-                    t2 = -2 * B / A - t1;
+                    t = (-B + Math.sqrt(delta)) / A;
 
-                    if (eps < t1 && t1 < 1 - eps) {
+                    if (eps < t && t < 1 - eps) {
 
-                        if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t1)]), i)) {
+                        if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 
                             return false;
 
@@ -573,9 +588,11 @@ function hyperbolicEdges(data, parameters) {
 
                     }
 
-                    if (eps < t2 && t2 < 1 - eps) {
+                    t = -2 * B / A - t;
 
-                        if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t2)]), i)) {
+                    if (eps < t && t < 1 - eps) {
+
+                        if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 
                             return false;
 
@@ -587,11 +604,15 @@ function hyperbolicEdges(data, parameters) {
 
             } else if (faces[i].type === "plane") {
 
-                t1 = -VF.vectorDot(camera, faces[i].normal) / VF.vectorDot(pc, faces[i].normal);
+                t = (faces[i].d - VF.vectorDot(camera, faces[i].normal)) / VF.vectorDot(pc, faces[i].normal);
 
-                if (eps < t1 && t1 < 1 - eps) {
+                if (eps < t && t < 1 - eps) {
 
-                    return false;
+                    if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
+
+                        return false;
+
+                    }
 
                 }
 
