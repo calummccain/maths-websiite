@@ -47,7 +47,7 @@ function main() {
         model: "poincare",
         refinement: 50,
         invisibleLines: invisible,
-        cells: ["", "d"],
+        cells: ["d", "abcd", "bcd", "cd"],
         numFaces: 200
     }
 
