@@ -20,8 +20,6 @@ const eps = 1e-5;
 
 function hyperbolicEdges(data, parameters) {
 
-    console.log(data)
-
     // Parameter checks
     const cells = parameters.cells || [""];
     const [thetax, thetay, thetaz, thetau, thetav, thetaw] = parameters.angles || [0, 0, 0, 0, 0, 0];
@@ -60,25 +58,22 @@ function hyperbolicEdges(data, parameters) {
     // Step 1: Generate the vertex, edge and face data
     for (var i = 0; i < parameters.cells.length; i++) {
 
-        localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
+        localVertices = [];
+        localVertices = generateVertices(cells[i]);
         vertices = vertices.concat(localVertices);
 
         generateFaces(localVertices);
 
-        console.log(faces)
-
         edges = edges.concat(generateEdges(localVertices));
 
     }
-
-    console.log(faces)
 
     outline();
 
     var edgeGroup = visibleEdges()
 
     // generate the positions of the vertices in several models
-    function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cell) {
+    function generateVertices(cell) {
 
         var newVertices = VF.transformVertices(data.vertices, cell, matrix);
         var verts = [];
@@ -133,15 +128,15 @@ function hyperbolicEdges(data, parameters) {
 
             if (data.metric === "u") {
 
-                v1 = HF.geodesicEndpoints(vertices[data.faces[i][0]].hyperboloid, vertices[data.faces[i][1]].hyperboloid)[0];
-                v2 = HF.geodesicEndpoints(vertices[data.faces[i][1]].hyperboloid, vertices[data.faces[i][2]].hyperboloid)[0];
-                v3 = HF.geodesicEndpoints(vertices[data.faces[i][2]].hyperboloid, vertices[data.faces[i][0]].hyperboloid)[0];
-                console.log(v1, v2, v3)
+                v1 = HF.geodesicEndpoints(localVertices[data.faces[i][0]].hyperboloid, localVertices[data.faces[i][1]].hyperboloid)[0];
+                v2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid)[0];
+                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid)[0];
+
             } else {
 
-                v1 = vertices[data.faces[i][0]].hyperboloid;
-                v2 = vertices[data.faces[i][1]].hyperboloid;
-                v3 = vertices[data.faces[i][2]].hyperboloid;
+                v1 = localVertices[data.faces[i][0]].hyperboloid;
+                v2 = localVertices[data.faces[i][1]].hyperboloid;
+                v3 = localVertices[data.faces[i][2]].hyperboloid;
 
             }
 
