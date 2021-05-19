@@ -9,50 +9,26 @@
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
-import { rt2, rt3, rt5, p2, p_1 } from "./constants.js";
+import { rt2, rt11 } from "./constants.js";
 
 const tetrahedronTruncData = (n) => {
 
-    const metric = boundaries(n, Math.PI / Math.atan(1 / rt2), 6);
+    const metric = boundaries(n, Math.PI / Math.atan(1 / rt2), Math.PI / Math.atan(1 / rt11));
     const cos = Math.cos(Math.PI / n) ** 2;
     const cot = cos / (1 - cos);
-    const cos5 = p2 / 4;
-    const sin5 = (5 - rt5) / 8;
-    const factor = 27 / 11;
 
-    const d =
-        (n == 3) ? (v) => [
-            (-v[0] + 5 * v[1] + 5 * v[2] - 5 * v[3]) / 4,
-            (v[0] + 3 * v[1] - v[2] + v[3]) / 4,
-            (v[0] - v[1] + 3 * v[2] + v[3]) / 4,
-            (-v[0] + v[1] + v[2] + 3 * v[3]) / 4
-        ] : (n == 4) ? (v) => [
-            (v[0] + v[1] + v[2] - v[3]) / 2,
-            (v[0] + v[1] - v[2] + v[3]) / 2,
-            (v[0] - v[1] + v[2] + v[3]) / 2,
-            (-v[0] + v[1] + v[2] + v[3]) / 2
-        ] : (n == 5) ? (v) => [
-            (2 - 3 * sin5) * v[0] + (3 * sin5 - 1) * v[1] + (3 * sin5 - 1) * v[2] + (1 - 3 * sin5) * v[3],
-            cos5 * v[0] + sin5 * v[1] - cos5 * v[2] + cos5 * v[3],
-            cos5 * v[0] - cos5 * v[1] + sin5 * v[2] + cos5 * v[3],
-            -cos5 * v[0] + cos5 * v[1] + cos5 * v[2] + sin5 * v[3]
-        ] : (n == 6) ? (v) => [
-            (5 * v[0] - v[1] - v[2] + v[3]) / 4,
-            (3 * v[0] + v[1] - 3 * v[2] + 3 * v[3]) / 4,
-            (3 * v[0] - 3 * v[1] + v[2] + 3 * v[3]) / 4,
-            (-3 * v[0] + 3 * v[1] + 3 * v[2] + v[3]) / 4
-        ] : (v) => [
-            (3 * cos - 1) * v[0] + (2 - 3 * cos) * v[1] + (2 - 3 * cos) * v[2] + (3 * cos - 2) * v[3],
-            cos * v[0] + (1 - cos) * v[1] - cos * v[2] + cos * v[3],
-            cos * v[0] - cos * v[1] + (1 - cos) * v[2] + cos * v[3],
-            -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]
-        ];
+    const d = (v) => [
+        (3 * cos - 1) * v[0] + (2 - 3 * cos) * v[1] + (2 - 3 * cos) * v[2] + (3 * cos - 2) * v[3],
+        cos * v[0] + (1 - cos) * v[1] - cos * v[2] + cos * v[3],
+        cos * v[0] - cos * v[1] + (1 - cos) * v[2] + cos * v[3],
+        -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]
+    ];
 
     const f = (v) => [
-        Math.sqrt(Math.abs(cot / (2 * (3 - cot)))) * v[0],
-        Math.sqrt(Math.abs(factor * (cot - 2) / (2 * (3 - cot)))) * v[1],
-        Math.sqrt(Math.abs(factor * (cot - 2) / (2 * (3 - cot)))) * v[2],
-        Math.sqrt(Math.abs(factor * (cot - 2) / (2 * (3 - cot)))) * v[3]
+        3 * Math.sqrt(Math.abs(cot / (2 * (11 - cot)))) * v[0],
+        3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[1],
+        3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[2],
+        3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[3]
     ];
 
     return {
