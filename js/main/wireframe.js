@@ -8,7 +8,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 3, r = 7;
+    var p = 3, q = 3, r = 6;
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var invisible = false;
     var geom = {};
@@ -44,10 +44,10 @@ function main() {
         q: q,
         r: r,
         truncated: true,
-        model: "uhp",
+        model: "poincare",
         refinement: 50,
         invisibleLines: invisible,
-        cells: [""],
+        cells: ["", "d"],
         numFaces: 200
     }
 
