@@ -16,19 +16,19 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 import { matrixDict } from "../maths-functions/generate-tesselations.js";
 
-const eps = 1e-5;
+const eps = 1e-2;
 
 function sphericalEdges(data, parameters) {
 
     // Parameter checks
-    const cells = parameters.cells || [""];
+    const cells = parameters.cells;
     const [thetax, thetay, thetaz, thetau, thetav, thetaw] = parameters.angles || [0, 0, 0, 0, 0, 0];
     const number = parameters.number || 1;
     const camera = parameters.camera || [10, 0, 0];
     const width = parameters.width || 1;
-    const invisibleLines = parameters.invisibleLines || false;
+    const invisibleLines = parameters.invisibleLines;
 
-    const outlineRes = 4;
+    const outlineRes = 8;
 
     // matrix dictionary
     const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
@@ -55,9 +55,9 @@ function sphericalEdges(data, parameters) {
     var faces = [];
 
     // Step 1: Generate the vertex, edge and face data
-    for (var i = 0; i < parameters.cells.length; i++) {
+    for (var i = 0; i < cells.length; i++) {
 
-        localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
+        localVertices = generateVertices(cells[i]);
         vertices = vertices.concat(localVertices);
 
         generateFaces(localVertices);
@@ -65,6 +65,8 @@ function sphericalEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
+
+    console.log(faces)
 
     outline();
 
@@ -117,18 +119,22 @@ function sphericalEdges(data, parameters) {
             v2 = localVertices[data.faces[i][1]].stereo;
             v3 = localVertices[data.faces[i][2]].stereo;
 
-            if (Math.abs(VF.determinant3([v1, v2, v3])) > eps) {
+            if (Math.abs(VF.determinant3([
+                VF.vectorDiff(v1, center3),
+                VF.vectorDiff(v2, center3),
+                VF.vectorDiff(v3, center3)
+            ])) > eps) {
 
                 [sphereCenter, radius] = VF.circum4(v1, v2, v3, center3);
 
                 faces.push({
                     type: "sphere",
-                    radius: radius,
+                    d: VF.determinant3([v1, v2, v3]),
                     normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
+                    radius: radius,
                     sphereCenter: sphereCenter,
                     center3: center3,
                     center4: center4,
-                    d: VF.determinant3([v1, v2, v3]),
                     polygon3: polygon3,
                     polygon4: polygon4
                 });
@@ -137,12 +143,12 @@ function sphericalEdges(data, parameters) {
 
                 faces.push({
                     type: "plane",
-                    radius: 0,
+                    d: 0,
                     normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
+                    radius: 0,
                     sphereCenter: [0, 0, 0],
                     center3: center3,
                     center4: center4,
-                    d: 0,
                     polygon3: polygon3,
                     polygon4: polygon4
                 });
@@ -200,7 +206,7 @@ function sphericalEdges(data, parameters) {
 
         var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
 
-        for (var i = 0; i < data.numFaces; i++) {
+        for (var i = 0; i < faces.length; i++) {
 
             if (faces[i].type === "sphere") {
 
@@ -373,19 +379,19 @@ function sphericalEdges(data, parameters) {
 
         const pc = VF.vectorDiff(point, camera);
 
-        var cs, A, B, C, delta, t1, t2;
+        var cs, A, B, C, delta, t;
 
-        for (var i = 0; i < data.numFaces; i++) {
+        for (var i = 0; i < faces.length; i++) {
 
             if (faces[i].type === "sphere") {
 
                 cs = VF.vectorDiff(camera, faces[i].sphereCenter);
 
                 A = VF.vectorDot(pc, pc);
-                B = 2 * VF.vectorDot(pc, cs);
+                B = VF.vectorDot(pc, cs);
                 C = VF.vectorDot(cs, cs) - faces[i].radius * faces[i].radius;
 
-                delta = B * B - 4 * A * C;
+                delta = B * B - A * C;
 
                 if ((delta <= 0) || isNaN(delta)) {
 
@@ -393,12 +399,11 @@ function sphericalEdges(data, parameters) {
 
                 } else {
 
-                    t1 = (-B + Math.sqrt(delta)) / (2 * A);
-                    t2 = -B / A - t1;
+                    t = (-B + Math.sqrt(delta)) / A;
 
-                    if (eps < t1 && t1 < 1 - eps) {
+                    if (eps < t && t < 1 - eps) {
 
-                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t1)]), i)) {
+                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 
                             return false;
 
@@ -406,9 +411,11 @@ function sphericalEdges(data, parameters) {
 
                     }
 
-                    if (eps < t2 && t2 < 1 - eps) {
+                    t = -2 * B / A - t;
 
-                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t2)]), i)) {
+                    if (eps < t && t < 1 - eps) {
+
+                        if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 
                             return false;
 
@@ -420,11 +427,17 @@ function sphericalEdges(data, parameters) {
 
             } else if (faces[i].type === "plane") {
 
-                t1 = -VF.vectorDot(camera, faces[i].normal) / VF.vectorDot(pc, faces[i].normal);
+                t = VF.vectorDot(camera, faces[i].normal) / VF.vectorDot(pc, faces[i].normal);
 
-                if (eps < t1 && t1 < 1 - eps) {
+                if (eps < t && t < 1 - eps) {
 
-                    return false;
+                    const rotPoint = RF.ru(point, Math.PI)
+
+                    if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
+
+                        return false;
+
+                    }
 
                 }
 

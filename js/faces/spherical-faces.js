@@ -7,6 +7,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     19/05/21 Supports faces with 6+ sides
 //=========================================================
 
 import * as VF from "../maths-functions/vector-functions.js";
@@ -17,21 +18,22 @@ function sphericalFace(vertices, refinement) {
 
     var coords = vertices;
     var faces = [];
+    var center = [0, 0, 0, 0];
 
     if (sideNumber == 3) {
 
         faces = [[0, 1, 2]];
 
-    } else if (sideNumber == 4) {
+    } else {
 
-        faces = faces.concat([[0, 1, 4], [1, 2, 4], [2, 3, 4], [3, 0, 4]]);
-        var center = VF.vectorScale(VF.vectorSum([coords[0], coords[1], coords[2], coords[3]]), 0.25);
-        coords.push(center);
+        for (var i = 0; i < sideNumber; i++) {
 
-    } else if (sideNumber == 5) {
+            faces.push([i, (i + 1) % sideNumber, sideNumber]);
+            center = VF.vectorSum([center, vertices[i]]);
 
-        faces = faces.concat([[0, 1, 5], [1, 2, 5], [2, 3, 5], [3, 4, 5], [4, 0, 5]]);
-        var center = VF.vectorScale(VF.vectorSum([coords[0], coords[1], coords[2], coords[3], coords[4]]), 0.2);
+        }
+
+        center = VF.vectorScale(center, 1 / sideNumber);
         coords.push(center);
 
     }

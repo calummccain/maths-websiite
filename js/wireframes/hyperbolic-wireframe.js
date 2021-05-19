@@ -20,6 +20,8 @@ const eps = 1e-5;
 
 function hyperbolicEdges(data, parameters) {
 
+    console.log(data)
+
     // Parameter checks
     const cells = parameters.cells || [""];
     const [thetax, thetay, thetaz, thetau, thetav, thetaw] = parameters.angles || [0, 0, 0, 0, 0, 0];
@@ -63,16 +65,20 @@ function hyperbolicEdges(data, parameters) {
 
         generateFaces(localVertices);
 
+        console.log(faces)
+
         edges = edges.concat(generateEdges(localVertices));
 
     }
+
+    console.log(faces)
 
     outline();
 
     var edgeGroup = visibleEdges()
 
     // generate the positions of the vertices in several models
-    function generateVertices(cell) {
+    function generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cell) {
 
         var newVertices = VF.transformVertices(data.vertices, cell, matrix);
         var verts = [];
@@ -130,7 +136,7 @@ function hyperbolicEdges(data, parameters) {
                 v1 = HF.geodesicEndpoints(vertices[data.faces[i][0]].hyperboloid, vertices[data.faces[i][1]].hyperboloid)[0];
                 v2 = HF.geodesicEndpoints(vertices[data.faces[i][1]].hyperboloid, vertices[data.faces[i][2]].hyperboloid)[0];
                 v3 = HF.geodesicEndpoints(vertices[data.faces[i][2]].hyperboloid, vertices[data.faces[i][0]].hyperboloid)[0];
-
+                console.log(v1, v2, v3)
             } else {
 
                 v1 = vertices[data.faces[i][0]].hyperboloid;
@@ -167,7 +173,11 @@ function hyperbolicEdges(data, parameters) {
                     type: "sphere",
                     radius: radius,
                     sphereCenter: sphereCenter,
-                    d: 0,
+                    d: VF.determinant3([
+                        VF.vectorDiff(v1, centerModel),
+                        VF.vectorDiff(v2, centerModel),
+                        VF.vectorDiff(v3, centerModel)
+                    ]),
                     normal: [0, 0, 0],
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
@@ -368,7 +378,7 @@ function hyperbolicEdges(data, parameters) {
 
         var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
 
-        for (var i = 0; i < data.numFaces; i++) {
+        for (var i = 0; i < faces.length; i++) {
 
             if (faces[i].type === "sphere") {
 
@@ -558,7 +568,7 @@ function hyperbolicEdges(data, parameters) {
 
         var cs, A, B, C, delta, t;
 
-        for (var i = 0; i < data.numFaces; i++) {
+        for (var i = 0; i < faces.length; i++) {
 
             if (faces[i].type === "sphere") {
 

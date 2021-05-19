@@ -365,11 +365,12 @@ function geodesicEndpoints(a, b) {
 
     }
 
-    const cosh = -hyperboloidInnerProduct(a, b);
-    const sinh = Math.sqrt(cosh * cosh - 1);
+    const sinh = hyperboloidInnerProduct(a, b);
+    const cosh = Math.sqrt(sinh * sinh + 1);
 
     const p1 = VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]);
-    const p2 = VF.vectorDiff(VF.vectorScale(a, sinh + cosh), b)
+    const p2 = VF.vectorDiff(VF.vectorScale(a, sinh + cosh), b);
+    console.log(hyperbolicNorm(p1))
 
     return [VF.vectorScale(p1, 1 / p1[0]), VF.vectorScale(p2, 1 / p2[0])];
 
