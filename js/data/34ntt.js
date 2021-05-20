@@ -17,15 +17,15 @@ const octahedronTruncData = (n) => {
     const tan = 1 / cos - 1;
     const cot = 1 / tan;
 
-    const metric = boundaries(n,  Math.PI / Math.atan(rt2), Math.PI / Math.atan(3 / rt5));
+    const metric = boundaries(n, Math.PI / Math.atan(rt2), Math.PI / Math.atan(1 / rt5));
 
     const d = (v) => v;
 
     const f = (v) => [
-        Math.sqrt(Math.abs(cot / (5 - 9 * cot))) * v[0],
-        Math.sqrt(Math.abs((2 * cot - 1) / (5 - 9 * cot))) * v[1],
-        Math.sqrt(Math.abs((2 * cot - 1) / (5 - 9 * cot))) * v[2],
-        Math.sqrt(Math.abs((2 * cot - 1) / (5 - 9 * cot))) * v[3]
+        Math.sqrt(Math.abs(9 * cot / (5 - cot))) * v[0],
+        Math.sqrt(Math.abs((2 * cot - 1) / (5 - cot))) * v[1],
+        Math.sqrt(Math.abs((2 * cot - 1) / (5 - cot))) * v[2],
+        Math.sqrt(Math.abs((2 * cot - 1) / (5 - cot))) * v[3]
     ];
 
     return {
