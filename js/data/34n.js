@@ -52,7 +52,7 @@ const octahedronData = (n) => {
             Math.sqrt(Math.abs(cot / (1 - cot))) * v[0],
             Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[1],
             Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[2],
-            Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[3],
+            Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[3]
         ];
 
     return {
