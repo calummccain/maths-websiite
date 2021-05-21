@@ -8,7 +8,7 @@
 //     ??/??/?? Initial commit
 //=========================================================
 
-import { p } from "./constants.js";
+import { p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
 const dodecahedronData = (n) => {
@@ -20,45 +20,45 @@ const dodecahedronData = (n) => {
 
     const d =
         (n == 3) ? (v) => [
-            (p * v[0] + v[1] / (p ** 3) + v[3] / (p ** 4)) / 2,
-            ((p ** 3) * v[0] - v[1] / p - p * v[3]) / 2,
+            (p * v[0] + v[1] * p_3 + v[3] * p_4) / 2,
+            (p3 * v[0] - v[1] * p_1 - p * v[3]) / 2,
             v[2],
-            ((p ** 2) * v[0] - p * v[1] + v[3]) / 2
+            (p2 * v[0] - p * v[1] + v[3]) / 2
         ] : (n == 4) ? (v) => [
-            p ** 2 * v[0] - v[1] - v[3] / p,
-            p ** 3 * v[0] - p * v[1] - p * v[3],
+            p2 * v[0] - v[1] - v[3] * p_1,
+            p3 * v[0] - p * v[1] - p * v[3],
             v[2],
-            p ** 2 * v[0] - p * v[1]
+            p2 * v[0] - p * v[1]
         ] : (n == 5) ? (v) => [
-            ((4 * p + 1) * v[0] - (4 * p - 1) / p * v[1] - (4 * p - 1) / (p ** 2) * v[3]) / 2,
-            (p ** 5 * v[0] + (2 - p ** 4) * v[1] - p ** 3 * v[3]) / 2,
+            ((4 * p + 1) * v[0] - (4 * p - 1) * p_1 * v[1] - (4 * p - 1) * p_2 * v[3]) / 2,
+            (p5* v[0] + (2 - p4) * v[1] - p3 * v[3]) / 2,
             v[2],
-            (p ** 4 * v[0] - p ** 3 * v[1] - v[3] / p) / 2
+            (p4 * v[0] - p3 * v[1] - v[3] * p_1) / 2
         ] : (n == 6) ? (v) => [
-            ((2 + p ** 4) * v[0] - p ** 3 * v[1] - p ** 2 * v[3]) / 2,
-            (3 * p ** 3 * v[0] + (2 - 3 * p ** 2) * v[1] - 3 * p * v[3]) / 2,
+            ((2 + p4) * v[0] - p3 * v[1] - p2 * v[3]) / 2,
+            (3 * p3 * v[0] + (2 - 3 * p2) * v[1] - 3 * p * v[3]) / 2,
             v[2],
-            (3 * p ** 2 * v[0] - 3 * p * v[1] - v[3]) / 2
+            (3 * p2 * v[0] - 3 * p * v[1] - v[3]) / 2
         ] : (v) => [
-            (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 / p) * v[1] - (2 * rt * cos / p - 2 / (p ** 2)) * v[3],
-            2 * (p ** 3) * cos * v[0] + (1 - 2 * (p ** 2) * cos) * v[1] - 2 * p * cos * v[3],
+            (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 * p_1) * v[1] - (2 * rt * cos * p_1 - 2 * p_2) * v[3],
+            2 * p3 * cos * v[0] + (1 - 2 * p2 * cos) * v[1] - 2 * p * cos * v[3],
             v[2],
-            2 * (p ** 2) * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
+            2 * p2 * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
         ];
 
     const f =
         (n == 3) ? (v) => [
-            (p ** 2) * v[0] / Math.sqrt(8),
+            p2 * v[0] / Math.sqrt(8),
             v[1] / (p * Math.sqrt(8)),
             v[2] / (p * Math.sqrt(8)),
             v[3] / (p * Math.sqrt(8))
         ] : (n == 4) ? (v) => [
-            p ** 2 / Math.sqrt(2) * v[0],
+            p2 / Math.sqrt(2) * v[0],
             Math.sqrt(p / 2) * v[1],
             Math.sqrt(p / 2) * v[2],
             Math.sqrt(p / 2) * v[3]
         ] : (n == 5) ? (v) => [
-            (p ** 4) / 2 * v[0],
+            (p4) / 2 * v[0],
             p * Math.sqrt(4 * p - 1) / 2 * v[1],
             p * Math.sqrt(4 * p - 1) / 2 * v[2],
             p * Math.sqrt(4 * p - 1) / 2 * v[3]
@@ -68,10 +68,10 @@ const dodecahedronData = (n) => {
             v[2],
             v[3]
         ] : (v) => [
-            (p ** 2) * Math.sqrt(Math.abs(cot / (cot - 3))) * v[0],
-            Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (cot - 3))) * v[1],
-            Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (cot - 3))) * v[2],
-            Math.sqrt(Math.abs(((p ** 2) * cot - 1) / (cot - 3))) * v[3]
+            p2 * Math.sqrt(Math.abs(cot / (cot - 3))) * v[0],
+            Math.sqrt(Math.abs((p2 * cot - 1) / (cot - 3))) * v[1],
+            Math.sqrt(Math.abs((p2 * cot - 1) / (cot - 3))) * v[2],
+            Math.sqrt(Math.abs((p2 * cot - 1) / (cot - 3))) * v[3]
         ];
 
     return {
@@ -79,9 +79,9 @@ const dodecahedronData = (n) => {
         vertices: [
             [1, 1, 1, 1], [1, 1, 1, -1], [1, 1, -1, 1], [1, 1, -1, -1],
             [1, -1, 1, 1], [1, -1, 1, -1], [1, -1, -1, 1], [1, -1, -1, -1],
-            [1, 0, p, 1 / p], [1, 0, p, -1 / p], [1, 0, -p, 1 / p], [1, 0, -p, -1 / p],
-            [1, p, 1 / p, 0], [1, p, -1 / p, 0], [1, -p, 1 / p, 0], [1, -p, -1 / p, 0],
-            [1, 1 / p, 0, p], [1, -1 / p, 0, p], [1, 1 / p, 0, -p], [1, -1 / p, 0, -p]
+            [1, 0, p, 1 * p_1], [1, 0, p, -1 * p_1], [1, 0, -p, 1 * p_1], [1, 0, -p, -1 * p_1],
+            [1, p, 1 * p_1, 0], [1, p, -1 * p_1, 0], [1, -p, 1 * p_1, 0], [1, -p, -1 * p_1, 0],
+            [1, 1 * p_1, 0, p], [1, -1 * p_1, 0, p], [1, 1 * p_1, 0, -p], [1, -1 * p_1, 0, -p]
         ],
 
         edges: [
@@ -114,8 +114,8 @@ const dodecahedronData = (n) => {
         // (0, 0, 1, 0)
         a: (v) => [v[0], v[1], -v[2], v[3]],
         // CFV
-        // (0, 1, -p ** 2, p)
-        b: (v) => [v[0], (p * v[1] + v[2] + v[3] / p) / 2, (v[1] - v[2] / p - p * v[3]) / 2, (v[1] / p - p * v[2] + v[3]) / 2],
+        // (0, 1, -p2, p)
+        b: (v) => [v[0], (p * v[1] + v[2] + v[3] * p_1) / 2, (v[1] - v[2] * p_1 - p * v[3]) / 2, (v[1] * p_1 - p * v[2] + v[3]) / 2],
 
         // CEV
         // (0, 0, 0, 1)
@@ -137,8 +137,8 @@ const dodecahedronData = (n) => {
 
         outerReflection: "d",
 
-        // (1, p, 1 / p, 0)
-        V: [1, p, 1 / p, 0],
+        // (1, p, 1 *p_1, 0)
+        V: [1, p, 1 * p_1, 0],
 
         // (1, p, 0, 0)
         E: [1, p, 0, 0],
