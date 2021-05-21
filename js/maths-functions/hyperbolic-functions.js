@@ -364,8 +364,8 @@ function geodesicEndpoints(a, b) {
         return [a, b];
 
     }
-    // console.log(a, hyperbolicNorm(a))
-    // console.log(b, hyperbolicNorm(b))
+    //console.log(a, hyperbolicNorm(a))
+    //console.log(b, hyperbolicNorm(b))
     const cosh = -hyperboloidInnerProduct(a, b);
     const sinh = Math.sqrt(cosh * cosh - 1);
     // console.log(cosh, sinh)
