@@ -9,7 +9,7 @@
 //     21/05/21 Constants tidied up
 //=========================================================
 
-import { rt3, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
+import { rt2, rt3, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
 const dodecahedronData = (n) => {
@@ -54,7 +54,7 @@ const dodecahedronData = (n) => {
             v[2] / (p * Math.sqrt(8)),
             v[3] / (p * Math.sqrt(8))
         ] : (n == 4) ? (v) => [
-            p2 / Math.sqrt(2) * v[0],
+            p2 / rt2 * v[0],
             Math.sqrt(p / 2) * v[1],
             Math.sqrt(p / 2) * v[2],
             Math.sqrt(p / 2) * v[3]
@@ -80,9 +80,9 @@ const dodecahedronData = (n) => {
         vertices: [
             [1, 1, 1, 1], [1, 1, 1, -1], [1, 1, -1, 1], [1, 1, -1, -1],
             [1, -1, 1, 1], [1, -1, 1, -1], [1, -1, -1, 1], [1, -1, -1, -1],
-            [1, 0, p, 1 * p_1], [1, 0, p, -1 * p_1], [1, 0, -p, 1 * p_1], [1, 0, -p, -1 * p_1],
-            [1, p, 1 * p_1, 0], [1, p, -1 * p_1, 0], [1, -p, 1 * p_1, 0], [1, -p, -1 * p_1, 0],
-            [1, 1 * p_1, 0, p], [1, -1 * p_1, 0, p], [1, 1 * p_1, 0, -p], [1, -1 * p_1, 0, -p]
+            [1, 0, p, p_1], [1, 0, p, -p_1], [1, 0, -p, p_1], [1, 0, -p, -p_1],
+            [1, p, p_1, 0], [1, p, -p_1, 0], [1, -p, p_1, 0], [1, -p, -p_1, 0],
+            [1, p_1, 0, p], [1, -p_1, 0, p], [1, p_1, 0, -p], [1, -p_1, 0, -p]
         ],
 
         edges: [
@@ -139,7 +139,7 @@ const dodecahedronData = (n) => {
         outerReflection: "d",
 
         // (1, p, 1 / p, 0)
-        V: [1, p, 1 * p_1, 0],
+        V: [1, p, p_1, 0],
 
         // (1, p, 0, 0)
         E: [1, p, 0, 0],
