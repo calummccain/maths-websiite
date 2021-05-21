@@ -19,7 +19,7 @@ import { matrixDict } from "../maths-functions/generate-tesselations.js";
 const eps = 1e-5;
 
 function hyperbolicEdges(data, parameters) {
-    console.log(data)
+
     // Parameter checks
     const cells = parameters.cells || [""];
     const [thetax, thetay, thetaz, thetau, thetav, thetaw] = parameters.angles || [0, 0, 0, 0, 0, 0];
@@ -67,8 +67,6 @@ function hyperbolicEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
-
-    console.log(faces)
 
     outline();
 
@@ -141,7 +139,7 @@ function hyperbolicEdges(data, parameters) {
                 v3 = localVertices[data.faces[i][2]].hyperboloid;
 
             }
-            console.log(v1, v2, v3)
+
             if (model === "uhp") {
 
                 v1 = HF.hyperboloidToUpperHalfPlane(v1);
