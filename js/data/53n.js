@@ -9,7 +9,7 @@
 //     21/05/21 Constants tidied up
 //=========================================================
 
-import { p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
+import { rt3, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
 const dodecahedronData = (n) => {
@@ -64,7 +64,7 @@ const dodecahedronData = (n) => {
             p * Math.sqrt(4 * p - 1) / 2 * v[2],
             p * Math.sqrt(4 * p - 1) / 2 * v[3]
         ] : (n == 6) ? (v) => [
-            Math.sqrt(3) * v[0],
+            rt3 * v[0],
             v[1],
             v[2],
             v[3]
@@ -138,7 +138,7 @@ const dodecahedronData = (n) => {
 
         outerReflection: "d",
 
-        // (1, p, 1 *p_1, 0)
+        // (1, p, 1 / p, 0)
         V: [1, p, 1 * p_1, 0],
 
         // (1, p, 0, 0)
