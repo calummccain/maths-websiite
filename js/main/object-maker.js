@@ -20,7 +20,9 @@ import { tetrahedronTruncData } from "../data/33ntt.js";
 // import { octahedronTruncData } from "../data/34nt.js";
 import { octahedronTruncData } from "../data/34ntt.js";
 
-import { icosahedronTruncData } from "../data/35nt.js";
+// import { icosahedronTruncData } from "../data/35nt.js";
+import { icosahedronTruncData } from "../data/35ntt.js";
+
 // import { cubeTruncData } from "../data/43nt.js";
 import { cubeTruncData } from "../data/43ntt.js";
 
