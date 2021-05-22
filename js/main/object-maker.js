@@ -26,7 +26,8 @@ import { icosahedronTruncData } from "../data/35ntt.js";
 // import { cubeTruncData } from "../data/43nt.js";
 import { cubeTruncData } from "../data/43ntt.js";
 
-import { dodecahedronTruncData } from "../data/53nt.js";
+import { dodecahedronTruncData } from "../data/53ntt.js";
+// import { dodecahedronTruncData } from "../data/53nt.js";
 
 
 function objectMaker(parameters) {
