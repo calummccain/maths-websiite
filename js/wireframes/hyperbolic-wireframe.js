@@ -16,7 +16,7 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 import { matrixDict } from "../maths-functions/generate-tesselations.js";
 
-const eps = 1e-5;
+const eps = 1e-4;
 
 function hyperbolicEdges(data, parameters) {
 
