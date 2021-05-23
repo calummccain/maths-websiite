@@ -27,8 +27,6 @@ function main() {
     // hyperbolic model
     var model = "uhp";
 
-    var coords;
-
     // parameters for the edges
     const edgeNumber = 50;
     const edgeWidth = 2;
@@ -71,6 +69,9 @@ function main() {
     var edges = [];
     var faces = [];
     var cells = [];
+
+    var edgeGroup = new THREE.Group();
+    scene.add(edgeGroup);
 
     var renderer = new SVGRenderer();
     renderer.setSize(WIDTH, HEIGHT);
@@ -137,6 +138,10 @@ function main() {
         mode = "move";
     });
 
+    document.getElementById("model").addEventListener("click", function () {
+        model = (model === "uhp") ? "poincare" : "uhp";
+    });
+
     canvas.addEventListener("mouseup", onClick);
 
     canvas.addEventListener("mousemove", mouseMove);
@@ -178,18 +183,18 @@ function main() {
 
             if (edgeMarker == 2) {
 
-                addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[0].position.toArray()), [edges.length], [], []);
-                addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[1].position.toArray()), [edges.length], [], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[0].position.toArray()), [edges.length - 1], [], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[1].position.toArray()), [edges.length - 1], [], []);
 
                 addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 2], vertices[vertices.length - 1], edgeNumber), [vertices.length - 2, vertices.length - 1], [], []);
 
                 if (model === "poincare") {
 
-                    scene.add(drawLine(edges[edges.length - 1].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 1].poincareCoords, 0x000000));
 
                 } else if (model === "uhp") {
 
-                    scene.add(drawLine(edges[edges.length - 1].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 1].uhpCoords, 0x000000));
 
                 }
 
@@ -202,7 +207,36 @@ function main() {
 
             faceControl[faceMarker].position.copy(sphereMouse.position);
 
-            faceMarker = (faceMarker + 1) % 3;
+            faceMarker++;
+
+            if (faceMarker == 3) {
+
+                addToVertices(HF.upperHalfPlaneToHyperboloid(faceControl[0].position.toArray()), [edges.length - 3, edges.length - 1], [faces.length - 1], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(faceControl[1].position.toArray()), [edges.length - 3, edges.length - 2], [faces.length - 1], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(faceControl[2].position.toArray()), [edges.length - 2, edges.length - 1], [faces.length - 1], []);
+
+                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 3], vertices[vertices.length - 2], edgeNumber), [vertices.length - 3, vertices.length - 2], [], []);
+                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 2], vertices[vertices.length - 1], edgeNumber), [vertices.length - 2, vertices.length - 1], [], []);
+                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 1], vertices[vertices.length - 3], edgeNumber), [vertices.length - 3, vertices.length - 1], [], []);
+
+                if (model === "poincare") {
+
+                    edgeGroup.add(drawLine(edges[edges.length - 3].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 2].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 1].poincareCoords, 0x000000));
+
+                } else if (model === "uhp") {
+
+                    edgeGroup.add(drawLine(edges[edges.length - 3].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 2].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 1].uhpCoords, 0x000000));
+
+                }
+
+
+                faceMarker = 0;
+
+            }
 
         }
 
