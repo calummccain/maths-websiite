@@ -14,11 +14,20 @@ import { dodecahedronData } from "../data/53n.js";
 import { hexagonData } from "../data/63n.js";
 import { pqrData } from "../data/pqr.js";
 
-import { tetrahedronTruncData } from "../data/33nt.js";
-import { octahedronTruncData } from "../data/34nt.js";
-import { icosahedronTruncData } from "../data/35nt.js";
-import { cubeTruncData } from "../data/43nt.js";
-import { dodecahedronTruncData } from "../data/53nt.js";
+// import { tetrahedronTruncData } from "../data/33nt.js";
+import { tetrahedronTruncData } from "../data/33ntt.js";
+
+// import { octahedronTruncData } from "../data/34nt.js";
+import { octahedronTruncData } from "../data/34ntt.js";
+
+// import { icosahedronTruncData } from "../data/35nt.js";
+import { icosahedronTruncData } from "../data/35ntt.js";
+
+// import { cubeTruncData } from "../data/43nt.js";
+import { cubeTruncData } from "../data/43ntt.js";
+
+import { dodecahedronTruncData } from "../data/53ntt.js";
+// import { dodecahedronTruncData } from "../data/53nt.js";
 
 
 function objectMaker(parameters) {

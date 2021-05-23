@@ -16,7 +16,7 @@ import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 import { matrixDict } from "../maths-functions/generate-tesselations.js";
 
-const eps = 1e-5;
+const eps = 1e-4;
 
 function hyperbolicEdges(data, parameters) {
 
@@ -58,7 +58,8 @@ function hyperbolicEdges(data, parameters) {
     // Step 1: Generate the vertex, edge and face data
     for (var i = 0; i < parameters.cells.length; i++) {
 
-        localVertices = generateVertices(data, thetax, thetay, thetaz, thetau, thetav, thetaw, cells[i]);
+        localVertices = [];
+        localVertices = generateVertices(cells[i]);
         vertices = vertices.concat(localVertices);
 
         generateFaces(localVertices);
@@ -127,15 +128,15 @@ function hyperbolicEdges(data, parameters) {
 
             if (data.metric === "u") {
 
-                v1 = HF.geodesicEndpoints(vertices[data.faces[i][0]].hyperboloid, vertices[data.faces[i][1]].hyperboloid)[0];
-                v2 = HF.geodesicEndpoints(vertices[data.faces[i][1]].hyperboloid, vertices[data.faces[i][2]].hyperboloid)[0];
-                v3 = HF.geodesicEndpoints(vertices[data.faces[i][2]].hyperboloid, vertices[data.faces[i][0]].hyperboloid)[0];
+                v1 = HF.geodesicEndpoints(localVertices[data.faces[i][0]].hyperboloid, localVertices[data.faces[i][1]].hyperboloid)[0];
+                v2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid)[0];
+                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid)[0];
 
             } else {
 
-                v1 = vertices[data.faces[i][0]].hyperboloid;
-                v2 = vertices[data.faces[i][1]].hyperboloid;
-                v3 = vertices[data.faces[i][2]].hyperboloid;
+                v1 = localVertices[data.faces[i][0]].hyperboloid;
+                v2 = localVertices[data.faces[i][1]].hyperboloid;
+                v3 = localVertices[data.faces[i][2]].hyperboloid;
 
             }
 
@@ -155,6 +156,8 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
+            
+
             if (Math.abs(VF.determinant3([
                 VF.vectorDiff(v1, centerModel),
                 VF.vectorDiff(v2, centerModel),
@@ -167,7 +170,11 @@ function hyperbolicEdges(data, parameters) {
                     type: "sphere",
                     radius: radius,
                     sphereCenter: sphereCenter,
-                    d: 0,
+                    d: VF.determinant3([
+                        VF.vectorDiff(v1, centerModel),
+                        VF.vectorDiff(v2, centerModel),
+                        VF.vectorDiff(v3, centerModel)
+                    ]),
                     normal: [0, 0, 0],
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
@@ -368,7 +375,7 @@ function hyperbolicEdges(data, parameters) {
 
         var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
 
-        for (var i = 0; i < data.numFaces; i++) {
+        for (var i = 0; i < faces.length; i++) {
 
             if (faces[i].type === "sphere") {
 
@@ -558,7 +565,7 @@ function hyperbolicEdges(data, parameters) {
 
         var cs, A, B, C, delta, t;
 
-        for (var i = 0; i < data.numFaces; i++) {
+        for (var i = 0; i < faces.length; i++) {
 
             if (faces[i].type === "sphere") {
 

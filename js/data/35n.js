@@ -38,10 +38,10 @@ const icosahedronData = (n) => {
             (Math.sqrt(3 * p - 1) / 2) * v[2],
             (Math.sqrt(3 * p - 1) / 2) * v[3]
         ] : (v) => [
-            p3 * Math.sqrt(cot / (p4 * cot - 1 - p2)) * v[0],
-            Math.sqrt((p4 * cot - 1) / (p4 * cot - 1 - p2)) * v[1],
-            Math.sqrt((p4 * cot - 1) / (p4 * cot - 1 - p2)) * v[2],
-            Math.sqrt((p4 * cot - 1) / (p4 * cot - 1 - p2)) * v[3]
+            p3 * Math.sqrt(Math.abs(cot / (p2 + 1 - p4 * cot))) * v[0],
+            Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 - p4 * cot))) * v[1],
+            Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 - p4 * cot))) * v[2],
+            Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 - p4 * cot))) * v[3]
         ];
 
     return {

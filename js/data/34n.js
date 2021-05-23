@@ -9,7 +9,7 @@
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
-import { rt2 } from "./constants.js";
+import { rt2, rt3 } from "./constants.js";
 
 const octahedronData = (n) => {
 
@@ -52,7 +52,7 @@ const octahedronData = (n) => {
             Math.sqrt(Math.abs(cot / (1 - cot))) * v[0],
             Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[1],
             Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[2],
-            Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[3],
+            Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[3]
         ];
 
     return {
@@ -126,7 +126,19 @@ const octahedronData = (n) => {
         // s p u u u
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        CF: rt3 * Math.sqrt(cot / (1 + cot)),
+
+        CE: rt2 * Math.sqrt(cot),
+
+        CV: rt3 * Math.sqrt(Math.abs(cot / (1 - cot))),
+
+        FE: rt2 * Math.sqrt(1 + cot) / rt3,
+
+        FV: Math.sqrt(Math.abs((1 + cot) / (1 - cot))) / rt3,
+
+        EV: Math.sqrt(Math.abs(1 / (1 - cot))) / rt2
 
     }
 
