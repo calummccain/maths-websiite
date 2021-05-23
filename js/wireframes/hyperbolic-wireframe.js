@@ -156,8 +156,6 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
-            
-
             if (Math.abs(VF.determinant3([
                 VF.vectorDiff(v1, centerModel),
                 VF.vectorDiff(v2, centerModel),
