@@ -11,7 +11,7 @@ window.onload = main;
 function main() {
 
     const eps = 1e-4;
-    const outlineRes = 8;
+    const outlineRes = 4;
 
     // Canvas constants
     const canvas = document.getElementById("canvas");
@@ -31,7 +31,7 @@ function main() {
     var model = "uhp";
 
     // parameters for the edges
-    const edgeNumber = 50;
+    const edgeNumber = 100;
     const edgeWidth = 2;
 
     var intersects;
@@ -99,6 +99,8 @@ function main() {
     camera.position.set(5, 5, 5);
     camera.up = new THREE.Vector3(0, 0, 1);
 
+    var cam = camera.position.toArray();
+
     scene.add(camera);
 
     var controls = new OrbitControls(camera, canvas);
@@ -154,6 +156,10 @@ function main() {
 
     document.getElementById("move").addEventListener("click", function () {
         mode = "move";
+    });
+
+    document.getElementById("visible").addEventListener("click", function () {
+        ;
     });
 
     document.getElementById("model").addEventListener("click", function () {
@@ -260,6 +266,8 @@ function main() {
 
         }
 
+        edgeGroup.children = visibleEdges().children;
+
     }
 
     function drawLine(vectors, col) {
@@ -329,7 +337,7 @@ function main() {
         const poincareCenter = HF.hyperboloidToPoincare(hyperboloidCenter);
         const uhpCenter = HF.hyperboloidToUpperHalfPlane(hyperboloidCenter);
 
-        var type, poincareSphereCenter, poincareRadius, poincareD, poincareNormal, uhpSphereCenter, uhpRadius, uhpD, uhpNormal;
+        var poincareType, uhpType, poincareSphereCenter, poincareRadius, poincareD, poincareNormal, uhpSphereCenter, uhpRadius, uhpD, uhpNormal;
 
         if (Math.abs(VF.determinant3([
             VF.vectorDiff(v1.poincare, poincareCenter),
@@ -337,7 +345,7 @@ function main() {
             VF.vectorDiff(v3.poincare, poincareCenter)
         ])) > eps) {
 
-            type = "sphere";
+            poincareType = "sphere";
 
             [poincareSphereCenter, poincareRadius] = VF.circum4(v1.poincare, v2.poincare, v3.poincare, poincareCenter);
 
@@ -351,7 +359,7 @@ function main() {
 
         } else {
 
-            type = "plane";
+            poincareType = "plane";
 
             poincareSphereCenter = [0, 0, 0];
             poincareRadius = 0;
@@ -367,7 +375,7 @@ function main() {
             VF.vectorDiff(v3.uhp, uhpCenter)
         ])) > eps) {
 
-            type = "sphere";
+            uhpType = "sphere";
 
             [uhpSphereCenter, uhpRadius] = VF.circum4(v1.uhp, v2.uhp, v3.uhp, uhpCenter);
 
@@ -381,7 +389,7 @@ function main() {
 
         } else {
 
-            type = "plane";
+            uhpType = "plane";
 
             if (v1.uhp[2] === Infinity) {
 
@@ -406,7 +414,8 @@ function main() {
         }
 
         faces.push({
-            type: type,
+            poincareType: poincareType,
+            uhpType: uhpType,
             hyperboloidCenter: hyperboloidCenter,
             hyperboloidPolygon: hyperboloidPolygon,
             kleinPolygon: kleinPolygon,
@@ -431,30 +440,39 @@ function main() {
 
         outlineGroup.children = [];
 
+        cam = camera.position.toArray();
+
         var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
-        const cam = camera.position.toArray();
 
         for (var i = 0; i < faces.length; i++) {
 
-            if (faces[i].type === "sphere") {
+            if (model === "poincare") {
 
-                if (model === "poincare") {
+                if (faces[i].poincareType === "sphere") {
 
                     center = faces[i].poincareSphereCenter;
                     r = faces[i].poincareRadius;
 
-                } else if (model === "uhp") {
+                }else {
+
+                    continue;
+    
+                }
+
+            } else if (model === "uhp") {
+
+                if (faces[i].uhpType === "sphere") {
 
                     center = faces[i].uhpSphereCenter;
                     r = faces[i].uhpRadius;
 
+                }else {
+
+                    continue;
+    
                 }
 
-            } else {
-
-                continue;
-
-            }
+            } 
 
             diff = VF.vectorDiff(center, cam);
             cs = VF.norm(diff);
@@ -485,22 +503,305 @@ function main() {
 
                 testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
 
-                // if (inHyperbolicFace(testCoord, i)) {
+                if (inHyperbolicFace(testCoord, i)) {
 
-                outline.push(testCoord);
+                    outline.push(testCoord);
 
-                //} else {
+                } else {
 
-                //     edges.push(outline);
-                //     outline = [];
+                    outlineGroup.add(drawLine(outline, 0x000000));
+                    outline = [];
 
-                // }
+                }
 
             }
 
-            outlineGroup.add(drawLine(outline, 0x000000))
+            outlineGroup.add(drawLine(outline, 0x000000));
 
         }
+
+    }
+
+    function inHyperbolicFace(point, face) {
+
+        var kleinPoint;
+
+        if (model === "uhp") {
+
+            if (point[2] < 0) {
+
+                return false;
+
+            }
+
+            kleinPoint = HF.upperHalfPlaneToKlein(point);
+
+        } else {
+
+            if (VF.norm2(point) > 1) {
+
+                return false;
+
+            }
+
+            kleinPoint = HF.poincareToKlein(point);
+
+        }
+
+        return pointInPolygon(kleinPoint, faces[face].kleinPolygon);
+
+    }
+
+    function pointInPolygon(point, polygon) {
+
+        var v0, v1, v2, dot01, dot12, dot20, dot11, dot22;
+
+        for (var i = 1; i < polygon.length - 1; i++) {
+
+            v0 = VF.vectorDiff(polygon[0], point);
+            v1 = VF.vectorDiff(polygon[i], point);
+            v2 = VF.vectorDiff(polygon[i + 1], point);
+
+            dot01 = VF.vectorDot(v0, v1);
+            dot12 = VF.vectorDot(v1, v2);
+            dot20 = VF.vectorDot(v2, v0);
+            dot11 = VF.vectorDot(v1, v1);
+            dot22 = VF.vectorDot(v2, v2);
+
+            if ((dot12 * dot20 > dot22 * dot01) && (dot01 * dot12 > dot11 * dot20)) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+    function visibleEdges() {
+
+        outline();
+
+        var edgeGroupLocal = new THREE.Group();
+
+        var drawVerts, segments, segmentsPoints, segNum, points;
+
+        for (var i = 0; i < edges.length; i++) {
+
+            if (model === "poincare") {
+
+                points = edges[i].poincareCoords;
+
+            } else if (model === "uhp") {
+
+                points = edges[i].uhpCoords;
+
+            }
+
+            if (points.length > 0) {
+
+                drawVerts = [];
+
+                for (var k = 0; k < points.length; k++) {
+
+                    drawVerts.push([points[k], visibilityTest(points[k])]);
+
+                }
+
+                segments = [[drawVerts[0]]];
+                segmentsPoints = [[drawVerts[0][0]]];
+                segNum = 0;
+
+                for (var k = 1; k < points.length; k++) {
+
+                    if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                        segments[segNum].push(drawVerts[k]);
+                        segmentsPoints[segNum].push(drawVerts[k][0]);
+
+                    } else {
+
+                        segNum++;
+                        segments.push([drawVerts[k]]);
+                        segmentsPoints.push([drawVerts[k][0]]);
+
+                    }
+
+                }
+
+                for (var k = 0; k < segments.length; k++) {
+
+                    if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                        edgeGroupLocal.add(drawLine(segmentsPoints[k], 0x000000));
+
+                        // } else {
+
+                        //     if (invisibleLines) {
+
+                        //         edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+
+                        //     }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return edgeGroupLocal;
+
+    }
+
+    function visibilityTest(point) {
+
+        cam = camera.position.toArray();
+
+        const pc = VF.vectorDiff(point, cam);
+
+        var cs, A, B, C, delta, t, sphereCenter, radius, d, normal;
+
+        for (var i = 0; i < faces.length; i++) {
+
+            if (model === "poincare") {
+
+                if (faces[i].poincareType === "sphere") {
+
+                    sphereCenter = faces[i].poincareSphereCenter;
+                    radius = faces[i].poincareRadius;
+                    d = faces[i].poincareD;
+                    normal = faces[i].poincareNormal;
+
+                    cs = VF.vectorDiff(cam, sphereCenter);
+
+                    A = VF.vectorDot(pc, pc);
+                    B = VF.vectorDot(pc, cs);
+                    C = VF.vectorDot(cs, cs) - radius * radius;
+
+                    delta = B * B - A * C;
+
+                    if ((delta <= 0) || isNaN(delta)) {
+
+                        continue;
+
+                    } else {
+
+                        t = (-B + Math.sqrt(delta)) / A;
+
+                        if (eps < t && t < 1 - eps) {
+
+                            if (inHyperbolicFace(VF.vectorSum([cam, VF.vectorScale(pc, t)]), i)) {
+
+                                return false;
+
+                            }
+
+                        }
+
+                        t = -2 * B / A - t;
+
+                        if (eps < t && t < 1 - eps) {
+
+                            if (inHyperbolicFace(VF.vectorSum([cam, VF.vectorScale(pc, t)]), i)) {
+
+                                return false;
+
+                            }
+
+                        }
+
+                    }
+
+                } else if (faces[i].poincareType === "plane") {
+
+                    t = (d - VF.vectorDot(cam, normal)) / VF.vectorDot(pc, normal);
+
+                    if (eps < t && t < 1 - eps) {
+
+                        if (inHyperbolicFace(VF.vectorSum([cam, VF.vectorScale(pc, t)]), i)) {
+
+                            return false;
+
+                        }
+
+                    }
+
+                }
+
+            } else if (model === "uhp") {
+
+                if (faces[i].uhpType === "sphere") {
+
+                    sphereCenter = faces[i].uhpSphereCenter;
+                    radius = faces[i].uhpRadius;
+                    d = faces[i].uhpD;
+                    normal = faces[i].uhpNormal;
+
+                    cs = VF.vectorDiff(cam, sphereCenter);
+
+                    A = VF.vectorDot(pc, pc);
+                    B = VF.vectorDot(pc, cs);
+                    C = VF.vectorDot(cs, cs) - radius * radius;
+
+                    delta = B * B - A * C;
+
+                    if ((delta <= 0) || isNaN(delta)) {
+
+                        continue;
+
+                    } else {
+
+                        t = (-B + Math.sqrt(delta)) / A;
+
+                        if (eps < t && t < 1 - eps) {
+
+                            if (inHyperbolicFace(VF.vectorSum([cam, VF.vectorScale(pc, t)]), i)) {
+
+                                return false;
+
+                            }
+
+                        }
+
+                        t = -2 * B / A - t;
+
+                        if (eps < t && t < 1 - eps) {
+
+                            if (inHyperbolicFace(VF.vectorSum([cam, VF.vectorScale(pc, t)]), i)) {
+
+                                return false;
+
+                            }
+
+                        }
+
+                    }
+
+                } else if (faces[i].uhpType === "plane") {
+
+                    t = (d - VF.vectorDot(cam, normal)) / VF.vectorDot(pc, normal);
+
+                    if (eps < t && t < 1 - eps) {
+
+                        if (inHyperbolicFace(VF.vectorSum([cam, VF.vectorScale(pc, t)]), i)) {
+
+                            return false;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return true;
 
     }
 
