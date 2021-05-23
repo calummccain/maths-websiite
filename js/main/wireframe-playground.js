@@ -3,16 +3,54 @@ import * as VF from "../maths-functions/vector-functions.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { SVGRenderer } from "../three-bits/SVGRenderer.js";
 
+import * as HG from "../maths-functions/hyperbolic-geodesic.js";
+import * as HF from "../maths-functions/hyperbolic-functions.js";
+
 window.onload = main;
 
 function main() {
 
     const canvas = document.getElementById("canvas");
     const rect = canvas.getBoundingClientRect();
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xE5E5E5);
+    var mode = "move";
+
+    var coords;
+
+    const width = 2;
+
+    const number = 50;
 
     var intersects;
 
     var model = "uhp";
+
+    const geometrySphere = new THREE.SphereBufferGeometry(0.2, 4, 4);
+    const materialSphere = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    var sphereMouse = new THREE.Mesh(geometrySphere, materialSphere);
+    scene.add(sphereMouse);
+
+    const materialSphere1 = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+    const materialSphere2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+    const materialSphere3 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+
+    var sphere1 = new THREE.Mesh(geometrySphere, materialSphere1);
+    var sphere2 = new THREE.Mesh(geometrySphere, materialSphere2);
+    var sphere3 = new THREE.Mesh(geometrySphere, materialSphere3);
+
+    sphere1.position.set(1, 0, 0);
+    sphere2.position.set(0, 1, 0);
+    sphere3.position.set(0, 0, 1);
+
+    scene.add(sphere1, sphere2, sphere3)
+
+    var vertex = [sphere1];
+    var edge = [sphere1, sphere2];
+    var face = [sphere1, sphere2, sphere3];
+
+    var edgeMarker = 0;
+    var faceMarker = 0;
 
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
@@ -21,13 +59,9 @@ function main() {
     renderer.setSize(WIDTH, HEIGHT);
     canvas.appendChild(renderer.domElement);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xE5E5E5);
-
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
     camera.position.set(5, 5, 5);
     camera.up = new THREE.Vector3(0, 0, 1);
-
 
     scene.add(camera);
 
@@ -39,13 +73,13 @@ function main() {
     scene.add(lineGroup);
 
     const geometry = new THREE.PlaneBufferGeometry(20, 20, 10, 10);
-    const material = new THREE.MeshLambertMaterial({ color: 0xBBBBBB, side: THREE.DoubleSide, opacity: 0.7, transparent: true });
+    const material = new THREE.MeshLambertMaterial({ color: 0xBBBBBB, side: THREE.DoubleSide, opacity: 0.1, transparent: true });
     const plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
 
-     // Make raycaster and mouse vector
-     var raycaster = new THREE.Raycaster();
-     var mouseVector = new THREE.Vector2();
+    // Make raycaster and mouse vector
+    var raycaster = new THREE.Raycaster();
+    var mouseVector = new THREE.Vector2();
 
     render();
 
@@ -70,13 +104,27 @@ function main() {
 
     }
 
-    document.getElementById("model").addEventListener("click", function () {
-        model = (model === "uhp") ? "poincare" : "uhp";
+    document.getElementById("addvertices").addEventListener("click", function () {
+        mode = "addvertices";
+    });
+
+    document.getElementById("addedges").addEventListener("click", function () {
+        mode = "addedges";
+    });
+
+    document.getElementById("addfaces").addEventListener("click", function () {
+        mode = "addfaces";
+    });
+
+    document.getElementById("move").addEventListener("click", function () {
+        mode = "move";
     });
 
     canvas.addEventListener("mouseup", onClick);
 
-    function onClick(event) {
+    canvas.addEventListener("mousemove", mouseMove);
+
+    function mouseMove(event) {
 
         event.preventDefault();
 
@@ -87,22 +135,68 @@ function main() {
         raycaster.setFromCamera(mouseVector, camera);
         intersects = raycaster.intersectObjects([plane]);
 
-        console.log(intersects)
+        if (intersects.length > 0) {
 
-        const geometry = new THREE.SphereBufferGeometry(0.1, 2, 2);
-        const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-        var sphere1 = new THREE.Mesh(geometry, material1);
-        sphere1.position.copy(intersects[0].point);
-        scene.add(sphere1);
+            sphereMouse.position.copy(intersects[0].point);
 
-        // var l1 = new THREE.PointLight(0xff0000, 10, 100);
-        // l1.position.set();
-        // console.log(l1);
-        // scene.add(l1);
+        }
 
-        // for (var i in scene.children) {
-        //     if (scene.children[i].material) scene.children[i].material.needsUpdate = true;
-        // }
+    }
+
+    function onClick(event) {
+
+        event.preventDefault();
+
+        if (mode === "addvertices") {
+
+            vertex[0].position.copy(sphereMouse.position);
+
+        } else if (mode === "addedges") {
+
+            edge[edgeMarker].position.copy(sphereMouse.position);
+
+            edgeMarker++;
+
+            if (edgeMarker == 2) {
+
+                console.log( edge[0].position.toArray(), HF.upperHalfPlaneToHyperboloid(edge[0].position.toArray()))
+
+                coords = HG.hyperbolicGeodesic(
+                    { hyperboloid: HF.upperHalfPlaneToHyperboloid(edge[0].position.toArray()) },
+                    { hyperboloid: HF.upperHalfPlaneToHyperboloid(edge[1].position.toArray()) },
+                    number,
+                    model
+                );
+
+                scene.add(drawLine(coords, 0x000000));
+
+                edgeMarker = 0;
+
+            }
+
+        } else if (mode === "addfaces") {
+
+            face[faceMarker].position.copy(sphereMouse.position);
+
+            faceMarker = (faceMarker + 1) % 3;
+
+        }
+
+    }
+
+    function drawLine(vectors, col) {
+
+        var threeVectors = [];
+
+        vectors.forEach((vect) => {
+            threeVectors.push(new THREE.Vector3().fromArray(vect));
+        });
+
+        var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
+        var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col, linewidth: width }));
+
+        return line;
+
     }
 
 }
