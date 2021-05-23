@@ -10,6 +10,8 @@ window.onload = main;
 
 function main() {
 
+    const eps = 1e-4;
+
     // Canvas constants
     const canvas = document.getElementById("canvas");
     const rect = canvas.getBoundingClientRect();
@@ -30,6 +32,8 @@ function main() {
     // parameters for the edges
     const edgeNumber = 50;
     const edgeWidth = 2;
+
+    var v1, v2, v3;
 
     var intersects;
 
@@ -186,7 +190,7 @@ function main() {
                 addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[0].position.toArray()), [edges.length - 1], [], []);
                 addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[1].position.toArray()), [edges.length - 1], [], []);
 
-                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 2], vertices[vertices.length - 1], edgeNumber), [vertices.length - 2, vertices.length - 1], [], []);
+                addToEdges(vertices.length - 2, vertices.length - 1, [vertices.length - 2, vertices.length - 1], [], []);
 
                 if (model === "poincare") {
 
@@ -197,7 +201,6 @@ function main() {
                     edgeGroup.add(drawLine(edges[edges.length - 1].uhpCoords, 0x000000));
 
                 }
-
 
                 edgeMarker = 0;
 
@@ -215,9 +218,13 @@ function main() {
                 addToVertices(HF.upperHalfPlaneToHyperboloid(faceControl[1].position.toArray()), [edges.length - 3, edges.length - 2], [faces.length - 1], []);
                 addToVertices(HF.upperHalfPlaneToHyperboloid(faceControl[2].position.toArray()), [edges.length - 2, edges.length - 1], [faces.length - 1], []);
 
-                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 3], vertices[vertices.length - 2], edgeNumber), [vertices.length - 3, vertices.length - 2], [], []);
-                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 2], vertices[vertices.length - 1], edgeNumber), [vertices.length - 2, vertices.length - 1], [], []);
-                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 1], vertices[vertices.length - 3], edgeNumber), [vertices.length - 3, vertices.length - 1], [], []);
+                v1 = vertices[vertices.length - 3];
+                v1 = vertices[vertices.length - 2];
+                v1 = vertices[vertices.length - 1];
+
+                addToEdges(vertices.length - 3, vertices.length - 2, [vertices.length - 3, vertices.length - 2], [], []);
+                addToEdges(vertices.length - 2, vertices.length - 1, [vertices.length - 2, vertices.length - 1], [], []);
+                addToEdges(vertices.length - 3, vertices.length - 1, [vertices.length - 3, vertices.length - 1], [], []);
 
                 if (model === "poincare") {
 
@@ -233,6 +240,7 @@ function main() {
 
                 }
 
+                addToFaces(vertices.length - 3, vertices.length - 2, vertices.length - 1, [vertices.length - 3, vertices.length - 2, vertices.length - 1], [edges.length - 3, edges.length - 2, edges.length - 1], []);
 
                 faceMarker = 0;
 
@@ -257,29 +265,153 @@ function main() {
 
     }
 
-    function addToVertices(vertex, edges, faces, cells) {
+    function addToVertices(vertex, e, f, c) {
 
         vertices.push({
             hyperboloid: vertex,
             klein: HF.hyperboloidToKlein(vertex),
             poincare: HF.hyperboloidToPoincare(vertex),
             uhp: HF.hyperboloidToUpperHalfPlane(vertex),
-            edges: edges,
-            faces: faces,
-            cells: cells
+            edges: e,
+            faces: f,
+            cells: c
         });
 
     }
 
-    function addToEdges(coords, vertices, faces, cells) {
+    function addToEdges(v1, v2, v, f, c) {
+
+        const coords = HG.hyperbolicGeodesic(vertices[v1], vertices[v2], edgeNumber);
 
         edges.push({
             poincareCoords: coords.poincare,
             uhpCoords: coords.uhp,
-            vertices: vertices,
-            faces: faces,
-            cells: cells
+            vertices: v,
+            faces: f,
+            cells: c
         });
+
+    }
+
+    function addToFaces(v1, v2, v3, v, e, c) {
+
+        var v1 = vertices[v1];
+        var v2 = vertices[v2];
+        var v3 = vertices[v3];
+
+        const hyperboloidPolygon = [
+            v1.hyperboloid,
+            v2.hyperboloid,
+            v3.hyperboloid
+        ];
+
+        const kleinPolygon = [
+            v1.klein,
+            v2.klein,
+            v3.klein
+        ];
+
+        var hyperboloidCenter = VF.vectorSum(hyperboloidPolygon);
+        hyperboloidCenter = VF.vectorScale(hyperboloidCenter, 1 / Math.sqrt(Math.abs(HF.hyperbolicNorm(hyperboloidCenter))));
+
+        const poincareCenter = HF.hyperboloidToPoincare(hyperboloidCenter);
+        const uhpCenter = HF.hyperboloidToUpperHalfPlane(hyperboloidCenter);
+
+        var type, poincareSphereCenter, poincareRadius, poincareD, poincareNormal, uhpSphereCenter, uhpRadius, uhpD, uhpNormal;
+
+        if (Math.abs(VF.determinant3([
+            VF.vectorDiff(v1.poincare, poincareCenter),
+            VF.vectorDiff(v2.poincare, poincareCenter),
+            VF.vectorDiff(v3.poincare, poincareCenter)
+        ])) > eps) {
+
+            type = "sphere";
+
+            [poincareSphereCenter, poincareRadius] = VF.circum4(v1.poincare, v2.poincare, v3.poincare, poincareCenter);
+
+            poincareD = VF.determinant3([
+                VF.vectorDiff(v1.poincare, poincareCenter),
+                VF.vectorDiff(v2.poincare, poincareCenter),
+                VF.vectorDiff(v3.poincare, poincareCenter)
+            ]);
+
+            poincareNormal = [0, 0, 0];
+
+        } else {
+
+            type = "plane";
+
+            poincareSphereCenter = [0, 0, 0];
+            poincareRadius = 0;
+
+            poincareD = 0;
+            poincareNormal = VF.vectorCross(VF.vectorDiff(v2.poincare), VF.vectorDiff(v3.poincare));
+
+        }
+
+        if (Math.abs(VF.determinant3([
+            VF.vectorDiff(v1.uhp, uhpCenter),
+            VF.vectorDiff(v2.uhp, uhpCenter),
+            VF.vectorDiff(v3.uhp, uhpCenter)
+        ])) > eps) {
+
+            type = "sphere";
+
+            [uhpSphereCenter, uhpRadius] = VF.circum4(v1.uhp, v2.uhp, v3.uhp, uhpCenter);
+
+            uhpD = VF.determinant3([
+                VF.vectorDiff(v1.uhp, uhpCenter),
+                VF.vectorDiff(v2.uhp, uhpCenter),
+                VF.vectorDiff(v3.uhp, uhpCenter)
+            ]);
+
+            uhpNormal = [0, 0, 0];
+
+        } else {
+
+            type = "plane";
+
+            if (v1.uhp[2] === Infinity) {
+
+                v1.uhp = uhpCenter;
+
+            } else if (v2.uhp[2] === Infinity) {
+
+                v2.uhp = uhpCenter;
+
+            } else if (v3.uhp[2] === Infinity) {
+
+                v3.uhp = uhpCenter;
+
+            }
+
+            uhpSphereCenter = [0, 0, 0];
+            uhpRadius = 0;
+
+            uhpD = VF.determinant3([v1.uhp, v2.uhp, v3.uhp]);
+            uhpNormal = VF.vectorCross(VF.vectorDiff(v2.uhp, v1.uhp), VF.vectorDiff(v3.uhp, v1.uhp));
+
+        }
+
+        faces.push({
+            type: type,
+            hyperboloidCenter: hyperboloidCenter,
+            hyperboloidPolygon: hyperboloidPolygon,
+            kleinPolygon: kleinPolygon,
+            poincareCenter: poincareCenter,
+            poincareSphereCenter: poincareSphereCenter,
+            poincareRadius: poincareRadius,
+            poincareD: poincareD,
+            poincareNormal: poincareNormal,
+            uhpCenter: uhpCenter,
+            uhpSphereCenter: uhpSphereCenter,
+            uhpRadius: uhpRadius,
+            uhpD: uhpD,
+            uhpNormal: uhpNormal,
+            vertices: v,
+            edges: e,
+            cells: c
+        })
 
     }
 
