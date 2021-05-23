@@ -11,6 +11,7 @@ window.onload = main;
 function main() {
 
     const eps = 1e-4;
+    const outlineRes = 8;
 
     // Canvas constants
     const canvas = document.getElementById("canvas");
@@ -32,8 +33,6 @@ function main() {
     // parameters for the edges
     const edgeNumber = 50;
     const edgeWidth = 2;
-
-    var v1, v2, v3;
 
     var intersects;
 
@@ -74,8 +73,23 @@ function main() {
     var faces = [];
     var cells = [];
 
+    var sin = [];
+    var cos = [];
+    var theta = 0;
+    const change = 2 * Math.PI / (outlineRes * edgeNumber);
+
+    for (var k = 0; k <= outlineRes * edgeNumber; k++) {
+
+        cos.push(Math.cos(theta));
+        sin.push(Math.sin(theta));
+
+        theta += change;
+
+    }
+
     var edgeGroup = new THREE.Group();
-    scene.add(edgeGroup);
+    var outlineGroup = new THREE.Group();
+    scene.add(edgeGroup, outlineGroup);
 
     var renderer = new SVGRenderer();
     renderer.setSize(WIDTH, HEIGHT);
@@ -218,10 +232,6 @@ function main() {
                 addToVertices(HF.upperHalfPlaneToHyperboloid(faceControl[1].position.toArray()), [edges.length - 3, edges.length - 2], [faces.length - 1], []);
                 addToVertices(HF.upperHalfPlaneToHyperboloid(faceControl[2].position.toArray()), [edges.length - 2, edges.length - 1], [faces.length - 1], []);
 
-                v1 = vertices[vertices.length - 3];
-                v1 = vertices[vertices.length - 2];
-                v1 = vertices[vertices.length - 1];
-
                 addToEdges(vertices.length - 3, vertices.length - 2, [vertices.length - 3, vertices.length - 2], [], []);
                 addToEdges(vertices.length - 2, vertices.length - 1, [vertices.length - 2, vertices.length - 1], [], []);
                 addToEdges(vertices.length - 3, vertices.length - 1, [vertices.length - 3, vertices.length - 1], [], []);
@@ -241,6 +251,8 @@ function main() {
                 }
 
                 addToFaces(vertices.length - 3, vertices.length - 2, vertices.length - 1, [vertices.length - 3, vertices.length - 2, vertices.length - 1], [edges.length - 3, edges.length - 2, edges.length - 1], []);
+
+                outline();
 
                 faceMarker = 0;
 
@@ -412,6 +424,83 @@ function main() {
             edges: e,
             cells: c
         })
+
+    }
+
+    function outline() {
+
+        outlineGroup.children = [];
+
+        var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
+        const cam = camera.position.toArray();
+
+        for (var i = 0; i < faces.length; i++) {
+
+            if (faces[i].type === "sphere") {
+
+                if (model === "poincare") {
+
+                    center = faces[i].poincareSphereCenter;
+                    r = faces[i].poincareRadius;
+
+                } else if (model === "uhp") {
+
+                    center = faces[i].uhpSphereCenter;
+                    r = faces[i].uhpRadius;
+
+                }
+
+            } else {
+
+                continue;
+
+            }
+
+            diff = VF.vectorDiff(center, cam);
+            cs = VF.norm(diff);
+
+            t = (r * r) / (cs * cs);
+            h = r * Math.sqrt(1 - t);
+            interp = VF.vectorSum([VF.vectorScale(center, 1 - t), VF.vectorScale(cam, t)]);
+
+            perp = [1, 0, 0];
+
+            if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
+
+                perp = [-diff[1] * h / VF.norm([diff[0], diff[1]]), diff[0] * h / VF.norm([diff[0], diff[1]]), 0];
+
+            }
+
+            v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / cs));
+
+            if (v[2] < 0) {
+
+                v = VF.vectorScale(v, -1);
+
+            }
+
+            outline = [];
+
+            for (var k = 0; k <= outlineRes * edgeNumber; k++) {
+
+                testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
+
+                // if (inHyperbolicFace(testCoord, i)) {
+
+                outline.push(testCoord);
+
+                //} else {
+
+                //     edges.push(outline);
+                //     outline = [];
+
+                // }
+
+            }
+
+            outlineGroup.add(drawLine(outline, 0x000000))
+
+        }
 
     }
 
