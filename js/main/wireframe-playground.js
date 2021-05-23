@@ -10,27 +10,38 @@ window.onload = main;
 
 function main() {
 
+    // Canvas constants
     const canvas = document.getElementById("canvas");
     const rect = canvas.getBoundingClientRect();
+
+    var WIDTH = canvas.clientWidth;
+    var HEIGHT = canvas.clientHeight;
+
+    // Define scene and background colour
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xE5E5E5);
+
+    // mode - the current selected move/vertex/edge/face/cell
     var mode = "move";
+
+    // hyperbolic model
+    var model = "uhp";
 
     var coords;
 
-    const width = 2;
-
-    const number = 50;
+    // parameters for the edges
+    const edgeNumber = 50;
+    const edgeWidth = 2;
 
     var intersects;
 
-    var model = "uhp";
-
+    // Mouse location
     const geometrySphere = new THREE.SphereBufferGeometry(0.2, 4, 4);
     const materialSphere = new THREE.MeshBasicMaterial({ color: 0xffffff });
     var sphereMouse = new THREE.Mesh(geometrySphere, materialSphere);
     scene.add(sphereMouse);
 
+    // Locations of the control points
     const materialSphere1 = new THREE.MeshBasicMaterial({ color: 0xff00ff });
     const materialSphere2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
     const materialSphere3 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
@@ -45,15 +56,21 @@ function main() {
 
     scene.add(sphere1, sphere2, sphere3)
 
-    var vertex = [sphere1];
-    var edge = [sphere1, sphere2];
-    var face = [sphere1, sphere2, sphere3];
+    // control arrays
+    var vertexControl = [sphere1];
+    var edgeControl = [sphere1, sphere2];
+    var faceControl = [sphere1, sphere2, sphere3];
 
+    // selector markers
     var edgeMarker = 0;
     var faceMarker = 0;
 
-    var WIDTH = canvas.clientWidth;
-    var HEIGHT = canvas.clientHeight;
+    // arrays of vertex/edge/face/cell data
+
+    var vertices = [];
+    var edges = [];
+    var faces = [];
+    var cells = [];
 
     var renderer = new SVGRenderer();
     renderer.setSize(WIDTH, HEIGHT);
@@ -149,26 +166,33 @@ function main() {
 
         if (mode === "addvertices") {
 
-            vertex[0].position.copy(sphereMouse.position);
+            vertexControl[0].position.copy(sphereMouse.position);
+
+            addToVertices(HF.upperHalfPlaneToHyperboloid(sphereMouse.position.toArray()), [], [], []);
 
         } else if (mode === "addedges") {
 
-            edge[edgeMarker].position.copy(sphereMouse.position);
+            edgeControl[edgeMarker].position.copy(sphereMouse.position);
 
             edgeMarker++;
 
             if (edgeMarker == 2) {
 
-                console.log( edge[0].position.toArray(), HF.upperHalfPlaneToHyperboloid(edge[0].position.toArray()))
+                addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[0].position.toArray()), [edges.length], [], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(edgeControl[1].position.toArray()), [edges.length], [], []);
 
-                coords = HG.hyperbolicGeodesic(
-                    { hyperboloid: HF.upperHalfPlaneToHyperboloid(edge[0].position.toArray()) },
-                    { hyperboloid: HF.upperHalfPlaneToHyperboloid(edge[1].position.toArray()) },
-                    number,
-                    model
-                );
+                addToEdges(HG.hyperbolicGeodesic(vertices[vertices.length - 2], vertices[vertices.length - 1], edgeNumber), [vertices.length - 2, vertices.length - 1], [], []);
 
-                scene.add(drawLine(coords, 0x000000));
+                if (model === "poincare") {
+
+                    scene.add(drawLine(edges[edges.length - 1].poincareCoords, 0x000000));
+
+                } else if (model === "uhp") {
+
+                    scene.add(drawLine(edges[edges.length - 1].uhpCoords, 0x000000));
+
+                }
+
 
                 edgeMarker = 0;
 
@@ -176,7 +200,7 @@ function main() {
 
         } else if (mode === "addfaces") {
 
-            face[faceMarker].position.copy(sphereMouse.position);
+            faceControl[faceMarker].position.copy(sphereMouse.position);
 
             faceMarker = (faceMarker + 1) % 3;
 
@@ -193,9 +217,35 @@ function main() {
         });
 
         var geometry = new THREE.BufferGeometry().setFromPoints(threeVectors);
-        var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col, linewidth: width }));
+        var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: col, linewidth: edgeWidth }));
 
         return line;
+
+    }
+
+    function addToVertices(vertex, edges, faces, cells) {
+
+        vertices.push({
+            hyperboloid: vertex,
+            klein: HF.hyperboloidToKlein(vertex),
+            poincare: HF.hyperboloidToPoincare(vertex),
+            uhp: HF.hyperboloidToUpperHalfPlane(vertex),
+            edges: edges,
+            faces: faces,
+            cells: cells
+        });
+
+    }
+
+    function addToEdges(coords, vertices, faces, cells) {
+
+        edges.push({
+            poincareCoords: coords.poincare,
+            uhpCoords: coords.uhp,
+            vertices: vertices,
+            faces: faces,
+            cells: cells
+        });
 
     }
 
