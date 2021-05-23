@@ -10,9 +10,9 @@ function main() {
     const canvas = document.getElementById("canvas");
     const rect = canvas.getBoundingClientRect();
 
-    var model = "uhp";
+    var intersects;
 
-    var [mousex, mousey, mousez] = [0, 0, 0];
+    var model = "uhp";
 
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
@@ -39,9 +39,13 @@ function main() {
     scene.add(lineGroup);
 
     const geometry = new THREE.PlaneBufferGeometry(20, 20, 10, 10);
-    const material = new THREE.MeshLambertMaterial({ color: 0x999999, side: THREE.DoubleSide, opacity: 0.7, transparent: true });
+    const material = new THREE.MeshLambertMaterial({ color: 0xBBBBBB, side: THREE.DoubleSide, opacity: 0.7, transparent: true });
     const plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
+
+     // Make raycaster and mouse vector
+     var raycaster = new THREE.Raycaster();
+     var mouseVector = new THREE.Vector2();
 
     render();
 
@@ -77,24 +81,28 @@ function main() {
         event.preventDefault();
 
         // Get the relative position of the mouse to the canvas
-        mousex = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-        mousey = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
-        mousez = 1;
+        mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
+        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
 
-        var cam = camera.position.toArray();
+        raycaster.setFromCamera(mouseVector, camera);
+        intersects = raycaster.intersectObjects([plane]);
 
-        var ray = VF.vectorDiff([mousex, mousey, mousez], cam);
+        console.log(intersects)
 
-        var intersect = VF.vectorSum([VF.vectorScale(ray, -cam[2] / ray[2]), cam])
+        const geometry = new THREE.SphereBufferGeometry(0.1, 2, 2);
+        const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        var sphere1 = new THREE.Mesh(geometry, material1);
+        sphere1.position.copy(intersects[0].point);
+        scene.add(sphere1);
 
-        var l1 = new THREE.PointLight(0xff0000, 10, 100);
-        l1.position.set(intersect[0], intersect[1], intersect[2]);
-        console.log(l1);
-        scene.add(l1);
+        // var l1 = new THREE.PointLight(0xff0000, 10, 100);
+        // l1.position.set();
+        // console.log(l1);
+        // scene.add(l1);
 
-        for (var i in scene.children) {
-            if (scene.children[i].material) scene.children[i].material.needsUpdate = true;
-        }
+        // for (var i in scene.children) {
+        //     if (scene.children[i].material) scene.children[i].material.needsUpdate = true;
+        // }
     }
 
 }
