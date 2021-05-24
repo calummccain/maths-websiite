@@ -453,10 +453,10 @@ function main() {
                     center = faces[i].poincareSphereCenter;
                     r = faces[i].poincareRadius;
 
-                }else {
+                } else {
 
                     continue;
-    
+
                 }
 
             } else if (model === "uhp") {
@@ -466,13 +466,13 @@ function main() {
                     center = faces[i].uhpSphereCenter;
                     r = faces[i].uhpRadius;
 
-                }else {
+                } else {
 
                     continue;
-    
+
                 }
 
-            } 
+            }
 
             diff = VF.vectorDiff(center, cam);
             cs = VF.norm(diff);
@@ -802,6 +802,28 @@ function main() {
         }
 
         return true;
+
+    }
+
+    function pairwise() {
+
+        for (var i = 0; i < faces.length; i++) {
+
+            for (var j = i + 1; j < faces.length; j++) {
+
+                if (model === "poincare") {
+
+                    if (poincareType === "sphere") {
+
+
+
+                    }
+
+                }
+
+            }
+
+        }
 
     }
 
