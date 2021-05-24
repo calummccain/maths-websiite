@@ -14,20 +14,20 @@ import { dodecahedronData } from "../data/53n.js";
 import { hexagonData } from "../data/63n.js";
 import { pqrData } from "../data/pqr.js";
 
-// import { tetrahedronTruncData } from "../data/33nt.js";
-import { tetrahedronTruncData } from "../data/33ntt.js";
+import { tetrahedronTruncData } from "../data/t33n.js";
+import { tetrahedronRectData } from "../data/r33n.js";
 
-// import { octahedronTruncData } from "../data/34nt.js";
-import { octahedronTruncData } from "../data/34ntt.js";
+import { octahedronTruncData } from "../data/t34n.js";
+import { octahedronRectData } from "../data/r34n.js";
 
-// import { icosahedronTruncData } from "../data/35nt.js";
-import { icosahedronTruncData } from "../data/35ntt.js";
+import { icosahedronTruncData } from "../data/t35n.js";
+import { icosahedronRectData } from "../data/r35n.js";
 
-// import { cubeTruncData } from "../data/43nt.js";
-import { cubeTruncData } from "../data/43ntt.js";
+import { cubeTruncData } from "../data/t43n.js";
+import { cubeRectData } from "../data/r43n.js";
 
-import { dodecahedronTruncData } from "../data/53ntt.js";
-// import { dodecahedronTruncData } from "../data/53nt.js";
+import { dodecahedronTruncData } from "../data/t53n.js";
+import { dodecahedronRectData } from "../data/r53n.js";
 
 
 function objectMaker(parameters) {
@@ -51,16 +51,28 @@ function objectMaker(parameters) {
         "{5,3}": dodecahedronTruncData
     }
 
+    const geomRect = {
+        "{3,3}": tetrahedronRectData,
+        "{3,4}": octahedronRectData,
+        "{3,5}": icosahedronRectData,
+        "{4,3}": cubeRectData,
+        "{5,3}": dodecahedronRectData
+    }
+
     const position = parameters.position;
     const [p, q, r] = [parameters.p, parameters.q, parameters.r];
     const name = "{" + p + "," + q + "," + r + "}";
     var data;
 
-    if (!parameters.truncated) {
+    if (parameters.modifier === "") {
 
         data = ((p - 2) * (q - 2) > 4) ? pqrData(p, q, r, parameters.numFaces) : geom["{" + p + "," + q + "}"](r);
 
-    } else {
+    } else if (parameters.modifier === "r") {
+
+        data = geomRect["{" + p + "," + q + "}"](r);
+
+    } else if (parameters.modifier === "t") {
 
         data = geomTrunc["{" + p + "," + q + "}"](r);
 

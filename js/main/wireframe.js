@@ -8,7 +8,8 @@ window.onload = main;
 
 function main() {
 
-    var p = 5, q = 3, r = 6;
+    var p = 3, q = 3, r = 3;
+    var modifier = "";
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var invisible = false;
     var geom = {};
@@ -43,7 +44,7 @@ function main() {
         p: p,
         q: q,
         r: r,
-        truncated: true,
+        modifier: modifier,
         model: "poincare",
         refinement: 50,
         invisibleLines: invisible,
@@ -122,35 +123,31 @@ function main() {
         data.invisibleLines = !data.invisibleLines;
     });
 
-    document.getElementById("truncated").addEventListener("click", function () {
-        data.truncated = !data.truncated;
-    });
-
     document.getElementById("model").addEventListener("click", function () {
         data.model = (data.model === "uhp") ? "poincare" : "uhp";
     });
 
     $(document).ready(function () {
 
-        updateCellSelector(data.p);
+        updateCellSelector(data.r);
 
         $("#pqr").click(function () {
             $("#pqrselector").toggle();
         });
 
         $("#rightarrow").click(function () {
-            data.p = Math.min(data.p + 1, 8);
-            updateCellSelector(data.p);
+            data.r = Math.min(data.r + 1, 8);
+            updateCellSelector(data.r);
         });
 
         $("#leftarrow").click(function () {
-            data.p = Math.max(data.p - 1, 3);
-            updateCellSelector(data.p);
+            data.r = Math.max(data.r - 1, 3);
+            updateCellSelector(data.r);
         });
 
         $(".cellselector").click(function () {
-            [q, r] = $(this).attr("id").split("-");
-            data.q = Number(q), data.r = Number(r);
+            [p, q, modifier] = $(this).attr("id").split("-");
+            data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         })
@@ -165,20 +162,94 @@ function main() {
         "u": "#BAE1FF"
     }
 
-    function updateCellSelector(p) {
+    const truncRectDict = {
+        "r-3-3-3": "s",
+        "r-3-3-4": "s",
+        "r-3-3-5": "s",
+        "r-3-3-6": "h",
+        "r-3-3-7": "h",
+        "r-3-3-8": "h",
+        "r-3-4-3": "s",
+        "r-3-4-4": "h",
+        "r-3-4-5": "h",
+        "r-3-4-6": "h",
+        "r-3-4-7": "h",
+        "r-3-4-8": "h",
+        "r-3-5-3": "h",
+        "r-3-5-4": "h",
+        "r-3-5-5": "h",
+        "r-3-5-6": "h",
+        "r-3-5-7": "h",
+        "r-3-5-8": "h",
+        "r-4-3-3": "s",
+        "r-4-3-4": "e",
+        "r-4-3-5": "h",
+        "r-4-3-6": "h",
+        "r-4-3-7": "h",
+        "r-4-3-8": "h",
+        "r-5-3-3": "s",
+        "r-5-3-4": "h",
+        "r-5-3-5": "h",
+        "r-5-3-6": "h",
+        "r-5-3-7": "h",
+        "r-5-3-8": "h",
+        "t-3-3-3": "s",
+        "t-3-3-4": "s",
+        "t-3-3-5": "s",
+        "t-3-3-6": "h",
+        "t-3-3-7": "h",
+        "t-3-3-8": "h",
+        "t-3-4-3": "s",
+        "t-3-4-4": "h",
+        "t-3-4-5": "h",
+        "t-3-4-6": "h",
+        "t-3-4-7": "h",
+        "t-3-4-8": "u",
+        "t-3-5-3": "h",
+        "t-3-5-4": "h",
+        "t-3-5-5": "h",
+        "t-3-5-6": "h",
+        "t-3-5-7": "u",
+        "t-3-5-8": "u",
+        "t-4-3-3": "s",
+        "t-4-3-4": "e",
+        "t-4-3-5": "h",
+        "t-4-3-6": "h",
+        "t-4-3-7": "h",
+        "t-4-3-8": "h",
+        "t-5-3-3": "s",
+        "t-5-3-4": "h",
+        "t-5-3-5": "h",
+        "t-5-3-6": "h",
+        "t-5-3-7": "h",
+        "t-5-3-8": "h"
+    }
 
-        for (var q = 3; q <= 8; q++) {
+    function updateCellSelector(r) {
 
-            for (var r = 3; r <= 8; r++) {
+        for (var p = 3; p <= 8; p++) {
+
+            for (var q = 3; q <= 8; q++) {
 
                 cellType = typeOfCell(p, q, r);
 
-                document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
-                document.getElementById(q + "-" + r).style.backgroundColor = cellTypeColours[cellType];
+                document.getElementById(p + "-" + q + "-").innerHTML = "{" + p + "," + q + "," + r + "}";
+                document.getElementById(p + "-" + q + "-").style.backgroundColor = cellTypeColours[cellType];
 
             }
 
         }
+
+        [[3, 3], [3, 4], [3, 5], [4, 3], [5, 3]].forEach(([p, q]) => {
+
+            ["t", "r"].forEach((affix) => {
+
+                document.getElementById(p + "-" + q + "-" + affix).innerHTML = affix + "{" + p + "," + q + "," + r + "}";
+                document.getElementById(p + "-" + q + "-" + affix).style.backgroundColor = cellTypeColours[truncRectDict[affix + "-" + p + "-" + q + "-" + r]];
+
+            })
+
+        })
 
     }
 
