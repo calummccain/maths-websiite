@@ -1,11 +1,12 @@
 // ========================================================
-// Order n tetrahedral truncated ??? tt{3,3,n}
+// Order n tetrahedral truncated t{3,3,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     19/05/21 Initial commit
+//     24/05/21 Renamed
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";

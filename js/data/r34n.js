@@ -1,17 +1,18 @@
 // ========================================================
-// Order n octahedral truncated ? t{3,4,n}
+// Order n octahedral rectified r{3,4,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     24/05/21 Renamed
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
 import { rt2 } from "./constants.js";
 
-const octahedronTruncData = (n) => {
+const octahedronRectData = (n) => {
 
     const cos = Math.cos(Math.PI / n) ** 2;
     const tan = 1 / cos - 1;
@@ -104,4 +105,4 @@ const octahedronTruncData = (n) => {
 
 }
 
-export { octahedronTruncData };
+export { octahedronRectData };

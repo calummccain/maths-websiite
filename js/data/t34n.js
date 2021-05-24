@@ -1,15 +1,16 @@
 // ========================================================
-// Order n octahedral truncated ? tt{3,4,n}
+// Order n octahedral truncated t{3,4,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     20/05/21 Initial commit
+//     24/05/21 Renamed
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
-import { rt2, rt5, rt6 } from "./constants.js";
+import { rt2, rt5 } from "./constants.js";
 
 const octahedronTruncData = (n) => {
 

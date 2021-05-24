@@ -4,7 +4,8 @@ import {
     poincareToUpperHalfPlaneEps,
     poincareToHyperboloidEps,
     kleinToPoincareEps,
-    geodesicEndpointsEps
+    geodesicEndpointsEps,
+    upperHalfPlaneToHyperboloidEps
 } from "../eps.js";
 
 // ========================================================
@@ -264,7 +265,14 @@ function poincareToUpperHalfPlane(point) {
 
 function upperHalfPlaneToHyperboloid(point) {
 
+    if (point[2] > upperHalfPlaneToHyperboloidEps) {
+
     return VF.vectorScale([(VF.norm2(point) + 1) * 0.5, point[0], point[1], (VF.norm2(point) - 1) * 0.5], 1 / point[2]);
+
+    } else {
+
+        return [(VF.norm2(point) + 1) * 0.5, point[0], point[1], (VF.norm2(point) - 1) * 0.5];
+    }
 
 }
 

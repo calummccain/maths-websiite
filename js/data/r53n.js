@@ -1,41 +1,59 @@
 // ========================================================
-// Order n icosahedral tuncated? t{3,5,n}
+// Order n dodecahderal rectified r{5,3,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     21/05/21 Constants tidy up
+//              Look into uncompact
+//     24/05/21 Renamed
 //=========================================================
 
-import { p, p2, p3, p4, p5, p_1, p_2, p_3 } from "./constants.js";
+import { p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
-const icosahedronTruncData = (n) => {
+const dodecahedronRectData = (n) => {
 
-    const metric = boundaries(n, Math.PI / Math.atan(p2), Infinity);
-
+    const metric = boundaries(n, Math.PI / Math.atan(p), Infinity);
     const cos = Math.cos(Math.PI / n) ** 2;
+    const rt = Math.sqrt(5);
     const cot = cos / (1 - cos);
 
     const d =
         (n == 3) ? (v) => [
-            ((p4 - 1) * v[0] - (p3 - 3 * p_1) * v[2] - (p - 3 * p_3) * v[3]) / 2,
-            v[1],
-            (p5 * v[0] + (2 - p4) * v[2] - p2 * v[3]) / 2,
-            (p3 * v[0] - p2 * v[2] + v[3]) / 2
+            (p * v[0] + v[1] * p_3 + v[3] * p_4) / 2,
+            (p3 * v[0] - v[1] * p_1 - p * v[3]) / 2,
+            v[2],
+            (p2 * v[0] - p * v[1] + v[3]) / 2
+        ] : (n == 4) ? (v) => [
+            p2 * v[0] - v[1] - v[3] * p_1,
+            p3 * v[0] - p * v[1] - p * v[3],
+            v[2],
+            p2 * v[0] - p * v[1]
+        ] : (n == 5) ? (v) => [
+            ((4 * p + 1) * v[0] - (4 * p - 1) * p_1 * v[1] - (4 * p - 1) * p_2 * v[3]) / 2,
+            (p5 * v[0] + (2 - p4) * v[1] - p3 * v[3]) / 2,
+            v[2],
+            (p4 * v[0] - p3 * v[1] - v[3] * p_1) / 2
+        ] : (n == 6) ? (v) => [
+            ((2 + p4) * v[0] - p3 * v[1] - p2 * v[3]) / 2,
+            (3 * p3 * v[0] + (2 - 3 * p2) * v[1] - 3 * p * v[3]) / 2,
+            v[2],
+            (3 * p2 * v[0] - 3 * p * v[1] - v[3]) / 2
         ] : (v) => [
-            (6 * p2 * cos - 1) * v[0] + (2 * p_1 - 6 * p * cos) * v[2] + (2 * p_3 - 6 * cos * p_1) * v[3],
-            v[1],
-            2 * p5 * cos * v[0] + (1 - 2 * p4 * cos) * v[2] - 2 * p2 * cos * v[3],
-            2 * p3 * cos * v[0] - 2 * p2 * cos * v[2] + (1 - 2 * cos) * v[3]
+            (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 * p_1) * v[1] - (2 * rt * cos * p_1 - 2 * p_2) * v[3],
+            2 * p3 * cos * v[0] + (1 - 2 * p2 * cos) * v[1] - 2 * p * cos * v[3],
+            v[2],
+            2 * p2 * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
         ];
 
     const f = (v) => [
-        p2 * Math.sqrt(Math.abs(cot)) * v[0],
-        Math.sqrt(Math.abs(p2 * cot - p_2)) * v[1],
-        Math.sqrt(Math.abs(p2 * cot - p_2)) * v[2],
-        Math.sqrt(Math.abs(p2 * cot - p_2)) * v[3]
+        p * Math.sqrt(Math.abs(cot)) * v[0],
+        Math.sqrt(Math.abs(cot - p_2)) * v[1],
+        Math.sqrt(Math.abs(cot - p_2)) * v[2],
+        Math.sqrt(Math.abs(cot - p_2)) * v[3]
     ];
 
     return {
@@ -99,22 +117,20 @@ const icosahedronTruncData = (n) => {
         numFaces: 32,
 
         // CFE
-        // (0, 1, 0, 0)
-        a: (v) => [v[0], -v[1], v[2], v[3]],
-
+        // (0, 0, 1, 0)
+        a: (v) => [v[0], v[1], -v[2], v[3]],
         // CFV
-        // (0, p, -1, 1 / p)
-        b: (v) => [v[0], (v[1] + v[2] * p_1 - p * v[3]) / 2, (v[1] * p_1 + p * v[2] + v[3]) / 2, (-p * v[1] + v[2] - v[3] * p_1) / 2],
+        // (0, 1, -p ** 2, p)
+        b: (v) => [v[0], (p * v[1] + v[2] + v[3] * p_1) / 2, (v[1] - v[2] * p_1 - p * v[3]) / 2, (v[1] * p_1 - p * v[2] + v[3]) / 2],
 
         // CEV
         // (0, 0, 0, 1)
         c: (v) => [v[0], v[1], v[2], -v[3]],
 
         // FEV
-        // (p cot ** 2 - 1 / p ** 3, 0, p ** 2, 1)
+        // ?????
         d: d,
 
-        // Identity matrix
         e: (v) => v,
 
         f: f,
@@ -123,20 +139,20 @@ const icosahedronTruncData = (n) => {
 
         outerReflection: "d",
 
-        // (1, 1, p, 0)
-        V: [1, 1, p, 0],
+        // (1, p, 1 / p, 0)
+        V: [1, p, p_1, 0],
 
-        // (1, 0, p, 0)
-        E: [1, 0, p, 0],
+        // (1, p, 0, 0)
+        E: [1, p, 0, 0],
 
-        // (3, 0, p ** 3, p)
-        F: [3, 0, p3, p],
+        // (3 - p, p, 0, 1)
+        F: [3 - p, p, 0, 1],
 
         // (1, 0, 0, 0)
         C: [1, 0, 0, 0],
 
         // 3 4 5 6 7
-        // h u u u u
+        // s h h p u
         metric: metric,
 
         cellType: "spherical"
@@ -145,4 +161,4 @@ const icosahedronTruncData = (n) => {
 
 }
 
-export { icosahedronTruncData };
+export { dodecahedronRectData };

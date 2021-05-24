@@ -1,17 +1,18 @@
 // ========================================================
-// Order n cubic truncated? t{4,3,n}
+// Order n cubic rectified r{4,3,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     24/05/21 Renamed
 //=========================================================
 
 import { p, p2, p_1 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
-const cubeTruncData = (n) => {
+const cubeRectData = (n) => {
 
     const metric = boundaries(n, 4, Infinity);
     const cos = Math.cos(2 * Math.PI / n);
@@ -129,4 +130,4 @@ const cubeTruncData = (n) => {
 
 }
 
-export { cubeTruncData };
+export { cubeRectData };
