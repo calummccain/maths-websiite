@@ -12,7 +12,7 @@
 import { p, p2, p3, p4, p5, p_1, p_2, p_3 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
-const icosahedronTruncData = (n) => {
+const icosahedronRectData = (n) => {
 
     const metric = boundaries(n, Math.PI / Math.atan(p2), Infinity);
 
@@ -146,4 +146,4 @@ const icosahedronTruncData = (n) => {
 
 }
 
-export { icosahedronTruncData };
+export { icosahedronRectData };

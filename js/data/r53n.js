@@ -14,7 +14,7 @@
 import { p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
-const dodecahedronTruncData = (n) => {
+const dodecahedronRectData = (n) => {
 
     const metric = boundaries(n, Math.PI / Math.atan(p), Infinity);
     const cos = Math.cos(Math.PI / n) ** 2;
@@ -161,4 +161,4 @@ const dodecahedronTruncData = (n) => {
 
 }
 
-export { dodecahedronTruncData };
+export { dodecahedronRectData };

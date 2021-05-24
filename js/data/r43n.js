@@ -12,7 +12,7 @@
 import { p, p2, p_1 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
-const cubeTruncData = (n) => {
+const cubeRectData = (n) => {
 
     const metric = boundaries(n, 4, Infinity);
     const cos = Math.cos(2 * Math.PI / n);
@@ -130,4 +130,4 @@ const cubeTruncData = (n) => {
 
 }
 
-export { cubeTruncData };
+export { cubeRectData };
