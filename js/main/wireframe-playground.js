@@ -46,25 +46,30 @@ function main() {
     const materialSphere1 = new THREE.MeshBasicMaterial({ color: 0xff00ff });
     const materialSphere2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
     const materialSphere3 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    const materialSphere4 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
     var sphere1 = new THREE.Mesh(geometrySphere, materialSphere1);
     var sphere2 = new THREE.Mesh(geometrySphere, materialSphere2);
     var sphere3 = new THREE.Mesh(geometrySphere, materialSphere3);
+    var sphere4 = new THREE.Mesh(geometrySphere, materialSphere4);
 
     sphere1.position.set(1, 0, 0);
     sphere2.position.set(0, 1, 0);
     sphere3.position.set(0, 0, 1);
+    sphere4.position.set(0, 0, 0);
 
-    scene.add(sphere1, sphere2, sphere3)
+    scene.add(sphere1, sphere2, sphere3, sphere4)
 
     // control arrays
     var vertexControl = [sphere1];
     var edgeControl = [sphere1, sphere2];
     var faceControl = [sphere1, sphere2, sphere3];
+    var cellControl = [sphere1, sphere2, sphere3, sphere4];
 
     // selector markers
     var edgeMarker = 0;
     var faceMarker = 0;
+    var cellMarker = 0;
 
     // arrays of vertex/edge/face/cell data
 
@@ -152,6 +157,10 @@ function main() {
 
     document.getElementById("addfaces").addEventListener("click", function () {
         mode = "addfaces";
+    });
+
+    document.getElementById("addcells").addEventListener("click", function () {
+        mode = "addcells";
     });
 
     document.getElementById("move").addEventListener("click", function () {
@@ -261,6 +270,59 @@ function main() {
                 outline();
 
                 faceMarker = 0;
+
+            }
+
+        } else if (mode === "addcells") {
+
+            cellControl[cellMarker].position.copy(sphereMouse.position);
+
+            cellMarker++;
+
+            if (cellMarker == 4) {
+
+                addToVertices(HF.upperHalfPlaneToHyperboloid(cellControl[0].position.toArray()), [], [], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(cellControl[1].position.toArray()), [], [], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(cellControl[2].position.toArray()), [], [], []);
+                addToVertices(HF.upperHalfPlaneToHyperboloid(cellControl[3].position.toArray()), [], [], []);
+
+                addToEdges(vertices.length - 4, vertices.length - 3, [], [], []);
+                addToEdges(vertices.length - 4, vertices.length - 2, [], [], []);
+                addToEdges(vertices.length - 4, vertices.length - 1, [], [], []);
+                addToEdges(vertices.length - 3, vertices.length - 2, [], [], []);
+                addToEdges(vertices.length - 3, vertices.length - 1, [], [], []);
+                addToEdges(vertices.length - 2, vertices.length - 1, [], [], []);
+
+                if (model === "poincare") {
+
+                    edgeGroup.add(drawLine(edges[edges.length - 6].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 5].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 4].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 3].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 2].poincareCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 1].poincareCoords, 0x000000));
+
+                } else if (model === "uhp") {
+
+                    edgeGroup.add(drawLine(edges[edges.length - 6].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 5].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 4].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 3].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 2].uhpCoords, 0x000000));
+                    edgeGroup.add(drawLine(edges[edges.length - 1].uhpCoords, 0x000000));
+
+                }
+
+                addToFaces(vertices.length - 3, vertices.length - 2, vertices.length - 1, [], [], []);
+                addToFaces(vertices.length - 4, vertices.length - 2, vertices.length - 1, [], [], []);
+                addToFaces(vertices.length - 4, vertices.length - 3, vertices.length - 1, [], [], []);
+                addToFaces(vertices.length - 4, vertices.length - 3, vertices.length - 2, [], [], []);
+
+                addToCells(vertices.length - 4, vertices.length - 3, vertices.length - 2, vertices.length - 1, [], []);
+
+                outline();
+
+                cellMarker = 0;
 
             }
 
@@ -433,6 +495,16 @@ function main() {
             edges: e,
             cells: c
         })
+
+    }
+
+    function addToCells(v1, v2, v3, v4, e, f) {
+
+        cells.push({
+            vertices: [v1, v2, v3, v4],
+            edges: e,
+            faces: f
+        });
 
     }
 
