@@ -1,11 +1,12 @@
 // ========================================================
-// Order n icosahedral tuncated? t{3,5,n}
+// Order n icosahedral tuncated t{3,5,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     20/05/21 Initial commit
+//     24/05/21 Renamed
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_2, p_3 } from "./constants.js";

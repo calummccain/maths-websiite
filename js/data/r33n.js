@@ -1,15 +1,16 @@
 // ========================================================
-// Order n tetrahedral truncated ??? t{3,3,n}
+// Order n tetrahedral rectified r{3,3,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     24/05/21 Renamed
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
-import { rt2, rt3, rt5, p2, p_1 } from "./constants.js";
+import { rt2, rt5, p2 } from "./constants.js";
 
 const tetrahedronTruncData = (n) => {
 

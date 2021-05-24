@@ -1,11 +1,12 @@
 // ========================================================
-// Order n octahedral truncated ? t{3,4,n}
+// Order n octahedral rectified r{3,4,n}
 // 
 // Inputs: n
 // Output: data
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     24/05/21 Renamed
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
