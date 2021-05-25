@@ -20,7 +20,23 @@ const octahedronRectData = (n) => {
 
     const metric = boundaries(n, Math.PI / Math.atan(rt2), Infinity);
 
-    const d = (v) => v;
+    const d =
+        (n == 3) ? (v) => [
+            (v[0] + v[1] + v[2] + v[3]) / 2,
+            (v[0] + v[1] - v[2] - v[3]) / 2,
+            (v[0] - v[1] + v[2] - v[3]) / 2,
+            (v[0] - v[1] - v[2] + v[3]) / 2
+        ] : (n == 4) ? (v) => [
+            2 * v[0] - v[1] - v[2] - v[3],
+            v[0] - v[2] - v[3],
+            v[0] - v[1] - v[3],
+            v[0] - v[1] - v[2]
+        ] : (v) => [
+            (6 * cos - 1) * v[0] + (2 - 6 * cos) * v[1] + (2 - 6 * cos) * v[2] + (2 - 6 * cos) * v[3],
+            2 * cos * v[0] + (1 - 2 * cos) * v[1] - 2 * cos * v[2] - 2 * cos * v[3],
+            2 * cos * v[0] - 2 * cos * v[1] + (1 - 2 * cos) * v[2] - 2 * cos * v[3],
+            2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
+        ];
 
     const f = (v) => [
         Math.sqrt(Math.abs(2 * cot)) * v[0],

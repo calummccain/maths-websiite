@@ -76,6 +76,7 @@ function hyperbolicEdges(data, parameters) {
     function generateVertices(cell) {
 
         var newVertices = VF.transformVertices(data.vertices, cell, matrix);
+
         var verts = [];
         var p;
 
