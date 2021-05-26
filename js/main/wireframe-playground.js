@@ -34,8 +34,6 @@ function main() {
     const edgeNumber = 100;
     const edgeWidth = 2;
 
-    var intersects;
-
     // Mouse location
     const geometrySphere = new THREE.SphereBufferGeometry(0.2, 4, 4);
     const materialSphere = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -123,6 +121,10 @@ function main() {
     // Make raycaster and mouse vector
     var raycaster = new THREE.Raycaster();
     var mouseVector = new THREE.Vector2();
+    var dPlane = Infinity;
+    var dEdges = Infinity;
+    var intersectPlane;
+    var intersectEdges;
 
     render();
 
@@ -188,11 +190,42 @@ function main() {
         mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
 
         raycaster.setFromCamera(mouseVector, camera);
-        intersects = raycaster.intersectObjects([plane]);
 
-        if (intersects.length > 0) {
+        intersectPlane = raycaster.intersectObjects([plane]);
 
-            sphereMouse.position.copy(intersects[0].point);
+        if (intersectPlane.length > 0) {
+
+            dPlane = intersectPlane[0].distance;
+
+        } else {
+
+            dPlane = Infinity;
+
+        }
+
+        if (edgeGroup.children.length > 0) {
+
+            intersectEdges = raycaster.intersectObjects(edgeGroup.children);
+
+            if (intersectEdges.length > 0) {
+
+                dEdges = intersectEdges[0].distance;
+
+            } else {
+
+                dEdges = Infinity;
+
+            }
+
+        }
+
+        if ((dEdges <= dPlane)) {
+
+            sphereMouse.position.copy(intersectEdges[0].point);
+
+        } else {
+
+            sphereMouse.position.copy(intersectPlane[0].point);
 
         }
 
