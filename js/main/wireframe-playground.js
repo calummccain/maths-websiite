@@ -72,11 +72,11 @@ function main() {
     var cellMarker = 0;
 
     // arrays of vertex/edge/face/cell data
-
     var vertices = [];
     var edges = [];
     var faces = [];
     var cells = [];
+    var outlines = [];
 
     var sin = [];
     var cos = [];
@@ -329,6 +329,7 @@ function main() {
         }
 
         edgeGroup.children = visibleEdges().children;
+        outlineGroup.children = visibleOutlines().children;
 
     }
 
@@ -510,7 +511,7 @@ function main() {
 
     function outline() {
 
-        outlineGroup.children = [];
+        outlines = [];
 
         cam = camera.position.toArray();
 
@@ -581,14 +582,14 @@ function main() {
 
                 } else {
 
-                    outlineGroup.add(drawLine(outline, 0x000000));
+                    outlines.push(outline);
                     outline = [];
 
                 }
 
             }
 
-            outlineGroup.add(drawLine(outline, 0x000000));
+            outlines.push(outline);
 
         }
 
@@ -654,8 +655,6 @@ function main() {
 
     function visibleEdges() {
 
-        outline();
-
         var edgeGroupLocal = new THREE.Group();
 
         var drawVerts, segments, segmentsPoints, segNum, points;
@@ -671,6 +670,75 @@ function main() {
                 points = edges[i].uhpCoords;
 
             }
+
+            if (points.length > 0) {
+
+                drawVerts = [];
+
+                for (var k = 0; k < points.length; k++) {
+
+                    drawVerts.push([points[k], visibilityTest(points[k])]);
+
+                }
+
+                segments = [[drawVerts[0]]];
+                segmentsPoints = [[drawVerts[0][0]]];
+                segNum = 0;
+
+                for (var k = 1; k < points.length; k++) {
+
+                    if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                        segments[segNum].push(drawVerts[k]);
+                        segmentsPoints[segNum].push(drawVerts[k][0]);
+
+                    } else {
+
+                        segNum++;
+                        segments.push([drawVerts[k]]);
+                        segmentsPoints.push([drawVerts[k][0]]);
+
+                    }
+
+                }
+
+                for (var k = 0; k < segments.length; k++) {
+
+                    if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                        edgeGroupLocal.add(drawLine(segmentsPoints[k], 0x000000));
+
+                        // } else {
+
+                        //     if (invisibleLines) {
+
+                        //         edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+
+                        //     }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return edgeGroupLocal;
+
+    }
+
+    function visibleOutlines() {
+
+        outline();
+
+        var edgeGroupLocal = new THREE.Group();
+
+        var drawVerts, segments, segmentsPoints, segNum, points;
+
+        for (var i = 0; i < outlines.length; i++) {
+
+            points = outlines[i];
 
             if (points.length > 0) {
 
