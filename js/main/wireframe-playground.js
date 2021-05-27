@@ -120,7 +120,7 @@ function main() {
 
     // Make raycaster and mouse vector
     var raycaster = new THREE.Raycaster();
-    raycaster.params.Line.threshold = 3;
+    raycaster.params.Line.threshold = 0.1;
     var mouseVector = new THREE.Vector2();
     var dPlane = Infinity;
     var dEdges = Infinity;
