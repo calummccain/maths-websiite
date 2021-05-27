@@ -114,7 +114,12 @@ function main() {
     scene.add(lineGroup);
 
     const geometry = new THREE.PlaneBufferGeometry(20, 20, 10, 10);
-    const material = new THREE.MeshLambertMaterial({ color: 0xBBBBBB, side: THREE.DoubleSide, opacity: 0.1, transparent: true });
+    const material = new THREE.MeshLambertMaterial({
+        color: 0xBBBBBB,
+        side: THREE.DoubleSide,
+        opacity: 0.1,
+        transparent: true
+    });
     const plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
 
