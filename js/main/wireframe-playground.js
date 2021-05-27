@@ -15,7 +15,7 @@ function main() {
 
     // Canvas constants
     const canvas = document.getElementById("canvas");
-    const rect = canvas.getBoundingClientRect();
+    var rect = canvas.getBoundingClientRect();
 
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
@@ -124,6 +124,9 @@ function main() {
     });
     const plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
+    var grid = false;
+    var rounded = [0, 0, 0];
+    const roundedParam = 1;
 
     // Make raycaster and mouse vector
     var raycaster = new THREE.Raycaster();
@@ -142,6 +145,8 @@ function main() {
 
         WIDTH = canvas.clientWidth;
         HEIGHT = canvas.clientHeight;
+
+        rect = canvas.getBoundingClientRect();
 
         renderer.setSize(WIDTH, HEIGHT);
 
@@ -179,6 +184,10 @@ function main() {
 
     document.getElementById("visible").addEventListener("click", function () {
         ;
+    });
+
+    document.getElementById("grid").addEventListener("click", function () {
+        grid = !grid;
     });
 
     document.getElementById("model").addEventListener("click", function () {
@@ -233,19 +242,53 @@ function main() {
 
             }
 
-            if ((dEdges <= dPlane)) {
+            if (isFinite(dEdges) || isFinite(dPlane)) {
 
-                sphereMouse.position.copy(intersectEdges[0].point);
+                if ((dEdges <= dPlane)) {
+
+                    sphereMouse.position.copy(intersectEdges[0].point);
+
+                } else {
+
+                    if (grid) {
+
+                        rounded = intersectPlane[0].point.toArray();
+                        rounded = [
+                            Math.round(rounded[0] * roundedParam) / roundedParam,
+                            Math.round(rounded[1] * roundedParam) / roundedParam,
+                            Math.round(rounded[2] * roundedParam) / roundedParam
+                        ];
+
+                        sphereMouse.position.fromArray(rounded);
+
+                    } else {
+
+                        sphereMouse.position.copy(intersectPlane[0].point);
+
+                    }
+
+                }
+
+            }
+
+        } else if (intersectPlane.length > 0) {
+
+            if (grid) {
+
+                rounded = intersectPlane[0].point.toArray();
+                rounded = [
+                    Math.round(rounded[0] * roundedParam) / roundedParam,
+                    Math.round(rounded[1] * roundedParam) / roundedParam,
+                    Math.round(rounded[2] * roundedParam) / roundedParam
+                ];
+
+                sphereMouse.position.fromArray(rounded);
 
             } else {
 
                 sphereMouse.position.copy(intersectPlane[0].point);
 
             }
-
-        } else if (intersectPlane.length > 0) {
-
-            sphereMouse.position.copy(intersectPlane[0].point);
 
         }
 
@@ -255,8 +298,6 @@ function main() {
 
             edgeGroup.children = visibleEdges().children;
             outlineGroup.children = visibleOutlines().children;
-
-            console.log("hi")
 
         }
 
