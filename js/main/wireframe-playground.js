@@ -120,6 +120,7 @@ function main() {
 
     // Make raycaster and mouse vector
     var raycaster = new THREE.Raycaster();
+    raycaster.params.Line.threshold = 3;
     var mouseVector = new THREE.Vector2();
     var dPlane = Infinity;
     var dEdges = Infinity;
@@ -191,21 +192,21 @@ function main() {
 
         raycaster.setFromCamera(mouseVector, camera);
 
-        intersectPlane = raycaster.intersectObjects([plane]);
+        intersectPlane = raycaster.intersectObjects([plane], true);
+        intersectEdges = raycaster.intersectObjects(edgeGroup.children, true);
 
-        if (intersectPlane.length > 0) {
-
-            dPlane = intersectPlane[0].distance;
-
-        } else {
-
-            dPlane = Infinity;
-
-        }
 
         if (edgeGroup.children.length > 0) {
 
-            intersectEdges = raycaster.intersectObjects(edgeGroup.children);
+            if (intersectPlane.length > 0) {
+
+                dPlane = intersectPlane[0].distance;
+
+            } else {
+
+                dPlane = Infinity;
+
+            }
 
             if (intersectEdges.length > 0) {
 
@@ -217,13 +218,17 @@ function main() {
 
             }
 
-        }
+            if ((dEdges <= dPlane)) {
 
-        if ((dEdges <= dPlane)) {
+                sphereMouse.position.copy(intersectEdges[0].point);
 
-            sphereMouse.position.copy(intersectEdges[0].point);
+            } else {
 
-        } else {
+                sphereMouse.position.copy(intersectPlane[0].point);
+
+            }
+
+        } else if (intersectPlane.length > 0) {
 
             sphereMouse.position.copy(intersectPlane[0].point);
 
