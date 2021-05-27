@@ -58,7 +58,15 @@ function main() {
     sphere3.position.set(0, 0, 1);
     sphere4.position.set(0, 0, 0);
 
-    scene.add(sphere1, sphere2, sphere3, sphere4)
+    sphere1.visible = false;
+    sphere2.visible = false;
+    sphere3.visible = false;
+    sphere4.visible = false;
+
+    const sphereGroup = new THREE.Group();
+    sphereGroup.add(sphere1, sphere2, sphere3, sphere4);
+
+    scene.add(sphereGroup)
 
     // control arrays
     var vertexControl = [sphere1];
@@ -192,6 +200,12 @@ function main() {
 
     document.getElementById("model").addEventListener("click", function () {
         model = (model === "uhp") ? "poincare" : "uhp";
+
+        outline();
+
+        edgeGroup.children = visibleEdges().children;
+        outlineGroup.children = visibleOutlines().children;
+
     });
 
     canvas.addEventListener("mouseup", onClick);
@@ -318,6 +332,8 @@ function main() {
 
             edgeControl[edgeMarker].position.copy(sphereMouse.position);
 
+            edgeControl[edgeMarker].visible = true;
+
             edgeMarker++;
 
             if (edgeMarker == 2) {
@@ -339,11 +355,16 @@ function main() {
 
                 edgeMarker = 0;
 
+                edgeControl.forEach((sphere) => {
+                    sphere.visible = false;
+                });
+
             }
 
         } else if (mode === "addfaces") {
 
             faceControl[faceMarker].position.copy(sphereMouse.position);
+            faceControl[faceMarker].visible = true;
 
             faceMarker++;
 
@@ -377,11 +398,16 @@ function main() {
 
                 faceMarker = 0;
 
+                faceControl.forEach((sphere) => {
+                    sphere.visible = false;
+                });
+
             }
 
         } else if (mode === "addcells") {
 
             cellControl[cellMarker].position.copy(sphereMouse.position);
+            cellControl[cellMarker].visible = true;
 
             cellMarker++;
 
@@ -429,6 +455,10 @@ function main() {
                 outline();
 
                 cellMarker = 0;
+
+                cellControl.forEach((sphere) => {
+                    sphere.visible = false;
+                })
 
             }
 
