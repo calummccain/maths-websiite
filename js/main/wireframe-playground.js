@@ -20,6 +20,8 @@ function main() {
     var WIDTH = canvas.clientWidth;
     var HEIGHT = canvas.clientHeight;
 
+    var mouseToggle = false;
+
     // Define scene and background colour
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xE5E5E5);
@@ -187,6 +189,14 @@ function main() {
 
     canvas.addEventListener("mousemove", mouseMove);
 
+    canvas.addEventListener("mousedown", mouseDown);
+
+    function mouseDown() {
+
+        mouseToggle = true;
+
+    }
+
     function mouseMove(event) {
 
         event.preventDefault();
@@ -238,6 +248,18 @@ function main() {
             sphereMouse.position.copy(intersectPlane[0].point);
 
         }
+
+        if (mouseToggle) {
+
+            outline();
+
+            edgeGroup.children = visibleEdges().children;
+            outlineGroup.children = visibleOutlines().children;
+
+            console.log("hi")
+
+        }
+
 
     }
 
@@ -373,6 +395,8 @@ function main() {
 
         edgeGroup.children = visibleEdges().children;
         outlineGroup.children = visibleOutlines().children;
+
+        mouseToggle = false;
 
     }
 
