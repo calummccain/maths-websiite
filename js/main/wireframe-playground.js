@@ -34,8 +34,6 @@ function main() {
     const edgeNumber = 100;
     const edgeWidth = 2;
 
-    var intersects;
-
     // Mouse location
     const geometrySphere = new THREE.SphereBufferGeometry(0.2, 4, 4);
     const materialSphere = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -116,13 +114,23 @@ function main() {
     scene.add(lineGroup);
 
     const geometry = new THREE.PlaneBufferGeometry(20, 20, 10, 10);
-    const material = new THREE.MeshLambertMaterial({ color: 0xBBBBBB, side: THREE.DoubleSide, opacity: 0.1, transparent: true });
+    const material = new THREE.MeshLambertMaterial({
+        color: 0xBBBBBB,
+        side: THREE.DoubleSide,
+        opacity: 0.1,
+        transparent: true
+    });
     const plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
 
     // Make raycaster and mouse vector
     var raycaster = new THREE.Raycaster();
+    raycaster.params.Line.threshold = 0.1;
     var mouseVector = new THREE.Vector2();
+    var dPlane = Infinity;
+    var dEdges = Infinity;
+    var intersectPlane;
+    var intersectEdges;
 
     render();
 
@@ -188,11 +196,46 @@ function main() {
         mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
 
         raycaster.setFromCamera(mouseVector, camera);
-        intersects = raycaster.intersectObjects([plane]);
 
-        if (intersects.length > 0) {
+        intersectPlane = raycaster.intersectObjects([plane], true);
+        intersectEdges = raycaster.intersectObjects(edgeGroup.children, true);
 
-            sphereMouse.position.copy(intersects[0].point);
+
+        if (edgeGroup.children.length > 0) {
+
+            if (intersectPlane.length > 0) {
+
+                dPlane = intersectPlane[0].distance;
+
+            } else {
+
+                dPlane = Infinity;
+
+            }
+
+            if (intersectEdges.length > 0) {
+
+                dEdges = intersectEdges[0].distance;
+
+            } else {
+
+                dEdges = Infinity;
+
+            }
+
+            if ((dEdges <= dPlane)) {
+
+                sphereMouse.position.copy(intersectEdges[0].point);
+
+            } else {
+
+                sphereMouse.position.copy(intersectPlane[0].point);
+
+            }
+
+        } else if (intersectPlane.length > 0) {
+
+            sphereMouse.position.copy(intersectPlane[0].point);
 
         }
 

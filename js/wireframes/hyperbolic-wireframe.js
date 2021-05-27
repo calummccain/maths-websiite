@@ -536,7 +536,7 @@ function hyperbolicEdges(data, parameters) {
 
                     if ((segments[k].length > 1) && (segments[k][0][1])) {
 
-                        edgeGroup.add(drawLine(segmentsPoints[k], 0x333333, 2));
+                        edgeGroup.add(drawLine(segmentsPoints[k], 0xFFFFFF, 2));
 
                     } else {
 
