@@ -8,6 +8,10 @@
 //
 // Change history:
 //     14/05/21 Initial commit
+//     29/05/21 Using precalculated v-v constants from 
+//              data file
+//              Rewrote geodesic code so have to update it
+//              here (no divide by p[0])
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
@@ -67,6 +71,8 @@ function hyperbolicEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
+
+    console.log(faces)
 
     outline();
 
@@ -129,9 +135,9 @@ function hyperbolicEdges(data, parameters) {
 
             if (data.metric === "u") {
 
-                v1 = HF.geodesicEndpoints(localVertices[data.faces[i][0]].hyperboloid, localVertices[data.faces[i][1]].hyperboloid)[0];
-                v2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid)[0];
-                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid)[0];
+                v1 = HF.geodesicEndpoints(localVertices[data.faces[i][0]].hyperboloid, localVertices[data.faces[i][1]].hyperboloid, data.vv)[0];
+                v2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid, data.vv)[0];
+                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid, data.vv)[0];
 
             } else {
 
@@ -202,7 +208,7 @@ function hyperbolicEdges(data, parameters) {
                     radius: 0,
                     sphereCenter: [0, 0, 0],
                     d: VF.determinant3([v1, v2, v3]),
-                    normal: normal = VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
+                    normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
                     centerHyperboloid: centerHyperboloid,
                     centerModel: centerModel,
                     polygonHyperboloid: polygonHyperboloid,
@@ -223,7 +229,10 @@ function hyperbolicEdges(data, parameters) {
 
         if (data.metric === "h") {
 
-            const ca = HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
+            // const ca = HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
+
+            const ca = data.vv;
+
             const an = Math.acosh(ca) / number;
             const denom = 1 / Math.sqrt(ca * ca - 1);
             var theta = 0;
@@ -237,7 +246,10 @@ function hyperbolicEdges(data, parameters) {
 
         } else if (data.metric === "p") {
 
-            const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid)));
+            // const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid)));
+
+            const denom = 1 / Math.sqrt(2 * data.vv);
+
             const a = 10 / number;
             var theta = -5;
 
@@ -250,8 +262,11 @@ function hyperbolicEdges(data, parameters) {
 
         } else if (data.metric === "u") {
 
-            var [e1, e2] = HF.geodesicEndpoints(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
-            const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(e1, e2)));
+            var [e1, e2] = HF.geodesicEndpoints(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid, data.vv);
+
+            // const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(e1, e2)));
+
+            const denom = 1 / 2;
             const a = 10 / number;
             var theta = -5;
 
@@ -272,7 +287,7 @@ function hyperbolicEdges(data, parameters) {
 
             if (data.metric === "u") {
 
-                [start, end] = HF.geodesicEndpoints(localVertices[endpoints[0]].hyperboloid, localVertices[endpoints[1]].hyperboloid);
+                [start, end] = HF.geodesicEndpoints(localVertices[endpoints[0]].hyperboloid, localVertices[endpoints[1]].hyperboloid, data.vv);
 
             } else {
 
@@ -311,32 +326,50 @@ function hyperbolicEdges(data, parameters) {
 
             var e1, e2, ca, a, denom, theta, edge, start, end, ratios, e3, e4;
 
+            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][0]].hyperboloid, data.vv)[0];
+            e2 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][2]].hyperboloid, data.vv)[0];
+            e1.shift();
+            e2.shift();
+
+            ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
+            a = Math.acos(ca);
+            denom = 1 / Math.sqrt(1 - ca * ca);
+            theta = 0;
+            ratios = [];
+
+            for (var k = 0; k <= newNumber; k++) {
+
+                ratios.push(Math.sin(theta) * denom);
+                theta += a / newNumber;
+
+            }
+
             for (var i = 0; i < data.numFaces; i++) {
 
-                e1 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid)[0];
-                e2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid)[0];
-                e1.shift();
-                e2.shift();
+                // e1 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid, data.vv)[0];
+                // e2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid, data.vv)[0];
+                // e1.shift();
+                // e2.shift();
 
-                ca = VF.vectorDot(e1, e2);
-                a = Math.acos(ca);
-                denom = 1 / Math.sqrt(1 - ca * ca);
-                theta = 0;
-                ratios = [];
+                // ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
+                // a = Math.acos(ca);
+                // denom = 1 / Math.sqrt(1 - ca * ca);
+                // theta = 0;
+                // ratios = [];
 
-                for (var k = 0; k <= newNumber; k++) {
+                // for (var k = 0; k <= newNumber; k++) {
 
-                    ratios.push(Math.sin(theta) * denom);
-                    theta += a / newNumber;
+                //     ratios.push(Math.sin(theta) * denom);
+                //     theta += a / newNumber;
 
-                }
+                // }
 
                 for (var j = 0; j < data.faces[i].length; j++) {
 
                     edge = [];
 
-                    e3 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j - 1 + data.faces[i].length) % data.faces[i].length]].hyperboloid)[0];
-                    e4 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j + 1) % data.faces[i].length]].hyperboloid)[0];
+                    e3 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j - 1 + data.faces[i].length) % data.faces[i].length]].hyperboloid, data.vv)[0];
+                    e4 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j + 1) % data.faces[i].length]].hyperboloid, data.vv)[0];
                     e3.shift();
                     e4.shift();
 
@@ -536,13 +569,13 @@ function hyperbolicEdges(data, parameters) {
 
                     if ((segments[k].length > 1) && (segments[k][0][1])) {
 
-                        edgeGroup.add(drawLine(segmentsPoints[k], 0xFFFFFF, 2));
+                        edgeGroup.add(drawLine(segmentsPoints[k], 0x222222, 2));
 
                     } else {
 
                         if (invisibleLines) {
 
-                            edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+                            edgeGroup.add(drawLine(segmentsPoints[k], 0x444444, 2));
 
                         }
 

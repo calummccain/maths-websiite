@@ -29,7 +29,7 @@ const cubeData = (n) => {
             v[2],
             v[3]
         ] : (n == 5) ? (v) => [
-            p * v[0] - p_1*v[1],
+            p * v[0] - p_1 * v[1],
             p2 * v[0] - p * v[1],
             v[2],
             v[3]
@@ -141,7 +141,9 @@ const cubeData = (n) => {
         // s e h d u
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        vv: (n == 6) ? 2 : (1 + cot) / (3 - cot)
 
     }
 

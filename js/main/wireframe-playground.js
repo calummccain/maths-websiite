@@ -566,7 +566,7 @@ function main() {
             poincareRadius = 0;
 
             poincareD = 0;
-            poincareNormal = VF.vectorCross(VF.vectorDiff(v2.poincare), VF.vectorDiff(v3.poincare));
+            poincareNormal = VF.vectorCross(VF.vectorDiff(v2.poincare, v1.poincare), VF.vectorDiff(v3.poincare, v1.poincare));
 
         }
 
@@ -609,8 +609,10 @@ function main() {
             uhpSphereCenter = [0, 0, 0];
             uhpRadius = 0;
 
-            uhpD = VF.determinant3([v1.uhp, v2.uhp, v3.uhp]);
-            uhpNormal = VF.vectorCross(VF.vectorDiff(v2.uhp, v1.uhp), VF.vectorDiff(v3.uhp, v1.uhp));
+            uhpD = VF.determinant3([v1.uhp, v2.uhp, uhpCenter]);
+
+            /////////// console.log(v1.uhp, v2.uhp, v3.uhp, uhpCenter, uhpD)
+            uhpNormal = VF.vectorCross(VF.vectorDiff(v2.uhp, v1.uhp), VF.vectorDiff(uhpCenter, v1.uhp));
 
         }
 
@@ -1060,6 +1062,8 @@ function main() {
                     }
 
                 } else if (faces[i].uhpType === "plane") {
+
+                    console.log(normal)
 
                     t = (d - VF.vectorDot(cam, normal)) / VF.vectorDot(pc, normal);
 

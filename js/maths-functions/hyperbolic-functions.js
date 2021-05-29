@@ -267,7 +267,7 @@ function upperHalfPlaneToHyperboloid(point) {
 
     if (point[2] > upperHalfPlaneToHyperboloidEps) {
 
-    return VF.vectorScale([(VF.norm2(point) + 1) * 0.5, point[0], point[1], (VF.norm2(point) - 1) * 0.5], 1 / point[2]);
+        return VF.vectorScale([(VF.norm2(point) + 1) * 0.5, point[0], point[1], (VF.norm2(point) - 1) * 0.5], 1 / point[2]);
 
     } else {
 
@@ -365,24 +365,32 @@ function uhpCenter(p1, p2, p3) {
 //     ??/??/?? Initial commit
 //=========================================================
 
-function geodesicEndpoints(a, b) {
+function geodesicEndpoints(a, b, l) {
 
     if ((Math.abs(hyperbolicNorm(a)) < geodesicEndpointsEps) && (Math.abs(hyperbolicNorm(b)) < geodesicEndpointsEps)) {
 
         return [a, b];
 
     }
-    //console.log(a, hyperbolicNorm(a))
-    //console.log(b, hyperbolicNorm(b))
-    const cosh = -hyperboloidInnerProduct(a, b);
+    // console.log("a", a, hyperbolicNorm(a))
+    // console.log("b", b, hyperbolicNorm(b))
+    // console.log("l", l)
+    // console.log("ab", hyperboloidInnerProduct(a, b));
+    const cosh = -l;
     const sinh = Math.sqrt(cosh * cosh - 1);
-    // console.log(cosh, sinh)
-    const p1 = VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]);
-    const p2 = VF.vectorDiff(VF.vectorScale(a, sinh + cosh), b);
-    // console.log(hyperbolicNorm(p1))
+    //console.log(cosh, sinh)
 
-    return [VF.vectorScale(p1, 1 / p1[0]), VF.vectorScale(p2, 1 / p2[0])];
+    //console.log(hyperbolicNorm(VF.vectorScale(VF.vectorDiff(b, VF.vectorScale(a, cosh)), 1 / sinh)));
 
+
+    const p1 = VF.vectorScale(VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]), 1 / sinh);
+    const p2 = VF.vectorScale(VF.vectorDiff(b, VF.vectorScale(a, sinh + cosh)), 1 / sinh);
+    // console.log("p1", hyperbolicNorm(p1))
+    // console.log("p2", hyperbolicNorm(p2))
+    // console.log("p1p2", hyperboloidInnerProduct(p1, p2))
+
+    //return [VF.vectorScale(p1, 1 / p1[0]), VF.vectorScale(p2, 1 / p2[0])];
+    return [p1, p2];
 }
 
 
