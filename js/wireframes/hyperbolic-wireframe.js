@@ -72,8 +72,6 @@ function hyperbolicEdges(data, parameters) {
 
     }
 
-    console.log(faces)
-
     outline();
 
     var edgeGroup = visibleEdges()
@@ -372,6 +370,8 @@ function hyperbolicEdges(data, parameters) {
                     e4 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j + 1) % data.faces[i].length]].hyperboloid, data.vv)[0];
                     e3.shift();
                     e4.shift();
+                    e3 = VF.vectorScale(e3, 1 / VF.norm(e3));
+                    e4 = VF.vectorScale(e4, 1 / VF.norm(e4));
 
                     for (var k = 0; k <= newNumber; k++) {
 

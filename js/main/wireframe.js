@@ -11,7 +11,7 @@ function main() {
     var p = 3, q = 3, r = 7;
     var modifier = "";
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
-    var invisible = true;
+    var invisible = false;
     var geom = {};
     var cellType;
 
