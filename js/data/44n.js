@@ -7,6 +7,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     30/05/21 Added v-v distance
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -127,7 +128,9 @@ const squareData = (r, n) => {
 
         cellType: "euclidean",
 
-        flip: (v) => [v[0], v[2], v[3], v[1]]
+        flip: (v) => [v[0], v[2], v[3], v[1]],
+
+        vv: (n == 4) ? 1 : 1 / Math.abs(1 - 2 * cos)
 
     }
 
