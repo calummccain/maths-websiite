@@ -6,6 +6,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     30/05/21 Added v-v distance
 //=========================================================
 
 import { rt2, rt3, p, p2, p_1 } from "./constants.js";
