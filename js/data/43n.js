@@ -143,7 +143,7 @@ const cubeData = (n) => {
 
         cellType: "spherical",
 
-        vv: (n == 6) ? 2 : (1 + cot) / (3 - cot)
+        vv: (n == 6) ? 2 : (1 + cot) / Math.abs(3 - cot)
 
     }
 
