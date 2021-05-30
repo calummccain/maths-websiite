@@ -9,6 +9,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     Added v-v distance
 //=========================================================
 
 import * as VF from "../maths-functions/vector-functions.js";
