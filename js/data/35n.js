@@ -128,7 +128,7 @@ const icosahedronData = (n) => {
 
         cellType: "spherical",
 
-        vv: (n == 10 / 3) ? 1 : (p2 - 1 + p4 * cot) / Math.abs(p2 + 1 - p4 * cot)
+        vv: (metric === "p") ? 1 : (p2 - 1 + p4 * cot) / Math.abs(p2 + 1 - p4 * cot)
 
     }
 

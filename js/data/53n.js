@@ -157,7 +157,7 @@ const dodecahedronData = (n) => {
 
         cellType: "spherical",
 
-        vv: (n == 6) ? 2 / p2 : (cot + p + p_1) / Math.abs(cot - 3)
+        vv: (metric === "p") ? 2 / p2 : (cot + p + p_1) / Math.abs(cot - 3)
 
     }
 

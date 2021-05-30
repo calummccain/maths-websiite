@@ -142,7 +142,7 @@ const octahedronData = (n) => {
 
         // EV: Math.sqrt(Math.abs(1 / (1 - cot))) / rt2,
 
-        vv: (n == 4) ? 1 : cot / Math.abs(1 - cot)
+        vv: (metric === "p") ? 1 : cot / Math.abs(1 - cot)
 
     }
 

@@ -128,7 +128,7 @@ const hexagonData = (r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (n == 6) ? 1 / 2 : (3 - 2 * c) / Math.abs(3 - 4 * c)
+        vv: (metric === "p") ? 1 / 2 : (3 - 2 * c) / Math.abs(3 - 4 * c)
 
     }
 

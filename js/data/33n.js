@@ -142,7 +142,7 @@ const tetrahedronData = (n) => {
 
         cellType: "spherical",
 
-        vv: (n == 6) ? 4 : (cot - 1) / Math.abs(3 - cot)
+        vv: (metric === "p") ? 4 : (cot - 1) / Math.abs(3 - cot)
 
     }
 
