@@ -12,6 +12,8 @@
 //              data file
 //              Rewrote geodesic code so have to update it
 //              here (no divide by p[0])
+//     30/05/21 Bug with making faces for ultracompact 
+//              cells
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
@@ -71,6 +73,8 @@ function hyperbolicEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
+
+    console.log(faces)
 
     outline();
 
@@ -135,7 +139,7 @@ function hyperbolicEdges(data, parameters) {
 
                 v1 = HF.geodesicEndpoints(localVertices[data.faces[i][0]].hyperboloid, localVertices[data.faces[i][1]].hyperboloid, data.vv)[0];
                 v2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid, data.vv)[0];
-                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid, data.vv)[0];
+                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][3 % data.faces[i].length]].hyperboloid, data.vv)[0];
 
             } else {
 
