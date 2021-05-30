@@ -7,6 +7,7 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     21/05/21 Constants tidied up
+//     30/05/21 Added v-v distance
 //=========================================================
 
 import { rt2, rt3, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
@@ -154,7 +155,9 @@ const dodecahedronData = (n) => {
         // s h h p u
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        vv: (n == 6) ? 2 / p2 : (cot + p + p_1) / Math.abs(cot - 3)
 
     }
 
