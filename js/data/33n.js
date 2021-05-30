@@ -6,6 +6,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     30/05/21 Added v-v distance
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
