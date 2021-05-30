@@ -227,8 +227,6 @@ function hyperbolicEdges(data, parameters) {
 
         if (data.metric === "h") {
 
-            // const ca = HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
-
             const ca = data.vv;
 
             const an = Math.acosh(ca) / number;
@@ -243,8 +241,6 @@ function hyperbolicEdges(data, parameters) {
             }
 
         } else if (data.metric === "p") {
-
-            // const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid)));
 
             const denom = 1 / Math.sqrt(2 * data.vv);
 
@@ -261,8 +257,6 @@ function hyperbolicEdges(data, parameters) {
         } else if (data.metric === "u") {
 
             var [e1, e2] = HF.geodesicEndpoints(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid, data.vv);
-
-            // const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(e1, e2)));
 
             const denom = 1 / 2;
             const a = 10 / number;
@@ -343,24 +337,6 @@ function hyperbolicEdges(data, parameters) {
             }
 
             for (var i = 0; i < data.numFaces; i++) {
-
-                // e1 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid, data.vv)[0];
-                // e2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid, data.vv)[0];
-                // e1.shift();
-                // e2.shift();
-
-                // ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
-                // a = Math.acos(ca);
-                // denom = 1 / Math.sqrt(1 - ca * ca);
-                // theta = 0;
-                // ratios = [];
-
-                // for (var k = 0; k <= newNumber; k++) {
-
-                //     ratios.push(Math.sin(theta) * denom);
-                //     theta += a / newNumber;
-
-                // }
 
                 for (var j = 0; j < data.faces[i].length; j++) {
 
