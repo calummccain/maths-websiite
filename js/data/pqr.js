@@ -164,6 +164,8 @@ const pqrData = (p, q, r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
+        vv: (metric === "p") ? 1 - cp(1) ** 2 : (2 * sr(1) ** 2 * cp(1) ** 2 - (sr(1) ** 2 - cq(1) ** 2)) / Math.abs((sr(1) ** 2 - cq(1) ** 2))
+
     }
 
 }
