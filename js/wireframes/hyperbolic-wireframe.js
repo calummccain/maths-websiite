@@ -76,7 +76,7 @@ function hyperbolicEdges(data, parameters) {
         console.log(edges.length)
 
     }
-
+    console.log(data.metric)
     console.log("edges", edges)
     console.log("faces", faces)
 
