@@ -7,6 +7,7 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     24/05/21 Renamed
+//     31/05/21 Added v-v distance
 //=========================================================
 
 import { p, p2, p_1 } from "./constants.js";
@@ -124,7 +125,9 @@ const cubeRectData = (n) => {
         // s e h d u
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        vv: cot / 2 + 1 / 2
 
     }
 
