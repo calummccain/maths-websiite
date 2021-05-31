@@ -68,13 +68,17 @@ function hyperbolicEdges(data, parameters) {
         localVertices = generateVertices(cells[i]);
         vertices = vertices.concat(localVertices);
 
+        // console.log(localVertices)
+
         generateFaces(localVertices);
 
         edges = edges.concat(generateEdges(localVertices));
+        console.log(edges.length)
 
     }
 
-    console.log(faces)
+    console.log("edges", edges)
+    console.log("faces", faces)
 
     outline();
 
@@ -237,6 +241,8 @@ function hyperbolicEdges(data, parameters) {
             const denom = 1 / Math.sqrt(ca * ca - 1);
             var theta = 0;
 
+            console.log(ca)
+
             for (var i = 0; i <= number; i++) {
 
                 ratios.push(Math.sinh(theta) * denom);
@@ -314,6 +320,8 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
+            console.log(edgeCoords.length)
+
         });
 
         if (data.metric === "u") {
@@ -322,14 +330,16 @@ function hyperbolicEdges(data, parameters) {
 
             var e1, e2, ca, a, denom, theta, edge, start, end, ratios, e3, e4;
 
-            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][0]].hyperboloid, data.vv)[0];
+            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][0]].hyperboloid, localVertices[data.faces[0][1]].hyperboloid, data.vv)[0];
             e2 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][2]].hyperboloid, data.vv)[0];
+
             e1.shift();
             e2.shift();
 
             ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
             a = Math.acos(ca);
-            denom = 1 / Math.sqrt(1 - ca * ca);
+            denom = 1 / Math.sin(a);
+
             theta = 0;
             ratios = [];
 
@@ -555,7 +565,7 @@ function hyperbolicEdges(data, parameters) {
 
                         if (invisibleLines) {
 
-                            edgeGroup.add(drawLine(segmentsPoints[k], 0x444444, 2));
+                            edgeGroup.add(drawLine(segmentsPoints[k], 0x888888, 2));
 
                         }
 
@@ -581,6 +591,8 @@ function hyperbolicEdges(data, parameters) {
 
             if (faces[i].type === "sphere") {
 
+                const faceEps = faces[i].radius * eps;
+
                 cs = VF.vectorDiff(camera, faces[i].sphereCenter);
 
                 A = VF.vectorDot(pc, pc);
@@ -597,7 +609,7 @@ function hyperbolicEdges(data, parameters) {
 
                     t = (-B + Math.sqrt(delta)) / A;
 
-                    if (eps < t && t < 1 - eps) {
+                    if (faceEps < t && t < 1 - faceEps) {
 
                         if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 
@@ -609,7 +621,7 @@ function hyperbolicEdges(data, parameters) {
 
                     t = -2 * B / A - t;
 
-                    if (eps < t && t < 1 - eps) {
+                    if (faceEps < t && t < 1 - faceEps) {
 
                         if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 

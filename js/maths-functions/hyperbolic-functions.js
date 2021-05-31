@@ -377,8 +377,8 @@ function geodesicEndpoints(a, b, l) {
     const cosh = -l;
     const sinh = Math.sqrt(cosh * cosh - 1);
 
-    const p1 = VF.vectorScale(VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]), 1 / sinh);
-    const p2 = VF.vectorScale(VF.vectorDiff(b, VF.vectorScale(a, sinh + cosh)), 1 / sinh);
+    const p1 = VF.vectorScale(VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]), 1 / sinh); // nearer b
+    const p2 = VF.vectorScale(VF.vectorDiff(b, VF.vectorScale(a, sinh + cosh)), 1 / sinh); // nearer a
 
     return [p1, p2];
 }
