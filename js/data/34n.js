@@ -6,6 +6,8 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     30/05/21 Commented outr extra distance - later work
+//              Added v-v distance
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -128,17 +130,19 @@ const octahedronData = (n) => {
 
         cellType: "spherical",
 
-        CF: rt3 * Math.sqrt(cot / (1 + cot)),
+        // CF: rt3 * Math.sqrt(cot / (1 + cot)),
 
-        CE: rt2 * Math.sqrt(cot),
+        // CE: rt2 * Math.sqrt(cot),
 
-        CV: rt3 * Math.sqrt(Math.abs(cot / (1 - cot))),
+        // CV: rt3 * Math.sqrt(Math.abs(cot / (1 - cot))),
 
-        FE: rt2 * Math.sqrt(1 + cot) / rt3,
+        // FE: rt2 * Math.sqrt(1 + cot) / rt3,
 
-        FV: Math.sqrt(Math.abs((1 + cot) / (1 - cot))) / rt3,
+        // FV: Math.sqrt(Math.abs((1 + cot) / (1 - cot))) / rt3,
 
-        EV: Math.sqrt(Math.abs(1 / (1 - cot))) / rt2
+        // EV: Math.sqrt(Math.abs(1 / (1 - cot))) / rt2,
+
+        vv: (metric === "p") ? 1 : cot / Math.abs(1 - cot)
 
     }
 

@@ -6,6 +6,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     30/05/21 Added v-v distance
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_3 } from "./constants.js";
@@ -125,7 +126,9 @@ const icosahedronData = (n) => {
         // h u u u u
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        vv: (metric === "p") ? 1 : (p2 - 1 + p4 * cot) / Math.abs(p2 + 1 - p4 * cot)
 
     }
 

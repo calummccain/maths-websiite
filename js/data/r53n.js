@@ -9,6 +9,7 @@
 //     21/05/21 Constants tidy up
 //              Look into uncompact
 //     24/05/21 Renamed
+//     31/05/21 Added v-v distance
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
@@ -155,7 +156,9 @@ const dodecahedronRectData = (n) => {
         // s h h p u
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        vv: cot / 2 + p / 2
 
     }
 

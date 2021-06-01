@@ -363,6 +363,7 @@ function uhpCenter(p1, p2, p3) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     30/05/21 Improvement
 //=========================================================
 
 function geodesicEndpoints(a, b, l) {
@@ -372,24 +373,13 @@ function geodesicEndpoints(a, b, l) {
         return [a, b];
 
     }
-    // console.log("a", a, hyperbolicNorm(a))
-    // console.log("b", b, hyperbolicNorm(b))
-    // console.log("l", l)
-    // console.log("ab", hyperboloidInnerProduct(a, b));
+
     const cosh = -l;
     const sinh = Math.sqrt(cosh * cosh - 1);
-    //console.log(cosh, sinh)
 
-    //console.log(hyperbolicNorm(VF.vectorScale(VF.vectorDiff(b, VF.vectorScale(a, cosh)), 1 / sinh)));
+    const p1 = VF.vectorScale(VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]), 1 / sinh); // nearer b
+    const p2 = VF.vectorScale(VF.vectorDiff(b, VF.vectorScale(a, sinh + cosh)), 1 / sinh); // nearer a
 
-
-    const p1 = VF.vectorScale(VF.vectorSum([VF.vectorScale(a, sinh - cosh), b]), 1 / sinh);
-    const p2 = VF.vectorScale(VF.vectorDiff(b, VF.vectorScale(a, sinh + cosh)), 1 / sinh);
-    // console.log("p1", hyperbolicNorm(p1))
-    // console.log("p2", hyperbolicNorm(p2))
-    // console.log("p1p2", hyperboloidInnerProduct(p1, p2))
-
-    //return [VF.vectorScale(p1, 1 / p1[0]), VF.vectorScale(p2, 1 / p2[0])];
     return [p1, p2];
 }
 

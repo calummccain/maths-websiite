@@ -7,6 +7,7 @@
 // Change history:
 //     20/05/21 Initial commit
 //     24/05/21 Renamed
+//     31/05/21 Added v-v distance
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_2, p_3 } from "./constants.js";
@@ -138,7 +139,9 @@ const icosahedronTruncData = (n) => {
         // h u u u u
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        vv: (p4 * cot + 9 * p2 - 1) / Math.abs(9 * p2 + 1 - p4 * cot)
 
     }
 

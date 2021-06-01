@@ -12,6 +12,8 @@
 //              data file
 //              Rewrote geodesic code so have to update it
 //              here (no divide by p[0])
+//     30/05/21 Bug with making faces for ultracompact 
+//              cells
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
@@ -135,7 +137,7 @@ function hyperbolicEdges(data, parameters) {
 
                 v1 = HF.geodesicEndpoints(localVertices[data.faces[i][0]].hyperboloid, localVertices[data.faces[i][1]].hyperboloid, data.vv)[0];
                 v2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid, data.vv)[0];
-                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid, data.vv)[0];
+                v3 = HF.geodesicEndpoints(localVertices[data.faces[i][2]].hyperboloid, localVertices[data.faces[i][3 % data.faces[i].length]].hyperboloid, data.vv)[0];
 
             } else {
 
@@ -227,12 +229,8 @@ function hyperbolicEdges(data, parameters) {
 
         if (data.metric === "h") {
 
-            // const ca = HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid);
-
-            const ca = data.vv;
-
-            const an = Math.acosh(ca) / number;
-            const denom = 1 / Math.sqrt(ca * ca - 1);
+            const an = Math.acosh(data.vv) / number;
+            const denom = 1 / Math.sqrt(data.vv * data.vv - 1);
             var theta = 0;
 
             for (var i = 0; i <= number; i++) {
@@ -244,10 +242,7 @@ function hyperbolicEdges(data, parameters) {
 
         } else if (data.metric === "p") {
 
-            // const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid)));
-
             const denom = 1 / Math.sqrt(2 * data.vv);
-
             const a = 10 / number;
             var theta = -5;
 
@@ -261,9 +256,6 @@ function hyperbolicEdges(data, parameters) {
         } else if (data.metric === "u") {
 
             var [e1, e2] = HF.geodesicEndpoints(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid, data.vv);
-
-            // const denom = 1 / Math.sqrt(Math.abs(2 * HF.hyperboloidInnerProduct(e1, e2)));
-
             const denom = 1 / 2;
             const a = 10 / number;
             var theta = -5;
@@ -324,14 +316,16 @@ function hyperbolicEdges(data, parameters) {
 
             var e1, e2, ca, a, denom, theta, edge, start, end, ratios, e3, e4;
 
-            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][0]].hyperboloid, data.vv)[0];
+            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][0]].hyperboloid, localVertices[data.faces[0][1]].hyperboloid, data.vv)[0];
             e2 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][2]].hyperboloid, data.vv)[0];
+
             e1.shift();
             e2.shift();
 
             ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
             a = Math.acos(ca);
-            denom = 1 / Math.sqrt(1 - ca * ca);
+            denom = 1 / Math.sin(a);
+
             theta = 0;
             ratios = [];
 
@@ -343,24 +337,6 @@ function hyperbolicEdges(data, parameters) {
             }
 
             for (var i = 0; i < data.numFaces; i++) {
-
-                // e1 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][0]].hyperboloid, data.vv)[0];
-                // e2 = HF.geodesicEndpoints(localVertices[data.faces[i][1]].hyperboloid, localVertices[data.faces[i][2]].hyperboloid, data.vv)[0];
-                // e1.shift();
-                // e2.shift();
-
-                // ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
-                // a = Math.acos(ca);
-                // denom = 1 / Math.sqrt(1 - ca * ca);
-                // theta = 0;
-                // ratios = [];
-
-                // for (var k = 0; k <= newNumber; k++) {
-
-                //     ratios.push(Math.sin(theta) * denom);
-                //     theta += a / newNumber;
-
-                // }
 
                 for (var j = 0; j < data.faces[i].length; j++) {
 
@@ -575,7 +551,7 @@ function hyperbolicEdges(data, parameters) {
 
                         if (invisibleLines) {
 
-                            edgeGroup.add(drawLine(segmentsPoints[k], 0x444444, 2));
+                            edgeGroup.add(drawLine(segmentsPoints[k], 0x888888, 2));
 
                         }
 
@@ -601,6 +577,8 @@ function hyperbolicEdges(data, parameters) {
 
             if (faces[i].type === "sphere") {
 
+                const faceEps = faces[i].radius * eps;
+
                 cs = VF.vectorDiff(camera, faces[i].sphereCenter);
 
                 A = VF.vectorDot(pc, pc);
@@ -617,7 +595,7 @@ function hyperbolicEdges(data, parameters) {
 
                     t = (-B + Math.sqrt(delta)) / A;
 
-                    if (eps < t && t < 1 - eps) {
+                    if (faceEps < t && t < 1 - faceEps) {
 
                         if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 
@@ -629,7 +607,7 @@ function hyperbolicEdges(data, parameters) {
 
                     t = -2 * B / A - t;
 
-                    if (eps < t && t < 1 - eps) {
+                    if (faceEps < t && t < 1 - faceEps) {
 
                         if (inHyperbolicFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 

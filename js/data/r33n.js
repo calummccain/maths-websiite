@@ -7,6 +7,7 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     24/05/21 Renamed
+//     31/05/21 Added v-v distance
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -124,7 +125,9 @@ const tetrahedronRectData = (n) => {
 
         metric: metric,
 
-        cellType: "spherical"
+        cellType: "spherical",
+
+        vv: cot / 2
 
     }
 

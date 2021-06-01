@@ -8,7 +8,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 3, r = 7;
+    var p = 3, q = 3, r = 3;
     var modifier = "";
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var invisible = false;
@@ -49,8 +49,14 @@ function main() {
         refinement: 50,
         invisibleLines: invisible,
         cells: [""],
-        numFaces: 200
+        numFaces: 20
     }
+
+    //  const geometry = new THREE.SphereBufferGeometry(1.128, 64, 64);
+    // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
+    // const sphere1 = new THREE.Mesh(geometry, material1);
+    // sphere1.position.set(0.7947, 1.286, 0);
+    // scene.add(sphere1);
 
     geom = objectMaker(data);
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];

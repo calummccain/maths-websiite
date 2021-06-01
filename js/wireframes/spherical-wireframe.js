@@ -30,6 +30,9 @@ function sphericalEdges(data, parameters) {
 
     const outlineRes = 8;
 
+    const colour1 = 0x000000;
+    const colour2 = 0xCCCCCC;
+
     // matrix dictionary
     const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
 
@@ -65,8 +68,6 @@ function sphericalEdges(data, parameters) {
         edges = edges.concat(generateEdges(localVertices));
 
     }
-
-    console.log(faces)
 
     outline();
 
@@ -165,7 +166,7 @@ function sphericalEdges(data, parameters) {
         var edgeCoords = [];
 
         var ratios = [];
-        const ca = VF.vectorDot(localVertices[data.edges[0][0]].hypersphere, localVertices[data.edges[0][1]].hypersphere);
+        const ca = data.vv;
         const a = Math.acos(ca);
         const denom = 1 / Math.sqrt(1 - ca * ca);
         var theta = 0;
@@ -353,13 +354,13 @@ function sphericalEdges(data, parameters) {
 
                     if ((segments[k].length > 1) && (segments[k][0][1])) {
 
-                        edgeGroup.add(drawLine(segmentsPoints[k], 0xEEEEEE, 2));
+                        edgeGroup.add(drawLine(segmentsPoints[k], colour1, 2));
 
                     } else {
 
                         if (invisibleLines) {
 
-                            edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+                            edgeGroup.add(drawLine(segmentsPoints[k], colour2, 2));
 
                         }
 
