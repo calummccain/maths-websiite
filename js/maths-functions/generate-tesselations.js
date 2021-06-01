@@ -251,7 +251,6 @@ function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
 // Finds which vertices surround each edge
 //
 // Inputs: evDist
-//         metric
 //         e
 //         v
 //         fmat

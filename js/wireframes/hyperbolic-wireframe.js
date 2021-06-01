@@ -68,17 +68,11 @@ function hyperbolicEdges(data, parameters) {
         localVertices = generateVertices(cells[i]);
         vertices = vertices.concat(localVertices);
 
-        // console.log(localVertices)
-
         generateFaces(localVertices);
 
         edges = edges.concat(generateEdges(localVertices));
-        console.log(edges.length)
 
     }
-    console.log(data.metric)
-    console.log("edges", edges)
-    console.log("faces", faces)
 
     outline();
 
@@ -235,13 +229,9 @@ function hyperbolicEdges(data, parameters) {
 
         if (data.metric === "h") {
 
-            const ca = data.vv;
-
-            const an = Math.acosh(ca) / number;
-            const denom = 1 / Math.sqrt(ca * ca - 1);
+            const an = Math.acosh(data.vv) / number;
+            const denom = 1 / Math.sqrt(data.vv * data.vv - 1);
             var theta = 0;
-
-            console.log(ca)
 
             for (var i = 0; i <= number; i++) {
 
@@ -253,7 +243,6 @@ function hyperbolicEdges(data, parameters) {
         } else if (data.metric === "p") {
 
             const denom = 1 / Math.sqrt(2 * data.vv);
-
             const a = 10 / number;
             var theta = -5;
 
@@ -267,7 +256,6 @@ function hyperbolicEdges(data, parameters) {
         } else if (data.metric === "u") {
 
             var [e1, e2] = HF.geodesicEndpoints(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid, data.vv);
-
             const denom = 1 / 2;
             const a = 10 / number;
             var theta = -5;
@@ -319,8 +307,6 @@ function hyperbolicEdges(data, parameters) {
                 edgeCoords.push(edge);
 
             }
-
-            console.log(edgeCoords.length)
 
         });
 
