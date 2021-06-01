@@ -89,7 +89,7 @@ const hexagonData = (r, n) => {
     const ev = (metric === "p") ? 1 / 4 : Math.abs((1 - c) / (1 - 4 * c / 3));
 
     var faceData = GT.generateFaceData(Math.abs(1 / (1 - 4 * c / 3)), 6, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(ev, metric, e, v, fmat);
+    const edgeData = GT.generateEdgeData(ev, e, v, fmat);
 
     faceData = GT.orderFaces(6, faceData, edgeData);
 

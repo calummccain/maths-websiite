@@ -91,7 +91,7 @@ const squareData = (r, n) => {
     const ev = (metric === "p") ? 1 / 2 : Math.abs((1 - cos) / (1 - 2 * cos));
 
     var faceData = GT.generateFaceData(Math.abs(1 / (1 - 2 * cos)), 4, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(ev, metric, e, v, fmat);
+    const edgeData = GT.generateEdgeData(ev, e, v, fmat);
 
     faceData = GT.orderFaces(4, faceData, edgeData);
 

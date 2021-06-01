@@ -83,7 +83,7 @@ const triangleData = (r, n) => {
     const ev = (metric === "p") ? 3 / 4 : Math.abs((1 - cos) / (1 - 4 * cos));
 
     var faceData = GT.generateFaceData(Math.abs(1 / (1 - 4 * cos)), 3, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(ev, metric, e, v, fmat);
+    const edgeData = GT.generateEdgeData(ev, e, v, fmat);
 
     faceData = GT.orderFaces(3, faceData, edgeData);
 

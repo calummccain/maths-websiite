@@ -115,7 +115,7 @@ const pqrData = (p, q, r, n) => {
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
     var faceData = GT.generateFaceData(Math.abs(cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2))), p, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(Math.abs(ev), metric, e, v, fmat);
+    const edgeData = GT.generateEdgeData(Math.abs(ev), e, v, fmat);
 
     faceData = GT.orderFaces(p, faceData, edgeData);
 

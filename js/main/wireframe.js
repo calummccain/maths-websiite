@@ -49,7 +49,7 @@ function main() {
         refinement: 50,
         invisibleLines: invisible,
         cells: [""],
-        numFaces: 8
+        numFaces: 20
     }
 
     //  const geometry = new THREE.SphereBufferGeometry(1.128, 64, 64);
