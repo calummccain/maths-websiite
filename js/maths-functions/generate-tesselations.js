@@ -259,13 +259,12 @@ function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     01/05/21 Removed ev calculation
 //=========================================================
 
-function generateEdgeData(evDist, metric, e, v, fmat) {
+function generateEdgeData(evDist, e, v, fmat) {
 
     var edgeData = [];
-    var ev = (metric !== "p") ? evDist : HF.hyperboloidInnerProduct(fmat(v[0]), fmat(e[0])) ** 2;
-
     var nearestPoints, j;
 
     e.forEach((edge) => {
@@ -281,7 +280,7 @@ function generateEdgeData(evDist, metric, e, v, fmat) {
 
             }
 
-            if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - ev) < eps) {
+            if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(edge)) ** 2 - evDist) < eps) {
 
                 nearestPoints.push(i)
                 j++;
