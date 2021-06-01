@@ -158,7 +158,7 @@ const dodecahedronRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: cot + 1 / 2
+        vv: cot / 2 + p / 2
 
     }
 
