@@ -133,7 +133,7 @@ const cubeTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: ((3 - 2 * rt2) * cot + 2 * rt2 - 1) / ((3 - 2 * rt2) * cot + 5 - 2 * rt2)
+        vv: ((3 - 2 * rt2) * cot + 2 * rt2 - 1) / Math.abs(-(3 - 2 * rt2) * cot + 5 - 2 * rt2)
 
     }
 
