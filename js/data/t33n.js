@@ -101,7 +101,7 @@ const tetrahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (2 * cot + 14) / (6 * (11 - cot))
+        vv: (cot + 7) / Math.abs(11 - cot)
 
     }
 
