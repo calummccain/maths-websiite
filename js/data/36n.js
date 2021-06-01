@@ -79,8 +79,11 @@ const triangleData = (r, n) => {
     const [f, fNames] = GT.makeFaces([(r == 3) ? 1 : den, 0, 0, 0], n, 3, matrixDict);
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
+
+    const ev = (metric === "p") ? 3 / 4 : Math.abs((1 - cos) / (1 - 4 * cos));
+
     var faceData = GT.generateFaceData(Math.abs(1 / (1 - 4 * cos)), 3, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(Math.abs((1 - cos) / (1 - 4 * cos)), metric, e, v, fmat);
+    const edgeData = GT.generateEdgeData(ev, metric, e, v, fmat);
 
     faceData = GT.orderFaces(3, faceData, edgeData);
 

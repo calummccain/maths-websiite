@@ -85,8 +85,11 @@ const hexagonData = (r, n) => {
     const [f, fNames] = GT.makeFaces([(r == 6) ? 1 : den, 0, 0, 0], n, 6, matrixDict);
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
+
+    const ev = (metric === "p") ? 1 / 4 : Math.abs((1 - c) / (1 - 4 * c / 3));
+
     var faceData = GT.generateFaceData(Math.abs(1 / (1 - 4 * c / 3)), 6, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(Math.abs((1 - c) / (1 - 4 * c / 3)), metric, e, v, fmat);
+    const edgeData = GT.generateEdgeData(ev, metric, e, v, fmat);
 
     faceData = GT.orderFaces(6, faceData, edgeData);
 

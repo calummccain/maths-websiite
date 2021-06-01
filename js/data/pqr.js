@@ -109,7 +109,7 @@ const pqrData = (p, q, r, n) => {
 
     const matrixDict = (letter, v) => GT.matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v);
 
-    const ev = (metric === "p") ? 1 - cp(1) ** 2 : sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2);
+    const ev = (metric === "p") ? Math.abs(1 - cp(1) ** 2) : sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2);
 
     const [f, fNames] = GT.makeFaces(F, n, p, matrixDict);
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
@@ -167,7 +167,7 @@ const pqrData = (p, q, r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (metric === "p") ? Math.abs(1 - 2 * cp(1) ** 2) : (2 * sr(1) ** 2 * cp(1) ** 2 - (sr(1) ** 2 - cq(1) ** 2)) / Math.abs((sr(1) ** 2 - cq(1) ** 2))
+        vv: (metric === "p") ? Math.abs(cp(2)) : (cp(2) * sr(1) ** 2 + cq(1) ** 2) / Math.abs(sr(1) ** 2 - cq(1) ** 2)
 
     }
 

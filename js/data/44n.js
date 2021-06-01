@@ -87,8 +87,11 @@ const squareData = (r, n) => {
     const [f, fNames] = GT.makeFaces([(r == 4) ? 1 : den, 0, 0, 0], n, 4, matrixDict);
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
+
+    const ev = (metric === "p") ? 1 / 2 : Math.abs((1 - cos) / (1 - 2 * cos));
+
     var faceData = GT.generateFaceData(Math.abs(1 / (1 - 2 * cos)), 4, metric, f, v, fmat);
-    const edgeData = GT.generateEdgeData(Math.abs((1 - cos) / (1 - 2 * cos)), metric, e, v, fmat);
+    const edgeData = GT.generateEdgeData(ev, metric, e, v, fmat);
 
     faceData = GT.orderFaces(4, faceData, edgeData);
 
