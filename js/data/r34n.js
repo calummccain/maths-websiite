@@ -118,7 +118,7 @@ const octahedronRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: cot - 1 / 2
+        vv: cot + 1 / 2
 
     }
 
