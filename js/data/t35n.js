@@ -141,7 +141,7 @@ const icosahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (p4 * cot + 9 * p2 - 1) / (9 * p2 + 1 - p4 * cot)
+        vv: (p4 * cot + 9 * p2 - 1) / Math.abs(9 * p2 + 1 - p4 * cot)
 
     }
 
