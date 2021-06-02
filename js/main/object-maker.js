@@ -162,7 +162,7 @@ function objectMaker(parameters) {
 
         }
 
-    } else if (parameters.model === "uhp" || parameters.model === "poincare") {
+    } else if (parameters.model === "wireframe") {
 
         if (data.metric === "s") {
 

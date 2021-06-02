@@ -1,3 +1,13 @@
+// ========================================================
+// main for the wireframe viewer
+// 
+// Inputs: 
+// Output:
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
@@ -8,10 +18,7 @@ window.onload = main;
 
 function main() {
 
-    var p = 3, q = 3, r = 3;
-    var modifier = "";
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
-    var invisible = false;
     var geom = {};
     var cellType;
 
@@ -41,18 +48,18 @@ function main() {
     scene.add(lineGroup);
 
     var data = {
-        p: p,
-        q: q,
-        r: r,
-        modifier: modifier,
-        model: "poincare",
+        p: 3,
+        q: 3,
+        r: 3,
+        modifier: "",
+        model: "wireframe",
         refinement: 50,
-        invisibleLines: invisible,
+        invisibleLines: false,
         cells: [""],
         numFaces: 20
     }
 
-    //  const geometry = new THREE.SphereBufferGeometry(1.128, 64, 64);
+    // const geometry = new THREE.SphereBufferGeometry(1.128, 64, 64);
     // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
     // const sphere1 = new THREE.Mesh(geometry, material1);
     // sphere1.position.set(0.7947, 1.286, 0);
@@ -152,7 +159,7 @@ function main() {
         });
 
         $(".cellselector").click(function () {
-            [p, q, modifier] = $(this).attr("id").split("-");
+            var [p, q, modifier] = $(this).attr("id").split("-");
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
