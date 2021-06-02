@@ -80,7 +80,7 @@ function objectMaker(parameters) {
 
     if (parameters.model === "solid") {
 
-        const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
+        const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.hyperbolicModel);
 
         const opacity = parameters.opacity || 1;
 
