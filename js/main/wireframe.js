@@ -53,7 +53,7 @@ function main() {
         r: 3,
         modifier: "",
         model: "wireframe",
-        refinement: 50,
+        refinement: 25,
         invisibleLines: false,
         cells: [""],
         numFaces: 20
