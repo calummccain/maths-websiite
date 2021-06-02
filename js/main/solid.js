@@ -98,7 +98,7 @@ function main() {
         transform: initialCell,
         position: [0, 0, 0],
         faceMode: true,
-        numFaces: 200,
+        numFaces: 50,
         shader: "toon",
         slices: 10,
     }
@@ -116,7 +116,7 @@ function main() {
         position: [0, 0, 0],
         faceMode: false,
         opacity: 0.3,
-        numFaces: 50,
+        numFaces: 20,
         shader: "toon",
         slices: 10
     }
@@ -376,21 +376,25 @@ function main() {
 
         $("#rightarrow").click(function () {
             data.r = Math.min(data.r + 1, 8);
+            ghostData.r = Math.min(ghostData.r + 1, 8);
             updateCellSelector(data.r);
         });
 
         $("#leftarrow").click(function () {
             data.r = Math.max(data.r - 1, 3);
+            ghostData.r = Math.max(ghostData.r - 1, 3);
             updateCellSelector(data.r);
         });
 
         $(".cellselector").click(function () {
             var [p, q, modifier] = $(this).attr("id").split("-");
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
+            ghostData.p = Number(p), ghostData.q = Number(q), ghostData.modifier = modifier;
             data.transform = initialCell;
             list = [initialCell];
             k = 0;
             visibleGroup.children = objectMaker(data).children;
+            ghostGroup.children = objectMaker(ghostData).children;
         })
 
     });
