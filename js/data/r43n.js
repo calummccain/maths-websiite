@@ -8,6 +8,7 @@
 //     ??/??/?? Initial commit
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
+//     03/06/21 Removed 1 *
 //=========================================================
 
 import { p, p2, p_1 } from "./constants.js";
@@ -27,7 +28,7 @@ const cubeRectData = (n) => {
             v[3]
         ] : (n == 4) ? (v) => [
             v[0],
-            2 * v[0] - 1 * v[1],
+            2 * v[0] - v[1],
             v[2],
             v[3]
         ] : (n == 5) ? (v) => [
@@ -47,7 +48,6 @@ const cubeRectData = (n) => {
             v[3]
         ];
 
-    // for n = 4: factor of 1/2 is arbitrary but scales shapes nicely
     const f = (v) => [
         Math.sqrt(Math.abs(cot)) * v[0],
         Math.sqrt(Math.abs((cot - 1) / 2)) * v[1],
@@ -105,7 +105,7 @@ const cubeRectData = (n) => {
 
         f: f,
 
-        faceReflections: ["", "", ""],
+        faceReflections: [""],
 
         outerReflection: "d",
 
