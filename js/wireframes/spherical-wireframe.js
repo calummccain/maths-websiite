@@ -69,8 +69,6 @@ function sphericalEdges(data, parameters) {
 
     }
 
-    console.log(faces)
-
     outline();
 
     var edgeGroup = visibleEdges()
@@ -146,7 +144,7 @@ function sphericalEdges(data, parameters) {
 
                 faces.push({
                     type: "plane",
-                    d: 0,
+                    d: VF.determinant3([v1, v2, v3]),
                     normal: VF.vectorCross(VF.vectorDiff(v2, v1), VF.vectorDiff(v3, v1)),
                     radius: 0,
                     sphereCenter: [0, 0, 0],
@@ -155,6 +153,8 @@ function sphericalEdges(data, parameters) {
                     polygon3: polygon3,
                     polygon4: polygon4
                 });
+
+                console.log(faces)
 
             }
 
@@ -430,7 +430,7 @@ function sphericalEdges(data, parameters) {
 
             } else if (faces[i].type === "plane") {
 
-                t = VF.vectorDot(camera, faces[i].normal) / VF.vectorDot(pc, faces[i].normal);
+                t = (faces[i].d - VF.vectorDot(camera, faces[i].normal)) / VF.vectorDot(pc, faces[i].normal);
 
                 if (eps < t && t < 1 - eps) {
 
