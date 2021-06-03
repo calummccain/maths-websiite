@@ -154,8 +154,6 @@ function sphericalEdges(data, parameters) {
                     polygon4: polygon4
                 });
 
-                console.log(faces)
-
             }
 
         }
@@ -434,7 +432,7 @@ function sphericalEdges(data, parameters) {
 
                 if (eps < t && t < 1 - eps) {
 
-                    const rotPoint = RF.ru(point, Math.PI)
+                    // const rotPoint = RF.ru(point, Math.PI)
 
                     if (inSphericalFace(VF.vectorSum([camera, VF.vectorScale(pc, t)]), i)) {
 
