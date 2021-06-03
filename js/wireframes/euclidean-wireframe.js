@@ -20,8 +20,6 @@ const eps = 1e-4;
 
 function euclideanEdges(data, parameters) {
 
-    console.log(data)
-
     // Parameter checks
     const cells = parameters.cells;
     const [thetax, thetay, thetaz, thetau, thetav, thetaw] = parameters.angles || [0, 0, 0, 0, 0, 0];
