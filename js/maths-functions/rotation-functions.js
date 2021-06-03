@@ -63,6 +63,7 @@ function rz(v, theta) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     03/06/21 Fixed euclidean bug
 //=========================================================
 
 function ru(v, theta, metric) {
@@ -76,7 +77,7 @@ function ru(v, theta, metric) {
 
     } else if (metric === "e") {
 
-        return [v[0] - theta * v[1], theta * v[0] + v[1], v[2], v[3]];
+        return [v[0], v[1] + theta, v[2], v[3]];
 
     } else if (metric === "h" || metric === "p" || metric === "u") {
 
@@ -97,6 +98,7 @@ function ru(v, theta, metric) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     03/06/21 Fixed euclidean bug
 //=========================================================
 
 function rv(v, theta, metric) {
@@ -110,7 +112,7 @@ function rv(v, theta, metric) {
 
     } else if (metric === "e") {
 
-        return [v[0] + theta * v[2], v[1], theta * v[0] + v[2], v[3]];
+        return [v[0], v[1], v[2] + theta, v[3]];
 
     } else if (metric === "h" || metric === "p" || metric === "u") {
 
@@ -131,6 +133,7 @@ function rv(v, theta, metric) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     03/06/21 Fixed euclidean bug
 //=========================================================
 
 function rw(v, theta, metric) {
@@ -144,7 +147,7 @@ function rw(v, theta, metric) {
 
     } else if (metric === "e") {
 
-        return [v[0] + theta * v[3], v[1], v[2], theta * v[0] + v[3]];
+        return [v[0], v[1], v[2], v[3] + theta];
 
     } else if (metric === "h" || metric === "p" || metric === "u") {
 
