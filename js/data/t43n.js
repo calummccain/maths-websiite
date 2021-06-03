@@ -8,6 +8,8 @@
 //     ??/??/?? Initial commit
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
+//     03/06/21 Removed 1 *
+//              Fixed edges - typo
 //=========================================================
 
 import { p, p2, p_1, rt2 } from "./constants.js";
@@ -28,7 +30,7 @@ const cubeTruncData = (n) => {
             v[3]
         ] : (n == 4) ? (v) => [
             v[0],
-            2 * v[0] - 1 * v[1],
+            2 * v[0] - v[1],
             v[2],
             v[3]
         ] : (n == 5) ? (v) => [
@@ -48,12 +50,18 @@ const cubeTruncData = (n) => {
             v[3]
         ];
 
-    const f = (v) => [
-        Math.sqrt(Math.abs(2 * cot / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[0],
-        Math.sqrt(Math.abs((cot - 1) / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[1],
-        Math.sqrt(Math.abs((cot - 1) / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[2],
-        Math.sqrt(Math.abs((cot - 1) / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[3]
-    ];
+    const f =
+        (n == 4) ? (v) => [
+            v[0],
+            v[1] / 2,
+            v[2] / 2,
+            v[3] / 2
+        ] : (v) => [
+            Math.sqrt(Math.abs(2 * cot / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[0],
+            Math.sqrt(Math.abs((cot - 1) / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[1],
+            Math.sqrt(Math.abs((cot - 1) / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[2],
+            Math.sqrt(Math.abs((cot - 1) / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[3]
+        ];
 
     return {
 
@@ -73,7 +81,7 @@ const cubeTruncData = (n) => {
             [4, 5], [4, 10], [5, 17], [6, 7], [6, 8], [6, 9], [7, 8], [8, 20],
             [9, 10], [9, 11], [10, 11], [11, 23], [12, 13], [12, 14], [12, 15], [13, 14],
             [13, 19], [15, 16], [15, 17], [16, 17], [16, 22], [18, 19], [18, 20], [18, 21],
-            [19, 20], [21, 22], [22, 23], [22, 23]
+            [19, 20], [21, 22], [21, 23], [22, 23]
         ],
 
         faces: [
@@ -111,7 +119,7 @@ const cubeTruncData = (n) => {
 
         f: f,
 
-        faceReflections: ["", "", ""],
+        faceReflections: [""],
 
         outerReflection: "d",
 

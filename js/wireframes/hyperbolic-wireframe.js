@@ -577,7 +577,7 @@ function hyperbolicEdges(data, parameters) {
 
             if (faces[i].type === "sphere") {
 
-                const faceEps = faces[i].radius * eps;
+                const faceEps = Math.min(faces[i].radius * eps, eps);
 
                 cs = VF.vectorDiff(camera, faces[i].sphereCenter);
 

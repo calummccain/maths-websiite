@@ -7,6 +7,7 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
+//     03/06/21 Removed 1 *
 //=========================================================
 
 import { rt2, rt3, p, p2, p_1 } from "./constants.js";
@@ -26,7 +27,7 @@ const cubeData = (n) => {
             v[3]
         ] : (n == 4) ? (v) => [
             v[0],
-            2 * v[0] - 1 * v[1],
+            2 * v[0] - v[1],
             v[2],
             v[3]
         ] : (n == 5) ? (v) => [

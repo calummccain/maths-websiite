@@ -2,6 +2,7 @@ import * as THREE from "../three-bits/three.module.js";
 import * as GM from "../geometries/geometry-maker.js";
 
 import * as SW from "../wireframes/spherical-wireframe.js";
+import * as EW from "../wireframes/euclidean-wireframe.js";
 import * as HW from "../wireframes/hyperbolic-wireframe.js";
 
 import { tetrahedronData } from "../data/33n.js";
@@ -80,7 +81,7 @@ function objectMaker(parameters) {
 
     if (parameters.model === "solid") {
 
-        const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.model);
+        const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.hyperbolicModel);
 
         const opacity = parameters.opacity || 1;
 
@@ -162,11 +163,21 @@ function objectMaker(parameters) {
 
         }
 
-    } else if (parameters.model === "uhp" || parameters.model === "poincare") {
+    } else if (parameters.model === "wireframe") {
 
         if (data.metric === "s") {
 
             return (rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
+                cells: parameters.cells,
+                angles: [rx, ry, rz, ru, rv, rw],
+                number: 50,
+                camera: camera,
+                width: 2,
+            });
+
+        } else if (data.metric === "e") {
+
+            return (rx, ry, rz, ru, rv, rw, camera) => EW.euclideanEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,

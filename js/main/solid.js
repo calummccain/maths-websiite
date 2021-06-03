@@ -21,7 +21,7 @@ function main() {
     var p = 3, q = 3, r = 3;
 
     // Initial values for the rotation values
-    var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
+    // var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
 
     // Flag to determine if the geometry has just changed or not: k = 0 => new geometry
     var k = 0;
@@ -91,15 +91,16 @@ function main() {
         p: p,
         q: q,
         r: r,
+        modifier: "",
         model: "solid",
+        hyperbolicModel: "poincare",
         refinement: 4,
         transform: initialCell,
         position: [0, 0, 0],
         faceMode: true,
-        numFaces: 200,
+        numFaces: 50,
         shader: "toon",
         slices: 10,
-        truncated: false
     }
 
     // ghostData is the dictionary of parameters for the ghost geometries
@@ -107,13 +108,15 @@ function main() {
         p: p,
         q: q,
         r: r,
+        modifier: "",
         model: "solid",
+        hyperbolicModel: "poincare",
         refinement: 3,
         transform: "",
         position: [0, 0, 0],
         faceMode: false,
         opacity: 0.3,
-        numFaces: 50,
+        numFaces: 20,
         shader: "toon",
         slices: 10
     }
@@ -257,7 +260,7 @@ function main() {
             clickObject = intersects[0].object;
 
             // If mode is 'add' then add the cell from the face
-            // If mode is 'rmeove' then remove the cell 
+            // If mode is 'remove' then remove the cell 
             if (mode === "add") {
 
                 data.transform = clickObject.cellName + clickObject.faceName + "d";
@@ -355,39 +358,43 @@ function main() {
         ghostGroup.children = [];
     });
 
-    document.getElementById("truncated").addEventListener("click", function () {
-        data.truncated = !data.truncated;
-        data.transform = initialCell;
-        list = [initialCell];
-        k = 0;
-        visibleGroup.children = objectMaker(data).children;
-    });
+    // document.getElementById("truncated").addEventListener("click", function () {
+    //     data.truncated = !data.truncated;
+    //     data.transform = initialCell;
+    //     list = [initialCell];
+    //     k = 0;
+    //     visibleGroup.children = objectMaker(data).children;
+    // });
 
     $(document).ready(function () {
 
-        updateCellSelector(data.p);
+        updateCellSelector(data.r);
 
         $("#pqr").click(function () {
             $("#pqrselector").toggle();
         });
 
         $("#rightarrow").click(function () {
-            data.p = Math.min(data.p + 1, 8);
-            ghostData.p = Math.min(data.p + 1, 8);
-            updateCellSelector(data.p);
+            data.r = Math.min(data.r + 1, 8);
+            ghostData.r = Math.min(ghostData.r + 1, 8);
+            updateCellSelector(data.r);
         });
 
         $("#leftarrow").click(function () {
-            data.p = Math.max(data.p - 1, 3);
-            ghostData.p = Math.max(data.p - 1, 3);
-            updateCellSelector(data.p);
+            data.r = Math.max(data.r - 1, 3);
+            ghostData.r = Math.max(ghostData.r - 1, 3);
+            updateCellSelector(data.r);
         });
 
         $(".cellselector").click(function () {
-            [q, r] = $(this).attr("id").split("-");
-            data.q = Number(q), data.r = Number(r);
-            ghostData.q = Number(q), ghostData.r = Number(r);
+            var [p, q, modifier] = $(this).attr("id").split("-");
+            data.p = Number(p), data.q = Number(q), data.modifier = modifier;
+            ghostData.p = Number(p), ghostData.q = Number(q), ghostData.modifier = modifier;
+            data.transform = initialCell;
+            list = [initialCell];
+            k = 0;
             visibleGroup.children = objectMaker(data).children;
+            ghostGroup.children = objectMaker(ghostData).children;
         })
 
     });
@@ -400,20 +407,94 @@ function main() {
         "u": "#BAE1FF"
     }
 
-    function updateCellSelector(p) {
+    const truncRectDict = {
+        "r-3-3-3": "s",
+        "r-3-3-4": "s",
+        "r-3-3-5": "s",
+        "r-3-3-6": "h",
+        "r-3-3-7": "h",
+        "r-3-3-8": "h",
+        "r-3-4-3": "s",
+        "r-3-4-4": "h",
+        "r-3-4-5": "h",
+        "r-3-4-6": "h",
+        "r-3-4-7": "h",
+        "r-3-4-8": "h",
+        "r-3-5-3": "h",
+        "r-3-5-4": "h",
+        "r-3-5-5": "h",
+        "r-3-5-6": "h",
+        "r-3-5-7": "h",
+        "r-3-5-8": "h",
+        "r-4-3-3": "s",
+        "r-4-3-4": "e",
+        "r-4-3-5": "h",
+        "r-4-3-6": "h",
+        "r-4-3-7": "h",
+        "r-4-3-8": "h",
+        "r-5-3-3": "s",
+        "r-5-3-4": "h",
+        "r-5-3-5": "h",
+        "r-5-3-6": "h",
+        "r-5-3-7": "h",
+        "r-5-3-8": "h",
+        "t-3-3-3": "s",
+        "t-3-3-4": "s",
+        "t-3-3-5": "s",
+        "t-3-3-6": "h",
+        "t-3-3-7": "h",
+        "t-3-3-8": "h",
+        "t-3-4-3": "s",
+        "t-3-4-4": "h",
+        "t-3-4-5": "h",
+        "t-3-4-6": "h",
+        "t-3-4-7": "h",
+        "t-3-4-8": "u",
+        "t-3-5-3": "h",
+        "t-3-5-4": "h",
+        "t-3-5-5": "h",
+        "t-3-5-6": "h",
+        "t-3-5-7": "u",
+        "t-3-5-8": "u",
+        "t-4-3-3": "s",
+        "t-4-3-4": "e",
+        "t-4-3-5": "h",
+        "t-4-3-6": "h",
+        "t-4-3-7": "h",
+        "t-4-3-8": "h",
+        "t-5-3-3": "s",
+        "t-5-3-4": "h",
+        "t-5-3-5": "h",
+        "t-5-3-6": "h",
+        "t-5-3-7": "h",
+        "t-5-3-8": "h"
+    }
 
-        for (var q = 3; q <= 8; q++) {
+    function updateCellSelector(r) {
 
-            for (var r = 3; r <= 8; r++) {
+        for (var p = 3; p <= 8; p++) {
+
+            for (var q = 3; q <= 8; q++) {
 
                 cellType = typeOfCell(p, q, r);
 
-                document.getElementById(q + "-" + r).innerHTML = "{" + p + "," + q + "," + r + "}";
-                document.getElementById(q + "-" + r).style.backgroundColor = cellTypeColours[cellType];
+                document.getElementById(p + "-" + q + "-").innerHTML = "{" + p + "," + q + "," + r + "}";
+                document.getElementById(p + "-" + q + "-").style.backgroundColor = cellTypeColours[cellType];
 
             }
 
         }
+
+        [[3, 3], [3, 4], [3, 5], [4, 3], [5, 3]].forEach(([p, q]) => {
+
+            ["t", "r"].forEach((affix) => {
+
+                document.getElementById(p + "-" + q + "-" + affix).innerHTML = affix + "{" + p + "," + q + "," + r + "}";
+                document.getElementById(p + "-" + q + "-" + affix).style.backgroundColor = cellTypeColours[truncRectDict[affix + "-" + p + "-" + q + "-" + r]];
+
+            })
+
+        })
 
     }
 
