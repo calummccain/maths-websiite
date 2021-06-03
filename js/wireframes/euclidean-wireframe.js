@@ -69,8 +69,6 @@ function euclideanEdges(data, parameters) {
 
     }
 
-    // outline();
-
     var edgeGroup = visibleEdges()
 
     // generate the positions of the vertices in several models
@@ -98,7 +96,7 @@ function euclideanEdges(data, parameters) {
     // generate the faces that bound the geometry
     function generateFaces(localVertices) {
 
-        var polygon3, polygon4, center4, center3, v1, v2, v3, sphereCenter, radius;
+        var polygon3, polygon4, center4, center3, v1, v2, v3;
 
         for (var i = 0; i < data.numFaces; i++) {
 
@@ -166,86 +164,6 @@ function euclideanEdges(data, parameters) {
         });
 
         return edgeCoords;
-
-    }
-
-    function outline() {
-
-        var center, r, diff, cs, h, t, interp, perp, v, outline, testCoord;
-
-        for (var i = 0; i < faces.length; i++) {
-
-            if (faces[i].type === "sphere") {
-
-                center = faces[i].sphereCenter;
-                r = faces[i].radius;
-
-            } else {
-
-                continue;
-
-            }
-
-            diff = VF.vectorDiff(center, camera);
-            cs = VF.norm(diff);
-
-            t = (r * r) / (cs * cs);
-            h = r * Math.sqrt(1 - t);
-            interp = VF.vectorSum([VF.vectorScale(center, 1 - t), VF.vectorScale(camera, t)]);
-
-            perp = [1, 0, 0];
-
-            if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
-
-                perp = [-diff[1] * h / VF.norm([diff[0], diff[1]]), diff[0] * h / VF.norm([diff[0], diff[1]]), 0];
-
-            }
-
-            v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / cs));
-
-            if (v[2] < 0) {
-
-                v = VF.vectorScale(v, -1);
-
-            }
-
-            outline = [];
-
-            for (var k = 0; k <= outlineRes * number; k++) {
-
-                testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
-
-                if (pointInPolygon(testCoord, faces[i].polygon)) {
-
-                    outline.push(testCoord);
-
-                } else {
-
-                    edges.push(outline);
-                    outline = [];
-
-                }
-
-            }
-
-            edges.push(outline)
-
-        }
-
-    }
-
-    function inSphericalFace(point, face) {
-
-        if (VF.vectorDot(SF.stereoToHyper(point), faces[face].center4) > 0) {
-
-            const d = faces[face].d / VF.vectorDot(point, faces[face].normal);
-            const flatPoint = VF.vectorScale(point, d);
-
-            return pointInPolygon(flatPoint, faces[face].polygon3);
-
-        }
-
-        return false;
 
     }
 
