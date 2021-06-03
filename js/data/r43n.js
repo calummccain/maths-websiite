@@ -48,12 +48,18 @@ const cubeRectData = (n) => {
             v[3]
         ];
 
-    const f = (v) => [
-        Math.sqrt(Math.abs(cot)) * v[0],
-        Math.sqrt(Math.abs((cot - 1) / 2)) * v[1],
-        Math.sqrt(Math.abs((cot - 1) / 2)) * v[2],
-        Math.sqrt(Math.abs((cot - 1) / 2)) * v[3]
-    ];
+    const f =
+        (n == 4) ? (v) => [
+            v[0],
+            v[1] / 2,
+            v[2] / 2,
+            v[3] / 2
+        ] : (v) => [
+            Math.sqrt(Math.abs(cot)) * v[0],
+            Math.sqrt(Math.abs((cot - 1) / 2)) * v[1],
+            Math.sqrt(Math.abs((cot - 1) / 2)) * v[2],
+            Math.sqrt(Math.abs((cot - 1) / 2)) * v[3]
+        ];
 
     return {
 
