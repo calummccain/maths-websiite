@@ -101,6 +101,7 @@ function main() {
         numFaces: 50,
         shader: "toon",
         slices: 10,
+        colour: 0x653286
     }
 
     // ghostData is the dictionary of parameters for the ghost geometries
