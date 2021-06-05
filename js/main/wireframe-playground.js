@@ -130,7 +130,7 @@ function main() {
         opacity: 0.1,
         transparent: true
     });
-    const plane = new THREE.Mesh(geometry, material);
+    var plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
     var grid = false;
     var rounded = [0, 0, 0];
@@ -169,6 +169,37 @@ function main() {
         requestAnimationFrame(render);
 
     }
+
+    function ExportToSVG(filename) {
+        var XMLS = new XMLSerializer();
+        var svgfile = XMLS.serializeToString(renderer.domElement);
+
+        var svgData = svgfile;
+        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+        var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = filename;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+
+    document.getElementById("svg").addEventListener("click", function () {
+        
+            plane.visible = false;
+            sphereMouse.visible = false;
+            render();
+        
+            var d = new Date();
+            ExportToSVG(d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear() + ".svg");
+
+            plane.visible = true;
+            sphereMouse.visible = true;
+            render();
+
+    });
 
     document.getElementById("addvertices").addEventListener("click", function () {
         mode = "addvertices";
