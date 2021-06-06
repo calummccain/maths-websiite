@@ -14,7 +14,7 @@ function main() {
     const outlineRes = 4;
 
     // Canvas constants
-    const canvas = document.getElementById("canvas");
+    const canvas = document.getElementById("canvassvg");
     var rect = canvas.getBoundingClientRect();
 
     var WIDTH = canvas.clientWidth;
@@ -149,6 +149,16 @@ function main() {
 
     window.addEventListener("resize", onWindowResize, false);
 
+    $(document).ready(function () {
+
+        // $(".menu-button").on("click", function() {
+        //     console.log("hi")
+        //     $("#edges-img").css({ stroke: "#ff0000" });
+        //     console.log(document.getElementById("edges-img"))
+        // });
+
+    });
+
     function onWindowResize() {
 
         WIDTH = canvas.clientWidth;
@@ -187,34 +197,89 @@ function main() {
     }
 
     document.getElementById("svg").addEventListener("click", function () {
-        
-            plane.visible = false;
-            sphereMouse.visible = false;
-            render();
-        
-            var d = new Date();
-            ExportToSVG(d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear() + ".svg");
 
-            plane.visible = true;
-            sphereMouse.visible = true;
-            render();
+        plane.visible = false;
+        sphereMouse.visible = false;
+        render();
+
+        var d = new Date();
+        ExportToSVG(d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear() + ".svg");
+
+        plane.visible = true;
+        sphereMouse.visible = true;
+        render();
 
     });
 
     document.getElementById("addvertices").addEventListener("click", function () {
         mode = "addvertices";
+
     });
 
     document.getElementById("addedges").addEventListener("click", function () {
+
         mode = "addedges";
+
+        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "70");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("edge-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("addfaces").addEventListener("click", function () {
+
         mode = "addfaces";
+
+        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "70");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("face-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("addcells").addEventListener("click", function () {
+
         mode = "addcells";
+
+        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "70");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("cell-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("move").addEventListener("click", function () {

@@ -163,7 +163,7 @@ function main() {
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             geom = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-        })
+        });
 
     });
 

@@ -5,56 +5,59 @@
 
         <meta charset="utf-8">
 
-        <link rel="stylesheet" href="../css/wireframe.css">
+        <link rel="stylesheet" href="../css/wireframe-playground.css">
         <link rel="stylesheet" href="../css/menu.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script type="text/javascript" async
             src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
             </script>
 
-        <title>wireframe</title>
+        <script src="../js/svg/svg-inject.min.js"></script>
+
+
+        <title>wireframe-playground</title>
 
     </head>
 
     <body>
 
-        <div id="canvas"></div>
+        <div id="canvassvg"></div>
 
         <div id="menu">
 
-            <button id="model">
+            <button class="menu-button" id="model">
                 <img src="../img/3-3-3.svg" alt="3-3-3" height=50>
             </button>
 
-            <button id="move">
+            <button class="menu-button" id="move">
                 <img src="../img/3-3-3.svg" alt="3-3-3" height=50>
             </button>
 
-            <button id="addvertices">
-                <img src="../img/3-3-3.svg" alt="vertex" height=50>
+            <button class="menu-button" id="addvertices">
+                <object id="vertex-svg" class="svg-button" type="image/svg+xml" data="../img/3-3-3.svg" width=50></object>
             </button>
 
-            <button id="addedges">
-                <img src="../img/edge.svg" alt="edge" height=50>
+            <button class="menu-button" id="addedges">
+                <object id="edge-svg" class="svg-button" type="image/svg+xml" data="../img/edge.svg" width=50></object>
             </button>
 
-            <button id="addfaces">
-                <img src="../img/face.svg" alt="face" height=50>
+            <button class="menu-button" id="addfaces">
+                <object id="face-svg" class="svg-button" type="image/svg+xml" data="../img/face.svg" width=50></object>
             </button>
 
-            <button id="addcells">
-                <img src="../img/cell.svg" alt="cell" height=50>
+            <button class="menu-button" id="addcells">
+                <object id="cell-svg" class="svg-button" type="image/svg+xml" data="../img/cell.svg" width=50></object>
             </button>
 
-            <button id="visible">
+            <button class="menu-button" id="visible">
                 <img src="../img/3-3-3.svg" alt="3-3-3" height=50>
             </button>
 
-            <button id="grid">
+            <button class="menu-button" id="grid">
                 <img src="../img/3-3-3.svg" alt="3-3-3" height=50>
             </button>
 
-            <button id="svg">
+            <button class="menu-button" id="svg">
                 <img src="../img/3-3-3.svg" alt="3-3-3" height=50>
             </button>
 
