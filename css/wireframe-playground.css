@@ -26,6 +26,11 @@ body {
     transition: 0.5s;
 }
 
+.svg-button {
+    margin: auto;
+    transition: 0.5s;
+}
+
 #canvassvg {
     position: fixed;
     width: 1080px;
