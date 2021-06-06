@@ -212,7 +212,26 @@ function main() {
     });
 
     document.getElementById("addvertices").addEventListener("click", function () {
+        
         mode = "addvertices";
+
+        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "70");
+                    p.setAttribute("fill", "#000000");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("vertex-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+                p.setAttribute("fill", "#FF0000");
+            }
+        )
 
     });
 
@@ -225,6 +244,7 @@ function main() {
                 (p) => {
                     p.setAttribute("stroke", "#000000");
                     p.setAttribute("stroke-width", "70");
+                    p.setAttribute("fill", "#000000");
                 }
             )
         })
@@ -247,6 +267,7 @@ function main() {
                 (p) => {
                     p.setAttribute("stroke", "#000000");
                     p.setAttribute("stroke-width", "70");
+                    p.setAttribute("fill", "#000000");
                 }
             )
         })
@@ -269,6 +290,7 @@ function main() {
                 (p) => {
                     p.setAttribute("stroke", "#000000");
                     p.setAttribute("stroke-width", "70");
+                    p.setAttribute("fill", "#000000");
                 }
             )
         })

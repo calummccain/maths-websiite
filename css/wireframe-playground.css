@@ -24,11 +24,7 @@ body {
     float: left;
     border-radius: 10px;
     transition: 0.5s;
-}
-
-.svg-button {
-    margin: auto;
-    transition: 0.5s;
+    pointer-events: auto
 }
 
 #canvassvg {
@@ -43,4 +39,6 @@ body {
 
 .svg-button {
     pointer-events: none;
+    margin: auto;
+    transition: 0.5s;
 }
