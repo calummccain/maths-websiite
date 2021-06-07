@@ -108,7 +108,7 @@ function main() {
     renderer.setSize(WIDTH, HEIGHT);
     canvas.appendChild(renderer.domElement);
 
-    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
+    var camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 100);
     camera.position.set(5, 5, 5);
     camera.up = new THREE.Vector3(0, 0, 1);
 
@@ -209,7 +209,7 @@ function main() {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
-                    p.setAttribute("stroke-width", "70");
+                    p.setAttribute("stroke-width", "75");
                     p.setAttribute("fill", "#000000");
                 }
             )
@@ -233,7 +233,7 @@ function main() {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
-                    p.setAttribute("stroke-width", "70");
+                    p.setAttribute("stroke-width", "75");
                     p.setAttribute("fill", "#000000");
                 }
             )
@@ -256,7 +256,7 @@ function main() {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
-                    p.setAttribute("stroke-width", "70");
+                    p.setAttribute("stroke-width", "75");
                     p.setAttribute("fill", "#000000");
                 }
             )
@@ -279,7 +279,7 @@ function main() {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
-                    p.setAttribute("stroke-width", "70");
+                    p.setAttribute("stroke-width", "75");
                     p.setAttribute("fill", "#000000");
                 }
             )
@@ -295,7 +295,26 @@ function main() {
     });
 
     document.getElementById("move").addEventListener("click", function () {
+        
         mode = "move";
+    
+        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+                    p.setAttribute("fill", "#000000");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("move-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("visible").addEventListener("click", function () {
