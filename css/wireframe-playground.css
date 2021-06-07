@@ -23,7 +23,6 @@ body {
 .menu-button {
     float: left;
     border-radius: 10px;
-    transition: 0.5s;
     pointer-events: auto
 }
 
@@ -40,5 +39,13 @@ body {
 .svg-button {
     pointer-events: none;
     margin: auto;
-    transition: 0.5s;
+}
+
+#menu {
+    position: fixed;
+    height: 100%;
+    width: 70px;
+    z-index: 10;
+    bottom: 0;
+    background-color: #A5A5A5;
 }

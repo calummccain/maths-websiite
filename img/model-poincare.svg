@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -47,28 +47,20 @@
      inkscape:zoom="0.48517716"
      inkscape:cx="462.05041"
      inkscape:cy="594.10227"
-     inkscape:window-x="-1"
+     inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg845"
      inkscape:document-rotation="0" />
-  <circle
-     style="fill:none;stroke-width:50"
-     id="path856"
-     cx="0"
-     cy="0"
-     r="400" />
-  <ellipse
-     style="fill:none;stroke-width:50;stroke-miterlimit:4;stroke-dasharray:150, 50;stroke-dashoffset:0"
-     id="path858"
-     sodipodi:type="arc"
-     sodipodi:cx="0"
-     sodipodi:cy="0"
-     sodipodi:rx="400"
-     sodipodi:ry="100"
-     sodipodi:start="0"
-     sodipodi:end="3.1415927"
-     sodipodi:open="true"
-     sodipodi:arc-type="arc"
-     d="m 400,0 a 400,100 0 0 1 -200.00001,86.602541 400,100 0 0 1 -400,-2e-6 A 400,100 0 0 1 -400,0" />
+    <circle
+       style="fill:none"
+       id="path856"
+       cx="0"
+       cy="0"
+       r="400" />
+    <path
+       style="fill:none;"
+       stroke-dasharray="120 80"
+       id="path839"
+       d="m 400,0 a 400,100 0 0 1 -200.00001,86.602541 400,100 0 0 1 -400,-2e-6 A 400,100 0 0 1 -400,0" />
 </svg>

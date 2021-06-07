@@ -149,16 +149,6 @@ function main() {
 
     window.addEventListener("resize", onWindowResize, false);
 
-    $(document).ready(function () {
-
-        // $(".menu-button").on("click", function() {
-        //     console.log("hi")
-        //     $("#edges-img").css({ stroke: "#ff0000" });
-        //     console.log(document.getElementById("edges-img"))
-        // });
-
-    });
-
     function onWindowResize() {
 
         WIDTH = canvas.clientWidth;
@@ -212,7 +202,7 @@ function main() {
     });
 
     document.getElementById("addvertices").addEventListener("click", function () {
-        
+
         mode = "addvertices";
 
         Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
@@ -317,12 +307,23 @@ function main() {
     });
 
     document.getElementById("model").addEventListener("click", function () {
+
         model = (model === "uhp") ? "poincare" : "uhp";
 
         outline();
 
         edgeGroup.children = visibleEdges().children;
         outlineGroup.children = visibleOutlines().children;
+
+        if (model === "poincare") {
+
+            document.getElementById("model-svg").data = "../img/model-poincare.svg";
+
+        } else {
+
+            document.getElementById("model-svg").data = "../img/model-uhp.svg";
+
+        }
 
     });
 
