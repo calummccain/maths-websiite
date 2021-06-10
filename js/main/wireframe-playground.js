@@ -214,7 +214,7 @@ function main() {
 
         mode = "addvertices";
 
-        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
@@ -238,7 +238,7 @@ function main() {
 
         mode = "addedges";
 
-        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
@@ -261,7 +261,7 @@ function main() {
 
         mode = "addfaces";
 
-        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
@@ -284,7 +284,7 @@ function main() {
 
         mode = "addcells";
 
-        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
@@ -307,7 +307,7 @@ function main() {
 
         mode = "move";
 
-        Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
                     p.setAttribute("stroke", "#000000");
