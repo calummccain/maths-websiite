@@ -171,6 +171,7 @@ function main() {
     }
 
     function ExportToSVG(filename) {
+
         var XMLS = new XMLSerializer();
         var svgfile = XMLS.serializeToString(renderer.domElement);
 
@@ -184,7 +185,15 @@ function main() {
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
+
     }
+
+    Array.from(document.getElementById("move-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+        (p) => {
+            p.setAttribute("stroke", "#FF0000");
+            p.setAttribute("stroke-width", "100");
+        }
+    )
 
     document.getElementById("svg").addEventListener("click", function () {
 
@@ -295,9 +304,9 @@ function main() {
     });
 
     document.getElementById("move").addEventListener("click", function () {
-        
+
         mode = "move";
-    
+
         Array.from(document.getElementsByClassName("svg-button")).forEach((button) => {
             Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
                 (p) => {
@@ -322,7 +331,27 @@ function main() {
     });
 
     document.getElementById("grid").addEventListener("click", function () {
+
         grid = !grid;
+
+        Array.from(document.getElementById("grid-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+
+                if (grid) {
+
+                    p.setAttribute("stroke", "#FF0000");
+                    p.setAttribute("stroke-width", "100");
+
+                } else {
+
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+
+                }
+
+            }
+        )
+
     });
 
     document.getElementById("model").addEventListener("click", function () {
