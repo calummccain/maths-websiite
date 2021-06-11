@@ -8,6 +8,7 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
+//     11/06/21 Added some vector info
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -27,11 +28,11 @@ const squareData = (r, n) => {
     const C = [1, 1, 0, 0];
 
     // CFE
-    // ()
+    // (0, 0, 1, -1)
     const amat = (v) => [v[0], v[1], v[3], v[2]];
 
     // CFV
-    // ()
+    // (0, 0, 0, 1)
     const bmat = (v) => [v[0], v[1], v[2], -v[3]]
 
     // CEV
@@ -55,7 +56,7 @@ const squareData = (r, n) => {
         ];
 
     // FEV
-    // ()
+    // (0, 1, 0, 0)
     const dmat = (v) => [v[0], -v[1], v[2], v[3]];
 
     const emat = (v) => v;
