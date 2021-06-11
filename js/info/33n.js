@@ -79,7 +79,7 @@ const info = {
             -\\frac{1}{2} & \\frac{1}{2} & \\frac{1}{2} & \\frac{1}{2}
             \\end{pmatrix}
             \\]`,
-        metric: `\\[w^2 - x^2 - y^2 - z^2 = 4\\]`
+        metric: `\\[w^2 + x^2 + y^2 + z^2 = 4\\]`
     },
     5: {
         name: `\\[\\{3,3,5\\}\\]`,
@@ -115,7 +115,7 @@ const info = {
             -\\frac{\\phi^2}{4} & \\frac{\\phi^2}{4} & \\frac{\\phi^2}{4} & \\frac{3 - \\phi}{4}
             \\end{pmatrix}
             \\]`,
-        metric: `\\[\\phi^6 w^2 - x^2 - y^2 - z^2 = 8 \\phi^2\\]`
+        metric: `\\[\\phi^6 w^2 + x^2 + y^2 + z^2 = 8 \\phi^2\\]`
     },
     6: {
         name: `\\[\\{3,3,6\\}\\]`,
@@ -151,7 +151,7 @@ const info = {
             -\\frac{3}{4} & \\frac{3}{4} & \\frac{3}{4} & \\frac{1}{4}
             \\end{pmatrix}
             \\]`,
-        metric: `\\[3 w^2 - x^2 - y^2 - z^2 = 1\\]`
+        metric: `\\[3 w^2 - x^2 - y^2 - z^2 = 0\\]`
     },
     n: {
         name: `\\[\\{3,3,n\\}\\]`,

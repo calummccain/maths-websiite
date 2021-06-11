@@ -79,7 +79,7 @@ const info = {
             1 & -1 & -1 & 0
             \\end{pmatrix}
             \\]`,
-        metric: `\\[w^2 - x^2 - y^2 - z^2 = 1\\]`
+        metric: `\\[w^2 - x^2 - y^2 - z^2 = 0\\]`
     },
     n: {
         name: `\\[\\{3,4,n\\}\\]`,
@@ -115,7 +115,7 @@ const info = {
             2 \\cos^2 \\left ( \\frac{\\pi}{n} \\right ) & -2 \\cos^2 \\left ( \\frac{\\pi}{n} \\right ) & -2 \\cos^2 \\left ( \\frac{\\pi}{n} \\right ) & 1 - 2 \\cos^2 \\left ( \\frac{\\pi}{n} \\right )
             \\end{pmatrix}
             \\]`,
-        metric: `\\[ \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) w^2 - \\left (1 - 2 \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) \\right ) x^2 - \\left (1 - 2 \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) \\right ) y^2 - \\left (1 - 2 \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) \\right ) z^2 = 1 - \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) \\]`
+        metric: `\\[ \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) w^2 - \\left (1 - 2 \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) \\right ) \\left ( x^2 + y^2 + z^2 \\right ) = 1 - \\cot^2 \\left ( \\frac{\\pi}{n} \\right ) \\]`
     }
     
 }
