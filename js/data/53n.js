@@ -10,14 +10,13 @@
 //     30/05/21 Added v-v distance
 //=========================================================
 
-import { rt2, rt3, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
+import { rt2, rt3, rt5, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
 const dodecahedronData = (n) => {
 
     const metric = boundaries(n, Math.PI / Math.atan(p), 6);
     const cos = Math.cos(Math.PI / n) ** 2;
-    const rt = Math.sqrt(5);
     const cot = cos / (1 - cos);
 
     const d =
@@ -32,7 +31,7 @@ const dodecahedronData = (n) => {
             v[2],
             p2 * v[0] - p * v[1]
         ] : (n == 5) ? (v) => [
-            ((4 * p + 1) * v[0] - (4 * p - 1) * p_1 * v[1] - (4 * p - 1) * p_2 * v[3]) / 2,
+            ((4 * p + 1) * v[0] - (5 - p) * v[1] - (5 * p - 6) * v[3]) / 2,
             (p5 * v[0] + (2 - p4) * v[1] - p3 * v[3]) / 2,
             v[2],
             (p4 * v[0] - p3 * v[1] - v[3] * p_1) / 2
@@ -42,7 +41,7 @@ const dodecahedronData = (n) => {
             v[2],
             (3 * p2 * v[0] - 3 * p * v[1] - v[3]) / 2
         ] : (v) => [
-            (2 * p * rt * cos - 1) * v[0] - (2 * rt * cos - 2 * p_1) * v[1] - (2 * rt * cos * p_1 - 2 * p_2) * v[3],
+            (2 * p * rt5 * cos - 1) * v[0] - (2 * rt5 * cos - 2 * p_1) * v[1] - (2 * rt5 * cos * p_1 - 2 * p_2) * v[3],
             2 * p3 * cos * v[0] + (1 - 2 * p2 * cos) * v[1] - 2 * p * cos * v[3],
             v[2],
             2 * p2 * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
@@ -60,7 +59,7 @@ const dodecahedronData = (n) => {
             Math.sqrt(p / 2) * v[2],
             Math.sqrt(p / 2) * v[3]
         ] : (n == 5) ? (v) => [
-            (p4) / 2 * v[0],
+            p4 / 2 * v[0],
             p * Math.sqrt(4 * p - 1) / 2 * v[1],
             p * Math.sqrt(4 * p - 1) / 2 * v[2],
             p * Math.sqrt(4 * p - 1) / 2 * v[3]
