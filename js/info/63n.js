@@ -188,7 +188,7 @@ const info = {
             \\end{pmatrix}
             \\]`,
         metric: `\\[ 3 w^2 - 3 \\cos^4 \\left ( \\frac{\\pi}{n} \\right ) x^2 - \\cos^2 \\left ( \\frac{\\pi}{n} \\right ) y^2 - 3 \\cos^2 \\left ( \\frac{\\pi}{n} \\right ) z^2 = 3 - 4 \\cos^2 \\left ( \\frac{\\pi}{n} \\right ) \\]`
-    },
+    }
 
 }
 
