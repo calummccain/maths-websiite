@@ -85,6 +85,7 @@ function main() {
     var faces = [];
     var cells = [];
     var outlines = [];
+    var intersections = [];
 
     var sin = [];
     var cos = [];
@@ -102,7 +103,8 @@ function main() {
 
     var edgeGroup = new THREE.Group();
     var outlineGroup = new THREE.Group();
-    scene.add(edgeGroup, outlineGroup);
+    var intersectionGroup = new THREE.Group();
+    scene.add(edgeGroup, outlineGroup, intersectionGroup);
 
     var renderer = new SVGRenderer();
     renderer.setSize(WIDTH, HEIGHT);
@@ -359,9 +361,11 @@ function main() {
         model = (model === "uhp") ? "poincare" : "uhp";
 
         outline();
+        pairwise();
 
         edgeGroup.children = visibleEdges().children;
         outlineGroup.children = visibleOutlines().children;
+        intersectionGroup.children = visibleIntersection().children;
 
         if (model === "poincare") {
 
@@ -476,9 +480,11 @@ function main() {
         if (mouseToggle) {
 
             outline();
+            pairwise();
 
             edgeGroup.children = visibleEdges().children;
             outlineGroup.children = visibleOutlines().children;
+            intersectionGroup.children = visibleIntersection().children;
 
         }
 
@@ -562,6 +568,7 @@ function main() {
                 addToFaces(vertices.length - 3, vertices.length - 2, vertices.length - 1, [vertices.length - 3, vertices.length - 2, vertices.length - 1], [edges.length - 3, edges.length - 2, edges.length - 1], []);
 
                 outline();
+                pairwise();
 
                 faceMarker = 0;
 
@@ -620,6 +627,7 @@ function main() {
                 addToCells(vertices.length - 4, vertices.length - 3, vertices.length - 2, vertices.length - 1, [], []);
 
                 outline();
+                pairwise();
 
                 cellMarker = 0;
 
@@ -1104,6 +1112,75 @@ function main() {
 
     }
 
+    function visibleIntersection() {
+
+        pairwise();
+
+        var edgeGroupLocal = new THREE.Group();
+
+        var drawVerts, segments, segmentsPoints, segNum, points;
+
+        for (var i = 0; i < intersections.length; i++) {
+
+            points = intersections[i];
+
+            if (points.length > 0) {
+
+                drawVerts = [];
+
+                for (var k = 0; k < points.length; k++) {
+
+                    drawVerts.push([points[k], visibilityTest(points[k])]);
+
+                }
+
+                segments = [[drawVerts[0]]];
+                segmentsPoints = [[drawVerts[0][0]]];
+                segNum = 0;
+
+                for (var k = 1; k < points.length; k++) {
+
+                    if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                        segments[segNum].push(drawVerts[k]);
+                        segmentsPoints[segNum].push(drawVerts[k][0]);
+
+                    } else {
+
+                        segNum++;
+                        segments.push([drawVerts[k]]);
+                        segmentsPoints.push([drawVerts[k][0]]);
+
+                    }
+
+                }
+
+                for (var k = 0; k < segments.length; k++) {
+
+                    if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                        edgeGroupLocal.add(drawLine(segmentsPoints[k], 0x000000));
+
+                        } else {
+
+                            if (invisibleLines) {
+
+                                edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+
+                            }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return edgeGroupLocal;
+
+    }
+
     function visibilityTest(point) {
 
         cam = camera.position.toArray();
@@ -1256,14 +1333,70 @@ function main() {
 
     function pairwise() {
 
-        for (var i = 0; i < faces.length; i++) {
+        var diff, ab, rad, t, interp, perp, v, intersection;
 
-            for (var j = i + 1; j < faces.length; j++) {
+        if (mode === "uhp") {
 
-                if (model === "poincare") {
+            intersections = [];
 
-                    if (poincareType === "sphere") {
+            for (var i = 0; i < faces.length; i++) {
 
+                for (var j = i + 1; j < faces.length; j++) {
+
+                    if (spheres[i].uhpType === "sphere" && spheres[j].uhpType === "sphere") {
+
+                        diff = VF.vectorDiff(spheres[i].uhpSphereCenter, spheres[j].uhpSphereCenter);
+                        ab = VF.norm(diff);
+                        rad = Math.sqrt(spheres[i].uhpRadius * spheres[i].uhpRadius - (ab * ab - spheres[j].uhpRadius * spheres[j].uhpRadius + spheres[i].uhpRadius * spheres[i].uhpRadius) ** 2 / (4 * ab * ab));
+
+                        t = (spheres[i].uhpRadius * spheres[i].uhpRadius - spheres[j].uhpRadius * spheres[j].uhpRadius) / (2 * ab * ab) + 0.5;
+
+                        interp = VF.vectorSum([VF.vectorScale(spheres[i].uhpSphereCenter, 1 - t), VF.vectorScale(spheres[j].uhpSphereCenter, t)]);
+
+                        perp = [1, 0, 0];
+
+                        if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
+
+                            perp = [-diff[1] / VF.norm([diff[0], diff[1]]), diff[0] / VF.norm([diff[0], diff[1]]), 0];
+
+                        }
+
+                        v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / ab));
+
+                        if (v[2] < 0) {
+
+                            v = VF.vectorScale(v, -1);
+
+                        }
+
+                        v = VF.vectorScale(v, rad);
+                        perp = VF.vectorScale(perp, rad);
+
+                        intersection = [];
+
+                        for (var k = 0; k <= outlineRes * edgeNumber; k++) {
+
+                            testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
+
+                            if (inHyperbolicFace(testCoord, i) && inHyperbolicFace(testCoord, j)) {
+
+                                intersection.push(testCoord);
+
+                            } else {
+
+                                intersections.push(intersection);
+                                intersection = [];
+
+                            }
+
+                        }
+
+                        intersections.push(intersections);
+
+                    } else if (spheres[i].poincareType === "sphere" || spheres[j].poincareType === "sphere") {
+
+
+                    } else {
 
 
                     }
