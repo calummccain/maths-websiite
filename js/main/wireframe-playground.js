@@ -14,7 +14,7 @@ function main() {
     const outlineRes = 4;
 
     // Canvas constants
-    const canvas = document.getElementById("canvas");
+    const canvas = document.getElementById("canvassvg");
     var rect = canvas.getBoundingClientRect();
 
     var WIDTH = canvas.clientWidth;
@@ -85,6 +85,7 @@ function main() {
     var faces = [];
     var cells = [];
     var outlines = [];
+    var intersections = [];
 
     var sin = [];
     var cos = [];
@@ -102,13 +103,14 @@ function main() {
 
     var edgeGroup = new THREE.Group();
     var outlineGroup = new THREE.Group();
-    scene.add(edgeGroup, outlineGroup);
+    var intersectionGroup = new THREE.Group();
+    scene.add(edgeGroup, outlineGroup, intersectionGroup);
 
     var renderer = new SVGRenderer();
     renderer.setSize(WIDTH, HEIGHT);
     canvas.appendChild(renderer.domElement);
 
-    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
+    var camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 100);
     camera.position.set(5, 5, 5);
     camera.up = new THREE.Vector3(0, 0, 1);
 
@@ -130,7 +132,7 @@ function main() {
         opacity: 0.1,
         transparent: true
     });
-    const plane = new THREE.Mesh(geometry, material);
+    var plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
     var grid = false;
     var rounded = [0, 0, 0];
@@ -170,24 +172,160 @@ function main() {
 
     }
 
+    function ExportToSVG(filename) {
+
+        var XMLS = new XMLSerializer();
+        var svgfile = XMLS.serializeToString(renderer.domElement);
+
+        var svgData = svgfile;
+        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+        var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = filename;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+    }
+
+    Array.from(document.getElementById("move-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+        (p) => {
+            p.setAttribute("stroke", "#FF0000");
+            p.setAttribute("stroke-width", "100");
+        }
+    )
+
+    document.getElementById("svg").addEventListener("click", function () {
+
+        plane.visible = false;
+        sphereMouse.visible = false;
+        render();
+
+        var d = new Date();
+        ExportToSVG(d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear() + ".svg");
+
+        plane.visible = true;
+        sphereMouse.visible = true;
+        render();
+
+    });
+
     document.getElementById("addvertices").addEventListener("click", function () {
+
         mode = "addvertices";
+
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+                    p.setAttribute("fill", "#000000");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("vertex-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+                p.setAttribute("fill", "#FF0000");
+            }
+        )
+
     });
 
     document.getElementById("addedges").addEventListener("click", function () {
+
         mode = "addedges";
+
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+                    p.setAttribute("fill", "#000000");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("edge-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("addfaces").addEventListener("click", function () {
+
         mode = "addfaces";
+
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+                    p.setAttribute("fill", "#000000");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("face-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("addcells").addEventListener("click", function () {
+
         mode = "addcells";
+
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+                    p.setAttribute("fill", "#000000");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("cell-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("move").addEventListener("click", function () {
+
         mode = "move";
+
+        Array.from(document.getElementsByClassName("svg-button mode")).forEach((button) => {
+            Array.from(button.getSVGDocument().getElementsByTagName('svg')).forEach(
+                (p) => {
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+                    p.setAttribute("fill", "#000000");
+                }
+            )
+        })
+
+        Array.from(document.getElementById("move-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+                p.setAttribute("stroke", "#FF0000");
+                p.setAttribute("stroke-width", "100");
+            }
+        )
+
     });
 
     document.getElementById("visible").addEventListener("click", function () {
@@ -195,16 +333,49 @@ function main() {
     });
 
     document.getElementById("grid").addEventListener("click", function () {
+
         grid = !grid;
+
+        Array.from(document.getElementById("grid-svg").getSVGDocument().getElementsByTagName('svg')).forEach(
+            (p) => {
+
+                if (grid) {
+
+                    p.setAttribute("stroke", "#FF0000");
+                    p.setAttribute("stroke-width", "100");
+
+                } else {
+
+                    p.setAttribute("stroke", "#000000");
+                    p.setAttribute("stroke-width", "75");
+
+                }
+
+            }
+        )
+
     });
 
     document.getElementById("model").addEventListener("click", function () {
+
         model = (model === "uhp") ? "poincare" : "uhp";
 
         outline();
+        pairwise();
 
         edgeGroup.children = visibleEdges().children;
         outlineGroup.children = visibleOutlines().children;
+        intersectionGroup.children = visibleIntersection().children;
+
+        if (model === "poincare") {
+
+            document.getElementById("model-svg").data = "../img/model-poincare.svg";
+
+        } else {
+
+            document.getElementById("model-svg").data = "../img/model-uhp.svg";
+
+        }
 
     });
 
@@ -309,9 +480,11 @@ function main() {
         if (mouseToggle) {
 
             outline();
+            pairwise();
 
             edgeGroup.children = visibleEdges().children;
             outlineGroup.children = visibleOutlines().children;
+            intersectionGroup.children = visibleIntersection().children;
 
         }
 
@@ -395,6 +568,7 @@ function main() {
                 addToFaces(vertices.length - 3, vertices.length - 2, vertices.length - 1, [vertices.length - 3, vertices.length - 2, vertices.length - 1], [edges.length - 3, edges.length - 2, edges.length - 1], []);
 
                 outline();
+                pairwise();
 
                 faceMarker = 0;
 
@@ -453,6 +627,7 @@ function main() {
                 addToCells(vertices.length - 4, vertices.length - 3, vertices.length - 2, vertices.length - 1, [], []);
 
                 outline();
+                pairwise();
 
                 cellMarker = 0;
 
@@ -937,6 +1112,75 @@ function main() {
 
     }
 
+    function visibleIntersection() {
+
+        pairwise();
+
+        var edgeGroupLocal = new THREE.Group();
+
+        var drawVerts, segments, segmentsPoints, segNum, points;
+
+        for (var i = 0; i < intersections.length; i++) {
+
+            points = intersections[i];
+
+            if (points.length > 0) {
+
+                drawVerts = [];
+
+                for (var k = 0; k < points.length; k++) {
+
+                    drawVerts.push([points[k], visibilityTest(points[k])]);
+
+                }
+
+                segments = [[drawVerts[0]]];
+                segmentsPoints = [[drawVerts[0][0]]];
+                segNum = 0;
+
+                for (var k = 1; k < points.length; k++) {
+
+                    if (drawVerts[k][1] === segments[segNum][segments[segNum].length - 1][1]) {
+
+                        segments[segNum].push(drawVerts[k]);
+                        segmentsPoints[segNum].push(drawVerts[k][0]);
+
+                    } else {
+
+                        segNum++;
+                        segments.push([drawVerts[k]]);
+                        segmentsPoints.push([drawVerts[k][0]]);
+
+                    }
+
+                }
+
+                for (var k = 0; k < segments.length; k++) {
+
+                    if ((segments[k].length > 1) && (segments[k][0][1])) {
+
+                        edgeGroupLocal.add(drawLine(segmentsPoints[k], 0x000000));
+
+                        } else {
+
+                            if (invisibleLines) {
+
+                                edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+
+                            }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return edgeGroupLocal;
+
+    }
+
     function visibilityTest(point) {
 
         cam = camera.position.toArray();
@@ -1089,14 +1333,70 @@ function main() {
 
     function pairwise() {
 
-        for (var i = 0; i < faces.length; i++) {
+        var diff, ab, rad, t, interp, perp, v, intersection;
 
-            for (var j = i + 1; j < faces.length; j++) {
+        if (mode === "uhp") {
 
-                if (model === "poincare") {
+            intersections = [];
 
-                    if (poincareType === "sphere") {
+            for (var i = 0; i < faces.length; i++) {
 
+                for (var j = i + 1; j < faces.length; j++) {
+
+                    if (spheres[i].uhpType === "sphere" && spheres[j].uhpType === "sphere") {
+
+                        diff = VF.vectorDiff(spheres[i].uhpSphereCenter, spheres[j].uhpSphereCenter);
+                        ab = VF.norm(diff);
+                        rad = Math.sqrt(spheres[i].uhpRadius * spheres[i].uhpRadius - (ab * ab - spheres[j].uhpRadius * spheres[j].uhpRadius + spheres[i].uhpRadius * spheres[i].uhpRadius) ** 2 / (4 * ab * ab));
+
+                        t = (spheres[i].uhpRadius * spheres[i].uhpRadius - spheres[j].uhpRadius * spheres[j].uhpRadius) / (2 * ab * ab) + 0.5;
+
+                        interp = VF.vectorSum([VF.vectorScale(spheres[i].uhpSphereCenter, 1 - t), VF.vectorScale(spheres[j].uhpSphereCenter, t)]);
+
+                        perp = [1, 0, 0];
+
+                        if (Math.abs(diff[0]) > eps || Math.abs(diff[1]) > eps) {
+
+                            perp = [-diff[1] / VF.norm([diff[0], diff[1]]), diff[0] / VF.norm([diff[0], diff[1]]), 0];
+
+                        }
+
+                        v = VF.vectorCross(perp, VF.vectorScale(diff, 1 / ab));
+
+                        if (v[2] < 0) {
+
+                            v = VF.vectorScale(v, -1);
+
+                        }
+
+                        v = VF.vectorScale(v, rad);
+                        perp = VF.vectorScale(perp, rad);
+
+                        intersection = [];
+
+                        for (var k = 0; k <= outlineRes * edgeNumber; k++) {
+
+                            testCoord = VF.vectorSum([VF.vectorScale(perp, cos[k]), VF.vectorScale(v, sin[k]), interp]);
+
+                            if (inHyperbolicFace(testCoord, i) && inHyperbolicFace(testCoord, j)) {
+
+                                intersection.push(testCoord);
+
+                            } else {
+
+                                intersections.push(intersection);
+                                intersection = [];
+
+                            }
+
+                        }
+
+                        intersections.push(intersections);
+
+                    } else if (spheres[i].poincareType === "sphere" || spheres[j].poincareType === "sphere") {
+
+
+                    } else {
 
 
                     }
