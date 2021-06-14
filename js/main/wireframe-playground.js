@@ -1161,13 +1161,13 @@ function main() {
 
                         edgeGroupLocal.add(drawLine(segmentsPoints[k], 0x000000));
 
-                        } else {
+                    // } else {
 
-                            if (invisibleLines) {
+                    //     if (invisibleLines) {
 
-                                edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
+                    //         edgeGroup.add(drawLine(segmentsPoints[k], 0xBBBBBB, 2));
 
-                            }
+                    //     }
 
                     }
 
@@ -1333,9 +1333,9 @@ function main() {
 
     function pairwise() {
 
-        var diff, ab, rad, t, interp, perp, v, intersection;
+        var diff, ab, rad, t, interp, perp, v, intersection, testCoord;
 
-        if (mode === "uhp") {
+        if (model === "uhp") {
 
             intersections = [];
 
@@ -1343,15 +1343,17 @@ function main() {
 
                 for (var j = i + 1; j < faces.length; j++) {
 
-                    if (spheres[i].uhpType === "sphere" && spheres[j].uhpType === "sphere") {
+                    if (faces[i].uhpType === "sphere" && faces[j].uhpType === "sphere") {
 
-                        diff = VF.vectorDiff(spheres[i].uhpSphereCenter, spheres[j].uhpSphereCenter);
+                        console.log(i, j)
+
+                        diff = VF.vectorDiff(faces[i].uhpSphereCenter, faces[j].uhpSphereCenter);
                         ab = VF.norm(diff);
-                        rad = Math.sqrt(spheres[i].uhpRadius * spheres[i].uhpRadius - (ab * ab - spheres[j].uhpRadius * spheres[j].uhpRadius + spheres[i].uhpRadius * spheres[i].uhpRadius) ** 2 / (4 * ab * ab));
+                        rad = Math.sqrt(faces[i].uhpRadius * faces[i].uhpRadius - (ab * ab - faces[j].uhpRadius * faces[j].uhpRadius + faces[i].uhpRadius * faces[i].uhpRadius) ** 2 / (4 * ab * ab));
 
-                        t = (spheres[i].uhpRadius * spheres[i].uhpRadius - spheres[j].uhpRadius * spheres[j].uhpRadius) / (2 * ab * ab) + 0.5;
+                        t = (faces[i].uhpRadius * faces[i].uhpRadius - faces[j].uhpRadius * faces[j].uhpRadius) / (2 * ab * ab) + 0.5;
 
-                        interp = VF.vectorSum([VF.vectorScale(spheres[i].uhpSphereCenter, 1 - t), VF.vectorScale(spheres[j].uhpSphereCenter, t)]);
+                        interp = VF.vectorSum([VF.vectorScale(faces[i].uhpSphereCenter, 1 - t), VF.vectorScale(faces[j].uhpSphereCenter, t)]);
 
                         perp = [1, 0, 0];
 
@@ -1391,9 +1393,9 @@ function main() {
 
                         }
 
-                        intersections.push(intersections);
+                        intersections.push(intersection);
 
-                    } else if (spheres[i].poincareType === "sphere" || spheres[j].poincareType === "sphere") {
+                    } else if (faces[i].poincareType === "sphere" || faces[j].poincareType === "sphere") {
 
 
                     } else {
@@ -1406,6 +1408,8 @@ function main() {
             }
 
         }
+
+        console.log(intersections)
 
     }
 
