@@ -48,7 +48,7 @@ function main() {
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
-    const n_max = 12;
+    const n_max = 13;
 
     var data = {
         p: 3,
@@ -71,8 +71,55 @@ function main() {
 
     [geom, metricValues] = objectMaker(data);
 
-    document.getElementById("s").style.width = metricValues["e"] / n_max * 100 + "%";
-    document.getElementById("h").style.width = metricValues["p"] / n_max * 100 + "%";
+    document.getElementById("s").style.width = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
+    document.getElementById("h").style.width = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
+
+    const dotColours = {
+        "s": "#BCE784",
+        "e": "#5DD39E",
+        "h": "#348AA7",
+        "p": "#525174",
+        "u": "#513B56"
+    }
+
+    for (var i = 3; i < n_max; i++) {
+
+        document.getElementById(i.toString()).style.left = (i - 2) / (n_max - 2) * 100 + "%";
+
+        (i < metricValues["e"]) ?
+            document.getElementById(i.toString()).style.backgroundColor = dotColours["s"] :
+            (i == metricValues["e"]) ?
+                document.getElementById(i.toString()).style.backgroundColor = dotColours["e"] :
+                (i < metricValues["p"]) ?
+                    document.getElementById(i.toString()).style.backgroundColor = dotColours["h"] :
+                    (i == metricValues["p"]) ?
+                        document.getElementById(i.toString()).style.backgroundColor = dotColours["p"] :
+                        document.getElementById(i.toString()).style.backgroundColor = dotColours["u"]
+
+    }
+
+    document.getElementById("euclidean").style.backgroundColor = dotColours["e"];
+    document.getElementById("paracompact").style.backgroundColor = dotColours["p"];
+
+    if (!Number.isInteger(metricValues["e"])) {
+
+        document.getElementById("euclidean").style.left = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
+
+    } else {
+
+        document.getElementById("euclidean").style.visibility = "false";
+
+    }
+
+    if (!Number.isInteger(metricValues["e"])) {
+
+        document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
+
+    } else {
+
+        document.getElementById("paracompact").style.visibility = "false";
+
+    }
 
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
@@ -171,10 +218,84 @@ function main() {
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             [geom, metricValues] = objectMaker(data);
 
-            document.getElementById("s").style.width = metricValues["e"] / n_max * 100 + "%";
-            document.getElementById("h").style.width = metricValues["p"] / n_max * 100 + "%";
+            document.getElementById("s").style.width = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
+            document.getElementById("h").style.width = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
+
+            for (var i = 3; i < n_max; i++) {
+
+                document.getElementById(i.toString()).style.left = (i - 2) / (n_max - 2) * 100 + "%";
+
+                (i < metricValues["e"]) ?
+                    document.getElementById(i.toString()).style.backgroundColor = dotColours["s"] :
+                    (i == metricValues["e"]) ?
+                        document.getElementById(i.toString()).style.backgroundColor = dotColours["e"] :
+                        (i < metricValues["p"]) ?
+                            document.getElementById(i.toString()).style.backgroundColor = dotColours["h"] :
+                            (i == metricValues["p"]) ?
+                                document.getElementById(i.toString()).style.backgroundColor = dotColours["p"] :
+                                document.getElementById(i.toString()).style.backgroundColor = dotColours["u"]
+
+            }
+
+            if (!(Number.isInteger(metricValues["e"])) && metricValues["e"] > 2) {
+
+                document.getElementById("euclidean").style.display = "block";
+                document.getElementById("euclidean").style.left = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
+
+            } else {
+
+                document.getElementById("euclidean").style.display = "none";
+
+            }
+
+            if (!(Number.isInteger(metricValues["e"]))) {
+
+                document.getElementById("paracompact").style.display = "block";
+                document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
+
+            } else {
+
+                document.getElementById("paracompact").style.display = "none";
+
+            }
 
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        });
+
+        $(".metricNumber").hover(function () {
+
+            $(this).css({
+                "width": "20px",
+                "height": "20px",
+                "z-index": "12",
+                "-ms-transform": "translateY(-50%) translateX(-10px)",
+                "transform": "translateY(-50%) translateX(-10px)"
+            });
+
+
+        }, function () {
+
+            $(this).css({
+                "width": "10px",
+                "height": "10px",
+                "z-index": "11",
+                "-ms-transform": "translateY(-50%) translateX(-5px)",
+                "transform": "translateY(-50%) translateX(-5px)"
+            });
+        });
+
+        $(".metricNumber").click(function () {
+
+            if (!(isNaN(parseInt($(this).attr("id"))))) {
+            
+                console.log(parseInt($(this).attr("id")))
+            
+            } else {
+                console.log($(this).attr("id")[0])
+                console.log(metricValues[$(this).attr("id")[0]])
+
+            }
+
         });
 
     });

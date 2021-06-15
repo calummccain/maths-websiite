@@ -60,8 +60,6 @@ function objectMaker(parameters) {
         "{5,3}": dodecahedronRectData
     }
 
-    console.log(parameters)
-
     const position = parameters.position;
     const [p, q, r] = [parameters.p, parameters.q, parameters.r];
     const name = "{" + p + "," + q + "," + r + "}";

@@ -170,7 +170,7 @@ const pqrData = (p, q, r, n) => {
         vv: (metric === "p") ? Math.abs(cp(2)) : (cp(2) * sr(1) ** 2 + cq(1) ** 2) / Math.abs(sr(1) ** 2 - cq(1) ** 2),
 
         metricValues: {
-            "e": Math.PI / Math.asin(cq(1) / sp(1)),
+            "e": ((p - 2) * (q - 2) <= 4) ? Math.PI / Math.asin(cq(1) / sp(1)) : 2,
             "p": 2 * q / (q - 2)
         }
 
