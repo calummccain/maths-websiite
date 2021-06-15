@@ -248,7 +248,7 @@ function main() {
 
             }
 
-            if (!(Number.isInteger(metricValues["e"]))) {
+            if (!(Number.isInteger(metricValues["p"]))) {
 
                 document.getElementById("paracompact").style.display = "block";
                 document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
@@ -286,11 +286,14 @@ function main() {
 
         $(".metricNumber").click(function () {
 
+            console.log(metricValues)
+
             if (!(isNaN(parseInt($(this).attr("id"))))) {
             
                 console.log(parseInt($(this).attr("id")))
             
             } else {
+
                 console.log($(this).attr("id")[0])
                 console.log(metricValues[$(this).attr("id")[0]])
 
