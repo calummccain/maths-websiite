@@ -101,7 +101,12 @@ const tetrahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (cot + 7) / Math.abs(11 - cot)
+        vv: (cot + 7) / Math.abs(11 - cot),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(1 / rt2),
+            'p': Math.PI / Math.atan(1 / rt11)
+        }
 
     }
 

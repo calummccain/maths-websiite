@@ -127,7 +127,12 @@ const tetrahedronRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: cot / 2
+        vv: cot / 2,
+
+        metricValues: {
+            'e': Math.PI / Math.atan(1 / rt2),
+            'p': Infinity
+        }
 
     }
 

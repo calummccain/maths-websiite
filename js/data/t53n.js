@@ -170,7 +170,12 @@ const dodecahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (p_2 * cot / 5 + 3 * p / 5) / Math.abs(1 + p_4 / 5 - p_2 * cot / 5)
+        vv: (p_2 * cot / 5 + 3 * p / 5) / Math.abs(1 + p_4 / 5 - p_2 * cot / 5),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(p),  
+            'p': Math.PI / Math.atan(p / Math.sqrt(5 * p4 + 1))
+        }
 
     }
 

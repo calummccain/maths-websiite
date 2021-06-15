@@ -118,7 +118,12 @@ const octahedronRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: cot + 1 / 2
+        vv: cot + 1 / 2,
+
+        metricValues: {
+            'e': Math.PI / Math.atan(rt2),
+            'p': Infinity
+        }
 
     }
 

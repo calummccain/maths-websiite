@@ -10,7 +10,7 @@
 //     31/05/21 Added v-v distance
 //=========================================================
 
-import { p, p2, p3, p4, p5, p_1, p_2, p_3 } from "./constants.js";
+import { p, p2, p3, p4, p5, p_1, p_3 } from "./constants.js";
 import { boundaries } from "./geometry-decider.js";
 
 const icosahedronTruncData = (n) => {
@@ -141,7 +141,12 @@ const icosahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (p4 * cot + 9 * p2 - 1) / Math.abs(9 * p2 + 1 - p4 * cot)
+        vv: (p4 * cot + 9 * p2 - 1) / Math.abs(9 * p2 + 1 - p4 * cot),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(p2), 
+            'p': Math.PI / Math.atan(p2 / Math.sqrt(9 * p2 + 1))
+        }
 
     }
 

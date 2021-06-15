@@ -123,7 +123,12 @@ const octahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (cot + 4) / Math.abs(5 - cot)
+        vv: (cot + 4) / Math.abs(5 - cot),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(rt2),
+            'p': Math.PI / Math.atan(1 / rt5)
+        }
 
     }
 

@@ -143,7 +143,12 @@ const icosahedronRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: p2 * cot / 2 + p / 2
+        vv: p2 * cot / 2 + p / 2,
+
+        metricValues: {
+            'e': Math.PI / Math.atan(p2),
+            'p': Infinity
+        }
 
     }
 
