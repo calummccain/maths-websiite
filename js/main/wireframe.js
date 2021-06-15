@@ -260,6 +260,7 @@ function main() {
             }
 
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+
         });
 
         $(".metricNumber").hover(function () {
@@ -286,18 +287,20 @@ function main() {
 
         $(".metricNumber").click(function () {
 
-            console.log(metricValues)
-
             if (!(isNaN(parseInt($(this).attr("id"))))) {
             
-                console.log(parseInt($(this).attr("id")))
+                data.r = parseInt($(this).attr("id"))
             
             } else {
 
-                console.log($(this).attr("id")[0])
-                console.log(metricValues[$(this).attr("id")[0]])
+                data.r  = metricValues[$(this).attr("id")[0]]
 
             }
+
+            console.log(data.r);
+
+            [geom, metricValues] = objectMaker(data);
+            lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
         });
 
