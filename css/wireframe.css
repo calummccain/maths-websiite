@@ -39,3 +39,41 @@ body {
     transform: translate(-50%, -50%);
     outline: none;
 }
+
+#metricBar {
+    height: 5%;
+    width: 100%;
+    background-color: cadetblue;
+    position: relative;
+}
+
+#s {
+    background-color: aquamarine;
+    z-index: 10;
+}
+
+#e {
+    background-color: crimson;
+    z-index: 9;
+}
+
+#h {
+    background-color: coral;
+    z-index: 8;
+}
+
+#p {
+    background-color:darkmagenta;
+    z-index: 7;
+}
+
+#u {
+    background-color: darkslategray;
+    z-index: 6;
+}
+
+.metricBox {
+    height: 100%;
+    width: 0%;
+    position: absolute;
+}

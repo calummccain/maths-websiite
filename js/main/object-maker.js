@@ -60,6 +60,8 @@ function objectMaker(parameters) {
         "{5,3}": dodecahedronRectData
     }
 
+    console.log(parameters)
+
     const position = parameters.position;
     const [p, q, r] = [parameters.p, parameters.q, parameters.r];
     const name = "{" + p + "," + q + "," + r + "}";
@@ -167,27 +169,27 @@ function objectMaker(parameters) {
 
         if (data.metric === "s") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
+            return [(rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,
                 camera: camera,
                 width: 2,
-            });
+            }), data.metricValues];
 
         } else if (data.metric === "e") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => EW.euclideanEdges(data, {
+            return [(rx, ry, rz, ru, rv, rw, camera) => EW.euclideanEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,
                 camera: camera,
                 width: 2,
-            });
+            }), data.metricValues];
 
         } else if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
+            return [(rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
                 number: 50,
@@ -195,7 +197,7 @@ function objectMaker(parameters) {
                 width: 2,
                 invisibleLines: parameters.invisibleLines,
                 model: parameters.model
-            });
+            }), data.metricValues];
 
         }
 

@@ -20,6 +20,7 @@ function main() {
 
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var geom = {};
+    var metricValues = {};
     var cellType;
 
     const canvas = document.getElementById("canvas");
@@ -47,6 +48,8 @@ function main() {
     var lineGroup = new THREE.Group();
     scene.add(lineGroup);
 
+    const n_max = 12;
+
     var data = {
         p: 3,
         q: 3,
@@ -56,8 +59,9 @@ function main() {
         refinement: 25,
         invisibleLines: false,
         cells: [""],
-        numFaces: 20
-    }
+        numFaces: 20,
+        position: [0, 0, 0]
+    };
 
     // const geometry = new THREE.SphereBufferGeometry(1.128, 64, 64);
     // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
@@ -65,7 +69,11 @@ function main() {
     // sphere1.position.set(0.7947, 1.286, 0);
     // scene.add(sphere1);
 
-    geom = objectMaker(data);
+    [geom, metricValues] = objectMaker(data);
+
+    document.getElementById("s").style.width = metricValues["e"] / n_max * 100 + "%";
+    document.getElementById("h").style.width = metricValues["p"] / n_max * 100 + "%";
+
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
     render();
@@ -93,13 +101,13 @@ function main() {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === "Enter") {
-            geom = objectMaker(data);
+            [geom, metricValues] = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }
     });
 
     window.addEventListener("touchend", () => {
-        geom = objectMaker(data);
+        [geom, metricValues] = objectMaker(data);
     }, false);
 
     document.getElementById("myRangex").oninput = function () {
@@ -161,7 +169,11 @@ function main() {
         $(".cellselector").click(function () {
             var [p, q, modifier] = $(this).attr("id").split("-");
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
-            geom = objectMaker(data);
+            [geom, metricValues] = objectMaker(data);
+
+            document.getElementById("s").style.width = metricValues["e"] / n_max * 100 + "%";
+            document.getElementById("h").style.width = metricValues["p"] / n_max * 100 + "%";
+
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         });
 
@@ -263,6 +275,9 @@ function main() {
             })
 
         })
+
+
+
 
     }
 
