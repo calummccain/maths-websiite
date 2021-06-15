@@ -128,7 +128,12 @@ const icosahedronData = (n) => {
 
         cellType: "spherical",
 
-        vv: (metric === "p") ? 1 : (p2 - 1 + p4 * cot) / Math.abs(p2 + 1 - p4 * cot)
+        vv: (metric === "p") ? 1 : (p2 - 1 + p4 * cot) / Math.abs(p2 + 1 - p4 * cot),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(p2),
+            'p': 10 / 3
+        }
 
     }
 

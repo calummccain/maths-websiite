@@ -145,7 +145,12 @@ const cubeData = (n) => {
 
         cellType: "spherical",
 
-        vv: (metric === "p") ? 2 : (1 + cot) / Math.abs(3 - cot)
+        vv: (metric === "p") ? 2 : (1 + cot) / Math.abs(3 - cot),
+
+        metricValues: {
+            'e': 4,
+            'p': 6
+        }
 
     }
 

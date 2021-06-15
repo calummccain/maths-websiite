@@ -125,7 +125,12 @@ const triangleData = (r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (metric === "p") ? 3 / 2 : (1 + 2 * cos) / Math.abs(1 - 4 * cos)
+        vv: (metric === "p") ? 3 / 2 : (1 + 2 * cos) / Math.abs(1 - 4 * cos),
+
+        metricValues: {
+            'e': 2,
+            'p': 3
+        }
 
     }
 

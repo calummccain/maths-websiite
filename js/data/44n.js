@@ -144,7 +144,12 @@ const squareData = (r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (metric === "p") ? 1 : 1 / Math.abs(1 - 2 * cos)
+        vv: (metric === "p") ? 1 : 1 / Math.abs(1 - 2 * cos),
+
+        metricValues: {
+            'e': 2,
+            'p': 4
+        }
 
     }
 
