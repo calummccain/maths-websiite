@@ -9,6 +9,8 @@
 //     24/05/21 Renamed
 //     01/06/21 Added v-v distance
 //              Fixed metric
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { rt5, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";

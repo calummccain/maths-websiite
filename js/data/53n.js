@@ -8,6 +8,8 @@
 //     ??/??/?? Initial commit
 //     21/05/21 Constants tidied up
 //     30/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { rt2, rt3, rt5, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";

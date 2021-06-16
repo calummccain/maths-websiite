@@ -8,6 +8,8 @@
 //     20/05/21 Initial commit
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";

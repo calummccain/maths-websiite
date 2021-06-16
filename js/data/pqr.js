@@ -10,6 +10,8 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import * as VF from "../maths-functions/vector-functions.js";

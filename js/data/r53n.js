@@ -10,6 +10,8 @@
 //              Look into uncompact
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";

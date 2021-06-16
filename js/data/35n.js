@@ -7,6 +7,8 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_3 } from "./constants.js";
