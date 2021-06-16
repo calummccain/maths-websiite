@@ -248,7 +248,7 @@ function main() {
 
             }
 
-            if (!(Number.isInteger(metricValues["p"]))) {
+            if (!(Number.isInteger(metricValues["p"])) && isFinite(metricValues["p"])) {
 
                 document.getElementById("paracompact").style.display = "block";
                 document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
@@ -288,12 +288,12 @@ function main() {
         $(".metricNumber").click(function () {
 
             if (!(isNaN(parseInt($(this).attr("id"))))) {
-            
+
                 data.r = parseInt($(this).attr("id"))
-            
+
             } else {
 
-                data.r  = metricValues[$(this).attr("id")[0]]
+                data.r = metricValues[$(this).attr("id")[0]]
 
             }
 
