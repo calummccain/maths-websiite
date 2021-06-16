@@ -39,12 +39,18 @@ const octahedronRectData = (n) => {
             2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
         ];
 
-    const f = (v) => [
-        Math.sqrt(Math.abs(2 * cot)) * v[0],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[1],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[2],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[3]
-    ];
+    const f =
+        (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            Math.sqrt(Math.abs(2 * cot)) * v[0],
+            Math.sqrt(Math.abs(cot - 1 / 2)) * v[1],
+            Math.sqrt(Math.abs(cot - 1 / 2)) * v[2],
+            Math.sqrt(Math.abs(cot - 1 / 2)) * v[3]
+        ];
 
     return {
 

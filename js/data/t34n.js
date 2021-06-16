@@ -39,12 +39,23 @@ const octahedronTruncData = (n) => {
             2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
         ];
 
-    const f = (v) => [
-        Math.sqrt(Math.abs(cot / (5 / 9 - cot / 9))) * v[0],
-        Math.sqrt(Math.abs((2 * cot - 1) / (5 / 9 - cot / 9))) * v[1],
-        Math.sqrt(Math.abs((2 * cot - 1) / (5 / 9 - cot / 9))) * v[2],
-        Math.sqrt(Math.abs((2 * cot - 1) / (5 / 9 - cot / 9))) * v[3]
-    ];
+    const f =
+        (metric === "p") ? (v) => [
+            v[0],
+            v[1] / Math.sqrt(5 / 9),
+            v[2] / Math.sqrt(5 / 9),
+            v[3] / Math.sqrt(5 / 9)
+        ] : (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            Math.sqrt(Math.abs(cot / (5 / 9 - cot / 9))) * v[0],
+            Math.sqrt(Math.abs((2 * cot - 1) / (5 / 9 - cot / 9))) * v[1],
+            Math.sqrt(Math.abs((2 * cot - 1) / (5 / 9 - cot / 9))) * v[2],
+            Math.sqrt(Math.abs((2 * cot - 1) / (5 / 9 - cot / 9))) * v[3]
+        ];
 
     return {
 
@@ -123,7 +134,7 @@ const octahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (cot + 4) / Math.abs(5 - cot),
+        vv: (metric === "p") ? 1 / 5 : (cot + 4) / Math.abs(5 - cot),
 
         metricValues: {
             'e': Math.PI / Math.atan(rt2),

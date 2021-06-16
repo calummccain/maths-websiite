@@ -50,6 +50,11 @@ const octahedronData = (n) => {
             v[1],
             v[2],
             v[3]
+        ] : (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
         ] : (v) => [
             Math.sqrt(Math.abs(cot / (1 - cot))) * v[0],
             Math.sqrt(Math.abs((1 - 2 * cot) / (1 - cot))) * v[1],

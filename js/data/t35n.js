@@ -34,12 +34,23 @@ const icosahedronTruncData = (n) => {
         2 * p3 * cos * v[0] - 2 * p2 * cos * v[2] + (1 - 2 * cos) * v[3]
     ];
 
-    const f = (v) => [
-        p3 * Math.sqrt(Math.abs(cot / (p2 + 1 / 9 - p4 * cot / 9))) * v[0],
-        Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 / 9 - p4 * cot / 9))) * v[1],
-        Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 / 9 - p4 * cot / 9))) * v[2],
-        Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 / 9 - p4 * cot / 9))) * v[3]
-    ];
+    const f =
+        (metric === "p") ? (v) => [
+            v[0],
+            v[1] / Math.sqrt(1 / 9 + p2),
+            v[2] / Math.sqrt(1 / 9 + p2),
+            v[3] / Math.sqrt(1 / 9 + p2)
+        ] : (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            p3 * Math.sqrt(Math.abs(cot / (p2 + 1 / 9 - p4 * cot / 9))) * v[0],
+            Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 / 9 - p4 * cot / 9))) * v[1],
+            Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 / 9 - p4 * cot / 9))) * v[2],
+            Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 / 9 - p4 * cot / 9))) * v[3]
+        ];
 
     return {
 
@@ -141,10 +152,10 @@ const icosahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (p4 * cot + 9 * p2 - 1) / Math.abs(9 * p2 + 1 - p4 * cot),
+        vv: (metric === "p") ? 2 / (9 * p2 + 1) : (p4 * cot + 9 * p2 - 1) / Math.abs(9 * p2 + 1 - p4 * cot),
 
         metricValues: {
-            'e': Math.PI / Math.atan(p2), 
+            'e': Math.PI / Math.atan(p2),
             'p': Math.PI / Math.atan(p2 / Math.sqrt(9 * p2 + 1))
         }
 

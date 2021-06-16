@@ -33,12 +33,18 @@ const icosahedronRectData = (n) => {
             2 * p3 * cos * v[0] - 2 * p2 * cos * v[2] + (1 - 2 * cos) * v[3]
         ];
 
-    const f = (v) => [
-        p2 * Math.sqrt(Math.abs(cot)) * v[0],
-        Math.sqrt(Math.abs(p2 * cot - p_2)) * v[1],
-        Math.sqrt(Math.abs(p2 * cot - p_2)) * v[2],
-        Math.sqrt(Math.abs(p2 * cot - p_2)) * v[3]
-    ];
+    const f =
+        (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            p2 * Math.sqrt(Math.abs(cot)) * v[0],
+            Math.sqrt(Math.abs(p2 * cot - p_2)) * v[1],
+            Math.sqrt(Math.abs(p2 * cot - p_2)) * v[2],
+            Math.sqrt(Math.abs(p2 * cot - p_2)) * v[3]
+        ];
 
     return {
 

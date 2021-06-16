@@ -49,12 +49,18 @@ const tetrahedronRectData = (n) => {
             -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]
         ];
 
-    const f = (v) => [
-        Math.sqrt(Math.abs(cot / 2)) * v[0],
-        Math.sqrt(Math.abs((cot - 2) / 2)) * v[1],
-        Math.sqrt(Math.abs((cot - 2) / 2)) * v[2],
-        Math.sqrt(Math.abs((cot - 2) / 2)) * v[3]
-    ];
+    const f =
+        (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            Math.sqrt(Math.abs(cot / 2)) * v[0],
+            Math.sqrt(Math.abs((cot - 2) / 2)) * v[1],
+            Math.sqrt(Math.abs((cot - 2) / 2)) * v[2],
+            Math.sqrt(Math.abs((cot - 2) / 2)) * v[3]
+        ];
 
     return {
 
