@@ -59,14 +59,14 @@ function main() {
         refinement: 25,
         invisibleLines: false,
         cells: [""],
-        numFaces: 20,
+        numFaces: 4,
         position: [0, 0, 0]
     };
 
-    // const geometry = new THREE.SphereBufferGeometry(1.128, 64, 64);
+    // const geometry = new THREE.SphereBufferGeometry(2.2153, 64, 64);
     // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
     // const sphere1 = new THREE.Mesh(geometry, material1);
-    // sphere1.position.set(0.7947, 1.286, 0);
+    // sphere1.position.set(2, 0, -1.38);
     // scene.add(sphere1);
 
     [geom, metricValues] = objectMaker(data);
@@ -147,10 +147,12 @@ function main() {
     }
 
     window.addEventListener('keydown', (event) => {
+
         if (event.key === "Enter") {
             [geom, metricValues] = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }
+
     });
 
     window.addEventListener("touchend", () => {
@@ -197,23 +199,14 @@ function main() {
 
     $(document).ready(function () {
 
-        updateCellSelector(data.r);
+        updateCellSelector();
 
         $("#pqr").click(function () {
             $("#pqrselector").toggle();
         });
 
-        $("#rightarrow").click(function () {
-            data.r = Math.min(data.r + 1, 8);
-            updateCellSelector(data.r);
-        });
-
-        $("#leftarrow").click(function () {
-            data.r = Math.max(data.r - 1, 3);
-            updateCellSelector(data.r);
-        });
-
         $(".cellselector").click(function () {
+
             var [p, q, modifier] = $(this).attr("id").split("-");
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             [geom, metricValues] = objectMaker(data);
@@ -268,7 +261,7 @@ function main() {
             $(this).css({
                 "width": "20px",
                 "height": "20px",
-                "z-index": "12",
+                "z-index": "16",
                 "-ms-transform": "translateY(-50%) translateX(-10px)",
                 "transform": "translateY(-50%) translateX(-10px)"
             });
@@ -279,7 +272,7 @@ function main() {
             $(this).css({
                 "width": "10px",
                 "height": "10px",
-                "z-index": "11",
+                "z-index": "15",
                 "-ms-transform": "translateY(-50%) translateX(-5px)",
                 "transform": "translateY(-50%) translateX(-5px)"
             });
@@ -297,8 +290,6 @@ function main() {
 
             }
 
-            console.log(data.r);
-
             [geom, metricValues] = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
@@ -306,87 +297,37 @@ function main() {
 
     });
 
-    const cellTypeColours = {
-        "s": "#FFB3BA",
-        "e": "#FFDFBA",
-        "h": "#FFFFBA",
-        "p": "#BAFFC9",
-        "u": "#BAE1FF"
+    const cellColours = {
+        "s": "#FFD2BC",
+        "e": "#F9AAAA",
+        "h": "#DB6D98"
     }
 
-    const truncRectDict = {
-        "r-3-3-3": "s",
-        "r-3-3-4": "s",
-        "r-3-3-5": "s",
-        "r-3-3-6": "h",
-        "r-3-3-7": "h",
-        "r-3-3-8": "h",
-        "r-3-4-3": "s",
-        "r-3-4-4": "h",
-        "r-3-4-5": "h",
-        "r-3-4-6": "h",
-        "r-3-4-7": "h",
-        "r-3-4-8": "h",
-        "r-3-5-3": "h",
-        "r-3-5-4": "h",
-        "r-3-5-5": "h",
-        "r-3-5-6": "h",
-        "r-3-5-7": "h",
-        "r-3-5-8": "h",
-        "r-4-3-3": "s",
-        "r-4-3-4": "e",
-        "r-4-3-5": "h",
-        "r-4-3-6": "h",
-        "r-4-3-7": "h",
-        "r-4-3-8": "h",
-        "r-5-3-3": "s",
-        "r-5-3-4": "h",
-        "r-5-3-5": "h",
-        "r-5-3-6": "h",
-        "r-5-3-7": "h",
-        "r-5-3-8": "h",
-        "t-3-3-3": "s",
-        "t-3-3-4": "s",
-        "t-3-3-5": "s",
-        "t-3-3-6": "h",
-        "t-3-3-7": "h",
-        "t-3-3-8": "h",
-        "t-3-4-3": "s",
-        "t-3-4-4": "h",
-        "t-3-4-5": "h",
-        "t-3-4-6": "h",
-        "t-3-4-7": "h",
-        "t-3-4-8": "u",
-        "t-3-5-3": "h",
-        "t-3-5-4": "h",
-        "t-3-5-5": "h",
-        "t-3-5-6": "h",
-        "t-3-5-7": "u",
-        "t-3-5-8": "u",
-        "t-4-3-3": "s",
-        "t-4-3-4": "e",
-        "t-4-3-5": "h",
-        "t-4-3-6": "h",
-        "t-4-3-7": "h",
-        "t-4-3-8": "h",
-        "t-5-3-3": "s",
-        "t-5-3-4": "h",
-        "t-5-3-5": "h",
-        "t-5-3-6": "h",
-        "t-5-3-7": "h",
-        "t-5-3-8": "h"
-    }
+    function updateCellSelector() {
 
-    function updateCellSelector(r) {
+        const spherical = ["3,3", "3,4", "3,5", "4,3", "5,3"];
+        const euclidean = ["3,6", "4,4", "6,3"]
 
         for (var p = 3; p <= 8; p++) {
 
             for (var q = 3; q <= 8; q++) {
 
-                cellType = typeOfCell(p, q, r);
+                if (spherical.includes(p + "," + q)) {
 
-                document.getElementById(p + "-" + q + "-").innerHTML = "{" + p + "," + q + "," + r + "}";
-                document.getElementById(p + "-" + q + "-").style.backgroundColor = cellTypeColours[cellType];
+                    document.getElementById(p + "-" + q + "-").style.backgroundColor = cellColours["s"];
+
+                } else if (euclidean.includes(p + "," + q)) {
+
+                    document.getElementById(p + "-" + q + "-").style.backgroundColor = cellColours["e"];
+
+                } else {
+
+                    document.getElementById(p + "-" + q + "-").style.backgroundColor = cellColours["h"];
+
+                }
+
+                document.getElementById(p + "-" + q + "-").innerHTML = "{" + p + "," + q + "}";
+
 
             }
 
@@ -396,8 +337,8 @@ function main() {
 
             ["t", "r"].forEach((affix) => {
 
-                document.getElementById(p + "-" + q + "-" + affix).innerHTML = affix + "{" + p + "," + q + "," + r + "}";
-                document.getElementById(p + "-" + q + "-" + affix).style.backgroundColor = cellTypeColours[truncRectDict[affix + "-" + p + "-" + q + "-" + r]];
+                document.getElementById(p + "-" + q + "-" + affix).innerHTML = affix + "{" + p + "," + q + "}";
+                document.getElementById(p + "-" + q + "-" + affix).style.backgroundColor = cellColours["s"];
 
             })
 
