@@ -42,11 +42,6 @@ const dodecahedronData = (n) => {
             (3 * p3 * v[0] + (2 - 3 * p2) * v[1] - 3 * p * v[3]) / 2,
             v[2],
             (3 * p2 * v[0] - 3 * p * v[1] - v[3]) / 2
-        ] : (metric === "e") ? (v) => [
-            v[0],
-            v[1],
-            v[2],
-            v[3]
         ] : (v) => [
             (2 * p * rt5 * cos - 1) * v[0] - (2 * rt5 * cos - 2 * p_1) * v[1] - (2 * rt5 * cos * p_1 - 2 * p_2) * v[3],
             2 * p3 * cos * v[0] + (1 - 2 * p2 * cos) * v[1] - 2 * p * cos * v[3],
@@ -72,6 +67,11 @@ const dodecahedronData = (n) => {
             p * Math.sqrt(4 * p - 1) / 2 * v[3]
         ] : (n == 6) ? (v) => [
             rt3 * v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (metric === "e") ? (v) => [
+            v[0],
             v[1],
             v[2],
             v[3]

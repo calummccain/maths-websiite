@@ -10,6 +10,7 @@
 //     30/05/21 Added v-v distance
 //     16/06/21 Corrected v-v distance for paracompact
 //              added metrics for e and p
+//     17/06/21 Added f-v distance
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -83,8 +84,9 @@ const triangleData = (r, n) => {
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
 
     const ev = (metric === "p") ? 3 / 4 : Math.abs((1 - cos) / (1 - 4 * cos));
+    const fv = (metric === "p") ? 1 : 1 / (1 - 4 * cos);
 
-    var faceData = GT.generateFaceData(Math.abs(1 / (1 - 4 * cos)), 3, metric, f, v, fmat);
+    var faceData = GT.generateFaceData(Math.abs(fv), 3, f, v, fmat);
     const edgeData = GT.generateEdgeData(ev, e, v, fmat);
 
     faceData = GT.orderFaces(3, faceData, edgeData);
