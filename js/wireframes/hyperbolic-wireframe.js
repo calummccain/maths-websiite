@@ -310,19 +310,19 @@ function hyperbolicEdges(data, parameters) {
 
         });
 
-        if (data.metric === "u") {
+        if (data.metric === "v") {
 
             const newNumber = Math.round(number / 4);
 
-            var e1, e2, ca, a, denom, theta, edge, start, end, ratios, e3, e4;
+            var e1, e2, ca, a, denom, theta, edge, start, end, ratios, e3, e4, interp;
 
-            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][0]].hyperboloid, localVertices[data.faces[0][1]].hyperboloid, data.vv)[0];
+            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][0]].hyperboloid, data.vv)[0];
             e2 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][2]].hyperboloid, data.vv)[0];
 
-            e1.shift();
-            e2.shift();
+            e1 = HF.hyperboloidToPoincare(e1);
+            e2 = HF.hyperboloidToPoincare(e2);
 
-            ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
+            ca = VF.vectorDot(e1, e2);
             a = Math.acos(ca);
             denom = 1 / Math.sin(a);
 
@@ -336,36 +336,59 @@ function hyperbolicEdges(data, parameters) {
 
             }
 
+            console.log(ratios);
+
             for (var i = 0; i < data.numFaces; i++) {
 
                 for (var j = 0; j < data.faces[i].length; j++) {
 
                     edge = [];
 
-                    e3 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j - 1 + data.faces[i].length) % data.faces[i].length]].hyperboloid, data.vv)[0];
+                    e3 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j == 0) ? data.faces[i].length - 1 : j - 1]].hyperboloid, data.vv)[0];
                     e4 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j + 1) % data.faces[i].length]].hyperboloid, data.vv)[0];
-                    e3.shift();
-                    e4.shift();
-                    e3 = VF.vectorScale(e3, 1 / VF.norm(e3));
-                    e4 = VF.vectorScale(e4, 1 / VF.norm(e4));
+
+                    e3 = HF.hyperboloidToPoincare(e3);
+                    e4 = HF.hyperboloidToPoincare(e4);
+
+                    // console.log(HF.hyperboloidInnerProduct(localVertices[data.faces[i][0]].hyperboloid,localVertices[data.faces[i][1]].hyperboloid), data.vv);
+
+                    // ca = VF.vectorDot(e3, e4);
+                    // a = Math.acos(ca);
+                    // denom = 1 / Math.sin(a);
+
+                    // theta = 0;
+                    // ratios = [];
+
+                    // for (var k = 0; k <= newNumber; k++) {
+
+                    //     ratios.push(Math.sin(theta) * denom);
+                    //     theta += a / newNumber;
+
+                    // }
+
+                    // console.log(ratios)
 
                     for (var k = 0; k <= newNumber; k++) {
+
+                        interp = VF.vectorSum([VF.vectorScale(e3, ratios[k]), VF.vectorScale(e4, ratios[newNumber - k])]);
 
                         if (model === "uhp") {
 
                             edge.push(
-                                HF.hyperboloidToUpperHalfPlane([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[k]), VF.vectorScale(e4, ratios[newNumber - k])])))
+                                HF.poincareToUpperHalfPlane(interp)
                             );
 
                         } else {
 
                             edge.push(
-                                HF.hyperboloidToPoincare([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[k]), VF.vectorScale(e4, ratios[newNumber - k])])))
+                                interp
                             );
 
                         }
 
                     }
+
+                    // console.log(edge);
 
                     edgeCoords.push(edge);
 

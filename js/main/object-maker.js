@@ -79,7 +79,7 @@ function objectMaker(parameters) {
 
     }
 
-    if (parameters.model === "solid") {
+    if (parameters.view === "solid") {
 
         const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.hyperbolicModel);
 
@@ -163,7 +163,7 @@ function objectMaker(parameters) {
 
         }
 
-    } else if (parameters.model === "wireframe") {
+    } else if (parameters.view === "wireframe") {
 
         if (data.metric === "s") {
 

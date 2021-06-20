@@ -11,7 +11,6 @@
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
-import { typeOfCell } from "../data/geometry-decider.js";
 import { SVGRenderer } from "../three-bits/SVGRenderer.js";
 
 window.onload = main;
@@ -52,14 +51,15 @@ function main() {
 
     var data = {
         p: 3,
-        q: 3,
-        r: 3,
+        q: 7,
+        r: 6,
         modifier: "",
-        model: "wireframe",
+        view: "wireframe",
+        model: "uhp",
         refinement: 25,
         invisibleLines: false,
         cells: [""],
-        numFaces: 4,
+        numFaces: 50,
         position: [0, 0, 0]
     };
 
@@ -149,6 +149,7 @@ function main() {
     window.addEventListener('keydown', (event) => {
 
         if (event.key === "Enter") {
+            console.log(data);
             [geom, metricValues] = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
         }

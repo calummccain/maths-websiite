@@ -22,8 +22,8 @@
 .cellselector {
     width: 16.66%;
     height: 30px;
-    float: left;
     color: #252525;
+    float: left;
     outline: none;
     z-index: 10;
 }
@@ -87,4 +87,14 @@
     top: 50%;
     -ms-transform: translateY(-50%) translateX(-5px);
     transform: translateY(-50%) translateX(-5px);
+}
+
+#truncated {
+    width: 100%;
+    float: left;
+}
+
+#rectified {
+    width: 100%;
+    float: left;
 }
