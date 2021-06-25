@@ -221,8 +221,8 @@ function main() {
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             [geom, metricValues] = objectMaker(data);
 
-            document.getElementById("s").style.width = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
-            document.getElementById("h").style.width = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
+            document.getElementById("s").style.width = (Math.max(2, metricValues["e"]) - 2) / (n_max - 2) * 100 + "%";
+            document.getElementById("h").style.width = (Math.min(n_max, metricValues["p"]) - 2) / (n_max - 2) * 100 + "%";
 
             for (var i = 3; i < n_max; i++) {
 
@@ -286,6 +286,7 @@ function main() {
                 "-ms-transform": "translateY(-50%) translateX(-5px)",
                 "transform": "translateY(-50%) translateX(-5px)"
             });
+
         });
 
         $(".metricNumber").click(function () {
