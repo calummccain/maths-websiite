@@ -326,7 +326,7 @@ function hyperbolicEdges(data, parameters) {
                     } else {
 
                         center = VF.vectorScale(faces[i].sphereCenter, 0.5 + 0.5 * (1 - faces[i].radius ** 2) / VF.norm2(faces[i].sphereCenter));
-                        console.log(faces[i].radius, faces[i].sphereCenter)
+
                     }
 
                     for (var j = 0; j < data.faces[i].length; j++) {
