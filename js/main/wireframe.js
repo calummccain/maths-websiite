@@ -34,7 +34,7 @@ function main() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xE5E5E5);
 
-    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
+    var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.01, 100);
     camera.position.set(0, 10, 0);
     camera.up = new THREE.Vector3(0, 0, 1);
 
@@ -50,12 +50,12 @@ function main() {
     const n_max = 13;
 
     var data = {
-        p: 3,
-        q: 7,
-        r: 6,
+        p: 4,
+        q: 3,
+        r: 7,
         modifier: "",
         view: "wireframe",
-        model: "uhp",
+        model: "poincare",
         refinement: 25,
         invisibleLines: false,
         cells: [""],
@@ -63,11 +63,19 @@ function main() {
         position: [0, 0, 0]
     };
 
-    // const geometry = new THREE.SphereBufferGeometry(2.2153, 64, 64);
+    // const geometry1 = new THREE.SphereBufferGeometry(0.1949, 64, 64);
     // const material1 = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
-    // const sphere1 = new THREE.Mesh(geometry, material1);
-    // sphere1.position.set(2, 0, -1.38);
+    // const sphere1 = new THREE.Mesh(geometry1, material1);
+    // sphere1.position.set(0.613, 0.304, 0.754);
     // scene.add(sphere1);
+
+    // const geometry2 = new THREE.SphereBufferGeometry(1, 64, 64);
+    // const material2 = new THREE.MeshBasicMaterial({ color: 0xff00ff, opacity: 0.3, transparent: true });
+    // const sphere2 = new THREE.Mesh(geometry2, material2);
+    // sphere2.position.set(0, 0, 0);
+
+
+    // scene.add(sphere1, sphere2);
 
     [geom, metricValues] = objectMaker(data);
 
@@ -149,9 +157,10 @@ function main() {
     window.addEventListener('keydown', (event) => {
 
         if (event.key === "Enter") {
-            console.log(data);
+            
             [geom, metricValues] = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        
         }
 
     });

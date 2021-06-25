@@ -370,7 +370,7 @@ function geodesicEndpoints(a, b, l) {
 
     if ((Math.abs(hyperbolicNorm(a)) < geodesicEndpointsEps) && (Math.abs(hyperbolicNorm(b)) < geodesicEndpointsEps)) {
 
-        return [a, b];
+        return [b, a];
 
     }
 

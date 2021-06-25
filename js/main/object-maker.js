@@ -170,7 +170,7 @@ function objectMaker(parameters) {
             return [(rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
-                number: 50,
+                number: parameters.refinement,
                 camera: camera,
                 width: 2,
             }), data.metricValues];
@@ -180,7 +180,7 @@ function objectMaker(parameters) {
             return [(rx, ry, rz, ru, rv, rw, camera) => EW.euclideanEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
-                number: 50,
+                number: parameters.refinement,
                 camera: camera,
                 width: 2,
             }), data.metricValues];
@@ -190,7 +190,7 @@ function objectMaker(parameters) {
             return [(rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
-                number: 50,
+                number: parameters.refinement,
                 camera: camera,
                 width: 2,
                 invisibleLines: parameters.invisibleLines,
