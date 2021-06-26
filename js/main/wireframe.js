@@ -72,9 +72,7 @@ function main() {
     // const material2 = new THREE.MeshBasicMaterial({ color: 0xff00ff, opacity: 0.3, transparent: true });
     // const sphere2 = new THREE.Mesh(geometry2, material2);
     // sphere2.position.set(0, 0, 0);
-
-
-    // scene.add(sphere1, sphere2);
+    // scene.add(sphere2);
 
     [geom, metricValues] = objectMaker(data);
 
@@ -185,25 +183,6 @@ function main() {
             updateMetricBar();
 
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-
-        });
-
-        $(".metricNumber").hover(function () {
-
-            $(this).css({
-                "width": "20px",
-                "height": "20px",
-                "z-index": "16"
-            });
-
-
-        }, function () {
-
-            $(this).css({
-                "width": "10px",
-                "height": "10px",
-                "z-index": "15",
-            });
 
         });
 
