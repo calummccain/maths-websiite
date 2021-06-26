@@ -226,37 +226,13 @@ function main() {
 
     });
 
-    const cellColours = {
-        "s": "#FFD2BC",
-        "e": "#F9AAAA",
-        "h": "#DB6D98"
-    }
-
     function updateCellSelector() {
-
-        const spherical = ["3,3", "3,4", "3,5", "4,3", "5,3"];
-        const euclidean = ["3,6", "4,4", "6,3"]
 
         for (var p = 3; p <= 8; p++) {
 
             for (var q = 3; q <= 8; q++) {
 
-                if (spherical.includes(p + "," + q)) {
-
-                    document.getElementById(p + "-" + q + "-").style.backgroundColor = cellColours["s"];
-
-                } else if (euclidean.includes(p + "," + q)) {
-
-                    document.getElementById(p + "-" + q + "-").style.backgroundColor = cellColours["e"];
-
-                } else {
-
-                    document.getElementById(p + "-" + q + "-").style.backgroundColor = cellColours["h"];
-
-                }
-
                 document.getElementById(p + "-" + q + "-").innerHTML = "{" + p + "," + q + "}";
-
 
             }
 
@@ -267,7 +243,6 @@ function main() {
             ["t", "r"].forEach((affix) => {
 
                 document.getElementById(p + "-" + q + "-" + affix).innerHTML = affix + "{" + p + "," + q + "}";
-                document.getElementById(p + "-" + q + "-" + affix).style.backgroundColor = cellColours["s"];
 
             })
 

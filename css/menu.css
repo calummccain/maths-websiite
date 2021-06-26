@@ -23,7 +23,6 @@
 .cellselector {
     width: 16.66%;
     height: 30px;
-    color: #252525;
     float: left;
     outline: none;
     z-index: 10;
@@ -35,7 +34,8 @@
 .cellselector:hover {
     transform: scale(1.5);
     box-shadow: 0 0 11px rgba(33,33,33,0.5);
-    z-index: 11;
+    z-index: 20;
+    color: #333333;
 }
 
 #metricBar {
@@ -104,3 +104,19 @@
     width: 100%;
     float: left;
 }
+
+.spherical {
+    background-color: #FFD2BC;
+    color: #FFD2BC;
+}
+
+.euclidean {
+    background-color: #F9AAAA;
+    color: #F9AAAA;
+}
+
+.hyperbolic {
+    background-color: #DB6D98;
+    color: #DB6D98;
+}
+
