@@ -55,7 +55,7 @@ function main() {
         modifier: "",
         view: "wireframe",
         model: "poincare",
-        refinement: 25,
+        refinement: 50,
         invisibleLines: false,
         cells: [""],
         numFaces: 50,
@@ -202,7 +202,7 @@ function main() {
             $(this).css({
                 "width": "10px",
                 "height": "10px",
-                "z-index": "15"
+                "z-index": "15",
             });
 
         });

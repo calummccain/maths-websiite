@@ -13,6 +13,7 @@
     width: 100%;
     height: 270px;
     background-color: #666666;
+    margin: 20px;
 }
 
 #options {
@@ -26,17 +27,16 @@
     float: left;
     outline: none;
     z-index: 10;
-}
-/* 
-#truncated {
-    float: left;
     margin: auto;
+    text-align: center;
+    transition: all 0.5s;
 }
 
-#rectified {
-    float: left;
-    margin: auto;
-} */
+.cellselector:hover {
+    transform: scale(1.5);
+    box-shadow: 0 0 11px rgba(33,33,33,0.5);
+    z-index: 11;
+}
 
 #metricBar {
     height: 5%;
@@ -87,7 +87,6 @@
     z-index: 15;
     top: 50%;
     margin: -5px -5px;
-    /* transform: translateY(-50%) translateX(-5px); */
     transition: all 0.5s;
 }
 
