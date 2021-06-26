@@ -20,7 +20,6 @@ function main() {
     var thetax = 0, thetay = 0, thetaz = 0, thetau = 0, thetav = 0, thetaw = 0;
     var geom = {};
     var metricValues = {};
-    var cellType;
 
     const canvas = document.getElementById("canvas");
 
@@ -52,7 +51,7 @@ function main() {
     var data = {
         p: 4,
         q: 3,
-        r: 7,
+        r: 3,
         modifier: "",
         view: "wireframe",
         model: "poincare",
@@ -79,9 +78,6 @@ function main() {
 
     [geom, metricValues] = objectMaker(data);
 
-    document.getElementById("s").style.width = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
-    document.getElementById("h").style.width = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
-
     const dotColours = {
         "s": "#BCE784",
         "e": "#5DD39E",
@@ -90,44 +86,7 @@ function main() {
         "u": "#513B56"
     }
 
-    for (var i = 3; i < n_max; i++) {
-
-        document.getElementById(i.toString()).style.left = (i - 2) / (n_max - 2) * 100 + "%";
-
-        (i < metricValues["e"]) ?
-            document.getElementById(i.toString()).style.backgroundColor = dotColours["s"] :
-            (i == metricValues["e"]) ?
-                document.getElementById(i.toString()).style.backgroundColor = dotColours["e"] :
-                (i < metricValues["p"]) ?
-                    document.getElementById(i.toString()).style.backgroundColor = dotColours["h"] :
-                    (i == metricValues["p"]) ?
-                        document.getElementById(i.toString()).style.backgroundColor = dotColours["p"] :
-                        document.getElementById(i.toString()).style.backgroundColor = dotColours["u"]
-
-    }
-
-    document.getElementById("euclidean").style.backgroundColor = dotColours["e"];
-    document.getElementById("paracompact").style.backgroundColor = dotColours["p"];
-
-    if (!Number.isInteger(metricValues["e"])) {
-
-        document.getElementById("euclidean").style.left = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
-
-    } else {
-
-        document.getElementById("euclidean").style.visibility = "false";
-
-    }
-
-    if (!Number.isInteger(metricValues["e"])) {
-
-        document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
-
-    } else {
-
-        document.getElementById("paracompact").style.visibility = "false";
-
-    }
+    updateMetricBar();
 
     lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
@@ -157,10 +116,10 @@ function main() {
     window.addEventListener('keydown', (event) => {
 
         if (event.key === "Enter") {
-            
+
             [geom, metricValues] = objectMaker(data);
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
-        
+
         }
 
     });
@@ -212,7 +171,9 @@ function main() {
         updateCellSelector();
 
         $("#pqr").click(function () {
+
             $("#pqrselector").toggle();
+
         });
 
         $(".cellselector").click(function () {
@@ -221,46 +182,7 @@ function main() {
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             [geom, metricValues] = objectMaker(data);
 
-            document.getElementById("s").style.width = (Math.max(2, metricValues["e"]) - 2) / (n_max - 2) * 100 + "%";
-            document.getElementById("h").style.width = (Math.min(n_max, metricValues["p"]) - 2) / (n_max - 2) * 100 + "%";
-
-            for (var i = 3; i < n_max; i++) {
-
-                document.getElementById(i.toString()).style.left = (i - 2) / (n_max - 2) * 100 + "%";
-
-                (i < metricValues["e"]) ?
-                    document.getElementById(i.toString()).style.backgroundColor = dotColours["s"] :
-                    (i == metricValues["e"]) ?
-                        document.getElementById(i.toString()).style.backgroundColor = dotColours["e"] :
-                        (i < metricValues["p"]) ?
-                            document.getElementById(i.toString()).style.backgroundColor = dotColours["h"] :
-                            (i == metricValues["p"]) ?
-                                document.getElementById(i.toString()).style.backgroundColor = dotColours["p"] :
-                                document.getElementById(i.toString()).style.backgroundColor = dotColours["u"]
-
-            }
-
-            if (!(Number.isInteger(metricValues["e"])) && metricValues["e"] > 2) {
-
-                document.getElementById("euclidean").style.display = "block";
-                document.getElementById("euclidean").style.left = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
-
-            } else {
-
-                document.getElementById("euclidean").style.display = "none";
-
-            }
-
-            if (!(Number.isInteger(metricValues["p"])) && isFinite(metricValues["p"])) {
-
-                document.getElementById("paracompact").style.display = "block";
-                document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
-
-            } else {
-
-                document.getElementById("paracompact").style.display = "none";
-
-            }
+            updateMetricBar();
 
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
 
@@ -271,9 +193,7 @@ function main() {
             $(this).css({
                 "width": "20px",
                 "height": "20px",
-                "z-index": "16",
-                "-ms-transform": "translateY(-50%) translateX(-10px)",
-                "transform": "translateY(-50%) translateX(-10px)"
+                "z-index": "16"
             });
 
 
@@ -282,9 +202,7 @@ function main() {
             $(this).css({
                 "width": "10px",
                 "height": "10px",
-                "z-index": "15",
-                "-ms-transform": "translateY(-50%) translateX(-5px)",
-                "transform": "translateY(-50%) translateX(-5px)"
+                "z-index": "15"
             });
 
         });
@@ -355,8 +273,53 @@ function main() {
 
         })
 
+    }
 
+    function updateMetricBar() {
 
+        document.getElementById("s").style.width = (Math.max(2, metricValues["e"]) - 2) / (n_max - 2) * 100 + "%";
+        document.getElementById("h").style.width = (Math.min(n_max, metricValues["p"]) - 2) / (n_max - 2) * 100 + "%";
+
+        for (var i = 3; i < n_max; i++) {
+
+            document.getElementById(i.toString()).style.left = (i - 2) / (n_max - 2) * 100 + "%";
+
+            (i < metricValues["e"]) ?
+                document.getElementById(i.toString()).style.backgroundColor = dotColours["s"] :
+                (i == metricValues["e"]) ?
+                    document.getElementById(i.toString()).style.backgroundColor = dotColours["e"] :
+                    (i < metricValues["p"]) ?
+                        document.getElementById(i.toString()).style.backgroundColor = dotColours["h"] :
+                        (i == metricValues["p"]) ?
+                            document.getElementById(i.toString()).style.backgroundColor = dotColours["p"] :
+                            document.getElementById(i.toString()).style.backgroundColor = dotColours["u"]
+
+        }
+
+        document.getElementById("euclidean").style.backgroundColor = dotColours["e"];
+        document.getElementById("paracompact").style.backgroundColor = dotColours["p"];
+
+        if (!(Number.isInteger(metricValues["e"])) && metricValues["e"] > 2) {
+
+            document.getElementById("euclidean").style.display = "block";
+            document.getElementById("euclidean").style.left = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
+
+        } else {
+
+            document.getElementById("euclidean").style.display = "none";
+
+        }
+
+        if (!(Number.isInteger(metricValues["p"])) && isFinite(metricValues["p"])) {
+
+            document.getElementById("paracompact").style.display = "block";
+            document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
+
+        } else {
+
+            document.getElementById("paracompact").style.display = "none";
+
+        }
 
     }
 

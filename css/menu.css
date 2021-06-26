@@ -27,7 +27,7 @@
     outline: none;
     z-index: 10;
 }
-
+/* 
 #truncated {
     float: left;
     margin: auto;
@@ -36,14 +36,14 @@
 #rectified {
     float: left;
     margin: auto;
-}
+} */
 
 #metricBar {
     height: 5%;
     width: 100%;
     background-color: cadetblue;
     position: absolute;
-    top: 270px
+    top: 270px;
 }
 
 #s {
@@ -75,9 +75,10 @@
     height: 100%;
     width: 0%;
     position: absolute;
+    transition: 0.5s;
 }
 
-.metricNumber{
+.metricNumber {
     border-radius: 50%;
     background-color: #000000;
     height: 10px;
@@ -85,8 +86,14 @@
     position: absolute;
     z-index: 15;
     top: 50%;
-    -ms-transform: translateY(-50%) translateX(-5px);
-    transform: translateY(-50%) translateX(-5px);
+    margin: -5px -5px;
+    /* transform: translateY(-50%) translateX(-5px); */
+    transition: all 0.5s;
+}
+
+.metricNumber:hover {
+    transform: scale(1);
+    margin: -10px -10px;
 }
 
 #truncated {
