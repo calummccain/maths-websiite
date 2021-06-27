@@ -10,8 +10,8 @@
 #pqrselector {
     display: none;
     transition: all 0.5s ease-out;
-    width: 100%;
-    height: 270px;
+    width: 300px;
+    height: 290px;
     background-color: #666666;
     margin: 20px;
 }
@@ -21,7 +21,7 @@
 }
 
 .cellselector {
-    width: 16.66%;
+    width: 50px;
     height: 30px;
     float: left;
     outline: none;
@@ -39,8 +39,8 @@
 }
 
 #metricBar {
-    height: 5%;
-    width: 100%;
+    height: 50px;
+    width: 300px;
     background-color: cadetblue;
     position: absolute;
     top: 270px;
@@ -87,7 +87,7 @@
     z-index: 15;
     top: 50%;
     margin: -5px -5px;
-    transition: all 0.5s;
+    transition: all 0.3s;
 }
 
 .metricNumber:hover {
@@ -95,27 +95,28 @@
 }
 
 #truncated {
-    width: 100%;
-    float: left;
+    width: 250px;
+    position: relative;
+    left: 25px;
 }
 
 #rectified {
-    width: 100%;
-    float: left;
+    width: 250px;
+    position: relative;
+    left: 25px;
 }
 
 .spherical {
     background-color: #FFD2BC;
-    color: #FFD2BC;
+    color: #DDB09A;
 }
 
 .euclidean {
     background-color: #F9AAAA;
-    color: #F9AAAA;
+    color: #D78888;
 }
 
 .hyperbolic {
     background-color: #DB6D98;
-    color: #DB6D98;
+    color: #B94B76;
 }
-

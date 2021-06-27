@@ -168,6 +168,9 @@ function main() {
 
         updateCellSelector();
 
+        $(".cellselector").css("color", "");
+        $("#3-3-").css("color", "#333333");
+
         $("#pqr").click(function () {
 
             $("#pqrselector").toggle();
@@ -183,6 +186,9 @@ function main() {
             updateMetricBar();
 
             lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+
+            $(".cellselector").css("color", "");
+            $(this).css("color", "#333333");
 
         });
 
