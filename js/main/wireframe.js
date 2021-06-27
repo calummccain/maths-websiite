@@ -127,41 +127,63 @@ function main() {
     }, false);
 
     document.getElementById("myRangex").oninput = function () {
+
         thetax = Math.PI * this.value / 50;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        document.getElementById("xrange").innerHTML = this.value / 50;
+
     };
 
     document.getElementById("myRangey").oninput = function () {
+
         thetay = Math.PI * this.value / 50;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        document.getElementById("yrange").innerHTML = this.value / 50;
+
     };
 
     document.getElementById("myRangez").oninput = function () {
+
         thetaz = Math.PI * this.value / 50;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        document.getElementById("zrange").innerHTML = this.value / 50;
+
     };
 
     document.getElementById("myRangeu").oninput = function () {
+
         thetau = Math.PI * this.value / 50 - Math.PI;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        document.getElementById("urange").innerHTML = (this.value - 50) / 50;
+
     };
 
     document.getElementById("myRangev").oninput = function () {
+
         thetav = Math.PI * this.value / 50 - Math.PI;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        document.getElementById("vrange").innerHTML = (this.value - 50) / 50;
+
     };
 
     document.getElementById("myRangew").oninput = function () {
+
         thetaw = Math.PI * this.value / 50 - Math.PI;
         lineGroup.children = [geom(thetax, thetay, thetaz, thetau, thetav, thetaw, camera.position.toArray())];
+        document.getElementById("wrange").innerHTML = (this.value - 50) / 50;
+
     };
 
     document.getElementById("visibleLines").addEventListener("click", function () {
+
         data.invisibleLines = !data.invisibleLines;
+
     });
 
     document.getElementById("model").addEventListener("click", function () {
+
         data.model = (data.model === "uhp") ? "poincare" : "uhp";
+
     });
 
     $(document).ready(function () {

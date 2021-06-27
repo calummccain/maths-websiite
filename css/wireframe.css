@@ -16,10 +16,6 @@ body {
     box-sizing: border-box;
 }
 
-.slidecontainer {
-    width: 100%;
-}
-
 #canvas {
     position: fixed;
     width: 80%;
