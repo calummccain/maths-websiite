@@ -42,8 +42,8 @@
     height: 50px;
     width: 300px;
     background-color: cadetblue;
-    position: absolute;
-    top: 270px;
+    position: relative;
+    float: left;
 }
 
 #s {
