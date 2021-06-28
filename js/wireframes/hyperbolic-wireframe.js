@@ -35,7 +35,7 @@ function hyperbolicEdges(data, parameters) {
     const invisibleLines = parameters.invisibleLines || false;
     const model = parameters.model || "uhp";
 
-    const outlineRes = 8;
+    const outlineRes = 2;
 
     // matrix dictionary
     const matrix = (letter, v) => matrixDict(letter, data.a, data.b, data.c, data.d, data.e, data.f, v);
@@ -255,7 +255,6 @@ function hyperbolicEdges(data, parameters) {
 
         } else if (data.metric === "u") {
 
-            var [e1, e2] = HF.geodesicEndpoints(localVertices[data.edges[0][0]].hyperboloid, localVertices[data.edges[0][1]].hyperboloid, data.vv);
             const denom = 1 / 2;
             const a = 10 / number;
             var theta = -5;
@@ -277,7 +276,7 @@ function hyperbolicEdges(data, parameters) {
 
             if (data.metric === "u") {
 
-                [start, end] = HF.geodesicEndpoints(localVertices[endpoints[0]].hyperboloid, localVertices[endpoints[1]].hyperboloid, data.vv);
+                [end, start] = HF.geodesicEndpoints(localVertices[endpoints[0]].hyperboloid, localVertices[endpoints[1]].hyperboloid, data.vv);
 
             } else {
 
@@ -312,62 +311,97 @@ function hyperbolicEdges(data, parameters) {
 
         if (data.metric === "u") {
 
-            const newNumber = Math.round(number / 4);
+            const newNumber = outlineRes * number;
 
-            var e1, e2, ca, a, denom, theta, edge, start, end, ratios, e3, e4;
+            var e1, e2, ca, a, denom, theta, edge, center;
 
-            e1 = HF.geodesicEndpoints(localVertices[data.faces[0][0]].hyperboloid, localVertices[data.faces[0][1]].hyperboloid, data.vv)[0];
-            e2 = HF.geodesicEndpoints(localVertices[data.faces[0][1]].hyperboloid, localVertices[data.faces[0][2]].hyperboloid, data.vv)[0];
+            if (model === "poincare") {
 
-            e1.shift();
-            e2.shift();
+                for (var i = 0; i < data.numFaces; i++) {
 
-            ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
-            a = Math.acos(ca);
-            denom = 1 / Math.sin(a);
+                    if (faces[i].type === "plane") {
 
-            theta = 0;
-            ratios = [];
+                        center = [0, 0, 0];
 
-            for (var k = 0; k <= newNumber; k++) {
+                    } else {
 
-                ratios.push(Math.sin(theta) * denom);
-                theta += a / newNumber;
+                        center = VF.vectorScale(faces[i].sphereCenter, 0.5 + 0.5 * (1 - faces[i].radius ** 2) / VF.norm2(faces[i].sphereCenter));
 
-            }
+                    }
 
-            for (var i = 0; i < data.numFaces; i++) {
+                    for (var j = 0; j < data.faces[i].length; j++) {
 
-                for (var j = 0; j < data.faces[i].length; j++) {
+                        edge = [];
 
-                    edge = [];
+                        e1 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][((j == 0) ? data.faces[i].length - 1 : j - 1)]].hyperboloid, data.vv)[0];
+                        e2 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][((j == data.faces[i].length - 1) ? 0 : j + 1)]].hyperboloid, data.vv)[0];
 
-                    e3 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j - 1 + data.faces[i].length) % data.faces[i].length]].hyperboloid, data.vv)[0];
-                    e4 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][(j + 1) % data.faces[i].length]].hyperboloid, data.vv)[0];
-                    e3.shift();
-                    e4.shift();
-                    e3 = VF.vectorScale(e3, 1 / VF.norm(e3));
-                    e4 = VF.vectorScale(e4, 1 / VF.norm(e4));
+                        e1 = HF.hyperboloidToPoincare(e1);
+                        e2 = HF.hyperboloidToPoincare(e2);
 
-                    for (var k = 0; k <= newNumber; k++) {
+                        e1 = VF.vectorDiff(e1, center);
+                        e2 = VF.vectorDiff(e2, center);
 
-                        if (model === "uhp") {
+                        ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
+
+                        a = Math.acos(ca);
+                        denom = 1 / Math.sin(a);
+
+                        for (var k = 0; k <= newNumber; k++) {
 
                             edge.push(
-                                HF.hyperboloidToUpperHalfPlane([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[k]), VF.vectorScale(e4, ratios[newNumber - k])])))
-                            );
-
-                        } else {
-
-                            edge.push(
-                                HF.hyperboloidToPoincare([1].concat(VF.vectorSum([VF.vectorScale(e3, ratios[k]), VF.vectorScale(e4, ratios[newNumber - k])])))
+                                VF.vectorSum([VF.vectorScale(e1, Math.sin(a * k / newNumber) * denom), VF.vectorScale(e2, Math.sin(a * (newNumber - k) / newNumber) * denom), center])
                             );
 
                         }
 
+                        edgeCoords.push(edge);
+
                     }
 
-                    edgeCoords.push(edge);
+                }
+
+            } else if (model === "uhp") {
+
+                for (var i = 0; i < data.numFaces; i++) {
+
+                    for (var j = 0; j < data.faces[i].length; j++) {
+
+                        edge = [];
+
+                        e1 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][((j == 0) ? data.faces[i].length - 1 : j - 1)]].hyperboloid, data.vv)[0];
+                        e2 = HF.geodesicEndpoints(localVertices[data.faces[i][j]].hyperboloid, localVertices[data.faces[i][((j == data.faces[i].length - 1) ? 0 : j + 1)]].hyperboloid, data.vv)[0];
+
+                        e1 = HF.hyperboloidToUpperHalfPlane(e1);
+                        e2 = HF.hyperboloidToUpperHalfPlane(e2);
+
+                        if (faces[i].type === "sphere") {
+
+                            e1 = VF.vectorDiff(e1, faces[i].sphereCenter);
+                            e2 = VF.vectorDiff(e2, faces[i].sphereCenter);
+
+                            ca = VF.vectorDot(e1, e2) / Math.sqrt(VF.norm2(e1) * VF.norm2(e2));
+
+                            a = Math.acos(ca);
+                            denom = 1 / Math.sin(a);
+
+                            for (var k = 0; k <= newNumber; k++) {
+
+                                edge.push(
+                                    VF.vectorSum([VF.vectorScale(e1, Math.sin(a * k / newNumber) * denom), VF.vectorScale(e2, Math.sin(a * (newNumber - k) / newNumber) * denom), faces[i].sphereCenter])
+                                );
+
+                            }
+
+                            edgeCoords.push(edge);
+
+                        } else {
+
+                            edgeCoords.push([e1, e2])
+
+                        }
+
+                    }
 
                 }
 

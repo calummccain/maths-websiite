@@ -10,6 +10,8 @@
 //     31/05/21 Added v-v distance
 //     03/06/21 Removed 1 *
 //              Fixed edges - typo
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { p, p2, p_1, rt2 } from "./constants.js";
@@ -56,6 +58,11 @@ const cubeTruncData = (n) => {
             v[1] / 2,
             v[2] / 2,
             v[3] / 2
+        ] : (metric === "p") ? (v) => [
+            v[0],
+            v[1] / Math.sqrt(5 - 2 * Math.sqrt(2)),
+            v[2] / Math.sqrt(5 - 2 * Math.sqrt(2)),
+            v[3] / Math.sqrt(5 - 2 * Math.sqrt(2))
         ] : (v) => [
             Math.sqrt(Math.abs(2 * cot / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[0],
             Math.sqrt(Math.abs((cot - 1) / (5 - 2 * rt2 - (3 - 2 * rt2) * cot))) * v[1],
@@ -141,7 +148,13 @@ const cubeTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: ((3 - 2 * rt2) * cot + 2 * rt2 - 1) / Math.abs(-(3 - 2 * rt2) * cot + 5 - 2 * rt2)
+        vv: (metric === "p") ? 2 / (7 + 4 * rt2) : ((3 - 2 * rt2) * cot + 2 * rt2 - 1) / Math.abs(-(3 - 2 * rt2) * cot + 5 - 2 * rt2),
+
+        metricValues: {
+            'e': 4,
+            'p': Math.PI / Math.atan(Math.sqrt(1 / (7 + 4 * rt2)))
+        }
+
 
     }
 

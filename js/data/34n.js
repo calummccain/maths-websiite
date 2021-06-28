@@ -6,8 +6,10 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
-//     30/05/21 Commented outr extra distance - later work
+//     30/05/21 Commented out extra distance - later work
 //              Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -46,6 +48,11 @@ const octahedronData = (n) => {
             v[2] / rt2,
             v[3] / rt2
         ] : (n == 4) ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (metric === "e") ? (v) => [
             v[0],
             v[1],
             v[2],
@@ -142,7 +149,12 @@ const octahedronData = (n) => {
 
         // EV: Math.sqrt(Math.abs(1 / (1 - cot))) / rt2,
 
-        vv: (metric === "p") ? 1 : cot / Math.abs(1 - cot)
+        vv: (metric === "p") ? 1 : cot / Math.abs(1 - cot),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(rt2),
+            'p': 4
+        }
 
     }
 

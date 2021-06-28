@@ -10,6 +10,8 @@
 //              Look into uncompact
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
@@ -50,12 +52,18 @@ const dodecahedronRectData = (n) => {
             2 * p2 * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
         ];
 
-    const f = (v) => [
-        p * Math.sqrt(Math.abs(cot)) * v[0],
-        Math.sqrt(Math.abs(cot - p_2)) * v[1],
-        Math.sqrt(Math.abs(cot - p_2)) * v[2],
-        Math.sqrt(Math.abs(cot - p_2)) * v[3]
-    ];
+    const f =
+        (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            p * Math.sqrt(Math.abs(cot)) * v[0],
+            Math.sqrt(Math.abs(cot - p_2)) * v[1],
+            Math.sqrt(Math.abs(cot - p_2)) * v[2],
+            Math.sqrt(Math.abs(cot - p_2)) * v[3]
+        ];
 
     return {
 
@@ -158,7 +166,12 @@ const dodecahedronRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: cot / 2 + p / 2
+        vv: cot / 2 + p / 2,
+
+        metricValues: {
+            'e': Math.PI / Math.atan(p),
+            'p': Infinity
+        }
 
     }
 

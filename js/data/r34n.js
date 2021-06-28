@@ -8,6 +8,8 @@
 //     ??/??/?? Initial commit
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -39,12 +41,18 @@ const octahedronRectData = (n) => {
             2 * cos * v[0] - 2 * cos * v[1] - 2 * cos * v[2] + (1 - 2 * cos) * v[3]
         ];
 
-    const f = (v) => [
-        Math.sqrt(Math.abs(2 * cot)) * v[0],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[1],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[2],
-        Math.sqrt(Math.abs(cot - 1 / 2)) * v[3]
-    ];
+    const f =
+        (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            Math.sqrt(Math.abs(2 * cot)) * v[0],
+            Math.sqrt(Math.abs(cot - 1 / 2)) * v[1],
+            Math.sqrt(Math.abs(cot - 1 / 2)) * v[2],
+            Math.sqrt(Math.abs(cot - 1 / 2)) * v[3]
+        ];
 
     return {
 
@@ -118,7 +126,12 @@ const octahedronRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: cot + 1 / 2
+        vv: cot + 1 / 2,
+
+        metricValues: {
+            'e': Math.PI / Math.atan(rt2),
+            'p': Infinity
+        }
 
     }
 

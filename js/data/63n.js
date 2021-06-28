@@ -8,6 +8,7 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
+//     17/06/21 Added f-v distance
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -87,8 +88,9 @@ const hexagonData = (r, n) => {
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
 
     const ev = (metric === "p") ? 1 / 4 : Math.abs((1 - c) / (1 - 4 * c / 3));
+    const fv  =(metric === "p") ? 1 : 1 / (1 - 4 * c / 3);
 
-    var faceData = GT.generateFaceData(Math.abs(1 / (1 - 4 * c / 3)), 6, metric, f, v, fmat);
+    var faceData = GT.generateFaceData(Math.abs(fv), 6, f, v, fmat);
     const edgeData = GT.generateEdgeData(ev, e, v, fmat);
 
     faceData = GT.orderFaces(6, faceData, edgeData);
@@ -131,7 +133,12 @@ const hexagonData = (r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (metric === "p") ? 1 / 2 : (3 - 2 * c) / Math.abs(3 - 4 * c)
+        vv: (metric === "p") ? 1 / 2 : (3 - 2 * c) / Math.abs(3 - 4 * c),
+
+        metricValues: {
+            'e': 2,
+            'p': 6
+        }
 
     }
 

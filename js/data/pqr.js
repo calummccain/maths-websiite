@@ -10,11 +10,19 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
+//     17/06/21 Added f-v distance
+//              Added boundary function
+//              Removed dependency on qr
+//              Added p and e metrics
+//     28/06/21 Corrected v-v dist (abs value)
 //=========================================================
 
 import * as VF from "../maths-functions/vector-functions.js";
 import * as HF from "../maths-functions/hyperbolic-functions.js";
 import * as GT from "../maths-functions/generate-tesselations.js";
+import { boundaries } from "./geometry-decider.js";
 
 const pqrData = (p, q, r, n) => {
 
@@ -22,22 +30,20 @@ const pqrData = (p, q, r, n) => {
     const sr = (i) => Math.sin(Math.PI * i / r);
 
     const cq = (i) => Math.cos(Math.PI * i / q);
-    // const sq = (i) => Math.sin(Math.PI * i / q);
+    const sq = (i) => Math.sin(Math.PI * i / q);
 
     const cp = (i) => Math.cos(Math.PI * i / p);
     const sp = (i) => Math.sin(Math.PI * i / p);
 
-    const qr = (q - 2) * (r - 2);
-
     const den = sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2));
 
-    const metric = (qr < 4) ? "h" : (qr == 4) ? "p" : "u";
+    const metric = boundaries(r, ((p - 2) * (q - 2) < 4) ? Math.PI / Math.asin(cq(1) / sp(1)) : 2, 2 * q / (q - 2));
 
     const cellType = "hyperbolic";
 
     const V = [1, 0, cp(1), sp(1)];
     const E = [1, 0, cp(1), 0];
-    const F = [(qr === 4 ? 1 : sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1))), 0, 0, 0];
+    const F = [(metric === "p") ? 1 : sp(1) * Math.sqrt(Math.abs(sr(1) ** 2 - cq(1) ** 2)) / (cp(1) * cq(1)), 0, 0, 0];
     const C = [cp(1) * cq(1) / (sp(1) * cr(1)), 1, 0, 0];
 
     // CFE
@@ -82,7 +88,17 @@ const pqrData = (p, q, r, n) => {
 
     const emat = (v) => v;
 
-    const fmat = (qr == 4) ? (v) => v : (v) => [
+    const fmat = (metric === "p") ? (v) => [
+        v[0],
+        v[1],
+        v[2],
+        v[3]
+    ] : (metric === "e") ? (v) => [
+        v[0],
+        v[1],
+        v[2],
+        v[3]
+    ] : (v) => [
         cp(1) * cq(1) * v[0] / den,
         Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[1] / den,
         Math.sqrt(Math.abs(sp(1) ** 2 * sr(1) ** 2 - cq(1) ** 2)) * v[2] / den,
@@ -109,12 +125,14 @@ const pqrData = (p, q, r, n) => {
 
     const matrixDict = (letter, v) => GT.matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v);
 
-    const ev = (metric === "p") ? Math.abs(1 - cp(1) ** 2) : sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2);
+    const ev = (metric === "p") ? sp(1) ** 2 : sr(1) ** 2 * cp(1) ** 2 / (sr(1) ** 2 - cq(1) ** 2);
+    const fv = (metric === "p") ? 1 : cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2));
 
     const [f, fNames] = GT.makeFaces(F, n, p, matrixDict);
     const v = GT.makeVertices(initialVerts, matrixDict, fNames);
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
-    var faceData = GT.generateFaceData(Math.abs(cp(1) ** 2 * cq(1) ** 2 / (sp(1) ** 2 * (sr(1) ** 2 - cq(1) ** 2))), p, metric, f, v, fmat);
+
+    var faceData = GT.generateFaceData(Math.abs(fv), p, f, v, fmat);
     const edgeData = GT.generateEdgeData(Math.abs(ev), e, v, fmat);
 
     faceData = GT.orderFaces(p, faceData, edgeData);
@@ -167,7 +185,12 @@ const pqrData = (p, q, r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (metric === "p") ? Math.abs(cp(2)) : (cp(2) * sr(1) ** 2 + cq(1) ** 2) / Math.abs(sr(1) ** 2 - cq(1) ** 2)
+        vv: (metric === "p") ? 2 * sp(1) ** 2 : (cp(2) * sr(1) ** 2 + cq(1) ** 2) / Math.abs(sr(1) ** 2 - cq(1) ** 2),
+
+        metricValues: {
+            "e": ((p - 2) * (q - 2) <= 4) ? Math.PI / Math.asin(cq(1) / sp(1)) : 2,
+            "p": 2 * q / (q - 2)
+        }
 
     }
 

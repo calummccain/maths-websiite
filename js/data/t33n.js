@@ -8,6 +8,8 @@
 //     19/05/21 Initial commit
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -26,12 +28,23 @@ const tetrahedronTruncData = (n) => {
         -cos * v[0] + cos * v[1] + cos * v[2] + (1 - cos) * v[3]
     ];
 
-    const f = (v) => [
-        3 * Math.sqrt(Math.abs(cot / (2 * (11 - cot)))) * v[0],
-        3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[1],
-        3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[2],
-        3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[3]
-    ];
+    const f =
+        (metric === "p") ? (v) => [
+            v[0],
+            v[1] / Math.sqrt(11 / 9),
+            v[2] / Math.sqrt(11 / 9),
+            v[3] / Math.sqrt(11 / 9)
+        ] : (metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
+        ] : (v) => [
+            3 * Math.sqrt(Math.abs(cot / (2 * (11 - cot)))) * v[0],
+            3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[1],
+            3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[2],
+            3 * Math.sqrt(Math.abs((cot - 2) / (2 * (11 - cot)))) * v[3]
+        ];
 
     return {
 
@@ -101,7 +114,12 @@ const tetrahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (cot + 7) / Math.abs(11 - cot)
+        vv: (metric === "p") ? 4 / 11 : (cot + 7) / Math.abs(11 - cot),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(1 / rt2),
+            'p': Math.PI / Math.atan(1 / rt11)
+        }
 
     }
 

@@ -9,6 +9,8 @@
 //     24/05/21 Renamed
 //     31/05/21 Added v-v distance
 //     03/06/21 Removed 1 *
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { p, p2, p_1 } from "./constants.js";
@@ -133,7 +135,12 @@ const cubeRectData = (n) => {
 
         cellType: "spherical",
 
-        vv: cot / 2 + 1 / 2
+        vv: cot / 2 + 1 / 2,
+
+        metricValues: {
+            'e': 4,
+            'p': Infinity
+        }
 
     }
 

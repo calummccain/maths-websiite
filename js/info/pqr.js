@@ -51,7 +51,7 @@ const info = {
         0 & 0 & 0 & 1
         \\end{pmatrix}
         \\]`,
-    metric: `\\[ \\cos^2 \\left ( \\frac{\\pi}{p} \\right ) \\cos^2 \\left ( \\frac{\\pi}{q} \\right ) w^2 - \\left ( \\sin^2 \\left ( \\frac{\\pi}{p} \\right ) \\sin^2 \\left ( \\frac{\\pi}{r} \\right ) - \\cos^2 \\left ( \\frac{\\pi}{q} \\right ) \\right ) \\left ( x^2 + y^2 + z^2 \\right ) = \\sin^2 \\left ( \\frac{\\pi}{p} \\right ) \\left ( \\sin^2 \\left ( \\frac{\\pi}{r} \\right ) - \\cos^2 \\left ( \\frac{\\pi}{q} \\right ) \\right ) \\]`
+    metric: `\\[ \\cos^2 \\left ( \\frac{\\pi}{p} \\right ) \\cos^2 \\left ( \\frac{\\pi}{q} \\right ) w^2 + \\left ( \\sin^2 \\left ( \\frac{\\pi}{p} \\right ) \\sin^2 \\left ( \\frac{\\pi}{r} \\right ) - \\cos^2 \\left ( \\frac{\\pi}{q} \\right ) \\right ) \\left ( x^2 + y^2 + z^2 \\right ) = \\sin^2 \\left ( \\frac{\\pi}{p} \\right ) \\left ( \\sin^2 \\left ( \\frac{\\pi}{r} \\right ) - \\cos^2 \\left ( \\frac{\\pi}{q} \\right ) \\right ) \\]`
 
 }
 

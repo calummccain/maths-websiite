@@ -9,6 +9,7 @@
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
 //     11/06/21 Added some vector info
+//     17/06/21 Added f-v distance
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -100,8 +101,9 @@ const squareData = (r, n) => {
     const e = GT.makeEdges(initialEdges, matrixDict, fNames);
 
     const ev = (metric === "p") ? 1 / 2 : Math.abs((1 - cos) / (1 - 2 * cos));
+    const fv = (metric === "p") ? 1 : 1 / (1 - 2 * cos);
 
-    var faceData = GT.generateFaceData(Math.abs(1 / (1 - 2 * cos)), 4, metric, f, v, fmat);
+    var faceData = GT.generateFaceData(Math.abs(fv), 4, f, v, fmat);
     const edgeData = GT.generateEdgeData(ev, e, v, fmat);
 
     faceData = GT.orderFaces(4, faceData, edgeData);
@@ -144,7 +146,12 @@ const squareData = (r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (metric === "p") ? 1 : 1 / Math.abs(1 - 2 * cos)
+        vv: (metric === "p") ? 1 : 1 / Math.abs(1 - 2 * cos),
+
+        metricValues: {
+            'e': 2,
+            'p': 4
+        }
 
     }
 

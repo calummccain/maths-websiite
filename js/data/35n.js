@@ -7,6 +7,8 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { p, p2, p3, p4, p5, p_1, p_3 } from "./constants.js";
@@ -38,6 +40,16 @@ const icosahedronData = (n) => {
             (Math.sqrt(3 * p - 1) / 2) * v[1],
             (Math.sqrt(3 * p - 1) / 2) * v[2],
             (Math.sqrt(3 * p - 1) / 2) * v[3]
+        ] : (metric === "p") ? (v) => [
+            v[0],
+            v[1] / Math.sqrt(p + 2),
+            v[2] / Math.sqrt(p + 2),
+            v[3] / Math.sqrt(p + 2)
+        ] :(metric === "e") ? (v) => [
+            v[0],
+            v[1],
+            v[2],
+            v[3]
         ] : (v) => [
             p3 * Math.sqrt(Math.abs(cot / (p2 + 1 - p4 * cot))) * v[0],
             Math.sqrt(Math.abs((p4 * cot - 1) / (p2 + 1 - p4 * cot))) * v[1],
@@ -128,7 +140,12 @@ const icosahedronData = (n) => {
 
         cellType: "spherical",
 
-        vv: (metric === "p") ? 1 : (p2 - 1 + p4 * cot) / Math.abs(p2 + 1 - p4 * cot)
+        vv: (metric === "p") ? 2 / (p + 2) : (p2 - 1 + p4 * cot) / Math.abs(p2 + 1 - p4 * cot),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(p2),
+            'p': 10 / 3
+        }
 
     }
 

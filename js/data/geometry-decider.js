@@ -15,7 +15,10 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     15/06/21 Added eps
 //=========================================================
+
+const eps = 1e-5;
 
 function boundaries(n, e, p) {
 
@@ -27,7 +30,7 @@ function boundaries(n, e, p) {
 
         return "s";
 
-    } else if (n == e) {
+    } else if (Math.abs(n - e) < eps) {
 
         return "e";
 
@@ -35,7 +38,7 @@ function boundaries(n, e, p) {
 
         return "h";
 
-    } else if (n == p) {
+    } else if (Math.abs(n - p) < eps) {
 
         return "p";
 

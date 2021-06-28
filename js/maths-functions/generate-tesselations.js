@@ -200,7 +200,6 @@ function makeFaces(face, maxNumber, numEdges, matrixDict) {
 // 
 // Inputs: fvDist
 //         numEdges
-//         metric
 //         f
 //         v
 //         fmat
@@ -208,13 +207,13 @@ function makeFaces(face, maxNumber, numEdges, matrixDict) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     17/06/21 Removed metric input 
+//              fvDist is the only one required
 //=========================================================
 
-function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
+function generateFaceData(fvDist, numEdges, f, v, fmat) {
 
     var faceData = [];
-    var fv = (metric !== "p") ? fvDist : 1;
-
     var nearestPoints, j;
 
     f.forEach((face) => {
@@ -230,7 +229,7 @@ function generateFaceData(fvDist, numEdges, metric, f, v, fmat) {
 
             }
 
-            if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - fv) < eps) {
+            if (Math.abs(HF.hyperboloidInnerProduct(fmat(v[i]), fmat(face)) ** 2 - fvDist) < eps) {
 
                 nearestPoints.push(i)
                 j++;

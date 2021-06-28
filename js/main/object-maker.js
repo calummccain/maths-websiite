@@ -79,7 +79,7 @@ function objectMaker(parameters) {
 
     }
 
-    if (parameters.model === "solid") {
+    if (parameters.view === "solid") {
 
         const shapeGeometry = GM.honeycombGeometry(data, parameters.transform, parameters.refinement, parameters.hyperbolicModel);
 
@@ -163,39 +163,39 @@ function objectMaker(parameters) {
 
         }
 
-    } else if (parameters.model === "wireframe") {
+    } else if (parameters.view === "wireframe") {
 
         if (data.metric === "s") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
+            return [(rx, ry, rz, ru, rv, rw, camera) => SW.sphericalEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
-                number: 50,
+                number: parameters.refinement,
                 camera: camera,
                 width: 2,
-            });
+            }), data.metricValues];
 
         } else if (data.metric === "e") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => EW.euclideanEdges(data, {
+            return [(rx, ry, rz, ru, rv, rw, camera) => EW.euclideanEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
-                number: 50,
+                number: parameters.refinement,
                 camera: camera,
                 width: 2,
-            });
+            }), data.metricValues];
 
         } else if (data.metric === "h" || data.metric === "p" || data.metric === "u") {
 
-            return (rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
+            return [(rx, ry, rz, ru, rv, rw, camera) => HW.hyperbolicEdges(data, {
                 cells: parameters.cells,
                 angles: [rx, ry, rz, ru, rv, rw],
-                number: 50,
+                number: parameters.refinement,
                 camera: camera,
                 width: 2,
                 invisibleLines: parameters.invisibleLines,
                 model: parameters.model
-            });
+            }), data.metricValues];
 
         }
 

@@ -9,6 +9,8 @@
 //     24/05/21 Renamed
 //     01/06/21 Added v-v distance
 //              Fixed metric
+//     16/06/21 Corrected v-v distance for paracompact
+//              added metrics for e and p
 //=========================================================
 
 import { rt5, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
@@ -57,7 +59,17 @@ const dodecahedronTruncData = (n) => {
             2 * p2 * cos * v[0] - 2 * p * cos * v[1] + (1 - 2 * cos) * v[3]
         ];
 
-    const f = (v) => [
+    const f = (metric === "p") ? (v) => [
+        v[0],
+        v[1] / Math.sqrt((5 * p4 + 1) / (5 * p2)),
+        v[2] / Math.sqrt((5 * p4 + 1) / (5 * p2)),
+        v[3] / Math.sqrt((5 * p4 + 1) / (5 * p2))
+    ] : (metric === "e") ? (v) => [
+        v[0],
+        v[1],
+        v[2],
+        v[3]
+    ] : (v) => [
         p * Math.sqrt(Math.abs(cot / (1 + p_4 / 5 - p_2 * cot / 5))) * v[0],
         Math.sqrt(Math.abs((cot - p_2) / (1 + p_4 / 5 - p_2 * cot / 5))) * v[1],
         Math.sqrt(Math.abs((cot - p_2) / (1 + p_4 / 5 - p_2 * cot / 5))) * v[2],
@@ -170,7 +182,12 @@ const dodecahedronTruncData = (n) => {
 
         cellType: "spherical",
 
-        vv: (p_2 * cot / 5 + 3 * p / 5) / Math.abs(1 + p_4 / 5 - p_2 * cot / 5)
+        vv: (metric === "p") ? 2 / (5 * p4 + 1) : (p_2 * cot / 5 + 3 * p / 5) / Math.abs(1 + p_4 / 5 - p_2 * cot / 5),
+
+        metricValues: {
+            'e': Math.PI / Math.atan(p),
+            'p': Math.PI / Math.atan(p / Math.sqrt(5 * p4 + 1))
+        }
 
     }
 
