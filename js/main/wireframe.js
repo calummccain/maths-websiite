@@ -55,10 +55,10 @@ function main() {
         modifier: "",
         view: "wireframe",
         model: "poincare",
-        refinement: 10,
+        refinement: 50,
         invisibleLines: false,
         cells: [""],
-        numFaces: 10,
+        numFaces: 50,
         position: [0, 0, 0]
     };
 
