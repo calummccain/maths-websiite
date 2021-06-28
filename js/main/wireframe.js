@@ -49,16 +49,16 @@ function main() {
     const n_max = 13;
 
     var data = {
-        p: 4,
+        p: 3,
         q: 3,
         r: 3,
         modifier: "",
         view: "wireframe",
         model: "poincare",
-        refinement: 50,
+        refinement: 10,
         invisibleLines: false,
         cells: [""],
-        numFaces: 50,
+        numFaces: 10,
         position: [0, 0, 0]
     };
 

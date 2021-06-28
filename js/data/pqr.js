@@ -16,6 +16,7 @@
 //              Added boundary function
 //              Removed dependency on qr
 //              Added p and e metrics
+//     28/06/21 Corrected v-v dist (abs value)
 //=========================================================
 
 import * as VF from "../maths-functions/vector-functions.js";
@@ -184,7 +185,7 @@ const pqrData = (p, q, r, n) => {
 
         flip: (v) => [v[0], v[2], v[3], v[1]],
 
-        vv: (metric === "p") ? 2 * sp(1) ** 2 : -(cp(2) * sr(1) ** 2 + cq(1) ** 2) / (sr(1) ** 2 - cq(1) ** 2),
+        vv: (metric === "p") ? 2 * sp(1) ** 2 : (cp(2) * sr(1) ** 2 + cq(1) ** 2) / Math.abs(sr(1) ** 2 - cq(1) ** 2),
 
         metricValues: {
             "e": ((p - 2) * (q - 2) <= 4) ? Math.PI / Math.asin(cq(1) / sp(1)) : 2,
