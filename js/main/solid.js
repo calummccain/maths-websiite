@@ -6,6 +6,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     29/06/21 Changed model to view
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
@@ -92,7 +93,7 @@ function main() {
         q: q,
         r: r,
         modifier: "",
-        model: "solid",
+        view: "solid",
         hyperbolicModel: "poincare",
         refinement: 4,
         transform: initialCell,
@@ -110,7 +111,7 @@ function main() {
         q: q,
         r: r,
         modifier: "",
-        model: "solid",
+        view: "solid",
         hyperbolicModel: "poincare",
         refinement: 3,
         transform: "",
