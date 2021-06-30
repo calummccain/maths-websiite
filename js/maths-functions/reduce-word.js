@@ -1,3 +1,13 @@
+// ========================================================
+// Reduces a word given the coxeter group's presentation
+//
+// Inputs: word, p, q, r
+// Output: reduced word
+//
+// Change history:
+//     30/06/21 Initial commit
+//=========================================================
+
 function reduceWord(word, p, q, r) {
 
     var done = false;
@@ -21,7 +31,7 @@ function reduceWord(word, p, q, r) {
         ["cb".repeat(Math.ceil(q / 2)) + ((q % 2 == 1) ? "" : "c"), "bc".repeat(Math.ceil(q / 2) - 1) + ((q % 2 == 1) ? "" : "b")],
         ["cd".repeat(Math.ceil(r / 2)) + ((r % 2 == 1) ? "" : "c"), "dc".repeat(Math.ceil(r / 2) - 1) + ((r % 2 == 1) ? "" : "d")],
         ["dc".repeat(Math.ceil(r / 2)) + ((r % 2 == 1) ? "" : "d"), "cd".repeat(Math.ceil(r / 2) - 1) + ((r % 2 == 1) ? "" : "c")]
-    ]
+    ];
 
     while (!done) {
 
