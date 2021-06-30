@@ -108,16 +108,22 @@ function objectMaker(parameters) {
                 // transparent: true,
                 side: THREE.DoubleSide,
                 gradientMap: gradientMap
-            })
+            });
 
-        } else {
+        } else if (parameters.shader === "normal") {
+
+            material = new THREE.MeshNormalMaterial({
+                side: THREE.DoubleSide
+            });
+
+        }  else {
 
             material = new THREE.MeshLambertMaterial({
                 color: new THREE.Color(parameters.colour),
                 opacity: opacity,
                 transparent: true,
                 side: THREE.DoubleSide
-            })
+            });
 
         }
 
@@ -141,7 +147,7 @@ function objectMaker(parameters) {
 
             }
 
-            return faceGroup;
+            return [faceGroup, data.metricValues];
 
         } else {
 
@@ -159,7 +165,7 @@ function objectMaker(parameters) {
             cellMesh.name = name;
             cellMesh.geometry.computeVertexNormals();
 
-            return cellMesh;
+            return [cellMesh, data.metricValues];
 
         }
 
