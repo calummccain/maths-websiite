@@ -7,12 +7,13 @@
 // Change history:
 //     ??/??/?? Initial commit
 //     29/06/21 Changed model to view
+//              Added better pqr menu
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
 import { OrbitControls } from "../three-bits/orbit-controls.js";
 import { objectMaker } from "./object-maker.js";
-import { typeOfCell } from "../data/geometry-decider.js";
+import { reduceWord } from "../maths-functions/reduce-word.js";
 
 window.onload = main;
 
@@ -27,15 +28,14 @@ function main() {
     // Flag to determine if the geometry has just changed or not: k = 0 => new geometry
     var k = 0;
 
+    const n_max = 13;
+
     //
     const initialCell = "";
     var list = [initialCell];
 
     // Determines current mode of clicking: add, remove, move
     var mode = "add";
-
-    //
-    var cellType;
 
     // Setup canvas and get dimensions
     const canvas = document.getElementById("canvas");
@@ -100,9 +100,9 @@ function main() {
         position: [0, 0, 0],
         faceMode: true,
         numFaces: 50,
-        shader: "toon",
+        shader: "normal",
         slices: 10,
-        colour: 0x653286
+        colour: 0x9562B6
     }
 
     // ghostData is the dictionary of parameters for the ghost geometries
@@ -119,12 +119,13 @@ function main() {
         faceMode: false,
         opacity: 0.3,
         numFaces: 20,
-        shader: "toon",
+        shader: "normal",
         slices: 10
     }
 
     // Using the data dictionary make a geometry using objectMaker and add to the visibleGroup
-    visibleGroup.children = objectMaker(data).children;
+    var [objects, metricValues] = objectMaker(data);
+    visibleGroup.children = objects.children;
 
     // Add some event listeners to the page
     window.addEventListener("resize", onResize, false);
@@ -133,9 +134,17 @@ function main() {
 
     window.addEventListener("click", onClick, false);
 
-    // window.addEventListener("touchend", () => { visibleGroup.children = objectMaker(data).children; }, false);
-
     window.addEventListener('keydown', onKeyDown, false);
+
+    const dotColours = {
+        "s": "#BCE784",
+        "e": "#5DD39E",
+        "h": "#348AA7",
+        "p": "#525174",
+        "u": "#513B56"
+    }
+
+    updateMetricBar();
 
     render();
 
@@ -156,88 +165,94 @@ function main() {
 
     function onMouseMove(event) {
 
-        event.preventDefault();
+        if (data.modifier === "") {
 
-        // Get mouse position relative to canvas
-        mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
+            event.preventDefault();
 
-        // See what the ray intersects
-        raycaster.setFromCamera(mouseVector, camera);
-        intersects = raycaster.intersectObjects(visibleGroup.children);
+            // Get mouse position relative to canvas
+            mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
+            mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
 
-        if (mode === "add") {
+            // See what the ray intersects
+            raycaster.setFromCamera(mouseVector, camera);
+            intersects = raycaster.intersectObjects(visibleGroup.children);
 
-            // If the ray intersects something
-            if (intersects.length > 0) {
+            if (mode === "add") {
 
-                // If nothing selected before i.e. new geometry
-                if (k == 0) {
+                // If the ray intersects something
+                if (intersects.length > 0) {
 
-                    oldObject = intersects[0].object;
-                    k++;
+                    // If nothing selected before i.e. new geometry
+                    if (k == 0) {
 
-                }
-
-                // Updates the newObject
-                newObject = intersects[0].object;
-
-                // If the newObject is different from the oldObject change their colours, update oldObject and ghostData
-                if (newObject.id != oldObject.id) {
-
-                    oldObject.material.emissive.setRGB(0, 0, 0);
-                    newObject.material.emissive.setRGB(0.1, 0.8, 0.1);
-
-                    oldObject = newObject;
-
-                    ghostData.transform = newObject.cellName + newObject.faceName + "d";
-                    ghostGroup.children = [objectMaker(ghostData)];
-
-                }
-
-            } else {
-
-                // If nothing selected (empty space) reset oldObject and empty the ghostGroup
-                if (k != 0) {
-
-                    oldObject.material.emissive.setRGB(0, 0, 0);
-                    ghostGroup.children = [];
-
-                }
-
-            }
-
-        } else if (mode === "remove") {
-
-            // If ray hits something
-            if (intersects.length > 0) {
-
-                // Get the name of the object to be removed
-                removeObject = intersects[0].object.cellName;
-
-                // aHighlight all faces with the removeObjects name
-                visibleGroup.children.forEach((mesh) => {
-
-                    if (mesh.cellName === removeObject) {
-
-                        mesh.material.emissive.setRGB(0.8, 0.1, 0.1);
-
-                    } else {
-
-                        mesh.material.emissive.setRGB(0, 0, 0);
+                        oldObject = intersects[0].object;
+                        k++;
 
                     }
 
-                })
+                    // Updates the newObject
+                    newObject = intersects[0].object;
 
-            } else {
+                    // If the newObject is different from the oldObject change their colours, update oldObject and ghostData
+                    if (newObject.id != oldObject.id) {
 
-                // Otherwise reset emmisivity of all faces
-                visibleGroup.children.forEach((mesh) => {
+                        oldObject.material.emissive.setRGB(0, 0, 0);
+                        newObject.material.emissive.setRGB(0.1, 0.8, 0.1);
 
-                    mesh.material.emissive.setRGB(0, 0, 0);
+                        oldObject = newObject;
 
-                })
+                        console.log(newObject.faceName, newObject.cellName)
+
+                        ghostData.transform = reduceWord(newObject.cellName + newObject.faceName + "d", data.p, data.q, data.r);
+                        ghostGroup.children = [objectMaker(ghostData)[0]];
+
+                    }
+
+                } else {
+
+                    // If nothing selected (empty space) reset oldObject and empty the ghostGroup
+                    if (k != 0) {
+
+                        oldObject.material.emissive.setRGB(0, 0, 0);
+                        ghostGroup.children = [];
+
+                    }
+
+                }
+
+            } else if (mode === "remove") {
+
+                // If ray hits something
+                if (intersects.length > 0) {
+
+                    // Get the name of the object to be removed
+                    removeObject = intersects[0].object.cellName;
+
+                    // Highlight all faces with the removeObjects name
+                    visibleGroup.children.forEach((mesh) => {
+
+                        if (mesh.cellName === removeObject) {
+
+                            mesh.material.emissive.setRGB(0.8, 0.1, 0.1);
+
+                        } else {
+
+                            mesh.material.emissive.setRGB(0, 0, 0);
+
+                        }
+
+                    })
+
+                } else {
+
+                    // Otherwise reset emmisivity of all faces
+                    visibleGroup.children.forEach((mesh) => {
+
+                        mesh.material.emissive.setRGB(0, 0, 0);
+
+                    })
+
+                }
 
             }
 
@@ -249,63 +264,70 @@ function main() {
 
         event.preventDefault();
 
-        // Get the relative position of the mouse to the canvas
-        mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
-        mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
+        if (data.modifier === "") {
 
-        // Find what the raycaster hits
-        raycaster.setFromCamera(mouseVector, camera);
-        intersects = raycaster.intersectObjects(visibleGroup.children);
+            // Get the relative position of the mouse to the canvas
+            mouseVector.x = ((event.clientX - rect.left) / WIDTH) * 2 - 1;
+            mouseVector.y = - ((event.clientY - rect.top) / HEIGHT) * 2 + 1;
 
-        if (intersects.length > 0) {
+            // Find what the raycaster hits
+            raycaster.setFromCamera(mouseVector, camera);
+            intersects = raycaster.intersectObjects(visibleGroup.children);
 
-            clickObject = intersects[0].object;
+            if (intersects.length > 0) {
 
-            // If mode is 'add' then add the cell from the face
-            // If mode is 'remove' then remove the cell 
-            if (mode === "add") {
+                clickObject = intersects[0].object;
 
-                data.transform = clickObject.cellName + clickObject.faceName + "d";
+                // If mode is 'add' then add the cell from the face
+                // If mode is 'remove' then remove the cell 
+                if (mode === "add") {
 
-                visibleGroup.children = visibleGroup.children.concat(objectMaker(data).children);
+                    // data.transform = reduceWord(clickObject.cellName + clickObject.faceName + "d", data.p, data.q, data.r);
+                    data.transform = clickObject.cellName + clickObject.faceName + "d";
 
-                list.push(data.transform);
+                    console.log("solid", data.transform)
 
-            } else if (mode === "remove") {
+                    visibleGroup.children = visibleGroup.children.concat(objectMaker(data)[0].children);
 
-                const removeCell = clickObject.cellName;
-                var newChildren = [];
+                    list.push(data.transform);
 
-                visibleGroup.children.forEach((mesh) => {
+                } else if (mode === "remove") {
 
-                    if (mesh.cellName !== removeCell) {
+                    const removeCell = clickObject.cellName;
+                    var newChildren = [];
 
-                        newChildren.push(mesh);
+                    visibleGroup.children.forEach((mesh) => {
 
-                    }
+                        if (mesh.cellName !== removeCell) {
 
-                })
+                            newChildren.push(mesh);
 
-                var newList = [];
+                        }
 
-                list.forEach((elem) => {
+                    })
 
-                    if (elem !== removeCell) {
+                    var newList = [];
 
-                        newList.push(elem);
+                    list.forEach((elem) => {
 
-                    }
+                        if (elem !== removeCell) {
 
-                })
+                            newList.push(elem);
 
-                visibleGroup.children = newChildren;
-                list = newList;
+                        }
+
+                    })
+
+                    visibleGroup.children = newChildren;
+                    list = newList;
+
+                }
+
+            } else if (visibleGroup.children.length == 0 && mode === "add") {
+
+                visibleGroup.children = visibleGroup.children.concat(objectMaker(data)[0].children);
 
             }
-
-        } else if (visibleGroup.children.length == 0 && mode === "add") {
-
-            visibleGroup.children = visibleGroup.children.concat(objectMaker(data).children);
 
         }
 
@@ -360,128 +382,73 @@ function main() {
         ghostGroup.children = [];
     });
 
-    // document.getElementById("truncated").addEventListener("click", function () {
-    //     data.truncated = !data.truncated;
-    //     data.transform = initialCell;
-    //     list = [initialCell];
-    //     k = 0;
-    //     visibleGroup.children = objectMaker(data).children;
-    // });
-
     $(document).ready(function () {
 
-        updateCellSelector(data.r);
+        updateCellSelector();
+
+        $(".cellselector").css("color", "");
+        $("#3-3-").css("color", "#333333");
 
         $("#pqr").click(function () {
+
             $("#pqrselector").toggle();
-        });
 
-        $("#rightarrow").click(function () {
-            data.r = Math.min(data.r + 1, 8);
-            ghostData.r = Math.min(ghostData.r + 1, 8);
-            updateCellSelector(data.r);
-        });
-
-        $("#leftarrow").click(function () {
-            data.r = Math.max(data.r - 1, 3);
-            ghostData.r = Math.max(ghostData.r - 1, 3);
-            updateCellSelector(data.r);
         });
 
         $(".cellselector").click(function () {
+
             var [p, q, modifier] = $(this).attr("id").split("-");
             data.p = Number(p), data.q = Number(q), data.modifier = modifier;
             ghostData.p = Number(p), ghostData.q = Number(q), ghostData.modifier = modifier;
+
             data.transform = initialCell;
+            ghostData.transform = initialCell;
             list = [initialCell];
-            k = 0;
-            visibleGroup.children = objectMaker(data).children;
-            ghostGroup.children = objectMaker(ghostData).children;
-        })
+
+            [objects, metricValues] = objectMaker(data);
+            visibleGroup.children = objects.children;
+
+            updateMetricBar();
+
+            $(".cellselector").css("color", "");
+            $(this).css("color", "#333333");
+
+        });
+
+        $(".metricNumber").click(function () {
+
+            if (!(isNaN(parseInt($(this).attr("id"))))) {
+
+                data.r = parseInt($(this).attr("id"))
+                ghostData.r = parseInt($(this).attr("id"))
+
+            } else {
+
+                data.r = metricValues[$(this).attr("id")[0]]
+                ghostData.r = metricValues[$(this).attr("id")[0]]
+
+            }
+
+            data.transform = initialCell;
+            ghostData.transform = initialCell;
+            list = [initialCell];
+
+            [objects, metricValues] = objectMaker(data);
+
+            console.log(objects.children)
+            visibleGroup.children = objects.children;
+
+        });
 
     });
 
-    const cellTypeColours = {
-        "s": "#FFB3BA",
-        "e": "#FFDFBA",
-        "h": "#FFFFBA",
-        "p": "#BAFFC9",
-        "u": "#BAE1FF"
-    }
-
-    const truncRectDict = {
-        "r-3-3-3": "s",
-        "r-3-3-4": "s",
-        "r-3-3-5": "s",
-        "r-3-3-6": "h",
-        "r-3-3-7": "h",
-        "r-3-3-8": "h",
-        "r-3-4-3": "s",
-        "r-3-4-4": "h",
-        "r-3-4-5": "h",
-        "r-3-4-6": "h",
-        "r-3-4-7": "h",
-        "r-3-4-8": "h",
-        "r-3-5-3": "h",
-        "r-3-5-4": "h",
-        "r-3-5-5": "h",
-        "r-3-5-6": "h",
-        "r-3-5-7": "h",
-        "r-3-5-8": "h",
-        "r-4-3-3": "s",
-        "r-4-3-4": "e",
-        "r-4-3-5": "h",
-        "r-4-3-6": "h",
-        "r-4-3-7": "h",
-        "r-4-3-8": "h",
-        "r-5-3-3": "s",
-        "r-5-3-4": "h",
-        "r-5-3-5": "h",
-        "r-5-3-6": "h",
-        "r-5-3-7": "h",
-        "r-5-3-8": "h",
-        "t-3-3-3": "s",
-        "t-3-3-4": "s",
-        "t-3-3-5": "s",
-        "t-3-3-6": "h",
-        "t-3-3-7": "h",
-        "t-3-3-8": "h",
-        "t-3-4-3": "s",
-        "t-3-4-4": "h",
-        "t-3-4-5": "h",
-        "t-3-4-6": "h",
-        "t-3-4-7": "h",
-        "t-3-4-8": "u",
-        "t-3-5-3": "h",
-        "t-3-5-4": "h",
-        "t-3-5-5": "h",
-        "t-3-5-6": "h",
-        "t-3-5-7": "u",
-        "t-3-5-8": "u",
-        "t-4-3-3": "s",
-        "t-4-3-4": "e",
-        "t-4-3-5": "h",
-        "t-4-3-6": "h",
-        "t-4-3-7": "h",
-        "t-4-3-8": "h",
-        "t-5-3-3": "s",
-        "t-5-3-4": "h",
-        "t-5-3-5": "h",
-        "t-5-3-6": "h",
-        "t-5-3-7": "h",
-        "t-5-3-8": "h"
-    }
-
-    function updateCellSelector(r) {
+    function updateCellSelector() {
 
         for (var p = 3; p <= 8; p++) {
 
             for (var q = 3; q <= 8; q++) {
 
-                cellType = typeOfCell(p, q, r);
-
-                document.getElementById(p + "-" + q + "-").innerHTML = "{" + p + "," + q + "," + r + "}";
-                document.getElementById(p + "-" + q + "-").style.backgroundColor = cellTypeColours[cellType];
+                document.getElementById(p + "-" + q + "-").innerHTML = "{" + p + "," + q + "}";
 
             }
 
@@ -491,12 +458,59 @@ function main() {
 
             ["t", "r"].forEach((affix) => {
 
-                document.getElementById(p + "-" + q + "-" + affix).innerHTML = affix + "{" + p + "," + q + "," + r + "}";
-                document.getElementById(p + "-" + q + "-" + affix).style.backgroundColor = cellTypeColours[truncRectDict[affix + "-" + p + "-" + q + "-" + r]];
+                document.getElementById(p + "-" + q + "-" + affix).innerHTML = affix + "{" + p + "," + q + "}";
 
             })
 
         })
+
+    }
+
+    function updateMetricBar() {
+
+        document.getElementById("s").style.width = (Math.max(2, metricValues["e"]) - 2) / (n_max - 2) * 100 + "%";
+        document.getElementById("h").style.width = (Math.min(n_max, metricValues["p"]) - 2) / (n_max - 2) * 100 + "%";
+
+        for (var i = 3; i < n_max; i++) {
+
+            document.getElementById(i.toString()).style.left = (i - 2) / (n_max - 2) * 100 + "%";
+
+            (i < metricValues["e"]) ?
+                document.getElementById(i.toString()).style.backgroundColor = dotColours["s"] :
+                (i == metricValues["e"]) ?
+                    document.getElementById(i.toString()).style.backgroundColor = dotColours["e"] :
+                    (i < metricValues["p"]) ?
+                        document.getElementById(i.toString()).style.backgroundColor = dotColours["h"] :
+                        (i == metricValues["p"]) ?
+                            document.getElementById(i.toString()).style.backgroundColor = dotColours["p"] :
+                            document.getElementById(i.toString()).style.backgroundColor = dotColours["u"]
+
+        }
+
+        document.getElementById("euclidean").style.backgroundColor = dotColours["e"];
+        document.getElementById("paracompact").style.backgroundColor = dotColours["p"];
+
+        if (!(Number.isInteger(metricValues["e"])) && metricValues["e"] > 2) {
+
+            document.getElementById("euclidean").style.display = "block";
+            document.getElementById("euclidean").style.left = (metricValues["e"] - 2) / (n_max - 2) * 100 + "%";
+
+        } else {
+
+            document.getElementById("euclidean").style.display = "none";
+
+        }
+
+        if (!(Number.isInteger(metricValues["p"])) && isFinite(metricValues["p"])) {
+
+            document.getElementById("paracompact").style.display = "block";
+            document.getElementById("paracompact").style.left = (metricValues["p"] - 2) / (n_max - 2) * 100 + "%";
+
+        } else {
+
+            document.getElementById("paracompact").style.display = "none";
+
+        }
 
     }
 
