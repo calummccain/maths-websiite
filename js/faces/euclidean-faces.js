@@ -6,6 +6,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     29/06/21 Accepts any number of sides
 //=========================================================
 
 import * as VF from "../maths-functions/vector-functions.js";
@@ -21,16 +22,15 @@ function euclideanFace(vertices) {
 
         faces = [[0, 1, 2]];
 
-    } else if (sideNumber == 4) {
+    } else {
 
-        faces = faces.concat([[0, 1, 4], [1, 2, 4], [2, 3, 4], [3, 0, 4]]);
-        var center = VF.vectorScale(VF.vectorSum([coords[0], coords[1], coords[2], coords[3]]), 0.25);
-        coords.push(center);
+        for (var i = 0; i < sideNumber; i++) {
 
-    } else if (sideNumber == 5) {
+            faces.push([i, (i + 1) % sideNumber, sideNumber]);
 
-        faces = faces.concat([[0, 1, 5], [1, 2, 5], [2, 3, 5], [3, 4, 5], [4, 0, 5]]);
-        var center = VF.vectorScale(VF.vectorSum([coords[0], coords[1], coords[2], coords[3], coords[4]]), 0.2);
+        }
+
+        var center = VF.vectorScale(VF.vectorSum(coords), 1 / sideNumber);
         coords.push(center);
 
     }

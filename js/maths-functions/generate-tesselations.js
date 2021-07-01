@@ -101,6 +101,7 @@ function makeEdges(initialEdges, matrixDict, fNames) {
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     29/06/21 Added better error catching
 //=========================================================
 
 function matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v) {
@@ -131,7 +132,7 @@ function matrixDict(letter, amat, bmat, cmat, dmat, emat, fmat, v) {
 
     } else {
 
-        throw 'letter needs to be one of a, b, c, d, e, f!';
+        throw 'letter needs to be one of a, b, c, d, e, f! : ' + letter;
 
     }
 
