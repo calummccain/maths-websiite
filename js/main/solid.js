@@ -51,7 +51,7 @@ function main() {
 
     // Make scene and set background colour
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xFFFFFF);
+    scene.background = new THREE.Color(0xE5E5E5);
 
     // Setup camera, position
     var camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 100);
