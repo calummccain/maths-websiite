@@ -103,7 +103,7 @@ function main() {
         shader: "normal",
         slices: 10,
         colour: 0x9562B6
-    }
+    };
 
     // ghostData is the dictionary of parameters for the ghost geometries
     var ghostData = {
@@ -121,7 +121,7 @@ function main() {
         numFaces: 20,
         shader: "normal",
         slices: 10
-    }
+    };
 
     // Using the data dictionary make a geometry using objectMaker and add to the visibleGroup
     var [objects, metricValues] = objectMaker(data);
@@ -200,8 +200,6 @@ function main() {
                         newObject.material.emissive.setRGB(0.1, 0.8, 0.1);
 
                         oldObject = newObject;
-
-                        console.log(newObject.faceName, newObject.cellName)
 
                         ghostData.transform = reduceWord(newObject.cellName + newObject.faceName + "d", data.p, data.q, data.r);
                         ghostGroup.children = [objectMaker(ghostData)[0]];
@@ -284,8 +282,6 @@ function main() {
 
                     // data.transform = reduceWord(clickObject.cellName + clickObject.faceName + "d", data.p, data.q, data.r);
                     data.transform = clickObject.cellName + clickObject.faceName + "d";
-
-                    console.log("solid", data.transform)
 
                     visibleGroup.children = visibleGroup.children.concat(objectMaker(data)[0].children);
 
@@ -435,7 +431,6 @@ function main() {
 
             [objects, metricValues] = objectMaker(data);
 
-            console.log(objects.children)
             visibleGroup.children = objects.children;
 
         });
