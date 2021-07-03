@@ -786,7 +786,6 @@ function main() {
 
             uhpD = VF.determinant3([v1.uhp, v2.uhp, uhpCenter]);
 
-            /////////// console.log(v1.uhp, v2.uhp, v3.uhp, uhpCenter, uhpD)
             uhpNormal = VF.vectorCross(VF.vectorDiff(v2.uhp, v1.uhp), VF.vectorDiff(uhpCenter, v1.uhp));
 
         }
@@ -1307,8 +1306,6 @@ function main() {
 
                 } else if (faces[i].uhpType === "plane") {
 
-                    console.log(normal)
-
                     t = (d - VF.vectorDot(cam, normal)) / VF.vectorDot(pc, normal);
 
                     if (eps < t && t < 1 - eps) {
@@ -1344,8 +1341,6 @@ function main() {
                 for (var j = i + 1; j < faces.length; j++) {
 
                     if (faces[i].uhpType === "sphere" && faces[j].uhpType === "sphere") {
-
-                        console.log(i, j)
 
                         diff = VF.vectorDiff(faces[i].uhpSphereCenter, faces[j].uhpSphereCenter);
                         ab = VF.norm(diff);
@@ -1408,8 +1403,6 @@ function main() {
             }
 
         }
-
-        console.log(intersections)
 
     }
 
