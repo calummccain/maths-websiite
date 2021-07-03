@@ -9,6 +9,11 @@ function honeycombGeometry(data, transform, refinement, model) {
     if (data.metric === "s") {
 
         refinement += 1;
+
+        const newVertices = [];
+        data.vertices.forEach((v) => { newVertices.push(data.flip(v)) });
+        data.vertices = newVertices;
+
         honeycomb = sphericalGeometry(data, transform, refinement);
 
     } else if (data.metric === "e") {
