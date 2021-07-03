@@ -10,6 +10,7 @@
 //              Added v-v distance
 //     16/06/21 Corrected v-v distance for paracompact
 //              added metrics for e and p
+//     03/07/21 Added flip function
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -148,6 +149,8 @@ const octahedronData = (n) => {
         // FV: Math.sqrt(Math.abs((1 + cot) / (1 - cot))) / rt3,
 
         // EV: Math.sqrt(Math.abs(1 / (1 - cot))) / rt2,
+
+        flip: (v) => [-v[0], v[1], v[2], v[3]],
 
         vv: (metric === "p") ? 1 : cot / Math.abs(1 - cot),
 

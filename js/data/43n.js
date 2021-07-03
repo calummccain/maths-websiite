@@ -8,6 +8,7 @@
 //     ??/??/?? Initial commit
 //     30/05/21 Added v-v distance
 //     03/06/21 Removed 1 *
+//     03/07/21 Added flip function
 //=========================================================
 
 import { rt2, rt3, p, p2, p_1 } from "./constants.js";
@@ -144,6 +145,8 @@ const cubeData = (n) => {
         metric: metric,
 
         cellType: "spherical",
+
+        flip: (v) => [-v[0], v[1], v[2], v[3]],
 
         vv: (metric === "p") ? 2 : (1 + cot) / Math.abs(3 - cot),
 

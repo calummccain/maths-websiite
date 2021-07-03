@@ -10,6 +10,7 @@
 //     30/05/21 Added v-v distance
 //     16/06/21 Corrected v-v distance for paracompact
 //              added metrics for e and p
+//     03/07/21 Added flip function
 //=========================================================
 
 import { rt2, rt3, rt5, p, p2, p3, p4, p5, p_1, p_2, p_3, p_4 } from "./constants.js";
@@ -162,6 +163,8 @@ const dodecahedronData = (n) => {
         metric: metric,
 
         cellType: "spherical",
+
+        flip: (v) => [-v[0], v[1], v[2], v[3]],
 
         vv: (metric === "p") ? 2 / p2 : (cot + p + p_1) / Math.abs(cot - 3),
 

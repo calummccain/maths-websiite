@@ -9,6 +9,7 @@
 //     30/05/21 Added v-v distance
 //     16/06/21 Corrected v-v distance for paracompact
 //              added metrics for e and p
+//     03/07/21 Added flip function
 //=========================================================
 
 import { boundaries } from "./geometry-decider.js";
@@ -148,6 +149,8 @@ const tetrahedronData = (n) => {
         metric: metric,
 
         cellType: "spherical",
+
+        flip: (v) => [-v[0], v[1], v[2], v[3]],
 
         vv: (metric === "p") ? 4 : (cot - 1) / Math.abs(3 - cot),
 
