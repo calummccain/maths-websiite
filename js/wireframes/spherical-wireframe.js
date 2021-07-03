@@ -8,6 +8,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
+//     03/06/21 Added flip
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
@@ -82,7 +83,7 @@ function sphericalEdges(data, parameters) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
+            p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
 
             verts.push({
                 hypersphere: p,

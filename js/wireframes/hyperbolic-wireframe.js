@@ -88,7 +88,19 @@ function hyperbolicEdges(data, parameters) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
+            if (data.cellType === "euclidean") {
+
+                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
+
+            } else if (data.cellType === "hyperbolic") {
+
+                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
+
+            } else {
+
+                p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
+
+            }
 
             verts.push({
                 hyperboloid: p,
