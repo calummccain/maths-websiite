@@ -4,38 +4,35 @@ import { MapControls } from "../three-bits/orbit-controls.js";
 
 const data = [
     [
-        { p: 3, q: 3, r: 3, model: "", refinement: 3, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
-        { p: 3, q: 3, r: 4, model: "", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
-        { p: 3, q: 3, r: 5, model: "", refinement: 3, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
-        { p: 3, q: 4, r: 3, model: "", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
-        { p: 4, q: 3, r: 3, model: "", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
-        { p: 5, q: 3, r: 3, model: "", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false }
+        { p: 3, q: 3, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [-5, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 3, q: 3, r: 4, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [-3, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 3, q: 3, r: 5, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [-1, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 3, q: 4, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [1, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 3, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [3, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 5, q: 3, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [5, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 }
     ],
     [
-        { p: 4, q: 3, r: 4, model: "", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false }
+        { p: 4, q: 3, r: 4, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 3, position: [0, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 }
     ],
     [
-        { p: 3, q: 5, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 3], transform: "", faceMode: false },
-        { p: 3, q: 4, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
-        { p: 5, q: 3, r: 7, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, -3], transform: "", faceMode: false },
-        { p: 6, q: 3, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 3], transform: "", faceMode: false, numFaces: 50 },
-        { p: 4, q: 4, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false, numFaces: 50 },
-        { p: 3, q: 3, r: 7, model: "poincare", refinement: 3, colour: 0x127548, position: [0, 0, -3], transform: "", faceMode: false, numFaces: 50 },
-        { p: 3, q: 7, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 3], transform: "", faceMode: false, numFaces: 50 },
-        { p: 4, q: 4, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false, numFaces: 50 },
-        { p: 5, q: 5, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, -3], transform: "", faceMode: false, numFaces: 50 },
+        { p: 3, q: 5, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [-3, 0, -3], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 3, q: 4, r: 4, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [0, 0, -3], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 5, q: 3, r: 7, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [3, 0, -3], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 6, q: 3, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 3, position: [-3, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 4, r: 4, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 3, position: [0, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 3, q: 6, r: 7, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 3, position: [3, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 3, q: 7, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 3, position: [-3, 0, 3], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 3, q: 8, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 3, position: [0, 0, 3], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 5, q: 5, r: 4, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 3, position: [3, 0, 3], transform: "", faceMode: false, shader: "normal", numFaces: 50 }
     ],
     [
-        { p: 4, q: 3, r: 3, model: "poincare", refinement: 3, colour: 0x127548, position: [-5, 0, 0], transform: "", faceMode: false },
-        { p: 4, q: 3, r: 4, model: "poincare", refinement: 3, colour: 0x127548, position: [-3, 0, 0], transform: "", faceMode: false },
-        { p: 4, q: 3, r: 5, model: "poincare", refinement: 3, colour: 0x127548, position: [-1, 0, 0], transform: "", faceMode: false },
-        { p: 4, q: 3, r: 6, model: "poincare", refinement: 3, colour: 0x127548, position: [1, 0, 0], transform: "", faceMode: false },
-        { p: 4, q: 3, r: 7, model: "poincare", refinement: 3, colour: 0x127548, position: [3, 0, 0], transform: "", faceMode: false },
-        { p: 4, q: 3, r: 8, model: "poincare", refinement: 3, colour: 0x127548, position: [5, 0, 0], transform: "", faceMode: false },
-
-    ],
-    [
-        { p: 5, q: 3, r: 7, model: "uhp", refinement: 15, colour: 0x127548, position: [0, 0, 0], transform: "", faceMode: false, intersection: true, cells: [""] }
+        { p: 4, q: 3, r: 3, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [-6, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 3, r: 4, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [-4, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 3, r: 5, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [-2, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 3, r: 6, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [0, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 3, r: 7, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [2, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 3, r: 8, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [4, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 },
+        { p: 4, q: 3, r: 9, modifier: "", view: "solid", hyperbolicModel: "poincare", refinement: 4, position: [6, 0, 0], transform: "", faceMode: false, shader: "normal", numFaces: 50 }
     ]
 ];
 
@@ -65,10 +62,10 @@ function main() {
         scene.userData.camera = camera;
 
         data[n].forEach((params) => {
-            var obj = objectMaker(params);
+            var obj = objectMaker(params)[0];
             objects.push(obj);
 
-            if (params.model === "uhp") {
+            if (params.hyperbolicModel === "uhp") {
 
                 scene.add(obj(0, 0, 0, camera.position.toArray()));
 
@@ -78,7 +75,7 @@ function main() {
 
             }
 
-            scene.userData.model = params.model;
+            scene.userData.hyperbolicModel = params.hyperbolicModel;
 
         });
 
@@ -143,7 +140,7 @@ function main() {
 
             scene.userData.objects.forEach((obj) => {
 
-                if (scene.userData.model !== "uhp") {
+                if (scene.userData.hyperbolicModel !== "uhp") {
 
                     obj.rotation.y = t * 0.0053;
                     obj.rotation.z = t * 0.0031;
