@@ -76,7 +76,7 @@ function hyperbolicEdges(data, parameters) {
 
     outline();
 
-    var edgeGroup = visibleEdges()
+    var edgeGroup = visibleEdges();
 
     // generate the positions of the vertices in several models
     function generateVertices(cell) {
@@ -88,19 +88,7 @@ function hyperbolicEdges(data, parameters) {
 
         for (var i = 0; i < data.numVertices; i++) {
 
-            if (data.cellType === "euclidean") {
-
-                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
-
-            } else if (data.cellType === "hyperbolic") {
-
-                p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
-
-            } else {
-
-                p = RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric);
-
-            }
+            p = data.flip(RF.ruvw(RF.rxyz(data.f(newVertices[i]), thetax, thetay, thetaz), thetau, thetav, thetaw, data.metric));
 
             verts.push({
                 hyperboloid: p,
