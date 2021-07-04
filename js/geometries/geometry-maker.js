@@ -1,3 +1,16 @@
+// ========================================================
+// Generates the geometric data for the cell in question
+//
+// Inputs: data
+//         transform
+//         refinement
+//         model
+// Output: honeycomb
+//
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 import { sphericalGeometry } from "./spherical-geometry.js";
 import { euclideanGeometry } from "./euclidean-geometry.js";
 import { hyperbolicGeometry } from "./hyperbolic-geometry.js";

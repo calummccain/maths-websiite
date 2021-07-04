@@ -8,7 +8,7 @@
 //
 // Change history:
 //     ??/??/?? Initial commit
-//     03/06/21 Added flip
+//     03/07/21 Added flip
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";

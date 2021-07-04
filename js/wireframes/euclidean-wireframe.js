@@ -8,10 +8,10 @@
 //
 // Change history:
 //     03/06/21 Initial commit
+//     04/07/21 Removed excessive import
 //=========================================================
 
 import * as THREE from "../three-bits/three.module.js";
-import * as SF from "../maths-functions/spherical-functions.js";
 import * as VF from "../maths-functions/vector-functions.js";
 import * as RF from "../maths-functions/rotation-functions.js";
 import { matrixDict } from "../maths-functions/generate-tesselations.js";
