@@ -1,6 +1,6 @@
 # spheuchyp
 
-## What is this?
+## Intro
 
 spheuchyp is a series of apps investigating [Coxeter Groups](https://en.wikipedia.org/wiki/Coxeter_group) and tesselations in spherical, euclidean and hyperbolic spaces. It also supports rectified and truncated polyhedrons ([truncation](https://en.wikipedia.org/wiki/Truncation_(geometry))/[rectified](https://en.wikipedia.org/wiki/Rectification_(geometry))).
 
