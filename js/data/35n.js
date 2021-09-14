@@ -117,7 +117,7 @@ const icosahedronData = (n) => {
             "", "c", "bcbc", "bc", "cbc", "bacbcabacbc",
             "cbacbcabacbc", "bacabacbc", "bcabacbc",
             "cbcabacbc", "abcbc", "abc", "acbc",
-            "abacabacbc", "abcabacbc", "bacaacbcabacbcbcbaca",
+            "abacabacbc", "abcabacbc", "cabcabacbc",
             "bacbc", "abacbc", "acabacbc", "cabacbc"
         ],
 
